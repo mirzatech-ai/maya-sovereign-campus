@@ -123,9 +123,16 @@ function gemini_keys() {
     $cache = array();
     $env = __DIR__ . '/.gemini_keys.env';
     if (file_exists($env)) {
+        // Robust loader · accepts EITHER `GEMINI=AIza...` OR bare `AIza...` lines.
+        // Hardened 2026-05-15 after silent-mock-VETO incident (mass sweep wasted
+        // ~50 chain runs because file format mismatch returned empty key set).
         foreach (preg_split('/\r?\n/', (string)@file_get_contents($env)) as $line) {
-            if (preg_match('/^GEMINI\s*=\s*([A-Za-z0-9_\-]+)/', $line, $m)) $cache[] = $m[1];
+            $line = trim($line);
+            if ($line === '' || $line[0] === '#') continue;
+            if (preg_match('/^GEMINI\s*=\s*([A-Za-z0-9_\-]+)/i', $line, $m)) { $cache[] = $m[1]; continue; }
+            if (preg_match('/^(AIza[A-Za-z0-9_\-]{30,})$/', $line, $m)) { $cache[] = $m[1]; continue; }
         }
+        $cache = array_values(array_unique($cache));
     }
     return $cache;
 }
