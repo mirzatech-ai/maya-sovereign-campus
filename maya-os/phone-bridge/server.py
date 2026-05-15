@@ -375,10 +375,48 @@ async def sys_verb(verb: str, req: Request, x_maya_bridge_token: Optional[str] =
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
+# ── PRIVACY · /eyes/on /eyes/off /eyes/status · Mo controls when Maya watches ──
+# File-based flag: ~/.maya_bridge_eyes_off exists = off, missing = on (default ON)
+EYES_OFF_FLAG = HOME / ".maya_bridge_eyes_off"
+
+def eyes_enabled() -> bool:
+    return not EYES_OFF_FLAG.exists()
+
+def require_eyes_on() -> None:
+    if not eyes_enabled():
+        raise HTTPException(status_code=403, detail="eyes_off · Mo disabled watching · POST /eyes/on to enable")
+
+@app.get("/eyes/status")
+def eyes_status(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    return {"ok": True, "enabled": eyes_enabled(), "flag_path": str(EYES_OFF_FLAG)}
+
+@app.post("/eyes/on")
+def eyes_on(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    try:
+        if EYES_OFF_FLAG.exists():
+            EYES_OFF_FLAG.unlink()
+        log.info("eyes turned ON by Mo")
+        return {"ok": True, "enabled": True}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+@app.post("/eyes/off")
+def eyes_off(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    try:
+        EYES_OFF_FLAG.write_text(f"disabled at {time.strftime('%Y-%m-%dT%H:%M:%S%z')}\n")
+        log.info("eyes turned OFF by Mo")
+        return {"ok": True, "enabled": False}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
 # ── /active-window · what app/tab Mo is currently looking at ────────────
 @app.get("/active-window")
 def active_window(x_maya_bridge_token: Optional[str] = Header(None)):
     require_token(x_maya_bridge_token)
+    require_eyes_on()
     try:
         if PLATFORM["is_windows"]:
             # PowerShell + Win32 API · returns title + process name of foreground window
@@ -426,6 +464,7 @@ ConvertTo-Json @{title = $sb.ToString(); process = $proc; pid = $pid} -Compress
 @app.get("/open-windows")
 def open_windows(x_maya_bridge_token: Optional[str] = Header(None)):
     require_token(x_maya_bridge_token)
+    require_eyes_on()
     try:
         if PLATFORM["is_windows"]:
             ps = (
@@ -450,6 +489,7 @@ def open_windows(x_maya_bridge_token: Optional[str] = Header(None)):
 @app.get("/screenshot-screen")
 def screenshot_screen(x_maya_bridge_token: Optional[str] = Header(None)):
     require_token(x_maya_bridge_token)
+    require_eyes_on()
     try:
         if PLATFORM["is_windows"]:
             # PowerShell can use System.Windows.Forms for screen capture without Pillow dependency
@@ -486,6 +526,143 @@ Write-Output 'OK'
             return {"ok": False, "error": f"not implemented for {PLATFORM['kind']}"}
     except subprocess.TimeoutExpired:
         return {"ok": False, "error": "timeout"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+# ── HANDS · Maya operates the computer · separate gate from eyes ─────────
+# Mo verbatim 2026-05-15: "having Maya use her hands and fingers to click on
+# the browsers ... If I need help, she needs to go in and do it. Click."
+# More invasive than watching · default OFF · explicit /hands/on to enable.
+HANDS_ON_FLAG = HOME / ".maya_bridge_hands_on"
+
+def hands_enabled() -> bool:
+    return HANDS_ON_FLAG.exists()
+
+def require_hands_on() -> None:
+    if not hands_enabled():
+        raise HTTPException(status_code=403, detail="hands_off · POST /hands/on to enable · default off for safety")
+
+@app.get("/hands/status")
+def hands_status(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    return {"ok": True, "enabled": hands_enabled(), "flag_path": str(HANDS_ON_FLAG)}
+
+@app.post("/hands/on")
+def hands_on(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    HANDS_ON_FLAG.write_text(f"enabled at {time.strftime('%Y-%m-%dT%H:%M:%S%z')}\n")
+    log.info("HANDS turned ON by Mo · Maya can now click/type/key")
+    return {"ok": True, "enabled": True}
+
+@app.post("/hands/off")
+def hands_off(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    try:
+        if HANDS_ON_FLAG.exists():
+            HANDS_ON_FLAG.unlink()
+    except Exception: pass
+    log.info("hands turned OFF by Mo")
+    return {"ok": True, "enabled": False}
+
+# ── /click {x, y, button?, double?} · move cursor + click ───────────────
+@app.post("/click")
+async def click(req: Request, x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    require_hands_on()
+    body = await req.json()
+    x = int(body.get("x", 0)); y = int(body.get("y", 0))
+    button = (body.get("button") or "left").lower()
+    double = bool(body.get("double", False))
+    if not PLATFORM["is_windows"]:
+        return {"ok": False, "error": f"click not implemented for {PLATFORM['kind']}"}
+    btn = {"left": "Left", "right": "Right", "middle": "Middle"}.get(button, "Left")
+    clicks = 2 if double else 1
+    ps = f"""
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class M {{
+  [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
+  [DllImport("user32.dll")] public static extern void mouse_event(uint flags, uint dx, uint dy, uint data, IntPtr info);
+}}
+"@ -ErrorAction SilentlyContinue
+[M]::SetCursorPos({x}, {y}) | Out-Null
+Start-Sleep -Milliseconds 80
+$down = @{{ 'Left' = 0x0002; 'Right' = 0x0008; 'Middle' = 0x0020 }}['{btn}']
+$up   = @{{ 'Left' = 0x0004; 'Right' = 0x0010; 'Middle' = 0x0040 }}['{btn}']
+for ($i=0; $i -lt {clicks}; $i++) {{
+  [M]::mouse_event($down, 0, 0, 0, [IntPtr]::Zero)
+  Start-Sleep -Milliseconds 30
+  [M]::mouse_event($up, 0, 0, 0, [IntPtr]::Zero)
+  if ($i -lt {clicks} - 1) {{ Start-Sleep -Milliseconds 80 }}
+}}
+Write-Output "clicked"
+"""
+    try:
+        r = subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps], capture_output=True, text=True, timeout=8)
+        log.info("click x=%d y=%d btn=%s double=%s", x, y, button, double)
+        return {"ok": r.returncode == 0, "x": x, "y": y, "button": button, "double": double, "stdout": r.stdout.strip()}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+# ── /type {text} · types text into the foreground window ────────────────
+@app.post("/type")
+async def type_text(req: Request, x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    require_hands_on()
+    body = await req.json()
+    text = body.get("text", "")
+    if not text: return {"ok": False, "error": "text required"}
+    if not PLATFORM["is_windows"]:
+        return {"ok": False, "error": f"type not implemented for {PLATFORM['kind']}"}
+    # SendKeys requires escaping special chars: + ^ % ~ ( ) { }
+    esc = text.replace("{", "{{}").replace("}", "{}}").replace("+", "{+}").replace("^", "{^}").replace("%", "{%}").replace("~", "{~}").replace("(", "{(}").replace(")", "{)}")
+    # Use single-quoted PowerShell here-string to avoid further escaping
+    safe = esc.replace("'", "''")
+    ps = f"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{safe}'); Write-Output 'typed'"
+    try:
+        r = subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps], capture_output=True, text=True, timeout=15)
+        log.info("type len=%d", len(text))
+        return {"ok": r.returncode == 0, "length": len(text), "stdout": r.stdout.strip()}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+# ── /key {combo} · press a keystroke combo like 'ctrl+t' 'enter' 'alt+tab' ──
+@app.post("/key")
+async def key(req: Request, x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    require_hands_on()
+    body = await req.json()
+    combo = (body.get("combo") or body.get("key") or "").strip().lower()
+    if not combo: return {"ok": False, "error": "combo required (e.g. 'ctrl+t' or 'enter')"}
+    if not PLATFORM["is_windows"]:
+        return {"ok": False, "error": f"key not implemented for {PLATFORM['kind']}"}
+    # SendKeys syntax: ^=ctrl, %=alt, +=shift, named keys in braces
+    parts = [p.strip() for p in combo.split("+")]
+    sk_named = {
+        "enter": "{ENTER}", "return": "{ENTER}", "tab": "{TAB}", "esc": "{ESC}", "escape": "{ESC}",
+        "space": " ", "backspace": "{BACKSPACE}", "delete": "{DELETE}", "del": "{DELETE}",
+        "up": "{UP}", "down": "{DOWN}", "left": "{LEFT}", "right": "{RIGHT}",
+        "home": "{HOME}", "end": "{END}", "pageup": "{PGUP}", "pagedown": "{PGDN}",
+        "f1": "{F1}", "f2": "{F2}", "f3": "{F3}", "f4": "{F4}", "f5": "{F5}",
+        "f6": "{F6}", "f7": "{F7}", "f8": "{F8}", "f9": "{F9}", "f10": "{F10}", "f11": "{F11}", "f12": "{F12}",
+    }
+    prefix = ""
+    base = ""
+    for p in parts:
+        if p == "ctrl" or p == "control": prefix += "^"
+        elif p == "alt": prefix += "%"
+        elif p == "shift": prefix += "+"
+        elif p == "win" or p == "meta": prefix += "^%"  # SendKeys doesn't support Win key directly; approximate
+        else:
+            base = sk_named.get(p, p)  # single char or named key
+    keystroke = prefix + base
+    safe = keystroke.replace("'", "''")
+    ps = f"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{safe}'); Write-Output 'keyed'"
+    try:
+        r = subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps], capture_output=True, text=True, timeout=8)
+        log.info("key combo=%s sk=%s", combo, keystroke)
+        return {"ok": r.returncode == 0, "combo": combo, "sendkeys": keystroke, "stdout": r.stdout.strip()}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

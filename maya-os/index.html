@@ -866,12 +866,15 @@
           </div>
         </header>
 
-        <!-- v1.14.0 · live "Maya is watching" banner · polls bridge /active-window · 2026-05-15 -->
+        <!-- v1.14.1 · live "Maya is watching" banner + privacy toggles · 2026-05-15 -->
         <div class="campus-watch" id="campusWatch" hidden>
           <span class="cw-eye">👁️</span>
           <span class="cw-label">Maya is watching:</span>
           <span class="cw-target" id="campusWatchTarget">(connecting to bridge…)</span>
           <span class="cw-process" id="campusWatchProcess"></span>
+          <button class="cw-toggle" id="cwEyesToggle" type="button" title="Toggle eyes (watching)">👁️ EYES</button>
+          <button class="cw-toggle" id="cwHandsToggle" type="button" title="Toggle hands (clicking)">🖱️ HANDS</button>
+          <button class="cw-toggle cw-action" id="cwSeeBtn" type="button" title="Maya captures + analyzes your screen with NVIDIA vision">🧠 What do you see?</button>
         </div>
 
         <div class="campus-floor" id="campusFloor">

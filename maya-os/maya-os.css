@@ -1326,6 +1326,17 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .cw-label { color: var(--camp-green); font-weight: 600; text-transform: uppercase; letter-spacing: .12em; font-size: 9px; }
 .cw-target { color: var(--text); font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cw-process { color: var(--text-dim); font-size: 9px; font-family: 'Share Tech Mono', monospace; flex-shrink: 0; }
+.cw-toggle {
+  background: transparent; color: var(--text-mut); border: 1px solid var(--border);
+  padding: 3px 8px; border-radius: 99px; font-size: 9px; cursor: pointer;
+  font-family: 'Share Tech Mono', monospace; letter-spacing: 0.08em; flex-shrink: 0;
+  transition: all .12s;
+}
+.cw-toggle:hover { color: var(--text); border-color: var(--accent); }
+.cw-toggle[data-on="1"] { color: var(--camp-green); border-color: var(--camp-green); background: rgba(67,230,161,.10); }
+.cw-toggle[data-on="0"] { color: var(--text-dim); opacity: 0.7; }
+.cw-toggle.cw-action { color: var(--camp-cyan); border-color: var(--camp-cyan); background: rgba(0,228,255,.08); }
+.cw-toggle.cw-action:hover { background: rgba(0,228,255,.18); }
 
 /* Re-layout the stage to make room for cmd + balloon */
 .campus-stage {

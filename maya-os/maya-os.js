@@ -2247,32 +2247,107 @@
     if (_watchTimer)  { clearInterval(_watchTimer);  _watchTimer = null; }
   }
 
-  // v1.14.0 · live "Maya is watching: <window title>" via bridge /active-window
+  // v1.14.1 · live "Maya is watching: <window title>" + privacy toggles
   let _watchTimer = null;
+  const _eyesToggleBtn  = $('cwEyesToggle');
+  const _handsToggleBtn = $('cwHandsToggle');
+
   async function pollWatchBanner() {
     const banner = $('campusWatch');
     const targetEl = $('campusWatchTarget');
     const procEl = $('campusWatchProcess');
     if (!banner || !_phoneCfg) {
-      // Bridge not connected · keep banner hidden so we don't show stale state
       if (banner) banner.hidden = true;
       return;
     }
+    const base = _phoneCfg.url.replace(/\/$/, '');
+    const headers = { 'X-Maya-Bridge-Token': _phoneCfg.token };
     try {
-      const r = await fetch(_phoneCfg.url.replace(/\/$/, '') + '/active-window', {
-        headers: { 'X-Maya-Bridge-Token': _phoneCfg.token },
-        cache: 'no-store'
-      });
-      if (!r.ok) { banner.hidden = true; return; }
-      const j = await r.json();
-      if (!j.ok || !j.title) { banner.hidden = true; return; }
+      // Always show banner if bridge reachable - eyes off shows muted state, hands shows status
+      const [eyesR, handsR] = await Promise.all([
+        fetch(base + '/eyes/status',  { headers, cache: 'no-store' }).then(r => r.json()).catch(() => ({ok:false})),
+        fetch(base + '/hands/status', { headers, cache: 'no-store' }).then(r => r.json()).catch(() => ({ok:false}))
+      ]);
       banner.hidden = false;
+      if (_eyesToggleBtn)  _eyesToggleBtn.dataset.on  = eyesR.enabled  ? '1' : '0';
+      if (_handsToggleBtn) _handsToggleBtn.dataset.on = handsR.enabled ? '1' : '0';
+      if (!eyesR.enabled) {
+        targetEl.textContent = '(eyes off · Maya not watching)';
+        targetEl.style.opacity = '0.5';
+        procEl.textContent = '';
+        return;
+      }
+      targetEl.style.opacity = '1';
+      const r = await fetch(base + '/active-window', { headers, cache: 'no-store' });
+      if (!r.ok) { targetEl.textContent = '(bridge eyes error)'; return; }
+      const j = await r.json();
+      if (!j.ok || !j.title) { targetEl.textContent = '(no foreground window)'; return; }
       targetEl.textContent = j.title.slice(0, 80);
       procEl.textContent = j.process ? '· ' + j.process : '';
     } catch (e) {
       banner.hidden = true;
     }
   }
+
+  async function toggleBridgeFlag(which) {
+    if (!_phoneCfg) return;
+    const base = _phoneCfg.url.replace(/\/$/, '');
+    const headers = { 'X-Maya-Bridge-Token': _phoneCfg.token };
+    const statusR = await fetch(base + '/' + which + '/status', { headers }).then(r => r.json());
+    const newVerb = statusR.enabled ? 'off' : 'on';
+    await fetch(base + '/' + which + '/' + newVerb, { method: 'POST', headers });
+    pollWatchBanner();
+  }
+  if (_eyesToggleBtn)  _eyesToggleBtn.addEventListener('click',  () => toggleBridgeFlag('eyes'));
+  if (_handsToggleBtn) _handsToggleBtn.addEventListener('click', () => toggleBridgeFlag('hands'));
+
+  // v1.14.1 · "What do you see?" → bridge screenshot → NIM vision → answer in balloon
+  const _seeBtn = $('cwSeeBtn');
+  if (_seeBtn) _seeBtn.addEventListener('click', async () => {
+    if (!_phoneCfg) { alert('connect Device Bridge first'); return; }
+    const pin = sessionStorage.getItem('maya_os_commander_pin_v1') || prompt('Commander PIN:');
+    if (!pin) return;
+    const balloon = $('campusBalloon');
+    balloon.hidden = false;
+    balloon.innerHTML = '<div class="cb-head"><span class="live"></span><span>Maya is looking…</span></div><pre>capturing screen → NVIDIA llama-3.2-90b-vision-instruct</pre>';
+    _seeBtn.disabled = true;
+    _seeBtn.textContent = '⏳ looking…';
+    try {
+      // 1. Capture screen via bridge
+      const sR = await fetch(_phoneCfg.url.replace(/\/$/, '') + '/screenshot-screen', {
+        headers: { 'X-Maya-Bridge-Token': _phoneCfg.token }
+      });
+      const sJ = await sR.json();
+      if (!sJ.ok || !sJ.base64) {
+        balloon.innerHTML = '<div class="cb-head"><span class="live"></span><span>capture failed</span></div><pre>' + escapeHTML(sJ.error || 'no image') + '</pre>';
+        return;
+      }
+      // 2. Send to vision model
+      const vR = await fetch('https://iamsuperio.cloud/api/maya_vision', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pin, image_base64: sJ.base64,
+          question: 'Mo is looking at this screen on his Windows laptop. In 4-5 sentences plain English: (1) what app/page is open, (2) what is he doing or trying to do, (3) what would be useful next.'
+        })
+      });
+      const vJ = await vR.json();
+      if (!vJ.ok) {
+        balloon.innerHTML = '<div class="cb-head"><span class="live"></span><span>vision failed</span></div><pre>' + escapeHTML(vJ.error || JSON.stringify(vJ)) + '</pre>';
+      } else {
+        balloon.innerHTML = '<div class="cb-head"><span class="live"></span><span>Maya sees · ' + escapeHTML(vJ.model || 'NIM vision') + '</span></div><pre>' + escapeHTML(vJ.answer) + '</pre>';
+        // Emit a Campus event so packet flies
+        fetch('https://iamsuperio.cloud/api/maya_event', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ actor: 'maya', action: 'vision', target: 'screen', status: 'done', room: 'maya_brain', result: vJ.answer.slice(0, 120) })
+        });
+      }
+    } catch (e) {
+      balloon.innerHTML = '<div class="cb-head"><span class="live"></span><span>network error</span></div><pre>' + escapeHTML(e.message) + '</pre>';
+    } finally {
+      _seeBtn.disabled = false;
+      _seeBtn.textContent = '🧠 What do you see?';
+    }
+  });
 
   // Hook into mode switching · poll only when campus is visible · use MutationObserver
   // to avoid clashing with the existing switchMode function declaration.
