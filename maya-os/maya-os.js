@@ -2613,6 +2613,49 @@
   pollUnreadBadge();
   setInterval(pollUnreadBadge, 60000);
 
+  // v1.13.0 · Web Share Target · 2026-05-15
+  // When Maya OS is installed as PWA and Mo taps "Maya OS" in Android share sheet,
+  // we land here with ?shared_url= / ?shared_text= / ?shared_title= query params.
+  // We emit a Campus event so packets fly, drop the content into chat, and clean URL.
+  (function handleSharedTarget() {
+    const p = new URLSearchParams(location.search);
+    const sharedUrl   = p.get('shared_url');
+    const sharedText  = p.get('shared_text');
+    const sharedTitle = p.get('shared_title');
+    if (!sharedUrl && !sharedText && !sharedTitle) return;
+
+    const payload = [sharedTitle, sharedUrl, sharedText].filter(Boolean).join('\n');
+
+    // 1. Emit event to Campus event spine so Maya sees it instantly
+    try {
+      fetch('https://iamsuperio.cloud/api/maya_event', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          actor: 'phone_share', action: 'share_received',
+          target: (sharedUrl || sharedTitle || '').slice(0, 200),
+          status: 'done', room: 'maya_brain',
+          result: payload.slice(0, 480)
+        })
+      });
+    } catch (_) {}
+
+    // 2. Drop into chat as if Mo typed it · then route Maya to answer
+    setTimeout(() => {
+      try {
+        const composer = document.getElementById('msg');
+        if (composer) {
+          composer.value = '[Shared from phone]\n' + payload + '\n\nMaya · what should I do with this?';
+          composer.focus();
+        }
+      } catch (_) {}
+    }, 400);
+
+    // 3. Clean URL so refresh doesn't re-process the share
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, location.pathname + location.hash);
+    }
+  })();
+
   // Boot complete
   switchMode('chat');
 })();
