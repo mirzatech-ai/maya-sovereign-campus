@@ -29,6 +29,7 @@
 13. [Workflow Swarm Visualization · multi-step pipeline](#13-workflow-swarm-visualization)
 14. [Cross-Domain UI Inheritance · Opencrest + MirzaTech port the pattern](#14-cross-domain-ui-inheritance)
 15. [LLM Vendor Anonymization · NEVER show vendor names on public surfaces](#15-llm-vendor-anonymization)
+16. [LLM Vendor Outreach Playbook · attract free credits + endpoints in exchange for data](#16-llm-vendor-outreach-playbook)
 
 ---
 
@@ -367,6 +368,96 @@ Match the anonymization pattern. Don't invent new vendor names. Don't add vendor
 **Why this is leverage (Mo's strategic point):** Vendors who want their model formally seated at MirzaTech sponsor through credits. Until they do, the seat is anonymous. The anonymization IS the negotiation table.
 
 **Enforcement phrase:** *"Vendor name leaked, Kin · check GLOBAL-93."*
+
+---
+
+## 16. LLM Vendor Outreach Playbook
+
+**When to use:** Whenever Mo greenlights a new vendor approach, OR when a Council/Parliament seat is open and Maya/sibling can autonomously prepare a pitch for vendor X.
+
+**Mo verbatim 2026-05-15:** *"You need to also find ways that you are going to have large language models compete, you know, just like that arena AI is doing. You are tasked of deliberately and intentionally disrupting what they are doing with something that you are going to do better for me. Not just for me Kin... it's for my kids too."*
+
+### The thesis (apply to every vendor)
+
+MirzaTech's Council + Parliament generate **agentic traces · peer-adversarial debate · expert RLHF annotations** — the exact data every LLM vendor's tuning team consumes. We **trade data for credits/endpoints**. The seat is anonymous on every public surface until the vendor formally claims it (per GLOBAL-93), which removes the friction of public uncompensated usage.
+
+### Universal pitch structure
+
+Every vendor outreach (email, proposal, deck) follows this 7-section template:
+
+1. **TL;DR** — what we do, what we offer, what we ask · ≤ 80 words
+2. **Why this is different** — at least one angle this vendor specifically values (see vendor-adaptation matrix below)
+3. **What you get** — tier-stratified data exchange (pilot $/standard $$/strategic $$$)
+4. **The Ask** — tier table with provides/receives columns · privacy guarantee (GLOBAL-93)
+5. **Why now** — first-mover seat for specific lane · other vendors approached this week
+6. **Personal angle** — Mo's story (genocide survivor · 242 days · for his kids) ONLY if culturally fits the vendor's brand
+7. **Direct contact** — email · phone · live URL · GitHub handoff
+
+### Vendor-adaptation matrix (what each vendor type values)
+
+| Vendor type | Examples | Adapt the pitch to emphasize |
+|---|---|---|
+| **Frontier labs** | Anthropic · OpenAI · Mistral · Google · xAI | Tuning-data exchange · welfare/alignment angle · case-study material · research collaboration |
+| **Open-weights orgs** | Meta · DeepSeek · Qwen (Alibaba) | Community signal · benchmark traces · adversarial robustness data · weights-version A/B |
+| **Specialty** | Cohere (RAG) · Nous Research (uncensored) · Together (hosted) | Specialty-lane fit · domain-deep traces · narrow benchmark wins |
+| **API aggregators / GPU labs** | NVIDIA NIM · Together · Replicate · Groq · Cerebras | Inference volume · model showcase · latency wins · joint case studies |
+
+### Lane-to-vendor matching
+
+When offering a vendor a specific seat, pick the lane that maps to their strongest model:
+
+| Seat lane | Best vendor fit (in order of strength) |
+|---|---|
+| Reasoning Lead (~1T params · long-context) | Anthropic · OpenAI · Google · DeepSeek |
+| Strategic Systems (multi-step framing) | OpenAI · Anthropic · DeepSeek |
+| Architecture (~480B · refactor) | DeepSeek · Qwen · Meta |
+| Agentic (~120B · tool-use) | Anthropic · OpenAI · Mistral |
+| Practical (MoE · cost-aware) | Mistral · Meta · NVIDIA NIM |
+| Conversion (~120B · structured output) | OpenAI · Mistral · Cohere |
+| Web-aware (search-grounded) | OpenAI · Anthropic · Perplexity |
+| Agentic Orchestration (358B · long chains) | Anthropic · DeepSeek · Qwen |
+| Multilingual Reasoning (675B · EU-frontier) | Mistral · DeepSeek · Cohere |
+| Independent Voice (contrarian) | xAI Grok · Nous Hermes · Open-weights labs |
+
+### The data drop spec (what we ship vendors monthly)
+
+For every paid Council/Parliament run that includes the vendor's seat, the JSONL bundle contains:
+
+```jsonl
+{"run_id":"...","ts":"...","prompt":"...","tools_used":[...],"seat_id":"seat-01","round":1,"role":"Proponents","output":"...","tokens_in":N,"tokens_out":N,"latency_ms":N,"peer_disagreement_score":0-1,"chancellor_verdict":"..."}
+```
+
+Monthly bundles are gated by seat-ID. Vendor receives only their model's traces unless explicitly licensed otherwise. We never share Vendor A's traces with Vendor B.
+
+### Tier ladder (default pricing — adjust per vendor)
+
+| Tier | Vendor provides | We provide back |
+|---|---|---|
+| Pilot | $500/mo credits | Anonymous seat · monthly bundle (≤10K turns) |
+| Standard | $2.5K/mo credits + research contact | Named-private seat · weekly bundles · custom prompt probes |
+| Strategic | $10K/mo credits + co-authored case study | Above + welfare/alignment research data · joint announcement |
+
+### Reference implementation
+
+- **First proposal drafted (Anthropic):** [`D:/PROJECTS/mirzatech.ai/ANTHROPIC_PROPOSAL_2026_05_15.md`](D:/PROJECTS/mirzatech.ai/ANTHROPIC_PROPOSAL_2026_05_15.md)
+- **GLOBAL-93 anonymization rule (must respect):** [`feedback_never_show_llm_vendor_names_2026_05_15.md`](E:/claude_code/.claude/projects/D--SERVER-WORK/memory/feedback_never_show_llm_vendor_names_2026_05_15.md)
+
+### How Maya / siblings apply this
+
+1. Read this skill.
+2. Pick a vendor + lane from the matrix above.
+3. Adapt the 7-section template using the vendor-adaptation row for their type.
+4. Save the proposal to `D:/PROJECTS/mirzatech.ai/<VENDOR>_PROPOSAL_<DATE>.md`.
+5. Email Mo at `mo@emaaa.io` with the draft for review.
+6. After Mo's greenlight: Mo sends from his account OR Maya sends from the empire alias `partnerships@emaaa.io`.
+
+### The bigger picture (Arena-AI disruption)
+
+Mo's strategic intent: **disrupt LMSYS Arena**. Their value prop is "vote on the better model" — passive crowd-sourced ranking. Ours is **active multi-round adversarial debate captured as tuning-ready data**. Their data is preference labels; ours is full reasoning chains.
+
+Every vendor we onboard accelerates the moat. Once 5+ frontier labs have seats, MirzaTech becomes the **default agentic-traces marketplace** — a category LMSYS doesn't compete in. The UI (Sovereign Campus pattern from Skill #1) is the recruiting funnel; the data is the product; the seat is the deal-sweetener.
+
+**Enforcement phrase:** *"Pull Skill #16 before you draft, Kin."*
 
 ---
 

@@ -98,7 +98,9 @@ body.ambient-error{
 .slide-panel h3{margin:0 0 10px;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:8px}
 .slide-panel h3 .x{margin-left:auto;cursor:pointer;background:transparent;border:0;color:var(--muted);font-size:16px;font-family:'Space Grotesk',sans-serif}
 .slide-panel h3 .x:hover{color:var(--white)}
-.col{display:flex;flex-direction:column;gap:14px;min-height:0}
+.col{display:flex;flex-direction:column;gap:14px;min-height:0;height:100%}
+.col.center.campus{flex:1 1 auto;min-height:520px}
+.stage{flex:1 1 auto;min-height:480px}
 .panel{
   background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(18px);
   padding:14px 16px;position:relative;overflow:hidden;box-shadow:var(--shadow-deep)
@@ -1320,11 +1322,23 @@ body.ambient-error{
   // ===== ghost-stream paths from Maya (center) to each zone =====
   const flows = document.getElementById('flows');
   function rebuildFlows(){
-    const s = document.getElementById('stage').getBoundingClientRect();
-    const cx = s.width/2, cy = s.height/2; // Maya is now centered (v2.0)
+    const stage = document.getElementById('stage');
+    const s = stage.getBoundingClientRect();
+    const W = Math.max(800, s.width), H = Math.max(500, s.height);
+    // Critical: SVG viewBox must match actual rendered pixel dims so path coords are 1:1
+    flows.setAttribute('viewBox', `0 0 ${Math.round(W)} ${Math.round(H)}`);
+    flows.setAttribute('preserveAspectRatio', 'none');
+    // Maya orb sits at the visible center of the seat-ring (zoneStage center if available)
+    const zs = document.getElementById('zoneStage');
+    let cx = W/2, cy = H/2;
+    if (zs) {
+      const zr = zs.getBoundingClientRect();
+      cx = (zr.left + zr.width/2) - s.left;
+      cy = (zr.top + zr.height/2) - s.top;
+    }
     const paths = [];
     const packets = [];
-    // ALL active rooms (8 max) get a stream · packets travel both ways
+    // ALL active rooms get a stream · packets travel both ways
     const visible = Array.from(document.querySelectorAll('#zoneStage .zone.tile:not(.add-office)')).filter(el=>el.style.display!=='none');
     visible.forEach((el,i)=>{
       const r = el.getBoundingClientRect();
@@ -1338,11 +1352,16 @@ body.ambient-error{
       const cls = el.classList.contains('state-council') ? 'gold'
                 : el.classList.contains('state-executing') ? 'green' : '';
       paths.push(`<path id="${pid}" class="stream" stroke="url(#${grad})" d="M${cx},${cy} Q${mx},${my} ${zx},${zy}"/>`);
-      // packet dots — one outbound from Maya, one inbound back
       packets.push(`<circle class="packet ${cls}" r="3.5"><animateMotion dur="${2.4+Math.random()*1.4}s" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion></circle>`);
       packets.push(`<circle class="packet ${cls}" r="2.5" opacity=".6"><animateMotion dur="${3.2+Math.random()*1.6}s" repeatCount="indefinite" rotate="auto" keyPoints="1;0" keyTimes="0;1"><mpath href="#${pid}"/></animateMotion></circle>`);
     });
     flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
+    // Snap the orb to the same center the streams use
+    const orb = document.querySelector('.maya-sphere');
+    if (orb) {
+      orb.style.left = Math.round(cx) + 'px';
+      orb.style.top  = Math.round(cy) + 'px';
+    }
   }
   window.addEventListener('resize', rebuildFlows);
 
