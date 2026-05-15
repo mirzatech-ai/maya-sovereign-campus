@@ -182,11 +182,13 @@ function call_gemini_chairman($role_persona, $payload_text, $stage_summary, $tim
             'thinkingConfig' => array('thinkingBudget' => 0),  // disable extended thinking · we want fast deterministic verdicts
         ),
     );
-    // Try up to 3 different keys (round-robin on 429/empty)
+    // Try up to 8 different keys with backoff on 429/empty.
+    // 42 keys in vault rotated round-robin keep us well under per-key quota.
     $reply = null; $code = 0; $last_key = '';
-    $attempts = min(3, count($keys));
+    $attempts = min(8, count($keys));
+    $offset = abs(crc32($role_persona . microtime()));
     for ($att = 0; $att < $attempts; $att++) {
-        $key = $keys[($att + abs(crc32($role_persona . microtime()))) % count($keys)];
+        $key = $keys[($att + $offset) % count($keys)];
         $last_key = substr($key, 0, 12) . '...';
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent?key=' . $key;
         $ch = curl_init($url);
@@ -206,7 +208,8 @@ function call_gemini_chairman($role_persona, $payload_text, $stage_summary, $tim
                 if (trim($reply) !== '') break;
             }
         }
-        // 429 / empty · try next key
+        // 429 · sleep then try next key. Empty/other · just rotate.
+        if ($code === 429 && $att < $attempts - 1) usleep(800000); // 0.8s
     }
     if ($reply === null || trim($reply) === '') {
         return array(
