@@ -43,6 +43,7 @@
 27. [Daily Empire Health Pulse · 7am email to Mo · revenue + jail + chain count + scout updates](#27-daily-empire-pulse)
 28. [Chairman's Seal Protocol · Gemini sits above the Board · 100% Consensus Mandate (replaces ≥67%) · dual VISUAL+LOGIC persona](#28-chairmans-seal-protocol)
 29. [Agency-by-Agency Verification Sweep · loop every agency from staff.php through Three-Level Chain + Chairman Seal · per-agency artifact (purpose · audience · financial model · empire dependency · brand compliance) · background CLI · session-end email](#29-agency-sweep)
+30. [Agent Factory · instantiate every role in every agency as a concrete agent JSON (persona · system_prompt · model_assignment · memory namespace) · idempotent · 100 agencies × ~7 roles = 724 agents in <5s](#30-agent-factory)
 
 ---
 
@@ -1212,6 +1213,68 @@ cd /tmp/manus-handoff && cp ... . && git add file && git commit -m "..." && git 
 **Inheritance**: same pattern applies to Council seats (12), Parliament seats (24), Board seats (12), and any future fleet (vendors · client tenants · packaged products). One sweep template · N fleets.
 
 ---
+
+---
+
+<a id="30-agent-factory"></a>
+## 30. Agent Factory
+
+**Mo verbatim 2026-05-15**: *"I asked you also to run a task to create every agent for every agency."*
+
+**Doctrine**: Every role defined in every agency MUST exist as a concrete addressable agent JSON file on disk. A role is a template; an agent is the instantiation. Without instantiated agents, "the agency has 12 roles" is just metadata — there's no actual entity to dispatch, no persona to load, no memory namespace to write to.
+
+**Endpoint**: `/api/agent_factory.php?action=preview | build | status | report`
+**CLI**: `php agent_factory.php build` (synchronous, ~3-5 seconds for 724 agents · idempotent)
+
+**Storage layout** (canonical · do not move):
+```
+/home/ai-staffing.agency/public_html/data/agents/
+  <agency-slug>/
+    _index.json                       ← list of agents in this agency
+    <role-slug>.json                  ← one file per agent
+    ...
+```
+
+**Agent JSON schema** (locked 2026-05-15):
+```json
+{
+  "agent_id": "<agency>--<role-slug>",
+  "agency_id": "...",
+  "agency_name": "...",
+  "role_title": "...",
+  "tier": "executive | senior | mid | junior",
+  "daily_rate": 0,
+  "skills": [...],
+  "persona": "<one-paragraph identity>",
+  "system_prompt": "<persona + agency context + hard rules>",
+  "model": {
+    "lane": "code | chat",
+    "primary": "maya:code:deepseek-v4 | maya:chat:groq",
+    "fallback": "...",
+    "brain": "https://iamsuperio.cloud/api/brain"
+  },
+  "memory_namespace": "agents/<agency>/<role-slug>",
+  "verification": {"chain": "...", "seal": "Skill #28", "doctrine": "GLOBAL-96 + GLOBAL-97"},
+  "brand": {"powered_by": "MirzaTech.ai", "property_of": "EMAAA.io", "phone": "+1 (743) 215-1423"},
+  "created_at": "...",
+  "factory_version": "v1.0"
+}
+```
+
+**Model assignment rule** (GLOBAL-105 canon):
+- `tier=executive | senior` → Maya code lane (DeepSeek V4 via NIM)
+- `tier=mid | junior` → Maya chat lane (Groq → Gemini fallback)
+- **Always** through Maya brain at `https://iamsuperio.cloud/api/brain` · NEVER direct vendor calls
+
+**Idempotency**: re-running `build` updates `created_at` and `factory_version` but does NOT destroy existing agent files. Safe to fire daily via cron.
+
+**Anti-patterns**:
+- ❌ Inlining agents in PHP arrays (un-Maya-readable, can't scale to 1000+ agents)
+- ❌ Calling vendor APIs directly from agent JSON (violates GLOBAL-105)
+- ❌ Generating without a `_index.json` per agency (breaks dispatcher lookup)
+- ❌ Naming with vendor strings in `agent_id` (violates GLOBAL-93)
+
+**Inheritance**: Agency Dispatcher reads `/data/agents/<agency>/_index.json` to choose which agent to hire for a job. Chain (Skill #21) and Sweep (Skill #29) can include the agent population as part of agency artifact verification.
 
 ---
 
