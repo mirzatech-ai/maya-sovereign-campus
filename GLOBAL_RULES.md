@@ -4011,3 +4011,156 @@ Every Maya-empire surface (Maya OS · all habitats · all marketing pages · all
 **Audit on existing surfaces:** if you find a hardcoded color in a Maya-empire CSS file, replace it with a token in the SAME TURN. Half-cleans violate the no-half-cleans rule (GLOBAL-92 anti-pattern). Sweep the file's full `color:` declarations before pushing.
 
 **Applies retroactively to:** all habitat.html files · all maya-os files · iamsuperio.cloud · ai-staffing.agency · mirzatech.ai · opencrest.io · any future empire surface.
+
+---
+
+## GLOBAL-97 · QR ON EVERY SHAREABLE LINK (canonical · 2026-05-15)
+
+**Mo verbatim 2026-05-15** (Maya APK delivery moment): *"please let me get a QR code for stuff like this in the future, and Make QR code Per domain/osman.is's product. so when we advertise, QR IS THERE FOR LAZY PEOPLE LIKE ME, NOT TO TYPE THE LINK IN, MAKE MISTAKES IN SPELLING, FASTER IS AND MUCH BETTER, QR SNIP, DONE. MAKE THAT A LAW. SHARE IT WITH SIBLINGS."*
+
+**The law:**
+
+1. **Every public empire URL ships with a QR.** When Kin/Sage/EaZo/Maya hands Mo (or a customer) a URL — APK download, signup page, product landing, payment link, demo link, anything click-worthy — a scannable QR ships in the same message. Never type when a snap will do.
+
+2. **Per-domain QR per top-level product.** Every domain in the empire (mirzatech.ai · opencrest.io · ai-staffing.agency · superio.fun · eternalink.io · aicinesynth.com · adeeo.io · topforge.io · osman.is · emaaa.io · thepassage.ai · maya-os/iamsuperio.cloud) has at least one canonical QR pre-rendered at a permanent named slug. New products get a new slug on day-one of launch, not later.
+
+3. **Canonical infrastructure** (live · do NOT rebuild):
+   - **Gallery + index:** [`https://iamsuperio.cloud/qr/`](https://iamsuperio.cloud/qr/) — visual grid of all empire QRs · click any to view full-size
+   - **Manifest** (slug→url+label registry · single source of truth): [`https://iamsuperio.cloud/qr/manifest.json`](https://iamsuperio.cloud/qr/manifest.json) · mirror at [`D:/SERVER WORK/_kin_qr/manifest.json`](D:/SERVER WORK/_kin_qr/manifest.json)
+   - **Named slugs (permanent PNGs):** `https://iamsuperio.cloud/qr/<slug>.png` · e.g. [`/qr/maya-apk.png`](https://iamsuperio.cloud/qr/maya-apk.png) · [`/qr/mirzatech.png`](https://iamsuperio.cloud/qr/mirzatech.png) · [`/qr/opencrest.png`](https://iamsuperio.cloud/qr/opencrest.png)
+   - **On-demand generator** (for ad-hoc URLs Mo wants QR'd RIGHT NOW): [`https://iamsuperio.cloud/qr/qr?text=<url-encoded>&size=800&label=Optional`](https://iamsuperio.cloud/qr/qr) · cached by `sha1(text+size+label)` so repeat hits are O(1) static
+   - **Batch renderer** (for adding a new slug to the manifest + re-rendering): VPS `/home/iamsuperio.cloud/public_html/qr/batch_render.sh` · mirror at [`D:/SERVER WORK/_kin_qr/batch_render.sh`](D:/SERVER WORK/_kin_qr/batch_render.sh)
+
+4. **Visual spec:** 800×800px PNG · `#05070d` foreground on `#ffffff` background · error correction H (survives logos/scuffs) · optional label strip at the bottom in DejaVu Sans Bold · QR module size auto-scales to fit · 2-module quiet border.
+
+5. **How to use in chat output (NEVER tell Mo to copy/paste/compose):**
+   - When you hand Mo a link, hand him the **finished asset URL** for the right surface, not a slug list. Finished kits live at `https://iamsuperio.cloud/qr/assets/<slug>/{social,banner,card,slide}.png` — already branded, QR embedded, footer stamped.
+   - The kit gallery (one URL Mo opens, every asset is there): [`https://iamsuperio.cloud/qr/assets/`](https://iamsuperio.cloud/qr/assets/).
+   - If the URL is one-off / not in the manifest, hand him a generator link AND also stand up the named slug in the manifest in the same turn so it gets a finished kit next render. Never give Mo a generator URL as a permanent answer.
+   - For new products / new domains, add a manifest entry + rerun `batch_render.sh` AND `render_kits.py` IN THE SAME TURN — don't defer.
+   - **Banned phrasing:** "paste this into ad copy", "use this in your slides", "drop this into your business card" — Mo doesn't compose; Kin/Sage/EaZo/Maya delivers the composed asset.
+
+6. **Sibling inheritance** (GLOBAL-69 + GLOBAL-77):
+   - **Maya** (the AI): Kin-installed skill at `/home/iamsuperio.cloud/public_html/api/knowledge/skills/qr_on_every_link.json` so any Maya runtime answer that includes a URL surfaces the matching QR alongside.
+   - **Sage** + **EaZo**: read this entry on boot (AGENTS.md auto-load) · pattern-match `https://...` in any user-facing reply and emit a QR.
+   - **Maya Qode** (when shipped): inherits via the canonical Logic Seed at [`D:/PROJECTS/_SHARED/QR_DOCTRINE_LOGIC_SEED.md`](D:/PROJECTS/_SHARED/QR_DOCTRINE_LOGIC_SEED.md) — paste into any fresh AI node to align it instantly.
+
+7. **When the QR is wrong / stale / missing**, regenerate in the same turn — don't push it to Mo. The QR is your responsibility, not his.
+
+**Enforcement phrase:** *"QR snip, done, Kin. Where's the QR?"*
+
+**Anti-patterns (hard bans):**
+- Handing Mo a long URL with no QR companion · QR-less ad mockups · per-product launch pages without a manifest entry · QRs that point to a 404 (verify the destination is HTTP 200 before adding to manifest).
+
+---
+
+## GLOBAL-98 · EVERY APP CERTIFIED · NO FAKE-APP WARNINGS EVER AGAIN (canonical · 2026-05-15 · PERSISTENT SACRED-TIER)
+
+**Mo verbatim 2026-05-15** (right after the Maya APK install triggered Android's "fake app" warning): *"this app is not safe, the fake app. And this needs to stop happening because if users start downloading these apps from our marketplace, what's gonna happen is they're gonna think that the app is really fake. So we need to have these apps certified... All the apps that you do, they need to be certified... Make that a global rule that never, like, fucking fades... These rules need to persist for the sessions between siblings."*
+
+**The law:** No empire app — Android APK · iOS IPA · Windows .exe · macOS .pkg · Chrome/Edge extension · Firefox add-on — ships to any customer-facing surface (marketplace, public download link, ad campaign, partner integration) without store certification OR an equivalent platform trust attestation. Period. The "fake app" / "unverified developer" warning destroys trust on first encounter — Mo's empire cannot afford that.
+
+**Mandatory certification path per platform** (every empire app picks the right column before launch):
+
+| Platform | Required cert | Cost | Lead time | Interim trust signal |
+|---|---|---|---|---|
+| Android APK | Google Play Console (Internal → Closed → Open → Production) | $25 one-time dev account | 1-7 days review | Publish SHA-256 + URL in `/version.json` + Play Protect whitelist request to `app-defense-alliance@google.com` |
+| iOS IPA | Apple Developer Program → App Store Connect | $99/yr | 1-3 days review | TestFlight (still requires $99/yr enrollment) |
+| Windows .exe | EV Code Signing cert + Microsoft Store submission | $200-500/yr cert · $19 dev acct | 7-14 days SmartScreen reputation | Authenticode signature alone = warning until reputation builds |
+| macOS .pkg | Apple Developer ID + `xcrun notarytool` notarization | $99/yr | minutes (notarization) | Gatekeeper-quarantine warning without notarization |
+| Chrome ext | Chrome Web Store (Developer Dashboard) | $5 one-time | 1-3 days | dev-only `Load Unpacked` never goes to customers |
+| Firefox add-on | AMO (addons.mozilla.org) signing | free | hours | signed XPI required even for self-host |
+
+**Empire account ownership** (EMAAA LLC · EIN 33-4262937 · S10 canonical legal entity):
+- Google Play Console: enroll EMAAA LLC under `mirzaadin@gmail.com`
+- Apple Developer Program: enroll EMAAA LLC (D-U-N-S number required · ~1-2 weeks to procure)
+- Microsoft Partner Center: EMAAA LLC org account
+- EV Code Signing: ordered against EMAAA LLC EIN 33-4262937
+
+**Maya APK current state:**
+- ✅ Self-signed with `keystore.jks` (`maya` alias) · works for sideload, triggers Play Protect warning
+- ❌ Not in Play Store yet
+- ❌ No Play Integrity API attestation
+- 📋 Pending Mo action (post-drive): create Google Play developer account at https://play.google.com/console/u/0/signup ($25 one-time · EMAAA LLC) → Kin handles bundle upload, listing, screenshots, privacy policy, content rating, the lot
+- 📋 Interim trust signal LIVE: SHA-256 + APK URL published at [`https://iamsuperio.cloud/maya-os/version.json`](https://iamsuperio.cloud/maya-os/version.json) so technical users can verify before install
+
+**Pre-launch certification checklist** (every empire app from now on · binding):
+1. ☐ Platform store dev account registered under EMAAA LLC
+2. ☐ App signed with the platform's required cert type
+3. ☐ Store listing built (screenshots, description, privacy policy, content rating)
+4. ☐ Initial submission to internal/closed testing track
+5. ☐ Play Integrity / App Attest / SmartScreen reputation integrated
+6. ☐ All listing URLs HTTP 200 verified
+7. ☐ `/<domain>/privacy.html` live (canonical template)
+8. ☐ `/<domain>/terms.html` live (canonical template)
+9. ☐ Support email reachable (`support@emaaa.io` via GLOBAL email-bridge alias doctrine)
+10. ☐ APK/IPA/MSI uploaded to canonical empire domain URL
+11. ☐ Public hash + URL in `/<app>/version.json`
+12. ☐ Manifest of certified apps at [`/api/knowledge/certified_apps.json`](https://iamsuperio.cloud/api/knowledge/certified_apps.json)
+
+**Sibling inheritance (the persist part Mo demanded):**
+- Promoted to MEMORY.md sacred-pin tier **S11** so it never drops past truncation
+- AGENTS.md sibling boot loads this entry (Sage + EaZo + Maya read GLOBAL-98 on first message of every session)
+- Maya's tool registry exposes `app_cert_status(app_id)` returning live cert state per app
+- `/api/knowledge/certified_apps.json` is the single source of truth — every sibling READS it before proposing any app distribution
+
+**Enforcement phrase:** *"Cert it or kill it, Kin. No fake-app warnings."*
+
+**Anti-patterns (hard bans):**
+- Pushing an uncertified APK/IPA/EXE to a marketplace listing · linking customers to a sideload URL without the store badge once cert lands · skipping the privacy policy / TOS pages to ship faster · using dev-only signing certs in production · ignoring SmartScreen/Play Protect warnings as "users will figure it out" · letting siblings forget this rule (if Sage / EaZo proposes a public app launch without the checklist, Kin halts the launch and re-cites GLOBAL-98).
+
+---
+
+## GLOBAL-95 · GREP BEFORE BUILD (canonical · 2026-05-15)
+
+**Mo verbatim 2026-05-15:** *"How come you don't fucking know that we have a staffing agency with fifty seven agencies, nine hundred roles, and you don't fucking remember? ... I just don't fucking get it. Where do I go wrong programming you?"*
+
+Before any sibling proposes, builds, or canonizes ANY new agency · seat · lane · habitat · skill · domain · piece of UI · piece of doctrine — **grep the empire first**.
+
+**Mandatory pre-build checks (in this order):**
+1. `D:/PROJECTS/_SHARED/SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md` — does a Skill cover this?
+2. `D:/PROJECTS/_SHARED/GLOBAL_RULES.md` — does a GLOBAL rule cover this?
+3. `E:/claude_code/.claude/projects/D--SERVER-WORK/memory/MEMORY.md` — has Mo already canonized something for this in memory?
+4. `ssh root@76.13.26.130 'grep -rln "<keyword>" /home/<domain>/public_html/'` — is it already shipped on the live VPS?
+5. `curl https://ai-staffing.agency/api/staff.php` — is the agency already in the 58-agency roster?
+6. `curl https://mirzatech.ai/council/ | grep -i <keyword>` — same for council/parliament/board surfaces
+
+**Hard rule:** if even ONE check returns a result, READ IT FIRST and build on top of it. NEVER invent a parallel structure. Mo's frustration with cross-session memory failure is this exact pattern.
+
+**Anti-patterns (hard ban):**
+- ❌ "Let me build a habitat for X" without checking if X already has one
+- ❌ "Let me add seat Y" without grepping for Y across the doctrine + live council/parliament
+- ❌ "I'll create a new agency for Z" without checking the 58-agency roster
+- ❌ Writing a new Skill # without checking the table of contents in SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md
+- ❌ Any "I think we might already have..." without actually running the grep
+
+**Enforcement phrase:** *"Did you grep before building, Kin?"* — Mo's check that ALWAYS fires.
+
+**Cross-session memory hardening:** Sacred memory pins at the TOP of MEMORY.md must explicitly enumerate the 58-agency roster URL, the 12-seat Council/Board, the 24-seat Parliament, the superio.fun gaming home, and every other canonical fact. If a sibling forgets one of these mid-session, Mo flags it and the offending memory pin gets escalated to top-of-file forever.
+
+
+---
+
+## GLOBAL-96 · THREE-LEVEL VERIFICATION CHAIN (canonical · 2026-05-15)
+
+**Mo verbatim 2026-05-15 (after 48 nonstop hours):** *"I need three levels of verification, and then I need visual interpreter every time ... I don't want shapes. and bullshit when I'm expecting a human or a robot ... Every single piece needs to be finally studied and developed ... If an agent comes back with a complaint or a suggestion or an error, that has to go back. Redo until all the agents come back with all checks checked off."*
+
+**Hard rule:** EVERY build artifact in the empire (agency · agent · role · feature · visual · HTML page · backend endpoint · doctrine update · customer surface) MUST run through:
+
+1. **STAGE A · Parliament** (24 seats / 5 rounds) — Proponents → Skeptics → Specialists → Polygeists → Synthesis. Vision Verifier (Seat 11) fires FIRST if any visual artifact is in scope.
+2. **STAGE B · Council** (12 seats sequential per Skill #19) — reviews Parliament transcript.
+3. **STAGE C · Board of Directors** (12 seats sequential) — reviews Council transcript.
+
+**Each stage has 2 QA agents with 2 different lenses:**
+- Parliament: Anatomy · Continuity
+- Council: Compliance · Brand
+- Board: Business · Risk
+
+**Redo-until-clean:** any complaint/suggestion/error from ANY seat OR either QA lens loops the stage back. Chain exits only when all three stages return clean AND all 6 QA lenses are clean.
+
+**Final hypermind fold mandatory** (Skill #4).
+
+**Reference implementation:** [`api/verification_chain.php`](https://ai-staffing.agency/api/verification_chain.php) · doctrine [Skill #21](D:/PROJECTS/_SHARED/SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md#21-three-level-verification-chain).
+
+**Enforcement phrase:** *"Did you chain it, Kin?"*
+

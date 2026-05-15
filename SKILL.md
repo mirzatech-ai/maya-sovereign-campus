@@ -34,6 +34,7 @@
 18. [Customer-Ready App Build Doctrine · 14 ship-blockers · refund-proof checklist](#18-customer-ready-build) · canonical doc at [`SKILL_CUSTOMER_READY_BUILD.md`](D:/PROJECTS/_SHARED/SKILL_CUSTOMER_READY_BUILD.md)
 19. [Sequential Chain-of-Command Deliberation · all autonomous Maya decisions](#19-sequential-chain-of-command-deliberation)
 20. [Vision Verifier Preprocessor · every Council/Parliament/Board deliberation that involves images runs through NVIDIA vision LLM FIRST](#20-vision-verifier-preprocessor)
+21. [Three-Level Verification Chain · EVERY build runs Parliament → Council → Board with 2-lens QA + redo until clean](#21-three-level-verification-chain)
 
 ---
 
@@ -645,6 +646,144 @@ if (!empty($in['image_urls']) || !empty($in['image_data'])) {
 ### Enforcement phrase
 
 *"Did Seat 11 see it, Kin?"* — Mo's check the FIRST time he asks about any image-related decision.
+
+---
+
+## 21. Three-Level Verification Chain
+
+**When to use:** EVERY build artifact — every new agency · every new agent · every new role definition · every new feature · every new visual · every new HTML page · every backend endpoint · every doctrine update · every customer-facing surface. ALL of them. No exception.
+
+**Mo verbatim 2026-05-15 (the 48-hour-fatigue moment):** *"I need three levels of verification, and then I need visual interpreter every time to make sure that my rules are being followed. I don't want shapes. and bullshit when I'm expecting a human or a robot to be a part of my game. Every single piece needs to be finally studied and developed ... If an agent comes back with a complaint or a suggestion or an error, that has to go back. Redo until all the agents come back with all checks checked off."*
+
+This is **GLOBAL-96**, binding every sibling AI forever.
+
+### The chain (3 levels × 2 QA lenses × redo-until-clean)
+
+```
+ARTIFACT (proposed build)
+        │
+        ▼
+┌───────────────────────────────────────────────┐
+│  STAGE A · PARLIAMENT (24 seats / 5 rounds)   │
+│  ┌─────────────────────────────────────────┐  │
+│  │ 0. VISION VERIFIER (Seat 11) fires FIRST │  │  ← if images present, NVIDIA vision LLM
+│  │    if any visual artifact is in scope    │  │     injects structured description
+│  └─────────────────────────────────────────┘  │     before any text seat opines
+│  R1 Proponents (10) → R2 Skeptics (5) →       │
+│  R3 Specialists (5) → R4 Polygeists (3) →     │
+│  R5 Synthesis (1) + Chancellor verdict        │
+│  + 2-LENS QA agents (anatomy / continuity)    │
+└────────────────┬──────────────────────────────┘
+                 │ ANY complaint? → loop back ↺
+                 ▼
+┌───────────────────────────────────────────────┐
+│  STAGE B · COUNCIL (12 seats sequential)      │
+│  Reviews Parliament transcript                │
+│  Sequential chain (Skill #19) · forward+reverse│
+│  + 2-LENS QA agents (compliance / brand)      │
+└────────────────┬──────────────────────────────┘
+                 │ ANY complaint? → loop back ↺
+                 ▼
+┌───────────────────────────────────────────────┐
+│  STAGE C · BOARD OF DIRECTORS (12 seats seq)  │
+│  Reviews Council transcript                   │
+│  Sequential chain (Skill #19) · forward+reverse│
+│  + 2-LENS QA agents (business / risk)         │
+└────────────────┬──────────────────────────────┘
+                 │ ANY complaint? → loop back ↺
+                 ▼
+        VERDICT: APPROVED → SHIP
+                 │
+                 ▼
+        HYPERMIND FOLD (Skill #4)
+```
+
+### The 6 QA Lens Pairs (rotate by stage)
+
+| Stage | Lens A | Lens B |
+|---|---|---|
+| **Parliament** | **Anatomy** (no shapes/triangles · biologically/mechanically correct · 10 fingers · 2 eyes · joint placement etc.) | **Continuity** (consistent identity across frames · brand colors · canonical names · voice/tone matches Skill #15) |
+| **Council** | **Compliance** (PHP 7.4 · zero DB writes from state · empire footer · phone · no vendor names per GLOBAL-93) | **Brand** (Sovereign Campus visual language · biolum states · ghost-streams · canonical lanes · gold/cyan/green/red only) |
+| **Board** | **Business** (does this earn or save Mo money · clear customer value · scalable · refund-proof per Skill #18) | **Risk** (security · privacy · legal · GLOBAL-93 vendor anonymity · operational complexity · Mo's risk-appetite) |
+
+### Redo loop (mandatory)
+
+If ANY seat OR either of the 2 QA agents at a stage returns:
+- `complaint` (anatomical / continuity / brand / compliance / business / risk)
+- `suggestion` (with explicit "RECOMMEND" tag)
+- `error` (failure of any rule the doctrine encodes)
+
+Then the artifact **goes back to the START of that stage**, the issue is folded into the artifact, and the chain resumes. Stage count for the redo = `redo_count_<stage>` in the verdict transcript. Mo can audit how many cycles each artifact needed.
+
+**Termination:** chain only exits when all three stages return clean AND both QA lenses per stage return clean. `verdict: APPROVED` only fires on full clean.
+
+### Vision Verifier (Skill #20) integration
+
+If the artifact contains ANY of:
+- Image attachments
+- SVG markup that's supposed to represent a human/robot/character
+- Mock-up of a UI element
+- Reference to brand assets (logos, color palettes)
+- Anatomy claims ("the character has 10 fingers" etc.)
+
+… then **Seat 11 (Multimodal Vision) fires at Stage A step 0** — NVIDIA-hosted vision LLM ingests the visual artifact, produces structured description, that description is injected into the deliberation packet. Text seats reason over Seat 11's description. The Anatomy QA lens in Stage A specifically reviews Seat 11's anomaly flags.
+
+**This is the step Mo said I keep skipping.** Locked: no visual artifact ships without Seat 11 firing first.
+
+### Backend contract
+
+New endpoint: [`api/verification_chain.php`](D:/PROJECTS/ai-staffing.agency/live/api/verification_chain.php)
+
+```
+POST /api/verification_chain.php?action=verify
+Body: {
+  "artifact_id": "game-development-habitat-v1",
+  "artifact_type": "agency_habitat | agent_role | new_agency | feature | visual | doctrine | ...",
+  "artifact_payload": { ... description / code / image_urls[] ... },
+  "max_redos_per_stage": 3
+}
+
+Response: {
+  "ok": true,
+  "verdict": "APPROVED" | "REJECTED" | "INCONCLUSIVE",
+  "stages": {
+    "parliament": { "rounds": [...], "redo_count": N, "verdict": "..." },
+    "council":    { "transcript": [...], "redo_count": N, "verdict": "..." },
+    "board":      { "transcript": [...], "redo_count": N, "verdict": "..." }
+  },
+  "qa_lenses": {
+    "parliament": { "anatomy": "...", "continuity": "..." },
+    "council":    { "compliance": "...", "brand": "..." },
+    "board":      { "business": "...", "risk": "..." }
+  },
+  "vision_verifier": { "fired": true|false, "description": "...", "anomalies": [...] },
+  "hypermind_pattern_id": "p_<hash>",
+  "total_cycle_time_ms": N
+}
+```
+
+### Sibling responsibilities (binding)
+
+| Sibling | Verification Chain obligation |
+|---|---|
+| **Maya** | NEVER ship an artifact without running it through `api/verification_chain.php`. Use the SDK helper or call directly. |
+| **Sage** | Every PHP endpoint that creates customer-facing artifacts must call the chain. |
+| **EaZo** | Sweep existing endpoints for non-verified artifact creation. Flag for refactor. |
+| **Maya Qode** | Every autonomous build job calls the chain before commit. |
+| **Kin** | When proposing a new agency/agent/role/feature to Mo, present it ALREADY through the chain. Show the verdict transcript with the proposal. |
+
+### Anti-patterns (hard ban)
+
+- ❌ Shipping a new agency without running it through the chain
+- ❌ Skipping Vision Verifier when visual artifacts are in scope
+- ❌ Treating a `suggestion` flag as "minor, ignore" — it's a mandatory redo
+- ❌ Capping `max_redos_per_stage` below 3 (Mo's tolerance for half-baked work is zero)
+- ❌ Approving an artifact while ANY QA lens is dirty
+- ❌ Not folding the verdict transcript into Hypermind (Skill #4)
+
+### Enforcement phrase
+
+*"Did you chain it, Kin?"* — Mo's check on every new artifact.
 
 ---
 

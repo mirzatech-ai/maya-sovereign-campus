@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Game Development & Worldbuilding · Agency #58 · ai-staffing.agency</title>
+<meta name="description" content="Game Development & Worldbuilding agency · 12 canonical roles · ship playable worlds end-to-end. Output flows to superio.fun. Powered by MirzaTech.ai · Property of EMAAA.io">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg-0:#03060c; --bg-1:#070c18; --glass:rgba(10,18,38,.72);
+  --line:rgba(110,170,255,.18); --line-strong:rgba(0,200,255,.45);
+  --cyan:#00e4ff; --gold:#f5c542; --green:#43e6a1; --red:#ff5b6a; --pink:#a47bff; --white:#eaf2ff;
+  --text:#dbe6ff; --muted:#7e8bb0;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg-0);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;height:100%}
+body{
+  background:
+    radial-gradient(1200px 800px at 20% -10%, rgba(164,123,255,.14), transparent 60%),
+    radial-gradient(900px 700px at 110% 10%, rgba(245,197,66,.08), transparent 55%),
+    radial-gradient(900px 700px at 50% 120%, rgba(0,228,255,.06), transparent 50%),
+    linear-gradient(180deg,#03060c 0%,#06091a 50%,#03060c 100%);
+}
+.app{position:fixed;inset:0;display:grid;grid-template-rows:46px 1fr 64px}
+.topbar{display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(8,14,28,.95),rgba(8,14,28,.7));backdrop-filter:blur(12px);font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.topbar .brand{display:flex;align-items:center;gap:10px;color:var(--white);font-weight:700;letter-spacing:.18em}
+.topbar .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 12px var(--pink)}
+.topbar .meta{flex:1;display:flex;gap:24px;align-items:center;color:var(--text)}
+.topbar .meta b{color:var(--white)}
+.topbar .meta .badge{padding:3px 10px;border-radius:99px;background:rgba(164,123,255,.16);color:var(--pink);font-size:10px;letter-spacing:.18em}
+.topbar a.back{color:var(--cyan);text-decoration:none;font-size:11px;letter-spacing:.14em;border:1px solid var(--line);padding:6px 12px;border-radius:99px;transition:all .15s}
+.topbar a.back:hover{border-color:var(--cyan);background:rgba(0,228,255,.08)}
+
+.stage{position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.grid-floor{position:absolute;inset:0;background-image:linear-gradient(rgba(164,123,255,.06) 1px, transparent 1px),linear-gradient(90deg,rgba(164,123,255,.06) 1px, transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);pointer-events:none}
+svg.flows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.flows path{fill:none;stroke-width:1.5;stroke-linecap:round;filter:drop-shadow(0 0 6px currentColor)}
+.flows .stream{stroke-dasharray:6 14;animation:gflow 1.8s linear infinite}
+@keyframes gflow{to{stroke-dashoffset:-200}}
+
+.director-orb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle at 50% 35%, rgba(255,255,255,.95) 0%, rgba(164,123,255,.55) 18%, rgba(105,60,200,.32) 42%, rgba(8,14,28,.85) 72%, rgba(3,6,12,.95) 100%);
+  box-shadow:0 0 100px rgba(164,123,255,.55), inset 0 0 70px rgba(164,123,255,.22);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:3;animation:gbreathe 6s ease-in-out infinite;cursor:pointer}
+.director-orb::before{content:"";position:absolute;inset:-12px;border-radius:50%;border:1px solid rgba(164,123,255,.22);animation:ghalo 4s linear infinite}
+.director-orb::after{content:"";position:absolute;inset:-28px;border-radius:50%;border:1px solid rgba(164,123,255,.12);animation:ghalo 8s linear infinite reverse}
+@keyframes gbreathe{0%,100%{box-shadow:0 0 100px rgba(164,123,255,.55), inset 0 0 70px rgba(164,123,255,.22)}50%{box-shadow:0 0 140px rgba(164,123,255,.7), inset 0 0 90px rgba(164,123,255,.32)}}
+@keyframes ghalo{to{transform:rotate(360deg)}}
+.director-orb b{color:#f0e6ff;font-size:16px;letter-spacing:.26em;text-shadow:0 0 24px rgba(164,123,255,.9);font-weight:700;text-align:center}
+.director-orb small{color:var(--pink);font-size:9px;letter-spacing:.36em;margin-top:5px;display:block}
+
+.role-tile{position:absolute;width:200px;min-height:100px;padding:12px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(18,28,52,.32),rgba(8,12,24,.20));
+  border:1px solid rgba(110,170,255,.32);backdrop-filter:blur(3px);z-index:4;left:50%;top:50%;
+  transform:translate(-50%,-50%) scale(.92);opacity:0;transition:opacity .25s ease, transform .25s ease, border-color .3s, box-shadow .3s;cursor:pointer}
+.role-tile.placed{opacity:1;transform:none}
+.role-tile:hover{border-color:var(--pink);box-shadow:0 0 22px rgba(164,123,255,.25)}
+.role-tile .num{position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;border:1px solid var(--pink);color:var(--pink);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;background:rgba(164,123,255,.10)}
+.role-tile .led{position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 9px var(--pink);animation:gpulse 1.6s infinite}
+@keyframes gpulse{0%,100%{opacity:1}50%{opacity:.5}}
+.role-tile .nm{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:var(--white);margin:0 0 4px 32px;line-height:1.2}
+.role-tile .tier{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-left:32px}
+.role-tile .skills{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);line-height:1.4}
+.role-tile .rate{position:absolute;bottom:8px;right:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.08em}
+
+.footer-strip{display:flex;align-items:center;gap:18px;padding:0 18px;border-top:1px solid var(--line);background:linear-gradient(0deg,rgba(8,14,28,.95),rgba(8,14,28,.7));backdrop-filter:blur(12px);font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.footer-strip b{color:var(--white)}
+.footer-strip .chain-status{color:var(--green);display:flex;align-items:center;gap:8px}
+.footer-strip .chain-status .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:gpulse 1.4s infinite}
+.footer-strip .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+.footer-strip a{color:var(--gold);text-decoration:none;font-size:10px;letter-spacing:.16em}
+.footer-strip a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="dot"></div>🕹 GAME DEVELOPMENT &amp; WORLDBUILDING</div>
+    <div class="meta">
+      <span class="badge">AGENCY #58</span>
+      <span><b>12</b> roles</span>
+      <span>Ship playable worlds end-to-end</span>
+      <span>Output → <b>superio.fun</b></span>
+    </div>
+    <a class="back" href="/">← All 58 Agencies</a>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="grid-floor"></div>
+    <svg class="flows" id="flows" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="g_pi" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a47bff" stop-opacity="0"/><stop offset="50%" stop-color="#a47bff" stop-opacity=".85"/><stop offset="100%" stop-color="#a47bff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="g_au" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f5c542" stop-opacity="0"/><stop offset="50%" stop-color="#f5c542" stop-opacity=".95"/><stop offset="100%" stop-color="#f5c542" stop-opacity="0"/></linearGradient>
+      </defs>
+    </svg>
+
+    <div class="director-orb" onclick="alert('Game Director — sets vision, scope, greenlight gates.\\n\\nDirects all 11 reports. Output approval flows to superio.fun + customer storefronts.\\n\\nVerification: every artifact runs through Parliament → Council → Board (GLOBAL-96).')">
+      <b>GAME<br>DIRECTOR</b>
+      <small>VISION · SCOPE</small>
+    </div>
+
+    <div id="roleStage"></div>
+  </div>
+
+  <div class="footer-strip">
+    <div class="chain-status"><div class="dot"></div>VERIFICATION CHAIN ARMED</div>
+    <span>Every build through <b>Parliament → Council → Board</b> + 2 QA lenses + Vision (Seat 11)</span>
+    <div class="right">
+      <a href="https://github.com/mirzatech-ai/maya-sovereign-campus/blob/main/SKILL.md#21-three-level-verification-chain">Skill #21</a>
+      <a href="tel:+17432151423">📞 +1 (743) 215-1423</a>
+      <span style="color:var(--muted);font-size:9px">Powered by <b style="color:#00e4ff">MirzaTech.ai</b> · Property of <b style="color:#00e4ff">EMAAA.io</b></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const ROLES = [
+  {n:1,  title:'Game Director',              tier:'executive', rate:2200, skills:'Creative Vision · Scope Control · Greenlight · Leadership'},
+  {n:2,  title:'Lead Game Designer',         tier:'executive', rate:1800, skills:'Mechanics · Systems · Balance · Player Loops'},
+  {n:3,  title:'Narrative Designer',         tier:'senior',    rate:1300, skills:'Story Bible · Lore · Branching Dialogue · Quests'},
+  {n:4,  title:'Lead Engine Programmer',     tier:'executive', rate:2000, skills:'UE5 · Unity · Custom Engine · Perf Profiling'},
+  {n:5,  title:'Gameplay Programmer',        tier:'senior',    rate:1400, skills:'Controllers · Combat · Game AI · State Machines'},
+  {n:6,  title:'Technical Artist',           tier:'senior',    rate:1500, skills:'Shaders · VFX · Pipelines · Optimization'},
+  {n:7,  title:'Character / 3D Artist',      tier:'senior',    rate:1200, skills:'Modeling · Rigging · Animation · PBR Textures'},
+  {n:8,  title:'Environment / Level Designer', tier:'senior',  rate:1200, skills:'World Building · Greybox · Lighting · Composition'},
+  {n:9,  title:'Audio Designer / Composer',  tier:'senior',    rate:1100, skills:'Adaptive Music · SFX · Voice · Wwise/FMOD'},
+  {n:10, title:'QA Lead / Playtest',         tier:'senior',    rate:950,  skills:'Test Plans · Bug Triage · Recruiting · Validation'},
+  {n:11, title:'Live Ops / Community',       tier:'mid',       rate:800,  skills:'Seasonal · Discord · LiveOps · Metrics'},
+  {n:12, title:'Production Manager',         tier:'executive', rate:1700, skills:'Milestone · Sprint · Risk Burndown · Publisher'},
+];
+
+const stage = document.getElementById('stage');
+const roleStage = document.getElementById('roleStage');
+const flows = document.getElementById('flows');
+
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function render(){
+  roleStage.innerHTML = ROLES.map(r => `
+    <div class="role-tile" data-i="${r.n}" onclick="showRole(${r.n})">
+      <div class="num">${String(r.n).padStart(2,'0')}</div>
+      <div class="led"></div>
+      <div class="nm">${escapeHtml(r.title)}</div>
+      <div class="tier">▶ ${escapeHtml(r.tier)}</div>
+      <div class="skills">${escapeHtml(r.skills)}</div>
+      <div class="rate">$${r.rate}/day</div>
+    </div>`).join('');
+  requestAnimationFrame(()=>requestAnimationFrame(layoutRing));
+  setTimeout(layoutRing, 80);
+  setTimeout(layoutRing, 320);
+  setTimeout(layoutRing, 900);
+}
+
+function layoutRing(){
+  const W = stage.clientWidth, H = stage.clientHeight;
+  const tiles = roleStage.querySelectorAll('.role-tile');
+  const N = tiles.length; if(N===0) return;
+  const m = tiles[0].getBoundingClientRect();
+  const tileW = Math.max(180, m.width || 200);
+  const tileH = Math.max(96, m.height || 100);
+  const orbHalf = 100, edge = 16, gap = 22;
+  const maxRx = (W/2) - tileW/2 - edge;
+  const maxRy = (H/2) - tileH/2 - edge;
+  const minR  = orbHalf + Math.max(tileW, tileH)/2 + gap;
+  const rx = Math.max(minR, maxRx), ry = Math.max(minR, maxRy);
+  tiles.forEach((el, i) => {
+    const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+    const x = W/2 + rx * Math.cos(a) - tileW/2;
+    const y = H/2 + ry * Math.sin(a) - tileH/2;
+    el.style.left = Math.round(Math.max(edge, Math.min(W - tileW - edge, x))) + 'px';
+    el.style.top  = Math.round(Math.max(edge, Math.min(H - tileH - edge, y))) + 'px';
+    el.style.transform = 'none';
+    el.classList.add('placed');
+  });
+  buildFlows();
+}
+
+function buildFlows(){
+  const W = stage.clientWidth, H = stage.clientHeight;
+  flows.setAttribute('viewBox', `0 0 ${Math.round(W)} ${Math.round(H)}`);
+  const cx = W/2, cy = H/2;
+  const tiles = roleStage.querySelectorAll('.role-tile');
+  const N = tiles.length;
+  const cycle = Math.max(8, N * 0.7);
+  const travel = 0.045, settle = 0.03;
+  const paths = [], packets = [];
+  tiles.forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    const hr = stage.getBoundingClientRect();
+    const zx = r.left + r.width/2 - hr.left;
+    const zy = r.top + r.height/2 - hr.top;
+    const mx = (cx+zx)/2 + (i%2===0?-30:30);
+    const my = (cy+zy)/2 + (i%2===0?-40:40);
+    const pid = 'gp'+i;
+    paths.push(`<path id="${pid}" class="stream" stroke="url(#g_pi)" d="M${cx},${cy} Q${mx},${my} ${zx},${zy}"/>`);
+    const t0 = i / N;
+    const t1 = Math.min(0.999, t0 + travel);
+    const t2 = Math.min(0.999, t1 + settle);
+    const t3 = Math.min(0.999, t2 + travel);
+    packets.push(`<circle r="3.5" fill="#a47bff" opacity="0" filter="drop-shadow(0 0 7px #a47bff)">
+      <animate attributeName="opacity" dur="${cycle}s" keyTimes="0;${t0};${t0+0.001};${t1};${t1+0.001};1" values="0;0;1;1;0;0" repeatCount="indefinite"/>
+      <animateMotion dur="${cycle}s" keyTimes="0;${t0};${t1};1" keyPoints="0;0;1;1" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion>
+    </circle>`);
+    packets.push(`<circle r="3.8" fill="#f5c542" opacity="0" filter="drop-shadow(0 0 8px #f5c542)">
+      <animate attributeName="opacity" dur="${cycle}s" keyTimes="0;${t2};${t2+0.001};${t3};${t3+0.001};1" values="0;0;1;1;0;0" repeatCount="indefinite"/>
+      <animateMotion dur="${cycle}s" keyTimes="0;${t2};${t3};1" keyPoints="1;1;0;0" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion>
+    </circle>`);
+  });
+  flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
+}
+
+function showRole(n){
+  const r = ROLES.find(x=>x.n===n);
+  alert(`SEAT ${String(n).padStart(2,'0')} · ${r.title}\n\nTier: ${r.tier} · $${r.rate}/day\n\nSkills: ${r.skills}\n\nVerification: this role's deliverables run through Parliament → Council → Board (GLOBAL-96) before commit.\n\nVision Verifier (Seat 11) fires on every visual artifact.\n\nCall this role's work: tel:+17432151423`);
+}
+
+render();
+let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layoutRing, 100); });
+</script>
+</body>
+</html>
