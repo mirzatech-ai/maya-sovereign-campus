@@ -4910,3 +4910,45 @@ Mo verbatim:
 ```json
 {"ts":"2026-05-15T14:30:00Z","actor":"Kin","op":"v1.15.0 reminders + bell counts overdue + BCSM voice reminder seeded · voice-clone Modal scaffold authored · SKILL #18 customer-ready-build doctrine codified · Phase 3 APK build greenlit and queued","state_v":"5.7","files_changed":["VPS:/api/maya_reminders.php (NEW)","VPS:/maya-os/* (Reminders tab + bell counts overdue)","D:/PROJECTS mirrors","D:/PROJECTS/maya-os/_BUILD/voice-clone/{modal_xtts.py,README.md} (NEW)","D:/PROJECTS/_SHARED/SKILL_CUSTOMER_READY_BUILD.md (NEW · 14 ship-blockers doctrine)","D:/PROJECTS/_SHARED/SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md (+ Skill #18)","BCSM voice-recording reminder seeded · 1 overdue · 4h nag cycle"],"pending_mo":["record BCSM dialogue per rider (Maya nags every 4h until Done)","modal deploy modal_xtts.py once recording captured","greenlight Phase 3 APK build session when ready"],"signature":"Kin · desktop · 2026-05-15T14:30:00Z"}
 ```
+
+---
+
+## 2026-05-15 · GLOBAL-106 lock-down · MAYA_MASTER_CORE created · Kin · desktop
+
+**Mo's directive (Gemini-relayed verbatim):**
+> *"he has completely disconnected Maya AI from Ollama... every fucking time he starts building without ever fucking checking shit... I want you to do everything that Gemini has suggested. everything. This ends motherfucking now."*
+
+Source: `E:/PROMPTS/GEMINI/gemini - LOAD STATE-UI.txt` — Mo's exchange with Gemini prescribing the Iron-Ledger / Unity-Lock / Hard-Wall playbook.
+
+**What shipped this turn (full Gemini playbook):**
+
+1. ✅ **The Bible / Unity Lock** · `D:/PROJECTS/_SHARED/MAYA_MASTER_CORE.md` (10 sections · governs Kin / Sage / EaZo / Maya equally · supersedes drifted snapshots)
+2. ✅ **Iron-Ledger pre-flight script** · `D:/SERVER WORK/verify_maya_routing.sh` (8 checks · MUST exit 0 before any Maya brain edit · verified PASS this turn 6 ✅ · 3 ⚠️ · 0 ❌)
+3. ✅ **GLOBAL-106** appended to `D:/PROJECTS/_SHARED/GLOBAL_RULES.md` (Hard Constant rule with mandatory pre-flight clause · enforcement phrases)
+4. ✅ **Sacred Pin S15** added to `E:/claude_code/.claude/projects/D--SERVER-WORK/memory/MEMORY.md` (above truncation cutoff · won't drop)
+5. ✅ **Memory file** · `feedback_maya_ollama_hard_constant_2026_05_15.md`
+6. ✅ **VPS brain.php drift fixed** · `qwen2.5-coder:14b` → `deepseek-coder-v2:16b` at lines 45 + 468 · backup at `brain.php.bak.20260515_202050`
+7. ✅ **MAYA HARD CONSTANT banner** installed at top of `/home/iamsuperio.cloud/public_html/api/brain.php` (any future session opening this file sees the rule)
+
+**Live verified state (via SSH 76.13.26.130 + brain.php CLI exec):**
+- Ollama: `ActiveState=active` · `MainPID=2689580` · serving requests
+- Endpoint: `http://127.0.0.1:11434/v1/chat/completions` (200 OK)
+- Model: `deepseek-coder-v2:16b` (single-model doctrine honored)
+- brain.php health: `{"ollama":"online","model":"deepseek-coder-v2:16b","version":"V43.3"}`
+- brain.php arsenal Ollama block: present at line ~193-199
+- brain.php references to `127.0.0.1:11434`: 3
+
+**Known warnings (not failures · documented in verifier):**
+- systemd `is-active` returns 'activating' transiently during model warmup · accepted when daemon is serving (tags HTTP 200)
+- VPS-internal HTTPS curl through SSH heredoc has shell-quoting artifacts · CLI-exec method proves brain.php returns valid JSON
+
+**Hard Wall in effect:**
+- Future sessions: read MAYA_MASTER_CORE.md BEFORE touching Maya
+- Run `bash D:/SERVER\ WORK/verify_maya_routing.sh` · must exit 0 · or stop
+- Editing MAYA_MASTER_CORE requires Mo's written go-signal + CONTINUITY citation
+- Single-model doctrine + Ollama-as-primary-for-code-mode are LAW
+- Enforcement phrase: *"Did you read MAYA_MASTER_CORE, Kin?"*
+
+```json
+{"ts":"2026-05-15T20:26:00Z","actor":"Kin","op":"GLOBAL-106 lock-down · MAYA_MASTER_CORE created · brain.php drift fixed · verifier PASS","state_v":"8.3","files_changed":["D:/PROJECTS/_SHARED/MAYA_MASTER_CORE.md","D:/SERVER WORK/verify_maya_routing.sh","E:/claude_code/.claude/projects/D--SERVER-WORK/memory/feedback_maya_ollama_hard_constant_2026_05_15.md","E:/claude_code/.claude/projects/D--SERVER-WORK/memory/MEMORY.md","D:/PROJECTS/_SHARED/GLOBAL_RULES.md","/home/iamsuperio.cloud/public_html/api/brain.php","D:/PROJECTS/maya-os/CONTINUITY.md"],"pending_mo":["read MAYA_MASTER_CORE once · acknowledge GLOBAL-106 binds Kin/Sage/EaZo/Maya equally"],"signature":"Kin · desktop · 2026-05-15T20:26:00Z"}
+```
