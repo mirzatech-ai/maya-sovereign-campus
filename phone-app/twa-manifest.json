@@ -1,0 +1,63 @@
+{
+  "packageId": "ai.mirzatech.maya",
+  "host": "iamsuperio.cloud",
+  "name": "Maya OS",
+  "launcherName": "Maya",
+  "display": "standalone",
+  "themeColor": "#05070d",
+  "themeColorDark": "#05070d",
+  "navigationColor": "#05070d",
+  "navigationColorDark": "#05070d",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#05070d",
+  "enableNotifications": true,
+  "startUrl": "/maya-os/",
+  "iconUrl": "https://iamsuperio.cloud/maya-os/assets/icon-512.png",
+  "maskableIconUrl": "https://iamsuperio.cloud/maya-os/assets/icon-512-maskable.png",
+  "monochromeIconUrl": "https://iamsuperio.cloud/maya-os/assets/icon-512.png",
+  "shortcuts": [
+    {
+      "name": "Campus",
+      "shortName": "Campus",
+      "url": "/maya-os/#campus",
+      "chosenIconUrl": "https://iamsuperio.cloud/maya-os/assets/icon-192.png"
+    },
+    {
+      "name": "Inbox",
+      "shortName": "Inbox",
+      "url": "/maya-os/#chat",
+      "chosenIconUrl": "https://iamsuperio.cloud/maya-os/assets/icon-192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://iamsuperio.cloud/maya-os/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": { "enabled": true },
+    "playBilling": { "enabled": false }
+  },
+  "alphaDependencies": { "enabled": false },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://iamsuperio.cloud/maya-os/",
+  "minSdkVersion": 23,
+  "orientation": "default",
+  "appVersionName": "1.16.0",
+  "appVersionCode": 116,
+  "shareTarget": {
+    "action": "https://iamsuperio.cloud/maya-os/index.html",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "shared_title",
+      "text":  "shared_text",
+      "url":   "shared_url"
+    }
+  },
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  }
+}
