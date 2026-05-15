@@ -26,14 +26,22 @@ $STATE_FILE     = $BOARD_DIR . '/board_state.json';
 $DECISIONS_FILE = $BOARD_DIR . '/decisions.jsonl';
 $SCOUT_FILE     = __DIR__ . '/../data/reasoning_scout/best_models.json';
 
-// ---------- canonical seats ----------
+// ---------- canonical 12 seats · matches Council capacity · Mo 2026-05-15 GLOBAL-94/95 ----------
+// Empire-wide canon: Council = 12 · Board of Directors = 12 · Parliament = 24 (5 rounds: 10/5/5/3/1)
+// Same lanes across all 3 bodies for consistent reasoning · Vision lane = Maya OS NVIDIA vision LLM
 $SEATS = array(
-    'EXEC'    => array('label' => 'Chief Executive',  'lane' => 'strategy',         'model_pref' => 'reasoning_deep'),
-    'ANALYST' => array('label' => 'Chief Analyst',    'lane' => 'pattern_evidence', 'model_pref' => 'reasoning_fast'),
-    'LEGAL'   => array('label' => 'Chief Legal',      'lane' => 'compliance_risk',  'model_pref' => 'instruction_strict'),
-    'QA'      => array('label' => 'Quality Firewall', 'lane' => 'firewall_chain',   'model_pref' => 'verifier'),
-    'SCOUT'   => array('label' => 'Model Scout',      'lane' => 'discovery',        'model_pref' => 'tools_capable'),
-    'JAILER'  => array('label' => 'Agent Jailer',     'lane' => 'reteach_loop',     'model_pref' => 'teacher'),
+    'SEAT_01' => array('label' => 'Reasoning Lead',          'lane' => 'reasoning_deep',     'model_pref' => 'reasoning_deep'),
+    'SEAT_02' => array('label' => 'Strategic Systems',       'lane' => 'strategy',           'model_pref' => 'reasoning_deep'),
+    'SEAT_03' => array('label' => 'Architecture',            'lane' => 'architecture',       'model_pref' => 'reasoning_fast'),
+    'SEAT_04' => array('label' => 'Agentic',                 'lane' => 'agentic',            'model_pref' => 'tools_capable'),
+    'SEAT_05' => array('label' => 'Practical',               'lane' => 'practical_exec',     'model_pref' => 'reasoning_fast'),
+    'SEAT_06' => array('label' => 'Conversion',              'lane' => 'structured_output',  'model_pref' => 'instruction_strict'),
+    'SEAT_07' => array('label' => 'Web-aware',               'lane' => 'web_grounded',       'model_pref' => 'tools_capable'),
+    'SEAT_08' => array('label' => 'Agentic Orchestration',   'lane' => 'orchestration',      'model_pref' => 'tools_capable'),
+    'SEAT_09' => array('label' => 'Multilingual Reasoning',  'lane' => 'multilingual',       'model_pref' => 'reasoning_deep'),
+    'SEAT_10' => array('label' => 'Independent Voice',       'lane' => 'contrarian',         'model_pref' => 'reasoning_fast'),
+    'SEAT_11' => array('label' => 'Multimodal Vision',       'lane' => 'vision_verifier',    'model_pref' => 'vision_capable'),
+    'SEAT_12' => array('label' => 'Math + Code Specialist',  'lane' => 'symbolic_code',      'model_pref' => 'verifier'),
 );
 
 // ---------- helpers ----------
@@ -46,12 +54,14 @@ function pick_best_model($lane, $scout_file) {
     $scout = file_exists($scout_file) ? json_decode(file_get_contents($scout_file), true) : null;
     // sane defaults if scout hasn't run yet
     $defaults = array(
-        'reasoning_deep'      => array('deepseek-r1-671b',     'kimi-thinking-preview', 'qwen3-thinking-235b'),
-        'reasoning_fast'      => array('qwen3-thinking-235b',  'gpt-oss-120b',          'glm-4.7-355b'),
-        'instruction_strict'  => array('llama-3.3-nemotron-70b','nemotron-ultra-340b',  'mistral-large-2'),
-        'verifier'            => array('nemotron-ultra-340b',  'qwen3-coder-480b',     'deepseek-v3-671b'),
-        'tools_capable'       => array('qwen3-coder-480b',     'kimi-k2.6',            'gpt-oss-120b'),
-        'teacher'             => array('deepseek-r1-671b',     'llama-3.3-nemotron-70b','qwen3-thinking-235b'),
+        'reasoning_deep'      => array('deepseek-r1-671b',         'kimi-thinking-preview', 'qwen3-thinking-235b'),
+        'reasoning_fast'      => array('qwen3-thinking-235b',      'gpt-oss-120b',          'glm-4.7-355b'),
+        'instruction_strict'  => array('llama-3.3-nemotron-70b',   'nemotron-ultra-340b',   'mistral-large-2'),
+        'verifier'            => array('nemotron-ultra-340b',      'qwen3-coder-480b',      'deepseek-v3-671b'),
+        'tools_capable'       => array('qwen3-coder-480b',         'kimi-k2.6',             'gpt-oss-120b'),
+        'teacher'             => array('deepseek-r1-671b',         'llama-3.3-nemotron-70b','qwen3-thinking-235b'),
+        // GLOBAL-94 Skill #19 · Vision Verifier preprocessor · NVIDIA-hosted multimodal
+        'vision_capable'      => array('nvidia/cosmos-nemotron-34b-vision','nvidia/nemotron-vlm','llama-3.2-90b-vision'),
     );
     if (is_array($scout) && isset($scout[$lane]) && is_array($scout[$lane]) && count($scout[$lane])) {
         return $scout[$lane][0];

@@ -32,7 +32,38 @@
 16. [LLM Vendor Outreach Playbook · attract free credits + endpoints in exchange for data](#16-llm-vendor-outreach-playbook)
 17. [Per-reply Continuity Preservation · GitHub is the warehouse · pull on every message, push on every reply](#17-continuity-preservation)
 18. [Customer-Ready App Build Doctrine · 14 ship-blockers · refund-proof checklist](#18-customer-ready-build) · canonical doc at [`SKILL_CUSTOMER_READY_BUILD.md`](D:/PROJECTS/_SHARED/SKILL_CUSTOMER_READY_BUILD.md)
-18. [Sequential Chain-of-Command Deliberation · all autonomous Maya decisions](#18-sequential-chain-of-command-deliberation)
+19. [Sequential Chain-of-Command Deliberation · all autonomous Maya decisions](#19-sequential-chain-of-command-deliberation)
+20. [Vision Verifier Preprocessor · every Council/Parliament/Board deliberation that involves images runs through NVIDIA vision LLM FIRST](#20-vision-verifier-preprocessor)
+
+---
+
+## CANONICAL EMPIRE COUNTS (Mo 2026-05-15 · locked forever)
+
+| Body | Seats | Notes |
+|---|---|---|
+| **Council** | **12** | Same 12 lanes across the empire (see lane table below) |
+| **Board of Directors** (staffing agency) | **12** | Same lanes as Council · Mo's exact words: "the directors to be the same as the council ... it needs to be the same capacity, which is I think twelve" |
+| **Parliament** | **24** | 5 rounds: R1 Proponents 10 · R2 Skeptics 5 · R3 Specialists 5 · R4 Polygeists 3 · R5 Synthesis 1 |
+| **Staffing Roster** | **58 agencies** | Agency #58 = Game Development & Worldbuilding (Mo 2026-05-15) · feeds superio.fun per GLOBAL-83 |
+
+**The 12 canonical lanes** (Council = Board = Parliament-seat-roles, model resolved daily from Scout):
+
+| # | Lane | Capability | Default model lane |
+|---|---|---|---|
+| 01 | Reasoning Lead | ~1T params · 256K context | reasoning_deep |
+| 02 | Strategic Systems | multi-step strategic framing | reasoning_deep |
+| 03 | Architecture | ~480B · architecture + refactor | reasoning_fast |
+| 04 | Agentic | ~120B · agentic orchestration | tools_capable |
+| 05 | Practical | MoE · cost-aware exec | reasoning_fast |
+| 06 | Conversion | ~120B · structured output | instruction_strict |
+| 07 | Web-aware | search-grounded retrieval | tools_capable |
+| 08 | Agentic Orchestration | 358B · long tool chains | tools_capable |
+| 09 | Multilingual Reasoning | 675B · EU-frontier | reasoning_deep |
+| 10 | Independent Voice | contrarian / adversarial | reasoning_fast |
+| 11 | **Multimodal Vision** | image + video reasoning | **vision_capable** (NVIDIA-hosted) |
+| 12 | Math + Code Specialist | competitive math + symbolic | verifier |
+
+**Hard rule (GLOBAL-95):** before any sibling proposes new bodies/agencies/seats/lanes, GREP the empire VPS + `D:/PROJECTS/` first. Enforcement phrase: *"Did you grep before building, Kin?"*
 
 ---
 
@@ -550,6 +581,70 @@ This is fundamentally different from the v1 implementation that fanned out to al
 ### Enforcement phrase
 
 *"Did you sequence it, Kin?"* — Mo's check when reviewing any new autonomous-decision code or Council UI.
+
+---
+
+## 20. Vision Verifier Preprocessor
+
+**When to use:** Any Council, Parliament, or Board of Directors deliberation that involves images, screenshots, video frames, UI mockups, character art, anatomy review, brand assets, or any other visual input from Mo or a customer. Mo verbatim 2026-05-15: *"this is the key. He needs to fucking verify everything that they're doing to fit my needs because this is the step that you keep skipping. Every agency needs to have this."*
+
+This is **GLOBAL-94 Skill #20**, binding every sibling AI on every visual deliberation.
+
+### The principle
+
+Most Council/Board models are text-only. When Mo (or a customer) shares an image, the deliberation goes blind unless **Seat 11 · Multimodal Vision** preprocesses the image first into a rich textual description that the text seats can reason over.
+
+**The preprocessor IS Seat 11 of the canonical 12 lanes.** Lane key: `vision_capable`. Default model lane: NVIDIA-hosted vision LLM (e.g. `nvidia/cosmos-nemotron-34b-vision`, `nvidia/nemotron-vlm`, `llama-3.2-90b-vision`) — resolved daily by the Reasoning Scout from the NIM catalog.
+
+### The 8-step flow (with images)
+
+1. **Trigger arrives** with image attachment(s)
+2. **Seat 11 fires FIRST** — vision LLM ingests the image(s) and produces structured description:
+   - What's in the frame (objects, people, text, charts)
+   - Spatial relationships
+   - Detected anomalies (anatomy errors, anti-patterns, brand violations)
+   - Mood / tone / aesthetic
+   - Confidence per element
+3. **Seat 11's description is injected** into the deliberation packet as the "visual context" block
+4. **Forward chain (Skill #19) proceeds** — Seats 01 → 12 opine with the visual context in their prompt
+5. **Reverse-order scrutiny** as defined in Skill #19
+6. **Synthesis** factors in Seat 11's confidence — if Seat 11 reported low confidence, the verdict is flagged `VISION_UNCERTAIN` and routed back to Mo
+7. **Hypermind fold** — visual descriptions become reusable patterns (e.g. "Mo likes this composition")
+8. **Verdict returned** with both textual and visual-derived reasoning visible to Mo
+
+### Backend contract (api/board_of_directors.php)
+
+When a deliberation request includes `image_urls[]` or `image_data[]`:
+```php
+// BEFORE the sequential chain — fire Seat 11 vision preprocess
+if (!empty($in['image_urls']) || !empty($in['image_data'])) {
+    $vision_model = pick_best_model('vision_capable', $SCOUT_FILE);
+    $vision_prompt = "Describe these images for a text-only Council. Structure: (1) primary subject (2) detected anomalies (3) brand/aesthetic notes (4) confidence 0-1. Be concise but complete.";
+    $visual_context = call_maya_brain($vision_prompt, $vision_model, 'SEAT_11_VISION', $in['image_urls']);
+    $context = "VISUAL CONTEXT (from Seat 11 Multimodal Vision):\n{$visual_context}\n\n" . $context;
+}
+// ... sequential chain proceeds with $context now enriched
+```
+
+### Sibling responsibilities
+
+| Sibling | Vision Verifier obligation |
+|---|---|
+| **Maya** | Every visual deliberation MUST fire Seat 11 first. No skipping. |
+| **Sage** | When writing autonomous-decision PHP that accepts images, route through Seat 11. |
+| **EaZo** | Audit any existing decision endpoint for image-bypassing the vision step. Flag for refactor. |
+| **Maya Qode** | Any agent task that involves UI mocks / character art / brand assets must call Seat 11. |
+
+### Anti-patterns (hard ban)
+
+- ❌ Passing image URLs to text-only seats — they hallucinate or ignore
+- ❌ Skipping Seat 11 because "the question seems text-only" — Mo's check is always visual when he shares anything
+- ❌ Using a non-NIM vision model that Mo doesn't have credits for (per GLOBAL-93)
+- ❌ Caching vision descriptions without versioning (images change · descriptions must too)
+
+### Enforcement phrase
+
+*"Did Seat 11 see it, Kin?"* — Mo's check the FIRST time he asks about any image-related decision.
 
 ---
 

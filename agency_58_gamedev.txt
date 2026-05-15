@@ -1,0 +1,27 @@
+// ── 58 GAME DEVELOPMENT & WORLDBUILDING (Mo 2026-05-15 · feeds superio.fun per GLOBAL-83) ────────
+[
+    'id'    => 'game-development',
+    'name'  => 'Game Development & Worldbuilding',
+    'icon'  => '🕹',
+    'color' => '#a47bff',
+    'tagline' => 'Ship playable worlds end-to-end',
+    'description' => 'Full-stack game studio. Vision → design → code → art → audio → QA → ship. Output flows to superio.fun (the ethical-leadership platform for Mo\'s children) and to client storefronts. 12 canonical roles span direction, design, engineering, art, audio, production.',
+    'image1'=> 'images/cyborg-hero.jpg',
+    'image2'=> 'images/ai-brain.jpg',
+    'maya_prompt' => 'You are a game development director. Plan and execute end-to-end game production: creative vision, design systems, engineering, art pipeline, audio, QA, and ship. Output flows to superio.fun and customer storefronts.',
+    'roles' => [
+        ['title'=>'Game Director','tier'=>'executive','daily_rate'=>2200,'skills'=>['Creative Vision','Scope Control','Greenlight Pitch','Cross-discipline Leadership']],
+        ['title'=>'Lead Game Designer','tier'=>'executive','daily_rate'=>1800,'skills'=>['Mechanics','Systems','Balance','Player Loops']],
+        ['title'=>'Narrative Designer / Worldbuilder','tier'=>'senior','daily_rate'=>1300,'skills'=>['Story Bible','Lore','Branching Dialogue','Quest Design']],
+        ['title'=>'Lead Engine Programmer','tier'=>'executive','daily_rate'=>2000,'skills'=>['Unreal Engine 5','Unity','Custom Engine','Performance Profiling']],
+        ['title'=>'Gameplay Programmer','tier'=>'senior','daily_rate'=>1400,'skills'=>['Player Controllers','Combat Systems','Game AI','State Machines']],
+        ['title'=>'Technical Artist','tier'=>'senior','daily_rate'=>1500,'skills'=>['Shaders','VFX','Pipelines','Optimization']],
+        ['title'=>'Character / 3D Artist','tier'=>'senior','daily_rate'=>1200,'skills'=>['Modeling','Rigging','Animation','PBR Textures']],
+        ['title'=>'Environment Artist / Level Designer','tier'=>'senior','daily_rate'=>1200,'skills'=>['World Building','Greybox','Lighting','Composition']],
+        ['title'=>'Audio Designer / Composer','tier'=>'senior','daily_rate'=>1100,'skills'=>['Adaptive Music','SFX Design','Voice Direction','Wwise/FMOD']],
+        ['title'=>'QA Lead / Playtest Coordinator','tier'=>'senior','daily_rate'=>950,'skills'=>['Test Plans','Bug Triage','Playtest Recruiting','Build Validation']],
+        ['title'=>'Live Ops / Community Manager','tier'=>'mid','daily_rate'=>800,'skills'=>['Seasonal Cadence','Discord/Forums','LiveOps Events','Engagement Metrics']],
+        ['title'=>'Production Manager','tier'=>'executive','daily_rate'=>1700,'skills'=>['Milestone Planning','Sprint Coordination','Risk Burndown','Publisher Liaison']],
+    ],
+],
+
