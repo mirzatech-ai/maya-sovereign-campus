@@ -27,6 +27,7 @@
 11. [Draft Agency Spawn · create via cmd bar](#11-draft-agency-spawn)
 12. [Consistency Sentinel · face-lock + anatomy QA](#12-consistency-sentinel)
 13. [Workflow Swarm Visualization · multi-step pipeline](#13-workflow-swarm-visualization)
+14. [Cross-Domain UI Inheritance · Opencrest + MirzaTech port the pattern](#14-cross-domain-ui-inheritance)
 
 ---
 
@@ -254,6 +255,29 @@
 - **Swarm dots orbiting every node** — 3 per node minimum, color-coded.
 - **Side log with three sections:** Currently Processing (rotating live log) · Council Consultations (which steps consulted, consensus %) · Active Swarm (count + tasks/hr + latency).
 - Connecting paths animate with `stroke-dashoffset`.
+
+---
+
+## 14. Cross-Domain UI Inheritance
+
+**When to use:** Building any UI for `opencrest.io` (Make/Zapier killer) OR `mirzatech.ai` (LLM Council/Parliament arena). Per Mo 2026-05-15 + GLOBAL-92, these two domains MUST inherit the Sovereign Campus pattern with intentional per-domain differentiation.
+
+**Mo's strategic point:** *"This must be the one more thing that will attract LLM vendors."* The UI itself is the recruiting funnel.
+
+**Per-domain variants:**
+
+| Domain | Central Hub | Satellites | Key differentiator |
+|---|---|---|---|
+| **ai-staffing.agency** (flagship) | Maya AI sphere | 8 active agency rooms | DONE (v2.0) |
+| **opencrest.io** | "Workflow Conductor" sphere | Pipeline stages (Trigger / Enrich / Audit / Council / Output) | Per-stage cost badge · side-by-side input/output viewports · swarm dots attack then disperse |
+| **mirzatech.ai** | "Consensus Orb" at live % | LLM-vendor seats · "+ Add Your Model" empty seats | Tournament-bracket overlay on disagreement · vendor logo + latency + win-rate per seat · 30-sec onboarding |
+
+**Hard rules:**
+- 13 shared constraints (translucent cards, ghost-streams, biolum, central hub, ring layout, right-rail tabs, pinned cmd bar, locked ticker, Sovereign Override, brand footer, Telnyx phone, PHP 7.4, zero DB writes from state endpoints) apply unchanged across all three domains.
+- Domain-specific variations are LIMITED to: central hub label/visual · satellite content type · per-satellite micro-data display · onboarding flow for that domain's primary actor (customer / workflow / vendor).
+- Do NOT diverge on color palette, biolum states, or animation timing — keep the empire visually unified.
+
+**Canonical doctrine:** [`D:/PROJECTS/_SHARED/CROSS_DOMAIN_UI_DOCTRINE_2026_05_15.md`](D:/PROJECTS/_SHARED/CROSS_DOMAIN_UI_DOCTRINE_2026_05_15.md)
 
 ---
 
