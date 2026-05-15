@@ -30,6 +30,7 @@
 14. [Cross-Domain UI Inheritance · Opencrest + MirzaTech port the pattern](#14-cross-domain-ui-inheritance)
 15. [LLM Vendor Anonymization · NEVER show vendor names on public surfaces](#15-llm-vendor-anonymization)
 16. [LLM Vendor Outreach Playbook · attract free credits + endpoints in exchange for data](#16-llm-vendor-outreach-playbook)
+17. [Per-reply Continuity Preservation · GitHub is the warehouse · pull on every message, push on every reply](#17-continuity-preservation)
 
 ---
 
