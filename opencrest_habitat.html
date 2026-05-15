@@ -292,15 +292,11 @@ body.ambient-error{
   transform-style:preserve-3d;
 }
 .zone.tile:hover{background:linear-gradient(135deg, rgba(18,28,52,.55), rgba(8,12,24,.42));border-color:var(--line-strong)}
-/* 8-position ring around Maya (clockwise from top-left) */
-.zone.tile[data-pos="0"]{left:4%;top:8%}
-.zone.tile[data-pos="1"]{left:38%;top:2%}
-.zone.tile[data-pos="2"]{right:4%;top:8%}
-.zone.tile[data-pos="3"]{right:4%;top:42%}
-.zone.tile[data-pos="4"]{right:4%;bottom:8%}
-.zone.tile[data-pos="5"]{left:38%;bottom:2%}
-.zone.tile[data-pos="6"]{left:4%;bottom:8%}
-.zone.tile[data-pos="7"]{left:4%;top:42%}
+/* v2.1 (Mo 2026-05-15 · forever-equal-spacing fix · canonical across all habitats):
+   Positions are JS-computed by layoutRing() · NEVER hardcode data-pos again.
+   The CSS guarantee: no tile is positioned by a static % rule anymore. */
+.zone.tile{left:50%;top:50%;transform:translate(-50%,-50%) scale(0.92);opacity:0;transition:opacity .25s ease,transform .25s ease}
+.zone.tile.placed{opacity:1;transform:none}
 /* "Add Office" gold-dashed tile — Mo opens Gallery to grow his roster */
 .zone.tile.add-office{background:linear-gradient(135deg,rgba(245,197,66,.10),rgba(245,197,66,.04));border:1px dashed rgba(245,197,66,.5);display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;flex-direction:column;color:var(--gold)}
 .zone.tile.add-office:hover{background:linear-gradient(135deg,rgba(245,197,66,.20),rgba(245,197,66,.08));border-color:var(--gold)}
@@ -1094,7 +1090,42 @@ body.ambient-error{
       tiles.push(`<div class="zone tile add-office" data-pos="${i}" onclick="document.querySelector('.campus-head .toolbar button[data-view=&quot;gallery&quot;]').click()"><div class="plus">+</div><div class="lbl">Add Office</div></div>`);
     }
     stage.innerHTML = tiles.join('');
+    layoutRing();   // v2.1 · canonical equal-spacing layout · Mo 2026-05-15
   }
+
+  /* v2.1 · layoutRing · 2026-05-15 (Mo's forever-equal-spacing law · canonical across all habitats) */
+  function layoutRing(){
+    const stage = document.getElementById('zoneStage');
+    if(!stage) return;
+    const tiles = Array.from(stage.querySelectorAll('.zone.tile'));
+    const N = tiles.length;
+    if(N === 0) return;
+    const W = stage.clientWidth, H = stage.clientHeight;
+    const measure = tiles[0].getBoundingClientRect();
+    const tileW = Math.max(180, measure.width  || 220);
+    const tileH = Math.max(100, measure.height || 130);
+    const orbHalf = 105, edgeMargin = 14, orbGap = 22;
+    const maxRx = (W / 2) - tileW / 2 - edgeMargin;
+    const maxRy = (H / 2) - tileH / 2 - edgeMargin;
+    const minR  = orbHalf + Math.max(tileW, tileH) / 2 + orbGap;
+    const rx    = Math.max(minR, maxRx);
+    const ry    = Math.max(minR, maxRy);
+    tiles.forEach((el, i) => {
+      const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+      const x = W/2 + rx * Math.cos(a) - tileW/2;
+      const y = H/2 + ry * Math.sin(a) - tileH/2;
+      el.style.left   = Math.round(Math.max(edgeMargin, Math.min(W - tileW - edgeMargin, x))) + 'px';
+      el.style.top    = Math.round(Math.max(edgeMargin, Math.min(H - tileH - edgeMargin, y))) + 'px';
+      el.style.right  = 'auto'; el.style.bottom = 'auto'; el.style.transform = 'none';
+      el.classList.add('placed');
+    });
+  }
+  let _layoutRingT = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(_layoutRingT);
+    _layoutRingT = setTimeout(() => { layoutRing(); if(typeof rebuildFlows==='function') rebuildFlows(); }, 100);
+  });
+
   function loadAgencies(){
     // Opencrest variant: pipeline stages are LOCAL (no API fetch needed)
     ZONES_FULL = PIPELINE_STAGES;

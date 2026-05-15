@@ -292,15 +292,13 @@ body.ambient-error{
   transform-style:preserve-3d;
 }
 .zone.tile:hover{background:linear-gradient(135deg, rgba(18,28,52,.55), rgba(8,12,24,.42));border-color:var(--line-strong)}
-/* 8-position ring around Maya (clockwise from top-left) */
-.zone.tile[data-pos="0"]{left:4%;top:8%}
-.zone.tile[data-pos="1"]{left:38%;top:2%}
-.zone.tile[data-pos="2"]{right:4%;top:8%}
-.zone.tile[data-pos="3"]{right:4%;top:42%}
-.zone.tile[data-pos="4"]{right:4%;bottom:8%}
-.zone.tile[data-pos="5"]{left:38%;bottom:2%}
-.zone.tile[data-pos="6"]{left:4%;bottom:8%}
-.zone.tile[data-pos="7"]{left:4%;top:42%}
+/* v2.1 (Mo 2026-05-15 · forever-equal-spacing fix):
+   Positions are JS-computed by layoutRing() in renderZones · NEVER hardcode data-pos again.
+   Initial defaults below only used during the millisecond before layoutRing() fires —
+   they stack diagonally rather than overlap, so refresh flash is harmless.
+   The CSS guarantee: no tile is positioned by a static % rule anymore. */
+.zone.tile{left:50%;top:50%;transform:translate(-50%,-50%) scale(0.92);opacity:0;transition:opacity .25s ease,transform .25s ease}
+.zone.tile.placed{opacity:1;transform:none}
 /* "Add Office" gold-dashed tile — Mo opens Gallery to grow his roster */
 .zone.tile.add-office{background:linear-gradient(135deg,rgba(245,197,66,.10),rgba(245,197,66,.04));border:1px dashed rgba(245,197,66,.5);display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;flex-direction:column;color:var(--gold)}
 .zone.tile.add-office:hover{background:linear-gradient(135deg,rgba(245,197,66,.20),rgba(245,197,66,.08));border-color:var(--gold)}
@@ -591,7 +589,7 @@ body.ambient-error{
 
   <!-- ============ TOP STRIP ============ -->
   <div class="topstrip">
-    <div class="brand"><div class="dot"></div>MIRZATECH · LLM ARENA</div>
+    <div class="brand"><div class="dot"></div>MIRZATECH · LLM ARENA <span style="color:var(--gold);letter-spacing:.16em;font-size:9px;margin-left:6px">· OWNER COMMAND VIEW</span></div>
     <div class="ticker" id="ticker">
       <div class="item"><div class="pulse"></div><b id="t_revenue">$0</b>&nbsp;Live Revenue Ticker</div>
       <div class="item blue"><div class="pulse"></div><b id="t_swarms">0</b>&nbsp;Active Swarms</div>
@@ -717,7 +715,7 @@ body.ambient-error{
         </div>
         <div class="maya-cmd in-stage">
           <div class="pre">▸ Order Maya</div>
-          <input id="mayaInput" placeholder="Tell Maya — e.g. create agency Crypto Trading · publish X · pause render #142" autocomplete="off">
+          <input id="mayaInput" placeholder="Convene Council on [topic] · seat a vendor in Seat 09 · run a Parliament round · pause Seat 04 · ask the Chancellor about pricing v3" autocomplete="off">
           <button onclick="sendOrder()">Send</button>
         </div>
       </div>
@@ -752,6 +750,48 @@ body.ambient-error{
   <button class="tab" data-slide="jail" onclick="toggleSlide('jail')">🔒<span class="label">Agent Jail</span></button>
   <button class="tab" data-slide="scout" onclick="toggleSlide('scout')">🛰<span class="label">Reasoning Scout</span></button>
   <button class="tab" onclick="openOnboarding()" style="margin-top:8px;border-color:var(--gold);color:var(--gold)">🚀<span class="label">Onboard Customer</span></button>
+  <button class="tab" onclick="toggleSlide('vendor')" style="margin-top:8px;border-color:var(--gold);color:var(--gold)">🤝<span class="label">Vendor Participation</span></button>
+</div>
+
+<div class="slide-panel" id="slide-vendor">
+  <h3 style="color:var(--gold)">🤝 LLM Vendor Participation <span class="badge" style="background:var(--gold-soft);color:var(--gold)">OPEN</span><button class="x" onclick="toggleSlide('vendor')">×</button></h3>
+  <div style="font-size:12.5px;line-height:1.65;color:var(--text)">
+    <div style="color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px">The Pitch</div>
+    <p>MirzaTech runs a <b>10-seat Council</b> and a <b>22-seat / 5-round Parliament</b> (Proponents · Skeptics · Specialists · Polygeists · Synthesis + Chancellor). Every paid run captures <b>step-by-step tool-use traces</b> + <b>expert-vetted annotations</b> across multiple models on the same problem. <i>The data LLM providers trade API credits for.</i></p>
+
+    <div style="color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">What you get (vendor)</div>
+    <ul style="margin:0;padding-left:18px;color:var(--text)">
+      <li><b>Agentic traces</b> — full tool-call sequences across your seat's responses</li>
+      <li><b>Adversarial robustness data</b> — your model debated by 21 peers across 5 rounds</li>
+      <li><b>Expert RLHF annotations</b> — Chancellor synthesis + per-round verdicts</li>
+      <li><b>Comparative win-rate metrics</b> — quiet positioning vs. the other 21 seats</li>
+      <li><b>Tuning-cycle-ready bundles</b> — JSONL drops gated by your seat ID</li>
+    </ul>
+
+    <div style="color:var(--gold);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">What we ask</div>
+    <ul style="margin:0;padding-left:18px;color:var(--text)">
+      <li><b>API credits</b> — sponsored token volume to seat your model on a capability lane</li>
+      <li><b>OR free-tier endpoint</b> — chat-completions-compatible URL + bearer key</li>
+      <li><b>Lane preference</b> — Reasoning Lead · Strategic Systems · Architecture · Agentic · Practical · Conversion · Web-aware · Agentic Orchestration · Multilingual Reasoning · Independent Voice</li>
+      <li><b>Rate budget</b> — rpm / tpm you're comfortable with</li>
+      <li><b>Round role</b> — Council seat · Parliament senator · both</li>
+    </ul>
+
+    <div style="color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">How to participate (30 sec)</div>
+    <ol style="margin:0;padding-left:18px;color:var(--text)">
+      <li>Email <a href="mailto:mo@emaaa.io" style="color:var(--gold)">mo@emaaa.io</a> with subject <b>SEAT REQUEST</b></li>
+      <li>Drop your endpoint + key + lane in <code style="background:rgba(0,228,255,.1);padding:1px 6px;border-radius:4px">VENDOR_INTEGRATION.json</code> in <a href="https://github.com/mirzatech-ai/maya-sovereign-campus" style="color:var(--cyan)">our handoff repo</a></li>
+      <li>Maya wires you in within 24h · your seat goes live anonymously · you receive your data drop schedule</li>
+    </ol>
+
+    <div style="color:var(--gold);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">Privacy + Anonymity</div>
+    <p>Per <b>GLOBAL-93</b>: your brand is <b>never displayed publicly</b> until you formally claim the seat. Seats are labeled by capability lane and param size only. This protects both sides — no vendor is publicly attached to uncompensated usage.</p>
+
+    <div style="margin-top:14px;padding:10px;border:1px solid var(--gold);border-radius:8px;background:rgba(245,197,66,.06);font-size:11.5px">
+      <b style="color:var(--gold)">▶ Direct contact:</b> <a href="mailto:mo@emaaa.io" style="color:var(--gold)">mo@emaaa.io</a> · phone <a href="tel:+17432151423" style="color:var(--gold)">+1 (743) 215-1423</a><br>
+      <b style="color:var(--gold)">▶ Empire:</b> EMAAA, LLC · EIN 33-4262937
+    </div>
+  </div>
 </div>
 
 <div class="slide-panel" id="slide-pulse">
@@ -1093,7 +1133,57 @@ body.ambient-error{
       tiles.push(`<div class="zone tile add-office" data-pos="${i}" onclick="document.querySelector('.campus-head .toolbar button[data-view=&quot;gallery&quot;]').click()"><div class="plus">+</div><div class="lbl">Add Office</div></div>`);
     }
     stage.innerHTML = tiles.join('');
+    layoutRing();   // v2.1 · place every tile on the ring at equal angles · NEVER overlap again
   }
+
+  /* v2.1 · layoutRing · 2026-05-15 (Mo's forever-equal-spacing law):
+     Reads the stage size + Maya orb size · places ALL .zone.tile descendants at
+     evenly-spaced angles on an ellipse around the orb. Works for ANY count.
+     Recomputes on resize. Tiles fade in via .placed class once positioned so the
+     initial center-stacked default state never flashes the user. */
+  function layoutRing(){
+    const stage = document.getElementById('zoneStage');
+    if(!stage) return;
+    const tiles = Array.from(stage.querySelectorAll('.zone.tile'));
+    const N = tiles.length;
+    if(N === 0) return;
+    const W = stage.clientWidth;
+    const H = stage.clientHeight;
+    /* Measure actual tile size once (use the first tile · all match per CSS) */
+    const measure = tiles[0].getBoundingClientRect();
+    const tileW = Math.max(180, measure.width  || 220);
+    const tileH = Math.max(100, measure.height || 130);
+    /* Maya orb occupies a ~210px diameter circle in the center (per .maya-sphere CSS) */
+    const orbHalf = 105;
+    /* Clearance · tile must not touch orb edge or viewport edge */
+    const edgeMargin = 14;
+    const orbGap     = 22;
+    const maxRx = (W / 2) - tileW / 2 - edgeMargin;
+    const maxRy = (H / 2) - tileH / 2 - edgeMargin;
+    /* Minimum radius keeps the nearest tile corner clear of the orb */
+    const minR  = orbHalf + Math.max(tileW, tileH) / 2 + orbGap;
+    const rx    = Math.max(minR, maxRx);
+    const ry    = Math.max(minR, maxRy);
+    /* Place each tile at angle (i/N)*2π · start at top (angle = -π/2) · clockwise */
+    tiles.forEach((el, i) => {
+      const a  = (i / N) * Math.PI * 2 - Math.PI / 2;
+      const x  = W/2 + rx * Math.cos(a) - tileW/2;
+      const y  = H/2 + ry * Math.sin(a) - tileH/2;
+      el.style.left   = Math.round(Math.max(edgeMargin, Math.min(W - tileW - edgeMargin, x))) + 'px';
+      el.style.top    = Math.round(Math.max(edgeMargin, Math.min(H - tileH - edgeMargin, y))) + 'px';
+      el.style.right  = 'auto';
+      el.style.bottom = 'auto';
+      el.style.transform = 'none';
+      el.classList.add('placed');
+    });
+  }
+  /* Recompute on resize · throttled */
+  let _layoutRingT = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(_layoutRingT);
+    _layoutRingT = setTimeout(() => { layoutRing(); rebuildFlows(); }, 100);
+  });
+
   function loadAgencies(){
     // MirzaTech variant: LLM-vendor seats are LOCAL (no API fetch needed)
     ZONES_FULL = LLM_SEATS;
