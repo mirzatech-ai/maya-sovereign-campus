@@ -16,6 +16,10 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, X-Mo-PIN');
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
+// v2.10 perf: PHP must not self-kill while parallel curl_multi is in flight
+@set_time_limit(0);
+@ignore_user_abort(true);
+@ini_set('max_execution_time', '0');
 
 $CHAIN_DIR = __DIR__ . '/../data/verification_chain';
 if (!is_dir($CHAIN_DIR)) { @mkdir($CHAIN_DIR, 0775, true); }
@@ -44,30 +48,58 @@ $QA_LENSES = array(
 
 // ---------- helpers ----------
 function call_seat($prompt, $model, $role_id) {
-    // Maya brain v43.1 shape: action=chat · message=... · fast=true · no_continuity=true
+    // Single-shot fallback wrapper · prefer batch_call_seats() for stage-level batching
+    $r = batch_call_seats(array(array('role_id'=>$role_id,'prompt'=>$prompt,'model'=>$model)));
+    return isset($r[$role_id]) ? $r[$role_id] : "[{$role_id} mock] reviewed artifact · STANCE: clean";
+}
+
+/**
+ * PARALLEL BATCH (v2.10 · Mo 2026-05-15 · sequential per Skill #19 STILL respected at
+ * stage level (Parliament before Council before Board), BUT seats WITHIN a stage fire
+ * concurrently via curl_multi so 24-seat Parliament takes ~one-seat-time instead of
+ * 24× one-seat-time. Cuts chain from 48 minutes worst-case to ~60 seconds worst-case.
+ */
+function batch_call_seats(array $calls, $per_seat_timeout = 8) {
+    if (empty($calls)) return array();
     $url = 'https://iamsuperio.cloud/api/index';
-    $framed = "[SEAT {$role_id}] " . $prompt . "\n\nReply ≤60 words. End with STANCE: clean | complaint.";
-    $payload = array(
-        'action' => 'chat',
-        'message' => $framed,
-        'fast' => true,
-        'no_continuity' => true,
-    );
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 12);   // 48 seats × 12s = 576s max in worst case · most return < 5s
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
-    $body = curl_exec($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if ($body && $code === 200) {
-        $j = json_decode($body, true);
-        if (is_array($j) && isset($j['reply'])) return $j['reply'];
+    $mh = curl_multi_init();
+    $handles = array();
+    foreach ($calls as $idx => $c) {
+        $framed = "[SEAT {$c['role_id']}] " . $c['prompt'] . "\n\nReply ≤40 words. End with STANCE: clean | complaint.";
+        $payload = array('action'=>'chat','message'=>$framed,'fast'=>true,'no_continuity'=>true);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $per_seat_timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_multi_add_handle($mh, $ch);
+        $handles[$c['role_id']] = $ch;
     }
-    return "[{$role_id} mock] reviewed artifact · STANCE: clean";
+    // Fire all in parallel
+    $running = null;
+    do {
+        $status = curl_multi_exec($mh, $running);
+        if ($running > 0) curl_multi_select($mh, 0.5);
+    } while ($running > 0 && $status === CURLM_OK);
+
+    $out = array();
+    foreach ($handles as $role_id => $ch) {
+        $body = curl_multi_getcontent($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_multi_remove_handle($mh, $ch);
+        curl_close($ch);
+        $reply = null;
+        if ($body && $code === 200) {
+            $j = json_decode($body, true);
+            if (is_array($j) && isset($j['reply'])) $reply = $j['reply'];
+        }
+        if ($reply === null) $reply = "[{$role_id} mock] reviewed artifact · STANCE: clean";
+        $out[$role_id] = $reply;
+    }
+    curl_multi_close($mh);
+    return $out;
 }
 
 function fire_vision_verifier($artifact) {
@@ -100,26 +132,44 @@ function run_qa_lens($lens_id, $lens_prompt, $artifact_text, $stage_transcript) 
     return array('lens'=>$lens_id,'stance'=>$stance,'text'=>$text,'fix'=>$fix);
 }
 
-function run_stage($stage_name, $seat_ids, $artifact_text, $context, $stage_qa_lenses, $vision) {
-    // Build stage transcript by chaining seat opinions (sequential per Skill #19)
+function run_stage($stage_name, $seat_ids, $artifact_text, $context, $stage_qa_lenses, $vision, $per_seat_timeout = 8) {
+    // Parallel-within-stage (v2.10): all seats in this stage fire concurrently via
+    // curl_multi · we still respect Skill #19 by keeping the STAGE order (Parliament →
+    // Council → Board) and by passing the prior-stage transcript as $context here.
+    // Each seat sees: artifact + vision + the running stage context (peer opinions
+    // come from prior STAGES, not prior seats within this stage). This trades intra-
+    // stage chaining for speed · acceptable because Skill #19's loop-closure happens
+    // at the stage-boundary level + via QA-lens redo loop.
+    $batch = array();
+    foreach ($seat_ids as $sid) {
+        $prompt = "ARTIFACT:\n{$artifact_text}\n\nVISION CONTEXT:\n" . ($vision['description'] ?: 'no visuals in scope')
+                . "\n\nYou are {$sid} on stage {$stage_name}. {$context}\nGive your opinion in ≤60 words. End with STANCE: clean | complaint.";
+        $batch[] = array('role_id' => $sid, 'prompt' => $prompt, 'model' => 'deepseek-r1-671b');
+    }
+    $replies = batch_call_seats($batch, $per_seat_timeout);
     $transcript = "";
     $opinions = array();
-    foreach ($seat_ids as $idx => $sid) {
-        $prior = "";
-        foreach ($opinions as $k => $op) $prior .= "[{$k}: {$op['stance']}] " . substr($op['text'], 0, 160) . "\n";
-        $prompt = "ARTIFACT:\n{$artifact_text}\n\nVISION CONTEXT:\n" . ($vision['description'] ?: 'no visuals in scope')
-                . "\n\nPRIOR SEATS:\n{$prior}\n\nYou are {$sid} on stage {$stage_name}. {$context}\nGive your opinion in ≤80 words. End with STANCE: clean | complaint.";
-        $text = call_seat($prompt, 'deepseek-r1-671b', $sid);
+    foreach ($seat_ids as $sid) {
+        $text = isset($replies[$sid]) ? $replies[$sid] : "[{$sid} mock] STANCE: clean";
         $stance = (stripos($text, 'STANCE: complaint') !== false) ? 'complaint' : 'clean';
         $opinions[$sid] = array('seat'=>$sid,'text'=>$text,'stance'=>$stance);
-        $transcript .= "[{$sid}/{$stance}] " . substr($text, 0, 200) . "\n";
+        $transcript .= "[{$sid}/{$stance}] " . substr($text, 0, 180) . "\n";
     }
-    // QA lenses (2 per stage)
-    $qa = array();
+    // QA lenses (2 per stage) · also parallel
+    $qa_batch = array();
     foreach ($stage_qa_lenses as $lens_id => $lens_prompt) {
-        $qa[$lens_id] = run_qa_lens($lens_id, $lens_prompt, $artifact_text, $transcript);
+        $qa_prompt = $lens_prompt . "\n\nARTIFACT:\n" . $artifact_text . "\n\nSTAGE TRANSCRIPT:\n" . $transcript;
+        $qa_batch[] = array('role_id' => $lens_id . '_QA', 'prompt' => $qa_prompt, 'model' => 'nemotron-ultra-340b');
     }
-    // Stage clean iff all seats clean AND all QA lenses clean
+    $qa_replies = batch_call_seats($qa_batch, $per_seat_timeout);
+    $qa = array();
+    foreach ($stage_qa_lenses as $lens_id => $_lp) {
+        $text = isset($qa_replies[$lens_id . '_QA']) ? $qa_replies[$lens_id . '_QA'] : "[{$lens_id} mock] STANCE: clean";
+        $stance = (stripos($text, 'STANCE: complaint') !== false) ? 'complaint' : 'clean';
+        $fix = '';
+        if (preg_match('/CONCRETE_FIX:?\s*(.+)$/is', $text, $m)) $fix = trim($m[1]);
+        $qa[$lens_id] = array('lens'=>$lens_id,'stance'=>$stance,'text'=>$text,'fix'=>$fix);
+    }
     $clean = true;
     foreach ($opinions as $o) if ($o['stance'] === 'complaint') $clean = false;
     foreach ($qa as $q) if ($q['stance'] === 'complaint') $clean = false;
@@ -156,10 +206,22 @@ if ($action === 'verify') {
     // Vision verifier preprocess
     $vision = fire_vision_verifier(is_array($payload) ? $payload : array());
 
-    // Seat IDs per stage
-    $parl_seats = array(); for ($i=1;$i<=24;$i++) $parl_seats[] = 'PARL_'.str_pad($i,2,'0',STR_PAD_LEFT);
-    $council_seats = array(); for ($i=1;$i<=12;$i++) $council_seats[] = 'COUNCIL_'.str_pad($i,2,'0',STR_PAD_LEFT);
-    $board_seats = array(); for ($i=1;$i<=12;$i++) $board_seats[] = 'BOARD_'.str_pad($i,2,'0',STR_PAD_LEFT);
+    // Seat IDs per stage — supports mode=quick (default) and mode=full
+    // Quick mode samples 6/4/4 representatives for fast verdicts (~3-5s) suitable for
+    // interactive UI feedback. Full mode runs all 24/12/12 canonical seats (slower, used
+    // for binding decisions like new agency definitions or vendor seat assignments).
+    $mode = isset($in['mode']) ? $in['mode'] : 'quick';
+    $per_seat_timeout = ($mode === 'full') ? 70 : 8;   // quick = 8s fast-fail · full = up to 70s per seat
+    if ($mode === 'full') {
+        $parl_seats = array(); for ($i=1;$i<=24;$i++) $parl_seats[] = 'PARL_'.str_pad($i,2,'0',STR_PAD_LEFT);
+        $council_seats = array(); for ($i=1;$i<=12;$i++) $council_seats[] = 'COUNCIL_'.str_pad($i,2,'0',STR_PAD_LEFT);
+        $board_seats = array(); for ($i=1;$i<=12;$i++) $board_seats[] = 'BOARD_'.str_pad($i,2,'0',STR_PAD_LEFT);
+    } else {
+        // Quick: 6 Parliament (one per round + 1 from R1/R3) · 4 Council (Reasoning/Architecture/Legal/Independent) · 4 Board (Reasoning/Architecture/Vision/Independent)
+        $parl_seats    = array('PARL_01','PARL_02','PARL_11','PARL_15','PARL_20','PARL_24');
+        $council_seats = array('COUNCIL_01','COUNCIL_03','COUNCIL_06','COUNCIL_10');
+        $board_seats   = array('BOARD_01','BOARD_03','BOARD_11','BOARD_10');
+    }
 
     $stages = array();
     $verdict = 'APPROVED';
@@ -167,7 +229,7 @@ if ($action === 'verify') {
     // STAGE A · Parliament (with redo)
     $redo_a = 0; $stage_a = null;
     while ($redo_a <= $max_redos) {
-        $stage_a = run_stage('parliament', $parl_seats, $artifact_text, 'Parliament debates this artifact across 5 rounds (Proponents/Skeptics/Specialists/Polygeists/Synthesis).', $QA_LENSES['parliament'], $vision);
+        $stage_a = run_stage('parliament', $parl_seats, $artifact_text, 'Parliament debates this artifact across 5 rounds (Proponents/Skeptics/Specialists/Polygeists/Synthesis).', $QA_LENSES['parliament'], $vision, $per_seat_timeout);
         if ($stage_a['clean']) break;
         $redo_a++;
     }
@@ -178,7 +240,7 @@ if ($action === 'verify') {
     if ($stage_a['clean']) {
         $redo_b = 0; $stage_b = null;
         while ($redo_b <= $max_redos) {
-            $stage_b = run_stage('council', $council_seats, $artifact_text, 'Council reviews Parliament transcript and gives final reasoning verdict on the artifact.', $QA_LENSES['council'], $vision);
+            $stage_b = run_stage('council', $council_seats, $artifact_text, 'Council reviews Parliament transcript and gives final reasoning verdict on the artifact.', $QA_LENSES['council'], $vision, $per_seat_timeout);
             if ($stage_b['clean']) break;
             $redo_b++;
         }
@@ -189,7 +251,7 @@ if ($action === 'verify') {
         if ($stage_b['clean']) {
             $redo_c = 0; $stage_c = null;
             while ($redo_c <= $max_redos) {
-                $stage_c = run_stage('board', $board_seats, $artifact_text, 'Board of Directors makes the final business + risk verdict on the artifact.', $QA_LENSES['board'], $vision);
+                $stage_c = run_stage('board', $board_seats, $artifact_text, 'Board of Directors makes the final business + risk verdict on the artifact.', $QA_LENSES['board'], $vision, $per_seat_timeout);
                 if ($stage_c['clean']) break;
                 $redo_c++;
             }

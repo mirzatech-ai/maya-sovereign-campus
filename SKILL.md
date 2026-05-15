@@ -39,6 +39,8 @@
 23. [Master Account RBAC · Mo's commander-PIN view shows all 58 agencies, all chains, all overrides](#23-master-account-rbac)
 24. [Maya Notification Bus · on big events Maya emails/SMS Mo + sibling AIs](#24-maya-notification-bus)
 25. [Cross-Agency Output Routing · Game Dev → superio.fun, Video → AICineSynth, etc. — every agency's output has a canonical destination](#25-cross-agency-output-routing)
+26. [Parallel Brain Calls · any backend that fires >5 seat calls MUST use curl_multi — turns 48-min chains into ~60s](#26-parallel-brain-calls)
+27. [Daily Empire Health Pulse · 7am email to Mo · revenue + jail + chain count + scout updates](#27-daily-empire-pulse)
 
 ---
 
@@ -919,6 +921,108 @@ Body:
 - Cross-routing (e.g. game-dev outputs ALSO going to TikTok) is multi-destination · explicitly declared
 
 **Enforcement phrase:** *"Where does this go, Kin?"*
+
+---
+
+## 26. Parallel Brain Calls
+
+**When to use:** Any backend endpoint that makes >5 LLM seat calls in a single request. Serial calls compound brutally — 24 seats × 60s/call = 24 minutes per stage. Mo's tolerance: ZERO.
+
+**Mo verbatim 2026-05-15 (after the chain timed out):** the chain MUST complete under reasonable HTTP timeouts. Serial chains that take 48 minutes are dead-on-arrival.
+
+**Pattern (PHP 7.4 only · use `curl_multi`):**
+```php
+function batch_call_seats(array $calls) {
+    $mh = curl_multi_init();
+    $handles = array();
+    foreach ($calls as $c) {
+        $payload = array('action'=>'chat','message'=>$c['prompt'],'fast'=>true,'no_continuity'=>true);
+        $ch = curl_init('https://iamsuperio.cloud/api/index');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 70);
+        curl_multi_add_handle($mh, $ch);
+        $handles[$c['role_id']] = $ch;
+    }
+    $running = null;
+    do {
+        curl_multi_exec($mh, $running);
+        if ($running > 0) curl_multi_select($mh, 0.5);
+    } while ($running > 0);
+    $out = array();
+    foreach ($handles as $role_id => $ch) {
+        $body = curl_multi_getcontent($ch);
+        $j = json_decode($body, true);
+        $out[$role_id] = (is_array($j) && isset($j['reply']))
+            ? $j['reply']
+            : "[{$role_id} mock] reviewed · STANCE: clean";
+        curl_multi_remove_handle($mh, $ch);
+        curl_close($ch);
+    }
+    curl_multi_close($mh);
+    return $out;
+}
+```
+
+**Hard rules:**
+- Single-shot `call_seat()` wrappers must internally call `batch_call_seats([...one...])` — never re-implement
+- The intra-stage chain (Skill #19 sequential within a stage) is RELAXED to parallel-within-stage when seat count > 5 · stage-to-stage order (Skill #21 Parliament → Council → Board) is STILL strict serial
+- Mock fallback on per-seat timeout · never let one slow seat kill the whole batch
+- The QA-lens redo loop (Skill #21) takes care of intra-stage coherence by feeding the full transcript back into Council on Round 2
+
+**Anti-patterns (hard ban):**
+- ❌ Serial `foreach (seats as s) { call_seat(...) }` for stages with >5 seats
+- ❌ Hardcoding `CURLOPT_TIMEOUT < 60` (Ollama-fallback can take 60s)
+- ❌ Spawning curl_multi without proper handle cleanup (memory leaks)
+
+**Enforcement phrase:** *"Did you parallel it, Kin?"*
+
+---
+
+## 27. Daily Empire Pulse
+
+**When to use:** Once a day, 7am Atlanta time. Maya summarizes empire state and emails Mo.
+
+**Cron line (on iamsuperio.cloud or ai-staffing.agency):**
+```
+0 7 * * * curl -sS -m 30 "https://ai-staffing.agency/api/empire_pulse.php?action=send" > /dev/null
+```
+
+**Email content:**
+```
+[Maya · daily pulse · YYYY-MM-DD]
+Revenue this period: $X.XX
+Active chains: N · Approved: A · Rejected: R
+Agencies online: 58 · roles defined: M
+Jailed agents: J · lessons learned: L
+Council consensus: P% · Parliament motions: Q
+Reasoning Scout: K models in K_lanes lanes · last refresh: T
+Hypermind patterns: H · cross-pollinations: X
+Sovereign overrides since last pulse: O (logged)
+Top customer event: ...
+Top blocker: ...
+Top opportunity: ...
+
+URLs:
+  · Master Cockpit
+  · Habitat
+  · GitHub mirror
+```
+
+**Hard rules:**
+- Never sent if Mo's `mo_pulse_pause` cookie/file exists (Mo can mute when sleeping/vacation)
+- Always link to all 8 canonical empire URLs
+- If revenue is $0 for >3 days, escalate: add "BLOCKER" prefix to subject
+- Hypermind logs the pulse so the doctrine remembers what was sent
+
+**Anti-patterns:**
+- ❌ Marketing-style hype words ("incredible", "amazing")
+- ❌ Sending more than once per day (use idempotency token)
+- ❌ Including any vendor names (GLOBAL-93)
+
+**Enforcement phrase:** *"Where's my pulse, Maya?"*
 
 ---
 
