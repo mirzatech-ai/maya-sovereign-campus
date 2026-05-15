@@ -12,7 +12,9 @@
 #   6. Optional: adds a Task Scheduler entry to auto-start on logon
 #   7. Prints the bridge token + tells Mo to paste it into Maya OS
 
-$ErrorActionPreference = "Stop"
+# Default to Continue so harmless stderr from native tools (python, pip, curl) doesn't kill the installer.
+# Critical steps still check $LASTEXITCODE explicitly and call Fail() on real errors.
+$ErrorActionPreference = "Continue"
 $Esc = [char]27
 function Banner($t) { Write-Host "$Esc[36m=== $t$Esc[0m" }
 function OK($t)     { Write-Host "$Esc[32m  ok  $t$Esc[0m" }
@@ -44,11 +46,26 @@ try {
 }
 
 # 2. pip packages
+# Native python.exe writes harmless "scripts not on PATH" warnings to stderr;
+# Windows PowerShell 5.1 with ErrorActionPreference=Stop treats those as fatal.
+# Relax pref around the pip calls only; rely on $LASTEXITCODE for real errors.
 Banner "Installing FastAPI + uvicorn (user scope)"
-& python -m pip install --user --upgrade pip *> $null
-& python -m pip install --user fastapi uvicorn
-if ($LASTEXITCODE -ne 0) { Fail "pip install failed" }
-OK "deps installed"
+$savedErrPref = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+try {
+    & python -m pip install --user --upgrade pip 2>&1 | Out-Null
+    & python -m pip install --user fastapi uvicorn 2>&1 | ForEach-Object {
+        # Silence pip warnings but keep real failures visible
+        if ($_ -match "WARNING|error|fail" -and $_ -notmatch "not on PATH|deprecated") {
+            Write-Host "    pip: $_"
+        }
+    }
+    $pipExit = $LASTEXITCODE
+} finally {
+    $ErrorActionPreference = $savedErrPref
+}
+if ($pipExit -ne 0) { Fail "pip install failed (exit $pipExit)" }
+OK "deps installed (PATH warnings are benign · bridge launcher calls python directly)"
 
 # 3. Download server.py
 $bridgeDir = Join-Path $env:USERPROFILE "maya-bridge"
