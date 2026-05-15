@@ -257,6 +257,21 @@
 
 ---
 
+## Hard rule (every sibling) · GitHub mirrors LIVE in real time
+
+**Mo verbatim 2026-05-15:** *"replace the pushed GitHub repo last edition with the live version every time. Please don't forget."*
+
+Every VPS deploy MUST be paired with a GitHub push in the same turn. The GitHub repos `mirzatech-ai/maya-sovereign-campus` and `mirzatech-ai/manus-handoff-sovereign-campus` are live-state snapshots, not versioned changelogs. No batching, no "I'll catch up later" — push immediately after every SCP.
+
+**Canonical pattern:**
+```bash
+scp file root@76.13.26.130:/home/<site>/public_html/  # 1. deploy
+cd /tmp/maya-sovereign-campus && cp ... . && git add file && git commit -m "..." && git push  # 2. mirror main
+cd /tmp/manus-handoff && cp ... . && git add file && git commit -m "..." && git push           # 3. mirror Manus
+```
+
+**Enforcement phrase:** *"GitHub doesn't match live, Kin."*
+
 ## Sibling responsibilities (GLOBAL-77)
 
 | Sibling | What you do |
