@@ -70,35 +70,33 @@ function pick_best_model($lane, $scout_file) {
 }
 
 function call_maya_brain($prompt, $model, $role) {
-    // Try Maya's brain at iamsuperio.cloud (this engine routes to NIM/Groq).
-    // Falls back to a deterministic mock if the brain isn't reachable from this host.
+    // Maya brain shape (v43.1 · 2026-05-15 fix): action=chat · message=... · fast=true
+    // Returns: {success, reply, engine, provider, ms}. Falls back to mock on timeout/error.
     $url = 'https://iamsuperio.cloud/api/index';
+    $framed_prompt = "[SEAT {$role}] " . $prompt . "\n\nReply in ≤80 words. End with STANCE: approve | reject | abstain.";
     $payload = array(
-        'action' => 'ask',
-        'engine' => 'groq',
-        'model'  => $model,
-        'system' => "You are the {$role} seat of Maya AI's Board of Directors. Be sharp, brief, evidence-based. Disagree with peers when warranted. Output ≤ 80 words.",
-        'prompt' => $prompt,
+        'action' => 'chat',
+        'message' => $framed_prompt,
+        'fast' => true,
+        'no_continuity' => true,
     );
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 25);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 35);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
     $body = curl_exec($ch);
-    $err = curl_error($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     if ($body && $code === 200) {
         $j = json_decode($body, true);
-        if (is_array($j)) {
-            if (isset($j['text']))   return $j['text'];
-            if (isset($j['output'])) return $j['output'];
-            if (isset($j['answer'])) return $j['answer'];
+        if (is_array($j) && !empty($j['success']) && !empty($j['reply'])) {
+            return $j['reply'];
         }
+        if (is_array($j) && isset($j['reply'])) return $j['reply'];
     }
-    // fallback mock — keeps the UI alive when brain is offline
     return "[{$role} mock · model:{$model}] " . substr(strip_tags($prompt), 0, 120);
 }
 

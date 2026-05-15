@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Master · Mo's Empire Cockpit · 58 agencies · 12 council · 24 parliament</title>
+<meta name="description" content="Mo's commander view · all 58 agencies + chains + overrides + agent builder + Maya inline. Commander PIN required. Powered by MirzaTech.ai · Property of EMAAA.io">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg-0:#03060c; --bg-1:#070c18; --glass:rgba(10,18,38,.72);
+  --line:rgba(110,170,255,.18); --line-strong:rgba(0,200,255,.45);
+  --cyan:#00e4ff; --gold:#f5c542; --green:#43e6a1; --red:#ff5b6a; --pink:#a47bff; --white:#eaf2ff;
+  --text:#dbe6ff; --muted:#7e8bb0;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg-0);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh}
+body{
+  background:
+    radial-gradient(1200px 800px at 20% -10%, rgba(245,197,66,.10), transparent 60%),
+    radial-gradient(900px 700px at 110% 10%, rgba(62,155,255,.10), transparent 55%),
+    linear-gradient(180deg,#03060c 0%,#06091a 50%,#03060c 100%);
+}
+/* ===== GATE ===== */
+.gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;background:radial-gradient(circle at 50% 40%,rgba(245,197,66,.10),rgba(8,12,24,.95))}
+.gate.hidden{display:none}
+.gate-box{width:min(440px,92vw);padding:36px 32px;background:linear-gradient(135deg,rgba(10,14,28,.95),rgba(20,14,4,.92));border:2px solid var(--gold);border-radius:18px;box-shadow:0 0 80px rgba(245,197,66,.4)}
+.gate-box h1{margin:0 0 8px;color:var(--gold);font-family:'Space Grotesk',sans-serif;letter-spacing:.22em;text-transform:uppercase;font-size:18px;text-align:center}
+.gate-box .sub{color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-align:center;margin-bottom:24px;font-family:'JetBrains Mono',monospace}
+.gate-box input{width:100%;padding:14px 16px;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--white);font-family:'JetBrains Mono',monospace;font-size:14px;border-radius:10px;outline:0;margin-bottom:12px;letter-spacing:.06em}
+.gate-box input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,197,66,.18)}
+.gate-box button{width:100%;padding:14px;background:linear-gradient(135deg,#f5c542,#b88a18);color:#03060c;border:0;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:12px;border-radius:99px;cursor:pointer}
+.gate-box .err{color:var(--red);font-size:12px;margin-top:8px;text-align:center;display:none}
+.gate-box .hint{font-size:10px;color:var(--muted);text-align:center;margin-top:18px;letter-spacing:.1em}
+
+/* ===== COCKPIT ===== */
+.cockpit{display:none}
+.cockpit.active{display:block}
+.topbar{display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:1px solid var(--gold);background:linear-gradient(180deg,rgba(20,14,4,.95),rgba(8,12,24,.7));backdrop-filter:blur(14px);position:sticky;top:0;z-index:50}
+.topbar .brand{display:flex;align-items:center;gap:10px;color:var(--gold);font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.22em;font-size:13px;text-transform:uppercase}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.topbar .stats{flex:1;display:flex;gap:24px;font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;font-family:'Space Grotesk',sans-serif}
+.topbar .stats b{color:var(--white)}
+.topbar .actions{display:flex;gap:10px}
+.topbar .actions a,.topbar .actions button{padding:8px 14px;border:1px solid var(--line);background:rgba(10,18,38,.6);color:var(--text);border-radius:99px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;cursor:pointer;text-decoration:none;transition:all .15s}
+.topbar .actions a:hover,.topbar .actions button:hover{border-color:var(--cyan);color:var(--cyan)}
+.topbar .actions .override{border-color:var(--gold);color:var(--gold)}
+.topbar .actions .override:hover{background:rgba(245,197,66,.12)}
+
+.main{max-width:1480px;margin:0 auto;padding:22px;display:grid;grid-template-columns:1fr 340px;gap:18px}
+@media (max-width:1100px){.main{grid-template-columns:1fr}}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:18px 20px;backdrop-filter:blur(14px)}
+.panel h2{margin:0 0 14px;font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px}
+.panel h2 .badge{font-size:9px;padding:3px 9px;border-radius:99px;background:var(--cyan-soft,rgba(0,228,255,.18));color:var(--cyan);font-weight:700}
+.panel.gold h2{color:var(--gold)}
+
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:5px 11px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:99px;background:rgba(10,18,38,.4);color:var(--muted);cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s}
+.chip.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,228,255,.10)}
+
+.agency-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;max-height:560px;overflow-y:auto;padding-right:6px}
+.agency-grid::-webkit-scrollbar{width:6px}
+.agency-grid::-webkit-scrollbar-thumb{background:rgba(0,228,255,.25);border-radius:3px}
+.agency-card{padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:linear-gradient(135deg,rgba(18,28,52,.42),rgba(8,12,24,.28));cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.agency-card:hover{transform:translateY(-1px);border-color:var(--line-strong);background:linear-gradient(135deg,rgba(18,28,52,.62),rgba(8,12,24,.42))}
+.agency-card .ic{font-size:18px;line-height:1}
+.agency-card .nm{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--white);margin:6px 0 3px;line-height:1.2}
+.agency-card .tg{font-size:10.5px;color:var(--muted);line-height:1.4;height:28px;overflow:hidden}
+.agency-card .meta{display:flex;justify-content:space-between;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)}
+.agency-card .meta b{color:var(--text)}
+.agency-card.new{border-color:var(--pink);box-shadow:0 0 14px rgba(164,123,255,.2)}
+.agency-card.new .nm::after{content:" · NEW";color:var(--pink);font-size:9px;letter-spacing:.16em}
+
+/* Maya inline chat */
+.maya-panel{display:flex;flex-direction:column}
+.maya-log{flex:1;max-height:340px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.7;color:var(--text);padding:10px;background:rgba(0,0,0,.32);border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+.maya-log .me{color:var(--cyan)}
+.maya-log .maya{color:var(--gold);margin-bottom:8px}
+.maya-form{display:flex;gap:6px}
+.maya-form input{flex:1;background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--white);padding:10px 14px;border-radius:99px;font-family:'Inter',sans-serif;font-size:13px;outline:0}
+.maya-form input:focus{border-color:var(--cyan)}
+.maya-form button{background:linear-gradient(135deg,#00e4ff,#3e9bff);color:#03060c;border:0;padding:10px 18px;border-radius:99px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+
+/* Quick links */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.quick{padding:10px;border:1px solid var(--line);border-radius:9px;text-decoration:none;color:var(--text);font-size:11px;line-height:1.4;display:block;transition:all .15s}
+.quick:hover{border-color:var(--cyan);color:var(--cyan)}
+.quick b{display:block;color:var(--white);font-family:'Space Grotesk',sans-serif;letter-spacing:.05em;font-size:11.5px;margin-bottom:2px}
+
+/* Agent builder dialog */
+.builder{background:linear-gradient(135deg,rgba(28,12,40,.6),rgba(8,12,24,.5));border:1px solid var(--pink);border-radius:14px;padding:14px;margin-top:14px}
+.builder h3{margin:0 0 10px;color:var(--pink);font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.builder textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--white);padding:10px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;outline:0;min-height:80px;resize:vertical;margin-bottom:8px}
+.builder textarea:focus{border-color:var(--pink)}
+.builder button{background:linear-gradient(135deg,#a47bff,#7547ff);color:#fff;border:0;padding:10px 16px;border-radius:99px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;width:100%}
+.builder .out{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text);background:rgba(0,0,0,.32);padding:10px;border-radius:8px;display:none;max-height:200px;overflow-y:auto;white-space:pre-wrap}
+
+.footer-credit{padding:18px;text-align:center;color:var(--muted);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+.footer-credit b{color:rgba(0,228,255,.5)}
+</style>
+</head>
+<body>
+<!-- ===== COMMANDER GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <h1>⚔ Commander Cockpit</h1>
+    <div class="sub">Empire Master View · Mo Only</div>
+    <input id="pin" type="password" placeholder="Commander PIN" autocomplete="off" autofocus>
+    <button onclick="unlock()">▸ Enter Cockpit</button>
+    <div class="err" id="err">Wrong PIN · GLOBAL-52</div>
+    <div class="hint">PIN 210379 · or phrase BuddyBoots2! · GLOBAL-52</div>
+  </div>
+</div>
+
+<!-- ===== COCKPIT ===== -->
+<div class="cockpit" id="cockpit">
+  <div class="topbar">
+    <div class="brand"><div class="dot"></div>Mo · Empire Master Cockpit</div>
+    <div class="stats">
+      <span><b id="stat_agencies">58</b> agencies</span>
+      <span><b>12</b> council seats</span>
+      <span><b>12</b> board seats</span>
+      <span><b>24</b> parliament seats</span>
+      <span><b id="stat_chain">0</b> chains today</span>
+    </div>
+    <div class="actions">
+      <a href="/habitat.html">▸ Habitat</a>
+      <a href="https://mirzatech.ai/council/">▸ Council</a>
+      <a href="https://mirzatech.ai/parliament-theater.html">▸ Parliament</a>
+      <button class="override" onclick="sovereignOverride()">⚡ Override</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- LEFT: 58 AGENCIES + AGENT BUILDER -->
+    <div>
+      <div class="panel">
+        <h2>All Agencies <span class="badge" id="agencyCount">58</span></h2>
+        <div class="filter-bar" id="filterBar"></div>
+        <div class="agency-grid" id="agencyGrid"><em style="color:var(--muted);font-size:12px">loading…</em></div>
+      </div>
+
+      <div class="builder">
+        <h3>✨ Build Agent · Drop role description</h3>
+        <textarea id="agentSpec" placeholder="Example: A Game UX Researcher who runs week-long playtests, synthesizes feedback into actionable design notes, and feeds them to the Game Director. Must coordinate with Live Ops on retention surveys."></textarea>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <select id="agentAgency" style="flex:1;background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--white);padding:8px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px">
+            <option value="">— pick host agency —</option>
+          </select>
+        </div>
+        <button onclick="buildAgent()">▸ Run Through Verification Chain</button>
+        <div class="out" id="agentOut"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: MAYA + QUICK LINKS -->
+    <div>
+      <div class="panel">
+        <h2>Maya · Inline <span class="badge">LIVE</span></h2>
+        <div class="maya-panel">
+          <div class="maya-log" id="mayaLog"><div class="maya">▸ Maya online. Commander mode active. Speak.</div></div>
+          <form class="maya-form" onsubmit="sendMaya(event)">
+            <input id="mayaInput" placeholder="Tell Maya — convene Council, build agent, route artifact…" autocomplete="off">
+            <button type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h2>Quick Routes</h2>
+        <div class="quick-grid">
+          <a class="quick" href="/api/staff.php"><b>📋 Staff API</b>58 agencies JSON</a>
+          <a class="quick" href="/api/board_of_directors.php?action=state"><b>🏛 Board State</b>12 seats live</a>
+          <a class="quick" href="/api/verification_chain.php?action=state"><b>🔒 Chain State</b>GLOBAL-96</a>
+          <a class="quick" href="/api/maya_reasoning_scout.php?action=state"><b>🛰 Scout</b>best models</a>
+          <a class="quick" href="/api/agent_jail.php?action=roster"><b>🔒 Jail</b>roster + lessons</a>
+          <a class="quick" href="/api/maya_sovereign_brain.php?action=state"><b>🧠 Hypermind</b>pattern store</a>
+          <a class="quick" href="/agencies/game-development/"><b>🕹 Agency #58</b>Game Development</a>
+          <a class="quick" href="https://mirzatech.ai/habitat.html"><b>🏛 MirzaTech</b>arena view</a>
+          <a class="quick" href="https://github.com/mirzatech-ai/maya-sovereign-campus"><b>⌥ GitHub</b>live mirror</a>
+          <a class="quick" href="/admin.html"><b>⚙ Legacy Admin</b>old gate</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-credit">Powered by <b>MirzaTech.ai</b> &nbsp;·&nbsp; Property of <b>EMAAA.io</b> &nbsp;·&nbsp; Commander mode · GLOBAL-52</div>
+</div>
+
+<script>
+const CMD_PIN_NUM = '210379';
+const CMD_PIN_PHRASE = 'BuddyBoots2!';
+const SUB_TYPE_MAP = {
+  tech: /engineer|developer|data|cyber|ai|cloud|devops|robot|space/i,
+  creative: /design|creative|content|media|music|art|video|cinema|film|fashion|game/i,
+  business: /sales|marketing|customer|finance|account|operation|hr|human|recruit|legal/i,
+  industry: /manufactur|construct|automotive|aviation|energy|defense|pharma|agriculture|retail/i,
+  services: /hospital|tourism|education|government|nonprofit|insurance|telecom|sport|pet|culinary/i,
+};
+let ZONES = []; let active = 'all';
+
+function unlock(){
+  const v = document.getElementById('pin').value;
+  if (v === CMD_PIN_NUM || v === CMD_PIN_PHRASE) {
+    localStorage.setItem('mo_master_token', '24h_' + Date.now());
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('cockpit').classList.add('active');
+    loadAgencies();
+  } else {
+    document.getElementById('err').style.display = 'block';
+  }
+}
+
+// Auto-unlock if recent token (24h)
+const tk = localStorage.getItem('mo_master_token');
+if (tk && tk.startsWith('24h_')) {
+  const ts = parseInt(tk.slice(4)); if (Date.now() - ts < 86400000) unlock();
+}
+document.getElementById('pin').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+
+async function loadAgencies(){
+  try{
+    const r = await fetch('/api/staff.php', {cache:'no-store'});
+    const j = await r.json();
+    ZONES = (j && j.agencies) || [];
+    document.getElementById('stat_agencies').textContent = ZONES.length;
+    document.getElementById('agencyCount').textContent = ZONES.length;
+    // populate agency select for agent builder
+    const sel = document.getElementById('agentAgency');
+    ZONES.forEach(z => { const o = document.createElement('option'); o.value=z.id; o.textContent=z.name; sel.appendChild(o); });
+    renderFilters(); renderGrid();
+  }catch(e){ document.getElementById('agencyGrid').innerHTML='<em style="color:var(--red)">staff.php offline</em>'; }
+}
+
+function renderFilters(){
+  const buckets = [['all','All'],['tech','Tech'],['creative','Creative'],['business','Business'],['industry','Industry'],['services','Services']];
+  document.getElementById('filterBar').innerHTML = buckets.map(([k,l])=>{
+    const c = k==='all' ? ZONES.length : ZONES.filter(z=>(SUB_TYPE_MAP[k]||/.*/ ).test(z.name+' '+z.tagline)).length;
+    return `<div class="chip ${k===active?'active':''}" onclick="applyFilter('${k}')">${l} · ${c}</div>`;
+  }).join('');
+}
+window.applyFilter = (k) => { active = k; renderFilters(); renderGrid(); };
+
+function renderGrid(){
+  const f = active==='all' ? z=>true : z => (SUB_TYPE_MAP[active]||/.*/).test(z.name+' '+z.tagline);
+  const list = ZONES.filter(f);
+  document.getElementById('agencyGrid').innerHTML = list.map(z =>
+    `<div class="agency-card ${z.id==='game-development'?'new':''}" onclick="openAgency('${z.id}')">
+       <div class="ic" style="${z.color?'color:'+z.color:''}">${z.icon||'•'}</div>
+       <div class="nm">${escapeHtml(z.name)}</div>
+       <div class="tg">${escapeHtml((z.tagline||'').slice(0,60))}</div>
+       <div class="meta"><span>SEAT</span><span><b>${z.role_count||0}</b> roles</span></div>
+     </div>`
+  ).join('');
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+window.openAgency = (id) => { window.open('/agencies/'+id+'/', '_blank'); };
+
+window.sovereignOverride = async () => {
+  const msg = prompt('Sovereign Override — instruct Maya directly (Council paused):');
+  if (!msg) return;
+  document.getElementById('mayaLog').innerHTML += `<div class="me">▸ [OVERRIDE] ${escapeHtml(msg)}</div><div class="maya">▸ Maya executing solo · Council paused · logged</div>`;
+  fetch('/api/board_of_directors.php?action=deliberate', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({question:msg, sovereign_override:true, context:'Mo via Master Cockpit override'})}).catch(()=>{});
+  fetch('/api/notify.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({event:'sovereign_override', summary:msg, channels:['email','log']})}).catch(()=>{});
+};
+
+window.sendMaya = async (e) => {
+  e.preventDefault();
+  const input = document.getElementById('mayaInput'); const q = input.value.trim(); if (!q) return;
+  const log = document.getElementById('mayaLog');
+  log.innerHTML += `<div class="me">▸ ${escapeHtml(q)}</div>`;
+  input.value = '';
+  try {
+    const r = await fetch('https://iamsuperio.cloud/api/index', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'chat', message:q, fast:true, no_continuity:true})});
+    const j = await r.json();
+    const reply = (j && j.reply) || '(no reply)';
+    log.innerHTML += `<div class="maya">▸ ${escapeHtml(String(reply).slice(0,800))}</div>`;
+    log.scrollTop = log.scrollHeight;
+  } catch (err) { log.innerHTML += `<div class="maya" style="color:var(--red)">▸ brain unreachable · ${escapeHtml(err.message)}</div>`; }
+};
+
+window.buildAgent = async () => {
+  const spec = document.getElementById('agentSpec').value.trim();
+  const agencyId = document.getElementById('agentAgency').value;
+  if (!spec) { alert('drop a role description first'); return; }
+  if (!agencyId) { alert('pick host agency first'); return; }
+  const out = document.getElementById('agentOut'); out.style.display='block';
+  out.textContent = '▸ Running through verification_chain... Parliament (24) → Council (12) → Board (12) + 6 QA lenses + redo until clean...';
+  try {
+    const r = await fetch('/api/verification_chain.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'verify', artifact_id:'agent_'+agencyId+'_'+Date.now(), artifact_type:'agent_role', max_redos_per_stage:1, artifact_payload:{spec, agency_id:agencyId}})});
+    const j = await r.json();
+    out.textContent = `▸ VERDICT: ${j.verdict}\n· ${j.total_cycle_ms}ms total\n· Parliament clean: ${j.stages?.parliament?.clean} (${j.stages?.parliament?.redo_count} redos)\n· Council clean:    ${j.stages?.council?.clean} (${j.stages?.council?.redo_count} redos)\n· Board clean:      ${j.stages?.board?.clean} (${j.stages?.board?.redo_count} redos)\n· Vision fired: ${j.vision_verifier?.fired}\n\nIf APPROVED, Maya will email you next steps + agent JSON spec.`;
+    if (j.verdict === 'APPROVED') {
+      fetch('/api/notify.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({event:'agent.built', summary:'New agent approved for '+agencyId+': '+spec.slice(0,80), channels:['email','log']})}).catch(()=>{});
+    }
+  } catch (err) { out.textContent = '▸ chain unreachable: ' + err.message; }
+};
+</script>
+</body>
+</html>

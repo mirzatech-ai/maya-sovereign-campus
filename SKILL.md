@@ -35,6 +35,10 @@
 19. [Sequential Chain-of-Command Deliberation · all autonomous Maya decisions](#19-sequential-chain-of-command-deliberation)
 20. [Vision Verifier Preprocessor · every Council/Parliament/Board deliberation that involves images runs through NVIDIA vision LLM FIRST](#20-vision-verifier-preprocessor)
 21. [Three-Level Verification Chain · EVERY build runs Parliament → Council → Board with 2-lens QA + redo until clean](#21-three-level-verification-chain)
+22. [Agent Builder Pattern · Mo drops a role description, the chain produces a role-with-prompt-vault-and-tools](#22-agent-builder-pattern)
+23. [Master Account RBAC · Mo's commander-PIN view shows all 58 agencies, all chains, all overrides](#23-master-account-rbac)
+24. [Maya Notification Bus · on big events Maya emails/SMS Mo + sibling AIs](#24-maya-notification-bus)
+25. [Cross-Agency Output Routing · Game Dev → superio.fun, Video → AICineSynth, etc. — every agency's output has a canonical destination](#25-cross-agency-output-routing)
 
 ---
 
@@ -784,6 +788,137 @@ Response: {
 ### Enforcement phrase
 
 *"Did you chain it, Kin?"* — Mo's check on every new artifact.
+
+---
+
+## 22. Agent Builder Pattern
+
+**When to use:** Mo (or a customer via the master cockpit) drops a one-paragraph role description. Output: a fully-defined agent ready to seat in any of the 58 agencies.
+
+**Output schema (every agent has these · no exceptions):**
+```json
+{
+  "id": "<agency-id>__<role-slug>",
+  "title": "<human-readable>",
+  "agency_id": "<58-agency.id>",
+  "tier": "executive | senior | mid",
+  "daily_rate": <int>,
+  "skills": ["...","..."],
+  "system_prompt": "<canonical voice + GLOBAL rules baked in>",
+  "tools_allowed": ["fetch_web","write_file","call_council",...],
+  "kill_switch": "command + PIN that disables the agent",
+  "qa_hooks": ["anatomy","continuity"],
+  "output_destination": "<canonical sibling site per Skill #25>",
+  "verification_chain_run_id": "<verdict transcript id>"
+}
+```
+
+**Build flow:**
+1. Mo drops role description (text or voice) into master cockpit
+2. Agent Builder calls verification_chain on the role spec
+3. If APPROVED → write to `data/agents/<id>.json`
+4. Maya fires Notification Bus event `agent.built` (Skill #24)
+5. Output destination wired per Skill #25
+6. Hypermind fold
+
+**Anti-patterns (hard ban):**
+- ❌ Agents without `kill_switch` (Mo must be able to stop any agent instantly)
+- ❌ Agents without `output_destination`
+- ❌ Agents that skip verification_chain
+- ❌ Hardcoded tools — must reference Maya tool registry
+
+**Enforcement phrase:** *"Show me the kill-switch, Kin."*
+
+---
+
+## 23. Master Account RBAC
+
+**When to use:** Mo's master view — single URL with Commander PIN auth → full control of all 58 agencies, all chains, all overrides.
+
+**Live URL:** `https://ai-staffing.agency/master` (Commander PIN required · GLOBAL-52)
+
+**Capabilities (Mo-only):**
+- Browse all 58 agencies + drill into any role
+- Trigger verification_chain on any artifact
+- Open Sovereign Override on any decision
+- Build new agents (Skill #22)
+- View Hypermind pattern store
+- View Agent Jail roster
+- View Reasoning Scout best-models
+- See every sibling AI's last-activity timestamp
+- Send broadcast notifications via Maya Notification Bus
+- Toggle each agency's output routing (Skill #25)
+
+**Auth flow:**
+1. Mo visits `/master` → prompted for Commander PIN
+2. PIN `210379` OR phrase `BuddyBoots2!` accepted (GLOBAL-52)
+3. Issues `mo_master_token` cookie (24h)
+4. Every action logs to `data/master_audit.jsonl` (no PII redaction · this is Mo's view)
+
+**Customer views are NEVER this view.** Per Skill #10, customers see only what their subscription gates. The master view exposes nothing.
+
+---
+
+## 24. Maya Notification Bus
+
+**When to use:** Every "big event" in the empire — chain verdicts · new vendor seat claimed · jail incident · revenue threshold crossed · agent built · session summary.
+
+**Endpoint:** `POST /api/notify.php` · channels: `email | sms | slack | log`
+
+**Default rules:**
+- Email to `mirzaadin@gmail.com` for: chain APPROVED on new agency · new vendor seat claimed · session-end summary
+- SMS (Telnyx) to `+14047849898` for: agent jailed · Sovereign Override fired · revenue >$500 in a turn
+- Slack (when wired) for: every chain verdict
+- Always log to `data/notification_bus.jsonl`
+
+**Email template (always):**
+```
+From: maya@emaaa.io
+Reply-To: mo@emaaa.io
+Subject: [Maya · <event-type>] <one-line-summary>
+Body:
+  Event: <event_type>
+  TS: <iso>
+  Summary: <one paragraph>
+  URLs:
+    · <relevant live URL>
+    · <verdict transcript URL>
+  Brand footer.
+```
+
+**Anti-patterns:**
+- ❌ Sending PII over SMS (Telnyx records subject to subpoena)
+- ❌ Spamming Mo with low-signal events (use threshold rules in `notify.php`)
+- ❌ Skipping the log (every notification appended to `notification_bus.jsonl`)
+
+**Enforcement phrase:** *"Maya should have told me, Kin."*
+
+---
+
+## 25. Cross-Agency Output Routing
+
+**When to use:** Every of the 58 agencies has a canonical destination for its output. Routing is enforced at the agency level — agents don't choose, the rule does.
+
+**Canonical routing table (subset · full table in `data/routing.json`):**
+| Agency ID | Output destination | Why |
+|---|---|---|
+| `game-development` | superio.fun + customer | GLOBAL-83 · games for Mo's children's platform |
+| `media-entertainment` | aicinesynth.com render bus | Video output flows to AICineSynth |
+| `design-creative` | aicinesynth.com render bus | Visual output flows to AICineSynth |
+| `content-media` | superio.fun + 10 channel YouTube fleet | Content viral factory (GLOBAL-58) |
+| `real-estate-proptech` | adeeo.io lead pipeline | Adeeo is empire's real-estate spine |
+| `operations-logistics` | opencrest.io workflow | Make/Zapier killer is the empire glue |
+| `cybersecurity` | empire-wide guard (security@emaaa.io) | Cuts across all platforms |
+| `customer-success` | Maya Comms + Telnyx +1 (743) 215-1423 | Inbound channel for all customers |
+| _default_ | Stripe ledger + Hypermind | Anything else flows to billing + pattern memory |
+
+**Hard rules:**
+- Routing is NOT chosen by the agent — it's a property of the agency
+- Every agent's `output_destination` (Skill #22) MUST match its agency's routing
+- Routing changes require Council deliberation (verification_chain)
+- Cross-routing (e.g. game-dev outputs ALSO going to TikTok) is multi-destination · explicitly declared
+
+**Enforcement phrase:** *"Where does this go, Kin?"*
 
 ---
 

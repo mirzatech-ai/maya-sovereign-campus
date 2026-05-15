@@ -44,33 +44,29 @@ $QA_LENSES = array(
 
 // ---------- helpers ----------
 function call_seat($prompt, $model, $role_id) {
+    // Maya brain v43.1 shape: action=chat · message=... · fast=true · no_continuity=true
     $url = 'https://iamsuperio.cloud/api/index';
+    $framed = "[SEAT {$role_id}] " . $prompt . "\n\nReply ≤60 words. End with STANCE: clean | complaint.";
     $payload = array(
-        'action' => 'ask',
-        'engine' => 'groq',
-        'model'  => $model,
-        'system' => "You are seat [{$role_id}]. Be sharp, brief, evidence-based. ≤80 words.",
-        'prompt' => $prompt,
+        'action' => 'chat',
+        'message' => $framed,
+        'fast' => true,
+        'no_continuity' => true,
     );
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 12);   // 48 seats × 12s = 576s max in worst case · most return < 5s
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
     $body = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     if ($body && $code === 200) {
         $j = json_decode($body, true);
-        if (is_array($j)) {
-            if (isset($j['text']))   return $j['text'];
-            if (isset($j['output'])) return $j['output'];
-            if (isset($j['answer'])) return $j['answer'];
-        }
+        if (is_array($j) && isset($j['reply'])) return $j['reply'];
     }
-    // mock fallback (brain-routing fix is Manus issue #1)
     return "[{$role_id} mock] reviewed artifact · STANCE: clean";
 }
 
