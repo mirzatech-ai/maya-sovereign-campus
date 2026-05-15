@@ -1022,6 +1022,32 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .pm-device-active-badge { display: inline-block; padding: 2px 7px; background: var(--accent-2); color: #001423; border-radius: 99px; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; }
 .pm-advanced { margin-top: 6px; }
 
+/* v1.12.0 · QR-code install block · scan instead of paste · 2026-05-15 */
+.pm-qr-block {
+  display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center;
+  padding: 12px; background: rgba(0,228,255,0.04); border: 1px solid var(--accent);
+  border-radius: var(--rad-sm);
+}
+.pm-qr-text strong { display: block; font-size: 13px; color: var(--accent); margin-bottom: 4px; }
+.pm-qr-text p { font-size: 11px; color: var(--text-mut); line-height: 1.5; margin-bottom: 8px; }
+.pm-qr-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+.pm-qr-tab {
+  background: transparent; color: var(--text-mut); border: 1px solid var(--border);
+  border-radius: 99px; padding: 4px 10px; font-size: 11px; cursor: pointer;
+  font-family: inherit; transition: all .12s;
+}
+.pm-qr-tab:hover { color: var(--text); border-color: var(--accent); }
+.pm-qr-tab.active { color: var(--accent); border-color: var(--accent); background: rgba(0,228,255,0.08); }
+.pm-qr-canvas {
+  width: 132px; height: 132px;
+  background: #fff; border-radius: 8px; padding: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.pm-qr-canvas canvas { width: 120px; height: 120px; }
+@media (max-width: 480px) {
+  .pm-qr-block { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+}
+
 /* ── v1.10.2 · SOVEREIGN CAMPUS · Skill #1 (Kinetic Habitat UI) · GLOBAL-92 ── */
 .campus-stage {
   --camp-cyan:  #00e4ff; --camp-cyan-soft: rgba(0,228,255,.18);
@@ -1227,8 +1253,54 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .cf-phase  { color: var(--text-dim); font-style: italic; }
 
 /* Mobile · stack log under floor, smaller hub */
+/* Inline Maya Command Bar · Skill #8 · pinned bottom of floor · 2026-05-15 */
+.campus-cmd {
+  grid-area: cmd;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px 6px 14px;
+  background: linear-gradient(135deg, rgba(0,228,255,.08), rgba(245,197,66,.04));
+  border: 1px solid var(--camp-cyan);
+  border-radius: 99px;
+  box-shadow: 0 0 0 1px rgba(0,228,255,.15) inset, 0 4px 18px rgba(0,0,0,.4);
+}
+.cc-pre { font-family: 'Space Grotesk', monospace; font-size: 10px; letter-spacing: .18em; color: var(--camp-cyan); text-transform: uppercase; padding-right: 8px; border-right: 1px solid var(--camp-line); flex-shrink: 0; }
+.campus-cmd input { flex: 1; background: transparent; border: 0; outline: 0; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; padding: 6px 0; min-width: 0; }
+.campus-cmd input::placeholder { color: var(--text-dim); font-size: 11px; }
+.campus-cmd button {
+  background: linear-gradient(135deg, var(--camp-cyan), #3e9bff); color: #03060c; border: 0;
+  font-weight: 700; font-size: 14px; padding: 7px 14px; border-radius: 99px; cursor: pointer;
+  flex-shrink: 0; transition: transform .12s, filter .12s;
+}
+.campus-cmd button:hover  { filter: brightness(1.12); }
+.campus-cmd button:active { transform: translateY(1px); }
+.campus-cmd button:disabled { opacity: .45; cursor: not-allowed; }
+.campus-balloon {
+  grid-area: balloon;
+  background: linear-gradient(135deg, rgba(10,18,38,.95), rgba(8,12,24,.92));
+  border: 1px solid var(--camp-cyan); border-radius: 12px;
+  padding: 10px 12px; color: var(--text); font-size: 12px; line-height: 1.55;
+  max-height: 200px; overflow-y: auto;
+  box-shadow: 0 0 18px rgba(0,228,255,.15);
+}
+.campus-balloon[hidden] { display: none; }
+.campus-balloon .cb-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--camp-cyan); font-family: 'Space Grotesk', sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+.campus-balloon .cb-head .live { width: 7px; height: 7px; border-radius: 50%; background: var(--camp-cyan); box-shadow: 0 0 10px var(--camp-cyan); animation: campPulse 1.4s infinite; }
+.campus-balloon pre { white-space: pre-wrap; word-wrap: break-word; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-mut); }
+
+/* Re-layout the stage to make room for cmd + balloon */
+.campus-stage {
+  grid-template-rows: 56px 1fr auto auto 36px;
+  grid-template-columns: 1fr 280px;
+  grid-template-areas:
+    "head head"
+    "floor log"
+    "balloon balloon"
+    "cmd cmd"
+    "foot foot";
+}
+
 @media (max-width: 900px) {
-  .campus-stage { grid-template-columns: 1fr; grid-template-areas: "head" "floor" "log" "foot"; grid-template-rows: 56px minmax(380px, 1fr) 160px 36px; }
+  .campus-stage { grid-template-columns: 1fr; grid-template-areas: "head" "floor" "log" "balloon" "cmd" "foot"; grid-template-rows: 56px minmax(380px, 1fr) 160px auto auto 36px; }
   .hub-orb { width: 120px; height: 120px; }
   .hub-orb-pct { font-size: 22px; }
   .room-card { width: 140px; min-height: 80px; padding: 6px 8px; }

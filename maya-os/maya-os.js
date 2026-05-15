@@ -2256,6 +2256,55 @@
     if (campusPanel.classList.contains('active')) campusStart();
   }
 
+  // v1.12.0 · Maya Command Bar inside Campus · Skill #8 · 2026-05-15
+  const campusCmdInput = $('campusCmdInput');
+  const campusCmdSend  = $('campusCmdSend');
+  const campusBalloon  = $('campusBalloon');
+
+  async function campusCmdRun() {
+    const text = (campusCmdInput?.value || '').trim();
+    if (!text) return;
+    campusCmdSend.disabled = true;
+    campusBalloon.hidden = false;
+    campusBalloon.innerHTML = '<div class="cb-head"><span class="live"></span><span>Maya is thinking…</span></div><pre>' + escapeHTML(text) + '</pre>';
+
+    // Emit "start" event into the Campus event spine so packet flies from hub to room
+    try {
+      await fetch('https://iamsuperio.cloud/api/maya_event', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({actor:'maya', action:'cmd', target: text.slice(0,80), status:'start', room:'maya_brain'})
+      });
+    } catch(_) {}
+
+    let answer = '';
+    try {
+      const r = await fetch(BRAIN_URL, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({action:'ask', engine:'gemini', question: text})
+      });
+      const j = await r.json();
+      answer = j.answer || j.response || j.text || j.content || '(no answer)';
+    } catch (e) {
+      answer = 'Network error: ' + e.message;
+    }
+
+    campusBalloon.innerHTML = '<div class="cb-head"><span class="live"></span><span>Maya · responded</span></div><pre>' + escapeHTML(answer) + '</pre>';
+    campusCmdInput.value = '';
+    campusCmdSend.disabled = false;
+
+    // Emit "done" event so packet completes
+    try {
+      await fetch('https://iamsuperio.cloud/api/maya_event', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({actor:'maya', action:'cmd', target: text.slice(0,80), status:'done', room:'maya_brain', result: answer.slice(0,120)})
+      });
+    } catch(_) {}
+  }
+  if (campusCmdSend)  campusCmdSend.addEventListener('click', campusCmdRun);
+  if (campusCmdInput) campusCmdInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); campusCmdRun(); }
+  });
+
   // ── v1.11.1 · PHONE BRIDGE · Mo's Samsung Fold 5 / Termux · Phase 1 · 2026-05-15 ──
   const PHONE_KEY_URL   = 'maya_os_phone_url_v1';
   const PHONE_KEY_TOKEN = 'maya_os_phone_token_v1';
@@ -2353,6 +2402,33 @@
     if (cached) pmRegPin.value = cached;
   }
   if (pmRefreshBtn) pmRefreshBtn.addEventListener('click', devListRefresh);
+
+  // v1.12.0 · QR-code install block · 2026-05-15
+  // Each tab targets a different installer; encoded URL is the canonical install endpoint
+  // so a phone camera scan opens the link in browser (then Mo copies the one-liner with one tap).
+  const QR_TARGETS = {
+    termux:  'https://iamsuperio.cloud/phone-bridge/install.sh',
+    windows: 'https://iamsuperio.cloud/phone-bridge/install.ps1',
+    macos:   'https://iamsuperio.cloud/phone-bridge/install.sh',
+  };
+  function pmQrRender(target) {
+    const url = QR_TARGETS[target] || QR_TARGETS.termux;
+    const host = document.getElementById('pmQrCanvas');
+    if (!host) return;
+    host.innerHTML = '<canvas id="pmQrCanvasEl"></canvas>';
+    // QRious from cdnjs · loaded via <script defer> in <head>
+    if (typeof QRious === 'undefined') {
+      host.innerHTML = '<div style="font-size:9px;color:#888;text-align:center;padding:10px;">QR lib loading…<br>refresh modal if it stays this way</div>';
+      return;
+    }
+    new QRious({ element: document.getElementById('pmQrCanvasEl'), value: url, size: 240, background: 'white', foreground: '#001423', level: 'M' });
+  }
+  qsAll('.pm-qr-tab').forEach(t => t.addEventListener('click', () => {
+    qsAll('.pm-qr-tab').forEach(x => x.classList.toggle('active', x === t));
+    pmQrRender(t.dataset.qrTarget);
+  }));
+  // Render initial QR when modal opens · piggyback on the pill click (which calls phoneOpenModal)
+  if (phonePill) phonePill.addEventListener('click', () => setTimeout(() => pmQrRender('termux'), 100));
 
   let _phoneState = 'unknown';   // 'unknown' | 'ok' | 'err' | 'idle'
   let _phoneCfg = null;

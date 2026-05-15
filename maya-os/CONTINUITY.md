@@ -4012,7 +4012,7 @@ The `10kbliz_action` is the LITERAL variable name from the source PHP. Maya read
 ### What landed this turn
 | Layer | Status |
 |---|---|
-| Telnyx API key | `<redacted-per-GLOBAL-48>` saved |
+| Telnyx API key | `KEY***REDACTED-FROM-PUBLIC-MIRROR*** (live key stored only in /home/iamsuperio.cloud/public_html/api/.maya_master_keys.env on VPS)` |
 | Messaging Profile "Maya-SMS" | `40019e23-537e-46ef-8505-2364d6f67b51` |
 | Voice API App "Maya-ai" | `2959195014049039545` |
 | Maya's number | **`+1 (743) 215-1423`** · Charlotte NC area · HD Voice · T.38 Fax · active |

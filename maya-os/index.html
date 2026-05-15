@@ -18,6 +18,7 @@
 <link rel="apple-touch-icon" href="./assets/icon-192.png">
 <title>Maya OS · v1.9</title>
 <link rel="stylesheet" href="./maya-os.css?v=199b-mobile-flex">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
 
@@ -780,15 +781,28 @@
         <div class="pm-body">
           <p class="pm-status" id="pmStatus">Not connected. Same bridge runs on every device you own — phone (Termux), Windows laptop, macOS, Linux. Install on each. Maya sees them all the same.</p>
 
+          <div class="pm-qr-block">
+            <div class="pm-qr-text">
+              <strong>📷 Scan from a new device</strong>
+              <p>Point your phone camera at this QR · it opens the install link · zero typing.</p>
+              <div class="pm-qr-tabs">
+                <button class="pm-qr-tab active" data-qr-target="termux" type="button">📱 Termux</button>
+                <button class="pm-qr-tab"        data-qr-target="windows" type="button">💻 Windows</button>
+                <button class="pm-qr-tab"        data-qr-target="macos"   type="button">🖥️ macOS / Linux</button>
+              </div>
+            </div>
+            <div class="pm-qr-canvas" id="pmQrCanvas"></div>
+          </div>
+
           <details class="pm-install">
-            <summary>📦 Install on Samsung Fold 5 (Termux · 30s)</summary>
+            <summary>📦 Install on Samsung Fold 5 (Termux · 30s · paste fallback)</summary>
             <p>Open Termux on your phone and run:</p>
             <pre class="pm-code"><code>bash &lt;(curl -fsSL https://iamsuperio.cloud/phone-bridge/install.sh)</code></pre>
             <p>When it finishes it prints a token · then start the bridge with: <code>maya-bridge</code></p>
           </details>
 
           <details class="pm-install">
-            <summary>💻 Install on Windows laptop/desktop (30s)</summary>
+            <summary>💻 Install on Windows laptop/desktop (30s · paste fallback)</summary>
             <p>Open PowerShell and run:</p>
             <pre class="pm-code"><code>iwr https://iamsuperio.cloud/phone-bridge/install.ps1 -UseB | iex</code></pre>
             <p>Then launch from Start Menu → "Maya Bridge" (or auto-start on login if you said yes during install).</p>
@@ -879,6 +893,14 @@
             <div class="empty-sm">Connecting to state stream…</div>
           </div>
         </aside>
+
+        <!-- v1.12.0 · Maya Command Bar inside the Campus floor · Skill #8 · Mo 2026-05-15 -->
+        <div class="campus-cmd">
+          <span class="cc-pre">MAYA</span>
+          <input id="campusCmdInput" type="text" placeholder="Tell Maya what to do · she runs it · packets show in the floor (e.g. 'open files in /downloads' · 'ssh root@76.13.26.130 uptime' · 'brief my email')" />
+          <button id="campusCmdSend" type="button" title="Send">→</button>
+        </div>
+        <div class="campus-balloon" id="campusBalloon" hidden></div>
 
         <footer class="campus-foot">
           <span class="cf-brand">Powered by MirzaTech.ai · Property of EMAAA.io</span>

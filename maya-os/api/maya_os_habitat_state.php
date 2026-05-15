@@ -51,70 +51,35 @@ $probe = function(string $url, int $timeout = 1): array {
     return ['ok' => $body !== false, 'latency_ms' => $elapsed, 'body' => $body];
 };
 
-/* Rooms · 5 canonical for Mo's personal campus */
-$rooms = [
-    [
-        'id'         => 'maya_brain',
-        'label'      => 'Maya Brain',
-        'role'       => 'perception · routing · voice',
-        'state'      => pick_state($slot + 0),
-        'sprites'    => 3,
-        'tasks_24h'  => 47 + ($min_slot % 9),
-        'latency_ms' => 180 + (($slot * 23) % 240),
-        'task'       => 'awaiting input',
-        'engines'    => 'gemini · groq · glm · nim · kimi',
-        'icon'       => '🧠',
-    ],
-    [
-        'id'         => 'kimi',
-        'label'      => 'Kimi',
-        'role'       => 'NVIDIA-Claude coding agent · kimi-k2.6',
-        'state'      => pick_state($slot + 1),
-        'sprites'    => 2,
-        'tasks_24h'  => 12 + ($min_slot % 5),
-        'latency_ms' => 320 + (($slot * 41) % 420),
-        'task'       => 'standby · port 8086',
-        'engines'    => 'moonshotai/kimi-k2.6',
-        'icon'       => '💠',
-    ],
-    [
-        'id'         => 'opencode',
-        'label'      => 'OpenCode',
-        'role'       => 'NVIDIA-Claude coding agent · glm-4.7',
-        'state'      => pick_state($slot + 2),
-        'sprites'    => 2,
-        'tasks_24h'  => 8 + ($min_slot % 4),
-        'latency_ms' => 280 + (($slot * 37) % 380),
-        'task'       => 'standby · port 8087',
-        'engines'    => 'zai-org/glm-4.7',
-        'icon'       => '🧠',
-    ],
-    [
-        'id'         => 'vscode',
-        'label'      => 'VS Code',
-        'role'       => 'NVIDIA-Claude coding agent · qwen3-coder',
-        'state'      => pick_state($slot + 3),
-        'sprites'    => 2,
-        'tasks_24h'  => 6 + ($min_slot % 3),
-        'latency_ms' => 290 + (($slot * 29) % 360),
-        'task'       => 'standby · port 8088',
-        'engines'    => 'qwen/qwen3-coder-480b',
-        'icon'       => '🇨🇳',
-    ],
-    [
-        'id'         => 'self_edit_queue',
-        'label'      => 'Self-Edit Queue',
-        'role'       => 'Loop 3 · screenshot → vision → file-edit',
-        'state'      => 'idle',   // queue is empty until Phase B ships
-        'sprites'    => 1,
-        'tasks_24h'  => 0,
-        'latency_ms' => 0,
-        'task'       => 'queue empty · awaiting Phase B (backend)',
-        'engines'    => 'gemini vision · kimi/opencode/vscode',
-        'icon'       => '✨',
-        'phase'      => 'B-pending',
-    ],
-];
+/* Rooms · loaded from canonical JSON registry · Mo's directive 2026-05-15:
+   "each time we add a new sibling, it must be there by default, preconfigured as the others"
+   Add a sibling = append one entry to data/siblings.json + push · the campus auto-renders.
+   Fallback to hardcoded list only if registry file is missing (defensive). */
+$rooms = [];
+$siblings_file = '/home/iamsuperio.cloud/public_html/api/data/siblings.json';
+if (is_readable($siblings_file)) {
+    $reg = @json_decode(@file_get_contents($siblings_file), true);
+    if (is_array($reg) && isset($reg['siblings']) && is_array($reg['siblings'])) {
+        foreach ($reg['siblings'] as $i => $s) {
+            $rooms[] = [
+                'id'         => (string)($s['id'] ?? "sibling_$i"),
+                'label'      => (string)($s['label'] ?? $s['id'] ?? "Sibling $i"),
+                'role'       => (string)($s['role'] ?? ''),
+                'state'      => isset($s['is_hub']) && $s['is_hub'] ? pick_state($slot + 0) : pick_state($slot + $i),
+                'sprites'    => isset($s['is_hub']) && $s['is_hub'] ? 3 : 2,
+                'tasks_24h'  => (int)($s['tasks_24h_base'] ?? 0) + ($min_slot % 9),
+                'latency_ms' => (int)($s['latency_base_ms'] ?? 0) + (($slot * (23 + $i * 4)) % 400),
+                'task'       => (string)($s['task_default'] ?? 'standby'),
+                'engines'    => (string)($s['engines'] ?? ''),
+                'icon'       => (string)($s['icon'] ?? '◇'),
+            ];
+        }
+    }
+}
+/* Defensive fallback if registry missing or empty */
+if (empty($rooms)) {
+    $rooms[] = ['id'=>'maya_brain','label'=>'Maya Brain','role'=>'perception · routing · voice','state'=>pick_state($slot),'sprites'=>3,'tasks_24h'=>47,'latency_ms'=>180,'task'=>'awaiting input','engines'=>'multi-engine','icon'=>'🧠'];
+}
 
 /* ── PHASE B SPINE · Read real events from events.jsonl · 2026-05-15 ──
    The 5-room oscillator above gives ambient motion when nothing's happening.
