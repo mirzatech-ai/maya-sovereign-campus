@@ -1,6 +1,20 @@
 /* Maya OS · v1.2 · 2026-05-12 · Kin
  * council-driven changes: top horizontal switcher · Ctrl+K palette · collapsible right rail · persistent audio strip
  * mobile fix: .feed min-height:0 so composer stays in viewport · safe-area-inset honored
+ *
+ * GLOBAL-95 · THEME-SAFE CONTRAST · locked 2026-05-15 by Mo verbatim:
+ *   "users with white screens cannot see the letters that are very light colored.
+ *    Some sites have day/night toggle, some don't. It needs to be rendered properly."
+ *
+ * HARD RULE: every color MUST use a CSS variable from this block. NEVER hardcode
+ * #4ade80 / #f87171 / rgba(255,255,255,0.6) etc. directly in a rule. If you need a
+ * color that isn't here, ADD it to BOTH :root (dark) AND html[data-theme="day"] (light)
+ * with values that pass WCAG AA contrast (4.5:1 for body text, 3:1 for large/icons).
+ *
+ * Status semantic tokens (--ok / --warn / --error / --info) are defined in BOTH
+ * themes so green/amber/red badges stay readable on white AND on dark.
+ *
+ * Enforcement phrase: "Theme-safe contrast, Kin · I can't read the text."
  */
 
 :root {
@@ -9,6 +23,11 @@
   --border: rgba(0,212,255,0.22); --border-hot: rgba(0,212,255,0.55); --border-mt: rgba(255,255,255,0.08);
   --text: #eef2f9; --text-mut: #9aa4bb; --text-dim: #6a7589;
   --accent: #00d4ff; --accent-2: #00ffa3; --maya: #b347ff; --user: #fbbf24; --hot: #ff3355; --warn: #ffaa00; --gold: #ffd700;
+  /* GLOBAL-95 · semantic status tokens · theme-safe contrast */
+  --ok:    #4ade80;  /* bright green on dark · readable */
+  --error: #f87171;  /* bright red on dark · readable */
+  --info:  #60a5fa;  /* bright blue on dark · readable */
+  --on-status: #fff; /* text color when sitting on a colored chip */
   --rail-left-w: 220px; --rail-right-w: 280px; --head-h: 50px; --audio-h: 36px;
   --rad-sm: 6px; --rad: 10px; --rad-lg: 16px;
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -18,8 +37,13 @@ html[data-theme="day"] {
   --bg: #f3f5fa; --bg-2: #fff; --bg-3: #ecf0f7;
   --panel: rgba(255,255,255,0.88); --panel-soft: rgba(0,0,0,0.04); --panel-h: rgba(0,0,0,0.06);
   --border: rgba(0,90,180,0.18); --border-hot: rgba(0,90,180,0.5); --border-mt: rgba(0,0,0,0.08);
-  --text: #0c1428; --text-mut: #4b5570; --text-dim: #8593a8;
-  --accent: #0066ff; --maya: #7a1fd6;
+  --text: #0c1428; --text-mut: #4b5570; --text-dim: #4b5570;
+  --accent: #0066ff; --accent-2: #00855a; --maya: #7a1fd6; --user: #b78400; --hot: #c92438; --warn: #b56600; --gold: #a37500;
+  /* GLOBAL-95 · status tokens DARKENED for day theme so green/red/amber stay readable on white */
+  --ok:    #047857;  /* deep green · 5.2:1 on white */
+  --error: #b91c1c;  /* deep red · 5.9:1 on white */
+  --info:  #1d4ed8;  /* deep blue · 6.3:1 on white */
+  --on-status: #fff;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -181,7 +205,7 @@ html[data-theme="day"] .canvas-head { background: rgba(255,255,255,0.7); }
 }
 .audio-strip button:hover { color: var(--text); border-color: var(--accent); }
 .audio-strip button.on { background: rgba(0,255,163,0.14); color: var(--accent-2); border-color: var(--accent-2); }
-.audio-strip button.hot:hover { color: #ffb0bd; border-color: var(--hot); }
+.audio-strip button.hot:hover { color: var(--error); border-color: var(--hot); }
 
 /* ─── PANELS ────────────────────────────────────────── */
 .panel { display: none; flex: 1; min-height: 0; overflow: hidden; flex-direction: column; }
@@ -266,7 +290,7 @@ html[data-theme="day"] .canvas-head { background: rgba(255,255,255,0.7); }
   padding: 4px 8px; border-radius: var(--rad-sm); cursor: pointer; font-size: 12px;
 }
 .chat-bar-rename:hover { color: var(--accent); border-color: var(--accent); }
-.chat-bar-delete:hover { color: #f87171; border-color: #f87171; }
+.chat-bar-delete:hover { color: var(--error); border-color: var(--error); }
 
 @media (max-width: 720px) {
   .chat-shell { grid-template-columns: 0px 1fr; }
@@ -288,7 +312,7 @@ html[data-theme="day"] .canvas-head { background: rgba(255,255,255,0.7); }
 .bubble.system { align-self: center; background: transparent; border: 1px dashed var(--border); color: var(--text-mut); font-size: 12px; font-style: italic; padding: 10px 14px; border-radius: var(--rad); max-width: 92%; }
 .bubble.tool { align-self: flex-start; background: rgba(0,212,255,0.06); border: 1px solid var(--border); color: var(--text-mut); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 8px 12px; border-radius: var(--rad); max-width: 80%; }
 .bubble.tool::before { content: "⚙ "; color: var(--accent); }
-.bubble.error { align-self: center; background: rgba(255,51,85,0.10); border: 1px solid var(--hot); color: #ffb0bd; font-size: 13px; }
+.bubble.error { align-self: center; background: rgba(255,51,85,0.10); border: 1px solid var(--hot); color: var(--error); font-size: 13px; }
 .bubble-meta { display: flex; gap: 8px; align-items: center; margin-top: 6px; font-size: 10px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 0.1em; }
 .bubble-meta .speak { cursor: pointer; color: var(--accent); border: 1px solid var(--border); padding: 2px 7px; border-radius: 999px; background: transparent; font-family: inherit; font-size: 10px; }
 .bubble-meta .speak:hover { background: rgba(0,212,255,0.1); }
@@ -435,7 +459,7 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
   max-height: 200px; overflow-y: auto;
 }
 .studio-copilot .sc-out:empty { display: none; }
-.studio-copilot .sc-out .sc-applied { color: #4ade80; }
+.studio-copilot .sc-out .sc-applied { color: var(--ok); }
 .studio-copilot .sc-out .sc-thinking { color: var(--accent); font-style: italic; }
 
 /* v1.9.5 · Evolution mode · scoreboard + history */
@@ -447,9 +471,9 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .evo-loading { color: var(--text-mut); font-family: 'Share Tech Mono', monospace; font-size: 13px; }
 .evo-headline { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
 .evo-health-big { font-size: 48px; font-weight: 900; line-height: 1; font-family: 'Share Tech Mono', monospace; }
-.evo-health-big.green { color: #4ade80; }
-.evo-health-big.amber { color: #fbbf24; }
-.evo-health-big.red   { color: #f87171; }
+.evo-health-big.green { color: var(--ok); }
+.evo-health-big.amber { color: var(--warn); }
+.evo-health-big.red   { color: var(--error); }
 .evo-stat { display: flex; flex-direction: column; gap: 2px; }
 .evo-stat-label { font-size: 10px; letter-spacing: 0.12em; color: var(--text-mut); text-transform: uppercase; }
 .evo-stat-value { font-size: 18px; font-weight: 700; color: var(--text); font-family: 'Share Tech Mono', monospace; }
@@ -494,9 +518,9 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
   font-size: 10px; letter-spacing: 0.1em; font-weight: 700;
   padding: 2px 8px; border-radius: 999px; text-transform: uppercase;
 }
-.evo-prov-badge.green  { background: rgba(74,222,128,0.15); color: #4ade80; }
-.evo-prov-badge.red    { background: rgba(248,113,113,0.15); color: #f87171; }
-.evo-prov-badge.amber  { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.evo-prov-badge.green  { background: rgba(74,222,128,0.15); color: var(--ok); }
+.evo-prov-badge.red    { background: rgba(248,113,113,0.15); color: var(--error); }
+.evo-prov-badge.amber  { background: rgba(251,191,36,0.15); color: var(--warn); }
 .evo-prov-badge.unknown{ background: rgba(255,255,255,0.08); color: var(--text-mut); }
 
 .evo-history {
