@@ -99,7 +99,7 @@
         <span class="status-text" id="statusText">connecting…</span>
       </div>
       <button class="palette-cue" id="paletteCue" type="button" title="Quick search · Ctrl+K">⌘K</button>
-      <button class="phone-pill" id="phonePill" type="button" aria-label="Phone bridge status" title="Phone Bridge · not connected · click to set up">📱 <span id="phoneDot" class="phone-dot"></span></button>
+      <button class="phone-pill" id="phonePill" type="button" aria-label="Device bridge status" title="Device Bridge · phone/laptop/desktop · click to set up">📱💻 <span id="phoneDot" class="phone-dot"></span></button>
       <button class="bell-btn" id="bellBtn" type="button" aria-label="Notifications · email + SMS" title="Inbox + SMS · Maya can brief you">
         <span class="bell-ico" aria-hidden="true">🔔</span>
         <span class="bell-badge" id="bellBadge" hidden>0</span>
@@ -770,24 +770,36 @@
 
     <!-- v1.9.7 · Qode mode is now an external launcher · panel removed · click rail Qode button opens https://iamsuperio.cloud/maya-qode in a separate window -->
 
-    <!-- v1.11.1 · PHONE BRIDGE setup modal · Mo's Samsung Fold 5 / Termux · 2026-05-15 -->
-    <div class="phone-modal" id="phoneModal" hidden role="dialog" aria-label="Phone Bridge setup">
+    <!-- v1.11.2 · DEVICE BRIDGE setup modal · same bridge on phone/laptop/desktop · 2026-05-15 -->
+    <div class="phone-modal" id="phoneModal" hidden role="dialog" aria-label="Device Bridge setup">
       <div class="pm-backdrop" id="pmBackdrop"></div>
       <div class="pm-card">
         <header class="pm-head">
-          <strong>📱 Phone Bridge · Phase 1</strong>
+          <strong>📱💻 Device Bridge · Phase 1</strong>
           <button class="pm-close" id="pmClose" type="button" aria-label="Close">✕</button>
         </header>
         <div class="pm-body">
-          <p class="pm-status" id="pmStatus">Not connected. Paste your bridge URL + token below, or follow the 30-second install.</p>
+          <p class="pm-status" id="pmStatus">Not connected. Same bridge runs on every device you own — phone (Termux), Windows laptop, macOS, Linux. Install on each. Maya sees them all the same.</p>
 
           <details class="pm-install">
             <summary>📦 Install on Samsung Fold 5 (Termux · 30s)</summary>
             <p>Open Termux on your phone and run:</p>
             <pre class="pm-code"><code>bash &lt;(curl -fsSL https://iamsuperio.cloud/phone-bridge/install.sh)</code></pre>
-            <p>When it finishes it prints a token · copy it · then start the bridge with:</p>
-            <pre class="pm-code"><code>maya-bridge</code></pre>
-            <p>Paste the printed token into the field below. Bridge URL stays <code>http://127.0.0.1:8765</code> if Maya OS is on the same phone (PWA installed). For your laptop to reach the phone, expose via Cloudflare Tunnel · see <a href="https://iamsuperio.cloud/phone-bridge/README.md" target="_blank" rel="noopener">README</a>.</p>
+            <p>When it finishes it prints a token · then start the bridge with: <code>maya-bridge</code></p>
+          </details>
+
+          <details class="pm-install">
+            <summary>💻 Install on Windows laptop/desktop (30s)</summary>
+            <p>Open PowerShell and run:</p>
+            <pre class="pm-code"><code>iwr https://iamsuperio.cloud/phone-bridge/install.ps1 -UseB | iex</code></pre>
+            <p>Then launch from Start Menu → "Maya Bridge" (or auto-start on login if you said yes during install).</p>
+          </details>
+
+          <details class="pm-install">
+            <summary>🐧 Install on macOS / Linux (30s)</summary>
+            <p>Same one-liner as Termux:</p>
+            <pre class="pm-code"><code>bash &lt;(curl -fsSL https://iamsuperio.cloud/phone-bridge/install.sh)</code></pre>
+            <p>Launch with: <code>maya-bridge</code> (added to PATH).</p>
           </details>
 
           <label class="pm-label">Bridge URL</label>

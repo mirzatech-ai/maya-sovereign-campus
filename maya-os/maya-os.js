@@ -2293,7 +2293,7 @@
     _phoneState = s;
     if (phonePill) {
       phonePill.dataset.state = (s === 'ok' || s === 'err') ? s : '';
-      phonePill.title = title || 'Phone Bridge · click to set up';
+      phonePill.title = title || 'Device Bridge · click to set up';
     }
   }
   function emitPhoneEvent(action, target, status, result) {
@@ -2315,15 +2315,15 @@
     } catch (e) { throw e; }
   }
   async function phoneCheck() {
-    if (!_phoneCfg) { phoneSetState('idle', 'Phone Bridge · not connected · click to set up'); return; }
+    if (!_phoneCfg) { phoneSetState('idle', 'Device Bridge · not connected · click to set up'); return; }
     try {
       const j = await phonePing(_phoneCfg);
       const caps = j.capabilities || {};
       const okCount = Object.values(caps).filter(Boolean).length;
-      phoneSetState('ok', `Phone Bridge · connected · ${okCount} capabilities · ${j.device_hint || ''}`);
+      phoneSetState('ok', `Device Bridge · connected · ${okCount} capabilities · ${j.device_hint || ''}`);
       return j;
     } catch (e) {
-      phoneSetState('err', 'Phone Bridge · unreachable · ' + e.message);
+      phoneSetState('err', 'Device Bridge · unreachable · ' + e.message);
     }
   }
 
@@ -2378,7 +2378,7 @@
   if (pmDisconnectBtn) pmDisconnectBtn.addEventListener('click', () => {
     phoneClearCfg();
     emitPhoneEvent('bridge_disconnected', 'phone', 'done', 'user-initiated');
-    phoneSetState('idle', 'Phone Bridge · not connected');
+    phoneSetState('idle', 'Device Bridge · not connected');
     if (pmStatus) { pmStatus.textContent = 'Disconnected.'; pmStatus.className = 'pm-status'; }
     pmCaps.hidden = true;
   });
