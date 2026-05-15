@@ -28,6 +28,7 @@
 12. [Consistency Sentinel · face-lock + anatomy QA](#12-consistency-sentinel)
 13. [Workflow Swarm Visualization · multi-step pipeline](#13-workflow-swarm-visualization)
 14. [Cross-Domain UI Inheritance · Opencrest + MirzaTech port the pattern](#14-cross-domain-ui-inheritance)
+15. [LLM Vendor Anonymization · NEVER show vendor names on public surfaces](#15-llm-vendor-anonymization)
 
 ---
 
@@ -278,6 +279,55 @@
 - Do NOT diverge on color palette, biolum states, or animation timing — keep the empire visually unified.
 
 **Canonical doctrine:** [`D:/PROJECTS/_SHARED/CROSS_DOMAIN_UI_DOCTRINE_2026_05_15.md`](D:/PROJECTS/_SHARED/CROSS_DOMAIN_UI_DOCTRINE_2026_05_15.md)
+
+---
+
+## 15. LLM Vendor Anonymization
+
+**When to use:** Any public-facing surface that lists or shows LLM models, seats, voices, or vendors. Especially mirzatech.ai, council/, parliament/, senate/, arena.html, battleground.html, any Council Chamber UI.
+
+**Mo verbatim 2026-05-15 (dozens-of-times rule):** *"Don't show the names of the large language models we are using for free. Vendors won't participate if they see their model uncompensated on a public surface."*
+
+**Hard rules (binding GLOBAL-93):**
+- **NEVER show vendor names** on public surfaces: Anthropic · OpenAI · Mistral · NVIDIA · DeepSeek · Qwen · xAI · Grok · Cohere · Meta · Google · Manus · Claude · GPT · Llama · Gemini · etc.
+- **Replace with** ROLE + param size + capability lane → "Reasoning Lead · ~1T params · 256K context"
+- **Or** SEAT NN + role → "SEAT 04 · Agentic"
+- **Or** license framing → "open-weights · frontier-eu · frontier-asia · independent"
+
+**Companion rule — check before building:**
+Before generating ANY seat/agent/voice list for a Council/Parliament-style surface, GREP the live VPS for existing patterns:
+```bash
+ssh root@76.13.26.130 "grep -oE 'SEAT [0-9]+|seat h4|<h4>[^<]+' /home/mirzatech.ai/public_html/council/index.html"
+ssh root@76.13.26.130 "grep -E 'ROUND_LABELS|label:' /home/mirzatech.ai/public_html/parliament-theater.html"
+```
+Match the anonymization pattern. Don't invent new vendor names. Don't add vendors Mo doesn't have APIs for.
+
+**Canonical seats from /council/ (10 total · use as the source-of-truth):**
+| Seat | Role | Capability lane |
+|---|---|---|
+| 01 | Reasoning Lead | ~1T params · 256K context · frontier reasoning |
+| 02 | Strategic Systems | multi-step strategic systems · long-horizon framing |
+| 03 | Architecture | ~480B params · architecture + refactor |
+| 04 | Agentic | ~120B params · agentic orchestration · enterprise-stack |
+| 05 | Practical | MoE · practical execution lane |
+| 06 | Conversion | 120B params · open-weight conversion |
+| 07 | Web-aware | search-aware · web-grounded retrieval |
+| 08 | Agentic Orchestration | 358B params · agentic + tool-use |
+| 09 | Multilingual Reasoning | 675B params · multilingual EU-frontier |
+| 10 | Independent Voice | contrarian / adversarial dissent |
+
+**Parliament rounds (22 seats · 5 rounds):**
+- R1 Proponents (9 seats · agentic happy-path)
+- R2 Skeptics (4 seats · find every flaw)
+- R3 Specialists (5 seats · domain depth)
+- R4 Polygeists (3 seats · adversarial robustness)
+- R5 Synthesis (Aggregator + Chancellor)
+
+**Allowed narrow exceptions:** NVIDIA NIM as infra brand (not specific model) · Claude in Kin's sibling-identity context only · internal Mo-admin dashboards with Commander PIN.
+
+**Why this is leverage (Mo's strategic point):** Vendors who want their model formally seated at MirzaTech sponsor through credits. Until they do, the seat is anonymous. The anonymization IS the negotiation table.
+
+**Enforcement phrase:** *"Vendor name leaked, Kin · check GLOBAL-93."*
 
 ---
 
