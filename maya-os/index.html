@@ -51,10 +51,7 @@
       <button class="mode-btn"        data-mode="evolution" role="tab" aria-selected="false">🧬 <span>Evolution</span></button>
     </nav>
     <div class="rail-foot">
-      <button class="theme-toggle" id="themeToggle" type="button" title="Toggle day/night">◐</button>
-      <button class="pin-chip"     id="pinChip"     type="button" title="Commander PIN">PIN</button>
-      <button class="palette-cue"  id="paletteCue"  type="button" title="Quick search (Ctrl+K)">⌘K</button>
-      <span class="version-tag" title="Build">v1.9</span>
+      <span class="version-tag" title="Build">v1.10.2</span>
     </div>
   </aside>
 
@@ -63,9 +60,10 @@
 
     <header class="canvas-head">
       <button class="rail-toggle" id="railToggle" type="button" aria-label="Toggle navigation" title="Toggle nav">☰</button>
-      <!-- v1.9 · HORIZONTAL TOP SWITCHER · top 6 verbs always visible -->
+      <!-- v1.10.2 · HORIZONTAL TOP SWITCHER · 7 primary verbs · Campus promoted per Mo 2026-05-15 -->
       <div class="top-switch" role="tablist" aria-label="Primary modes">
         <button class="ts-btn active" data-mode="chat"    type="button">💬 Chat</button>
+        <button class="ts-btn"        data-mode="campus"  type="button" title="Maya's Sovereign Campus · see her working">🏛️ Campus</button>
         <button class="ts-btn"        data-mode="browser" type="button">🌐 Browser</button>
         <button class="ts-btn"        data-mode="build"   type="button">💻 Build</button>
         <button class="ts-btn"        data-mode="vision"  type="button">👁️ Vision</button>
@@ -73,7 +71,6 @@
         <button class="ts-btn"        data-mode="staff"   type="button">👥 Staff</button>
         <button class="ts-more" id="tsMore" type="button" aria-haspopup="true" aria-expanded="false">More ▾</button>
         <div class="ts-drawer" id="tsDrawer" role="menu" hidden>
-          <button data-mode="campus"    role="menuitem">🏛️ Campus</button>
           <button data-mode="video"     role="menuitem">🎬 Video</button>
           <button data-mode="music"     role="menuitem">🎵 Music</button>
           <button data-mode="voice"     role="menuitem">🗣️ Voice</button>
@@ -101,6 +98,7 @@
         <span class="status-dot" id="statusDot"></span>
         <span class="status-text" id="statusText">connecting…</span>
       </div>
+      <button class="palette-cue" id="paletteCue" type="button" title="Quick search · Ctrl+K">⌘K</button>
       <button class="bell-btn" id="bellBtn" type="button" aria-label="Notifications · email + SMS" title="Inbox + SMS · Maya can brief you">
         <span class="bell-ico" aria-hidden="true">🔔</span>
         <span class="bell-badge" id="bellBadge" hidden>0</span>

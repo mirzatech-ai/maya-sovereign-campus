@@ -73,22 +73,22 @@ kbd { border: 1px solid var(--border-mt); }
 .mode-btn.active { background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(179,71,255,0.10)); color: var(--text); border-color: var(--border-hot); }
 .mode-btn span { flex: 1; }
 
-/* v1.9.9d · rail-foot was wrapping + overlapping nav buttons (PIN/⌘K/v1.9 clutter on Mo's screenshot)
-   Fix: no-wrap · auto-shrink · compact chips · v1.9 stays as title attr only on the version-tag
+/* v1.10.2 · rail-foot reduced to just version-tag · theme/PIN/⌘K removed per Mo 2026-05-15
+   (theme is operational in chat composer · PIN flow lives in bell drawer + commander_auth from any empire site)
+   ⌘K moved to canvas-head where it has more room
 */
-.rail-foot { display: flex; align-items: center; gap: 3px; padding: 8px 6px; border-top: 1px solid var(--border); margin-top: 4px; flex-shrink: 0; flex-wrap: nowrap; overflow: hidden; min-height: 36px; }
-.rail-foot > * { flex-shrink: 0; }
-.rail-foot .version-tag { font-size: 9px; opacity: 0.55; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; }
-.theme-toggle, .pin-chip, .palette-cue {
+.rail-foot { display: flex; align-items: center; justify-content: center; padding: 8px 6px; border-top: 1px solid var(--border); margin-top: 4px; flex-shrink: 0; min-height: 28px; }
+.rail-foot .version-tag { font-size: 10px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 0.12em; opacity: 0.7; }
+
+/* ⌘K palette button · canvas-head home · subtle cyan (no longer the only purple in the rail-foot) */
+.palette-cue {
   background: transparent; border: 1px solid var(--border);
   color: var(--text-mut); padding: 5px 9px; border-radius: 999px;
   font-size: 10px; letter-spacing: 0.1em;
-  transition: all 0.15s;
+  font-family: 'Share Tech Mono', monospace; cursor: pointer;
+  flex-shrink: 0; transition: all 0.15s;
 }
-.theme-toggle:hover, .pin-chip:hover, .palette-cue:hover { border-color: var(--accent); color: var(--text); }
-.pin-chip.authed { background: rgba(0,255,163,0.12); border-color: var(--accent-2); color: var(--accent-2); }
-.palette-cue { color: var(--maya); border-color: rgba(179,71,255,0.4); font-family: 'Share Tech Mono', monospace; }
-.version-tag { margin-left: auto; font-size: 10px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 0.12em; }
+.palette-cue:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ─── CANVAS ────────────────────────────────────────── */
 .canvas { display: flex; flex-direction: column; height: 100dvh; min-width: 0; min-height: 0; background: var(--bg); }

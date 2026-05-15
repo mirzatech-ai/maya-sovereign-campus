@@ -67,9 +67,11 @@
   const attachFile = $('attachFile');
   const railToggle = $('railToggle');
   const liveToggle = $('liveToggle');
-  const themeBt    = $('themeToggle');
-  const pinChip    = $('pinChip');
-  const paletteCue = $('paletteCue');
+  // v1.10.2 · themeToggle + pinChip removed from rail-foot per Mo
+  // Theme toggle is operational from elsewhere · PIN flow lives in bell drawer + commander_auth
+  const themeBt    = $('themeToggle');   // may be null after v1.10.2 cleanup
+  const pinChip    = $('pinChip');       // may be null after v1.10.2 cleanup
+  const paletteCue = $('paletteCue');    // moved to canvas-head
   const statusDot  = $('statusDot');
   const statusText = $('statusText');
   const lmEl       = $('lastModel');
@@ -97,7 +99,7 @@
   // ── Theme ─────────────────────────────────────────────────────────
   const savedTheme = localStorage.getItem(THEME_KEY) || 'night';
   document.documentElement.setAttribute('data-theme', savedTheme);
-  themeBt.addEventListener('click', () => {
+  if (themeBt) themeBt.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'day' ? 'night' : 'day';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem(THEME_KEY, next);
@@ -106,15 +108,17 @@
   // ── PIN ───────────────────────────────────────────────────────────
   function refreshPinChip() {
     const a = isAuthed();
-    pinChip.classList.toggle('authed', a);
-    pinChip.textContent = a ? 'PIN ✓' : 'PIN';
+    if (pinChip) {
+      pinChip.classList.toggle('authed', a);
+      pinChip.textContent = a ? 'PIN ✓' : 'PIN';
+    }
     if (attachBt) {
       attachBt.classList.toggle('armed', a);
       attachBt.disabled = !a;
       attachBt.title = a ? 'Attach file (Commander mode)' : 'Commander PIN required';
     }
   }
-  pinChip.addEventListener('click', () => {
+  if (pinChip) pinChip.addEventListener('click', () => {
     const cur = localStorage.getItem('maya_pin') || '';
     const next = prompt('Commander PIN (210379 or BuddyBoots2!) · blank to clear:', cur);
     if (next === null) return;
