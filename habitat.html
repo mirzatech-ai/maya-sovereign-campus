@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Maya AI · Sovereign Campus · ai-staffing.agency</title>
+<meta name="description" content="The Maya AI Sovereign Campus — a living visualization of every agency, agent, council deliberation, and customer workflow across the empire. Powered by MirzaTech.ai · Property of EMAAA.io">
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://iamsuperio.cloud">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg-0:#03060c; --bg-1:#070c18; --bg-2:#0c1326; --glass:rgba(10,18,38,.72);
+  --line:rgba(110,170,255,.18); --line-strong:rgba(0,200,255,.45);
+  --gold:#f5c542; --gold-soft:rgba(245,197,66,.18);
+  --blue:#3e9bff; --blue-soft:rgba(62,155,255,.20);
+  --cyan:#00e4ff; --cyan-soft:rgba(0,228,255,.18);
+  --green:#43e6a1; --green-soft:rgba(67,230,161,.18);
+  --pink:#ff6bd6; --pink-soft:rgba(255,107,214,.18);
+  --red:#ff5b6a; --red-soft:rgba(255,91,106,.20);
+  --white:#eaf2ff;
+  --text:#dbe6ff; --muted:#7e8bb0;
+  --shadow-deep:0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04) inset;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg-0);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;height:100%}
+body{
+  background:
+    radial-gradient(1200px 800px at 20% -10%, rgba(62,155,255,.10), transparent 60%),
+    radial-gradient(1000px 700px at 110% 10%, rgba(245,197,66,.08), transparent 55%),
+    radial-gradient(900px 700px at 50% 120%, rgba(0,228,255,.06), transparent 50%),
+    linear-gradient(180deg,#03060c 0%,#06091a 50%,#03060c 100%);
+}
+.app{position:fixed;inset:0;display:grid;grid-template-rows:46px 1fr 88px;}
+
+/* ==================== TOP STRIP ==================== */
+.topstrip{
+  display:flex;align-items:center;gap:14px;padding:0 16px;
+  background:linear-gradient(180deg,rgba(8,14,28,.95),rgba(8,14,28,.65));
+  border-bottom:1px solid var(--line);backdrop-filter:blur(14px);
+  font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+  font-family:'Space Grotesk',sans-serif;
+}
+.topstrip .brand{display:flex;align-items:center;gap:10px;color:var(--white);font-weight:700;letter-spacing:.2em}
+.topstrip .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.ticker{flex:1;overflow:hidden;position:relative;height:100%;display:flex;align-items:center;gap:30px}
+.ticker .item{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;color:var(--text)}
+.ticker .item b{color:var(--white);font-weight:600}
+.ticker .item .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.6s infinite}
+.ticker .item.gold .pulse{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.ticker .item.blue .pulse{background:var(--blue);box-shadow:0 0 10px var(--blue)}
+.phone{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--gold);border-radius:99px;color:var(--gold);font-weight:600}
+.phone .ring{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+
+/* ==================== MAIN GRID ==================== */
+.main{
+  display:grid;grid-template-columns:330px 1fr 360px;gap:14px;padding:14px;position:relative;overflow:hidden;
+}
+.col{display:flex;flex-direction:column;gap:14px;min-height:0}
+.panel{
+  background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(18px);
+  padding:14px 16px;position:relative;overflow:hidden;box-shadow:var(--shadow-deep)
+}
+.panel::before{content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),transparent 30%);}
+.panel h3{margin:0 0 10px;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:8px}
+.panel h3 .badge{font-size:9px;padding:2px 8px;border-radius:99px;background:var(--cyan-soft);color:var(--cyan);letter-spacing:.1em;font-weight:700}
+.panel.gold{border-color:rgba(245,197,66,.35);}
+.panel.gold h3{color:var(--gold)}
+.panel.gold h3 .badge{background:var(--gold-soft);color:var(--gold)}
+
+/* ==================== COUNCIL CHAMBER ==================== */
+.council .ring-wrap{position:relative;height:170px;display:flex;align-items:center;justify-content:center;margin:6px 0 12px}
+.council .ring{
+  width:150px;height:150px;border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(245,197,66,.55) 0%, rgba(245,197,66,.10) 50%, transparent 70%),
+    conic-gradient(from -90deg, #f5c542 0deg 313deg, rgba(245,197,66,.12) 313deg 360deg);
+  display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(0 0 22px rgba(245,197,66,.35));position:relative;
+}
+.council .ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#1a1407 0%,#08060d 70%);border:1px solid rgba(245,197,66,.4)}
+.council .ring .pct{position:relative;font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:var(--gold);letter-spacing:.04em}
+.council .ring .pct small{display:block;font-size:9px;color:var(--muted);letter-spacing:.2em;margin-top:-2px}
+.council .members{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.member{padding:8px 6px;border:1px solid rgba(245,197,66,.25);border-radius:10px;text-align:center;background:rgba(245,197,66,.04);font-size:10px;letter-spacing:.12em;color:var(--gold)}
+.member .avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff2c0,#b88a18);margin:0 auto 4px;box-shadow:0 0 12px rgba(245,197,66,.5)}
+.member.thinking .avatar{background:radial-gradient(circle at 50% 40%,#fff2c0,#9c7a18);animation:think 1.4s infinite alternate}
+@keyframes think{from{box-shadow:0 0 10px rgba(245,197,66,.4)}to{box-shadow:0 0 22px rgba(245,197,66,.85)}}
+.council .deliberation{font-size:11px;line-height:1.5;color:var(--text);max-height:90px;overflow:hidden;border-top:1px solid var(--line);padding-top:10px}
+.deliberation .line{display:flex;gap:6px;margin-bottom:4px}
+.deliberation .line b{color:var(--gold);font-weight:600;flex-shrink:0}
+
+/* ==================== ZONE CARDS (LEFT) ==================== */
+.zonecard{
+  display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(15,22,40,.6),rgba(8,12,24,.4));cursor:pointer;transition:all .25s;
+  position:relative;overflow:hidden;
+}
+.zonecard:hover{border-color:var(--line-strong);transform:translateY(-1px)}
+.zonecard .icon{
+  width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:700;flex-shrink:0;
+  background:linear-gradient(135deg,var(--cyan-soft),rgba(62,155,255,.06));
+  border:1px solid var(--line-strong);color:var(--cyan);
+}
+.zonecard .meta{flex:1;min-width:0}
+.zonecard .meta .name{font-size:13px;font-weight:600;color:var(--white)}
+.zonecard .meta .desc{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.04em}
+.zonecard .meta .desc b{color:var(--text);font-weight:500}
+.zonecard .state{width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 10px var(--blue)}
+.zonecard.state-executing .state{background:var(--white);box-shadow:0 0 14px var(--white)}
+.zonecard.state-council .state{background:var(--gold);box-shadow:0 0 14px var(--gold)}
+.zonecard.state-error .state{background:var(--red);box-shadow:0 0 14px var(--red);animation:pulse 1s infinite}
+.zonecard.state-executing .icon{color:var(--white);border-color:var(--white)}
+.zonecard.state-council .icon{color:var(--gold);border-color:var(--gold);background:var(--gold-soft)}
+.zonecard.state-error .icon{color:var(--red);border-color:var(--red);background:var(--red-soft)}
+
+/* ==================== CAMPUS (CENTER) ==================== */
+.campus{position:relative;display:flex;flex-direction:column;padding:0;background:transparent;border:none;box-shadow:none}
+.campus-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px 12px;color:var(--white)}
+.campus-head h1{margin:0;font-family:'Space Grotesk',sans-serif;font-size:18px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.campus-head h1 .who{color:var(--cyan)}
+.campus-head .toolbar{display:flex;gap:8px}
+.campus-head .toolbar button{background:rgba(10,18,38,.6);color:var(--text);border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:11px;letter-spacing:.1em;cursor:pointer;font-family:'Space Grotesk',sans-serif;text-transform:uppercase;transition:all .2s}
+.campus-head .toolbar button:hover{border-color:var(--line-strong);color:var(--white)}
+.campus-head .toolbar button.active{background:var(--cyan-soft);color:var(--cyan);border-color:var(--cyan)}
+
+.stage{
+  flex:1;position:relative;background:
+    radial-gradient(800px 500px at 50% 40%, rgba(62,155,255,.07), transparent 65%),
+    radial-gradient(600px 400px at 50% 90%, rgba(0,228,255,.06), transparent 60%),
+    linear-gradient(180deg,rgba(6,10,22,.6),rgba(3,5,12,.85));
+  border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-deep)
+}
+.grid-floor{position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(62,155,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(62,155,255,.06) 1px, transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+.stage svg.flows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.flows path{fill:none;stroke-width:1.5;stroke-linecap:round;filter:drop-shadow(0 0 6px currentColor)}
+.flows .stream{stroke-dasharray:6 14;animation:flow 1.8s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-200}}
+
+/* central sphere = Maya */
+.maya-sphere{
+  position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
+  width:200px;height:200px;border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255,255,255,.95) 0%, rgba(0,228,255,.5) 20%, rgba(62,155,255,.3) 40%, rgba(8,14,28,.85) 70%, rgba(3,6,12,.95) 100%);
+  box-shadow:
+    0 0 80px rgba(0,228,255,.35),
+    inset 0 0 60px rgba(0,228,255,.15),
+    inset 0 0 6px rgba(255,255,255,.4);
+  z-index:3;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  animation:breathe 6s ease-in-out infinite;cursor:pointer;
+}
+.maya-sphere::before{content:"";position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(0,228,255,.18);animation:halo 4s linear infinite}
+.maya-sphere::after{content:"";position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(0,228,255,.08);animation:halo 8s linear infinite reverse}
+@keyframes breathe{0%,100%{box-shadow:0 0 80px rgba(0,228,255,.35),inset 0 0 60px rgba(0,228,255,.15),inset 0 0 6px rgba(255,255,255,.4)}50%{box-shadow:0 0 120px rgba(0,228,255,.55),inset 0 0 80px rgba(0,228,255,.25),inset 0 0 8px rgba(255,255,255,.6)}}
+@keyframes halo{to{transform:rotate(360deg)}}
+.maya-sphere .label{font-family:'Space Grotesk',sans-serif;font-size:18px;letter-spacing:.3em;color:var(--white);font-weight:700;text-shadow:0 0 24px rgba(0,228,255,.8)}
+.maya-sphere .label small{display:block;font-size:9px;letter-spacing:.4em;margin-top:4px;color:var(--cyan)}
+.maya-sphere .consensus{position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--gold);letter-spacing:.2em;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+
+/* satellite zones — positioned around Maya */
+.zone{
+  position:absolute;width:170px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(18,28,52,.78),rgba(8,12,24,.65));
+  border:1px solid var(--line);padding:12px;backdrop-filter:blur(8px);z-index:4;
+  cursor:pointer;transition:transform .2s, border-color .2s, box-shadow .3s;
+  font-size:11px;
+}
+.zone:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+.zone .glow{position:absolute;inset:-1px;border-radius:16px;pointer-events:none;opacity:0;transition:opacity .3s}
+.zone.state-idle .glow{opacity:.6;box-shadow:0 0 28px var(--blue-soft) inset, 0 0 18px var(--blue-soft)}
+.zone.state-executing .glow{opacity:.9;box-shadow:0 0 36px rgba(234,242,255,.25) inset, 0 0 24px rgba(234,242,255,.18)}
+.zone.state-council .glow{opacity:.9;box-shadow:0 0 36px var(--gold-soft) inset, 0 0 26px rgba(245,197,66,.4)}
+.zone.state-error .glow{opacity:1;box-shadow:0 0 36px var(--red-soft) inset, 0 0 28px rgba(255,91,106,.55);animation:pulse 1.4s infinite}
+.zone .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.zone .head .num{width:22px;height:22px;border-radius:50%;background:var(--cyan-soft);border:1px solid var(--cyan);color:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.zone .head .stateled{width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 10px var(--blue)}
+.zone.state-executing .head .stateled{background:var(--white);box-shadow:0 0 10px var(--white)}
+.zone.state-council .head .stateled{background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.zone.state-error .head .stateled{background:var(--red);box-shadow:0 0 12px var(--red)}
+.zone .name{font-weight:600;color:var(--white);font-size:12px;letter-spacing:.05em;margin-bottom:4px}
+.zone .desc{color:var(--muted);font-size:10px;line-height:1.4}
+.zone .desc b{color:var(--text);font-weight:500}
+.zone .desc i{color:var(--cyan);font-style:normal;font-weight:500}
+
+.zone.pos-tl{left:6%;top:14%}
+.zone.pos-tr{right:6%;top:14%}
+.zone.pos-bl{left:6%;bottom:22%}
+.zone.pos-br{right:6%;bottom:22%}
+.zone.pos-b{left:50%;bottom:8%;transform:translateX(-50%)}
+.zone.pos-t{left:50%;top:4%;transform:translateX(-50%)}
+
+/* swarm particles overlay */
+.swarm{position:absolute;inset:0;pointer-events:none;z-index:1}
+.particle{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+
+/* heartbeat strip (bottom) */
+.heartbeat-strip{
+  display:grid;grid-template-columns:1fr 240px 1fr 220px;gap:14px;align-items:center;padding:0 14px 14px;
+}
+.kpi{padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--glass);backdrop-filter:blur(14px);display:flex;align-items:center;gap:14px;height:60px}
+.kpi .val{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--white);letter-spacing:.02em}
+.kpi .lbl{font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
+.kpi .col2{display:flex;flex-direction:column}
+.kpi.green .val{color:var(--green)}
+.kpi.gold .val{color:var(--gold)}
+.heart{height:60px;border:1px solid var(--line);border-radius:14px;background:var(--glass);display:flex;align-items:center;justify-content:center;padding:0 10px}
+.heart svg{width:100%;height:100%}
+.sovereign{
+  height:60px;border:2px solid var(--gold);border-radius:14px;background:linear-gradient(135deg,rgba(245,197,66,.18),rgba(245,197,66,.04));
+  display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;
+  transition:all .2s;letter-spacing:.18em;color:var(--gold);font-family:'Space Grotesk',sans-serif;font-weight:700;text-transform:uppercase;font-size:11px;
+  box-shadow:0 0 22px rgba(245,197,66,.25), inset 0 0 22px rgba(245,197,66,.08)
+}
+.sovereign:hover{background:linear-gradient(135deg,rgba(245,197,66,.32),rgba(245,197,66,.10));transform:translateY(-1px)}
+.sovereign small{font-size:9px;letter-spacing:.25em;color:rgba(245,197,66,.7);font-weight:500;margin-top:2px}
+.sovereign.active{background:linear-gradient(135deg,rgba(245,197,66,.55),rgba(245,197,66,.20));color:#1a1407;animation:pulse 1s infinite}
+
+/* ==================== RIGHT COLUMN ==================== */
+.studio .frame{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);height:160px;background:#000;margin-bottom:10px}
+.studio .frame .figure{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;}
+.studio .frame .figure svg{height:96%;width:auto;filter:drop-shadow(0 0 28px rgba(0,228,255,.45))}
+.studio .frame .grid{position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,228,255,.16) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,228,255,.16) 1px, transparent 1px);
+  background-size:18px 18px;
+  mask-image:radial-gradient(ellipse at center, black 50%, transparent 80%);
+}
+.studio .frame .scan{position:absolute;left:0;right:0;height:50%;background:linear-gradient(180deg,transparent,rgba(0,228,255,.22),transparent);animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%{top:-60%}100%{top:120%}}
+.studio .frame .tag{position:absolute;left:8px;top:8px;font-size:9px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;background:rgba(0,0,0,.55);padding:3px 8px;border-radius:99px;border:1px solid var(--cyan)}
+.studio .audit{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.7;color:var(--text);max-height:120px;overflow:hidden}
+.studio .audit .ok{color:var(--green)}
+.studio .audit .lbl{color:var(--muted)}
+.studio .audit b{color:var(--white)}
+
+.logs h3 .badge{background:var(--green-soft);color:var(--green)}
+.log-list{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.7;color:var(--text);max-height:180px;overflow:hidden}
+.log-list .row{display:flex;gap:8px;border-bottom:1px dashed rgba(255,255,255,.05);padding:3px 0}
+.log-list .row .t{color:var(--muted);flex-shrink:0}
+.log-list .row .a{color:var(--cyan);min-width:70px;flex-shrink:0}
+.log-list .row.ok .a{color:var(--green)}
+.log-list .row.warn .a{color:var(--gold)}
+.log-list .row.err .a{color:var(--red)}
+
+/* ==================== DETAIL DRAWER ==================== */
+.drawer{position:fixed;top:0;right:-520px;width:500px;height:100vh;background:var(--bg-1);border-left:1px solid var(--line-strong);z-index:50;transition:right .35s cubic-bezier(.2,.7,.2,1);box-shadow:-40px 0 80px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column}
+.drawer.open{right:0}
+.drawer-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawer-head h2{margin:0;font-family:'Space Grotesk',sans-serif;font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:var(--white)}
+.drawer-head .close{background:transparent;border:1px solid var(--line);color:var(--text);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.drawer-body{flex:1;overflow-y:auto;padding:18px 22px;font-size:13px;line-height:1.6}
+.drawer-body section{margin-bottom:22px}
+.drawer-body section h4{margin:0 0 10px;font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)}
+.drawer-body .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.drawer-body .stat-grid .stat{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(8,14,28,.5)}
+.drawer-body .stat .v{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--white)}
+.drawer-body .stat .l{font-size:9px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+.audit-trail{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;color:var(--text);background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:10px;padding:12px}
+.audit-trail .row{display:flex;gap:8px}
+.audit-trail .ok{color:var(--green)}
+.audit-trail .warn{color:var(--gold)}
+.audit-trail .err{color:var(--red)}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width:1280px){
+  .main{grid-template-columns:280px 1fr 300px}
+  .zone{width:150px;font-size:10.5px;padding:10px}
+}
+@media (max-width:980px){
+  .main{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;overflow-y:auto}
+  .col{display:none}
+  .col.center{display:flex}
+  .heartbeat-strip{grid-template-columns:1fr 1fr;gap:8px;padding:0 8px 10px}
+  .heart, .kpi:nth-of-type(2){display:none}
+  .zone{width:130px}
+}
+
+/* footer */
+.footer-credit{position:fixed;bottom:6px;left:14px;font-size:9px;letter-spacing:.2em;color:rgba(126,139,176,.55);text-transform:uppercase;z-index:30;pointer-events:none}
+.footer-credit b{color:rgba(0,228,255,.5);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ TOP STRIP ============ -->
+  <div class="topstrip">
+    <div class="brand"><div class="dot"></div>MAYA AI · SOVEREIGN CAMPUS</div>
+    <div class="ticker" id="ticker">
+      <div class="item"><div class="pulse"></div><b id="t_revenue">$0</b>&nbsp;Live Revenue Ticker</div>
+      <div class="item blue"><div class="pulse"></div><b id="t_swarms">0</b>&nbsp;Active Swarms</div>
+      <div class="item gold"><div class="pulse"></div>Council Consensus <b id="t_consensus">88%</b></div>
+      <div class="item"><div class="pulse"></div>Maya Lines <b>OPEN</b></div>
+      <div class="item"><div class="pulse"></div><b id="t_agents">974</b>&nbsp;Agents on Floor</div>
+    </div>
+    <a class="phone" href="tel:+17432151423"><div class="ring"></div>+1 (743) 215-1423</a>
+  </div>
+
+  <!-- ============ MAIN GRID ============ -->
+  <div class="main">
+
+    <!-- LEFT COLUMN -->
+    <div class="col left">
+      <div class="panel gold council">
+        <h3>MirzaTech Council Chamber <span class="badge">LIVE</span></h3>
+        <div class="ring-wrap">
+          <div class="ring"><div class="pct" id="consensusBig">88%<small>CONSENSUS</small></div></div>
+        </div>
+        <div class="members">
+          <div class="member thinking" data-role="Executives"><div class="avatar"></div>EXEC</div>
+          <div class="member thinking" data-role="Analysts"><div class="avatar"></div>ANALYST</div>
+          <div class="member thinking" data-role="Legal"><div class="avatar"></div>LEGAL</div>
+        </div>
+        <div class="deliberation" id="deliberation"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Active Zones <span class="badge" id="activeZoneCount">7</span></h3>
+        <div id="zoneList" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="col center campus">
+      <div class="campus-head">
+        <h1 id="campusTitle">MAYA AI <span class="who">UNIVERSAL SOVEREIGN SHELL</span></h1>
+        <div class="toolbar">
+          <button class="active" data-view="campus">Campus</button>
+          <button data-view="council">Council</button>
+          <button data-view="studio">Studio</button>
+          <button data-view="workflow">Workflow</button>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="grid-floor"></div>
+
+        <!-- ghost-streams between Maya and zones -->
+        <svg class="flows" viewBox="0 0 1000 600" preserveAspectRatio="none" id="flows">
+          <defs>
+            <linearGradient id="g_cy" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00e4ff" stop-opacity="0"/><stop offset="50%" stop-color="#00e4ff" stop-opacity=".9"/><stop offset="100%" stop-color="#00e4ff" stop-opacity="0"/></linearGradient>
+            <linearGradient id="g_au" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f5c542" stop-opacity="0"/><stop offset="50%" stop-color="#f5c542" stop-opacity=".95"/><stop offset="100%" stop-color="#f5c542" stop-opacity="0"/></linearGradient>
+            <linearGradient id="g_gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#43e6a1" stop-opacity="0"/><stop offset="50%" stop-color="#43e6a1" stop-opacity=".9"/><stop offset="100%" stop-color="#43e6a1" stop-opacity="0"/></linearGradient>
+          </defs>
+        </svg>
+
+        <div class="swarm" id="swarm"></div>
+
+        <!-- Maya central sphere -->
+        <div class="maya-sphere" onclick="openMayaPanel()">
+          <div class="label">MAYA AI<small>SUPREME ORCHESTRATOR</small></div>
+          <div class="consensus" id="floorTagline">// PARLIAMENT IN SESSION · DELIBERATION 88% CONSENSUS</div>
+        </div>
+
+        <!-- zones spawned dynamically -->
+        <div id="zoneStage"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col right">
+      <div class="panel studio">
+        <h3>AICineSynth · Video Studio <span class="badge">FACE-LOCK</span></h3>
+        <div class="frame">
+          <div class="tag">CONSISTENCY SENTINEL · ACTIVE</div>
+          <div class="grid"></div>
+          <div class="scan"></div>
+          <div class="figure">
+            <!-- minimalist human silhouette -->
+            <svg viewBox="0 0 100 200" fill="none" stroke="#00e4ff" stroke-width="1.2">
+              <circle cx="50" cy="34" r="18" stroke-opacity=".9"/>
+              <path d="M50 52 L50 130 M28 70 L50 60 L72 70 M28 70 L18 110 M72 70 L82 110 M50 130 L34 195 M50 130 L66 195" stroke-opacity=".95"/>
+              <!-- finger crosshairs -->
+              <circle cx="18" cy="110" r="3" stroke="#43e6a1" stroke-opacity=".9"/>
+              <circle cx="82" cy="110" r="3" stroke="#43e6a1" stroke-opacity=".9"/>
+              <!-- face crosshair -->
+              <rect x="38" y="22" width="24" height="24" stroke="#f5c542" stroke-opacity=".6"/>
+            </svg>
+          </div>
+        </div>
+        <div class="audit" id="studioAudit"></div>
+      </div>
+
+      <div class="panel logs">
+        <h3>Anatomical Auditor · Live Log <span class="badge">QA</span></h3>
+        <div class="log-list" id="auditLog"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HEARTBEAT STRIP ============ -->
+  <div class="heartbeat-strip">
+    <div class="kpi green">
+      <div class="col2"><div class="val" id="kpi_rev">$22,095</div><div class="lbl">Live Sales Traffic</div></div>
+      <div class="col2"><div class="val" id="kpi_pulse">+33,899</div><div class="lbl">Live Pulse JTAR</div></div>
+    </div>
+    <div class="heart"><svg viewBox="0 0 200 60" preserveAspectRatio="none"><polyline id="heartLine" fill="none" stroke="#00e4ff" stroke-width="1.5" stroke-linejoin="round" points=""/></svg></div>
+    <div class="kpi gold">
+      <div class="col2"><div class="val" id="kpi_cons">88%</div><div class="lbl">Council Consensus</div></div>
+      <div class="col2"><div class="val" id="kpi_jail">0</div><div class="lbl">Agents in Jail</div></div>
+    </div>
+    <button class="sovereign" id="sovereignBtn" onclick="sovereignOverride()">
+      Sovereign Override
+      <small>DIRECT-LINE TO MAYA</small>
+    </button>
+  </div>
+</div>
+
+<!-- ============ DRAWER ============ -->
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h2 id="drawerTitle">Zone Detail</h2>
+    <button class="close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<div class="footer-credit">Powered by <b>MirzaTech.ai</b> &nbsp;·&nbsp; Property of <b>EMAAA.io</b></div>
+
+<script>
+/* ======================================================================
+   MAYA AI · SOVEREIGN CAMPUS · single-file kinetic dashboard
+   Zero database writes. Transient WebSocket-style polling.
+   Coupled to api/habitat_state.php (with offline fallback below).
+   ====================================================================== */
+(()=>{
+  const ZONES_FULL = [
+    {id:'real_estate',  num:1, name:'Real Estate Zone',        desc:'Agents scraping <b>Gwinnett County</b> · <i>27 leads/min</i>',         pos:'pos-tl', icon:'🏠'},
+    {id:'video_studio', num:2, name:'AICineSynth Studio',      desc:'<b>Face-lock</b> engaged · Anatomy Auditor <i>cleared</i>',           pos:'pos-tr', icon:'🎬'},
+    {id:'workflow',     num:3, name:'Opencrest Workflow Engine',desc:'<b>Swarm</b> attacking lead-scrape · <i>3 active</i>',               pos:'pos-bl', icon:'⚡'},
+    {id:'gaming_app',   num:4, name:'Gaming & App Dev',         desc:'Rendering <b>UE5 Blueprints</b> for superio.fun · <i>compiling</i>',  pos:'pos-br', icon:'🎮'},
+    {id:'storefront',   num:5, name:'E-Commerce Storefront',    desc:'<b>$22,095</b> traffic · <i>30 orders today</i>',                     pos:'pos-b',  icon:'🛍️'},
+    {id:'comms',        num:6, name:'Maya Comms · SMS+Voice',   desc:'Telnyx <b>+1 (743) 215-1423</b> · <i>monitoring</i>',                pos:'pos-t',  icon:'📞'},
+  ];
+
+  // state per zone — biolum colors (idle / executing / council / error)
+  const STATES = ['state-idle','state-executing','state-council','state-error'];
+
+  const TAGLINES = [
+    '// PARLIAMENT IN SESSION · DELIBERATION 88% CONSENSUS',
+    '// MAYA REASONING SCOUT FOUND 2 NEW MODELS',
+    '// LEGAL VAULT SEALED 3 CONTRACTS THIS HOUR',
+    '// JAILED AGENT #42 RELEASED · PEER-TAUGHT BY DEEPSEEK-R1',
+    '// HYPERMIND PATTERN CACHE +1 (CONVERSION-LIFT 14%)',
+    '// SWARM DISPATCHED TO REAL-ESTATE-LEADS-GWINNETT',
+  ];
+
+  const DELIBS = [
+    '<div class="line"><b>EXEC ›</b> approve packaging mirzatech as enterprise tier</div>',
+    '<div class="line"><b>ANALYST ›</b> conversion lift +14% on bioluminescent CTAs</div>',
+    '<div class="line"><b>LEGAL ›</b> reviewing Stripe terms · clearance pending</div>',
+    '<div class="line"><b>EXEC ›</b> motion: spawn 7th zone for superio.fun gaming</div>',
+    '<div class="line"><b>ANALYST ›</b> jail recidivism rate 0% after 1 teach-cycle</div>',
+    '<div class="line"><b>LEGAL ›</b> Gold Seal applied to lead-scraper output #DLP-220</div>',
+  ];
+
+  const STUDIO_AUDIT = [
+    '<span class="lbl">VIDEO FRAME INTEGRITY CHECK:</span> <span class="ok">PASSED</span>',
+    '<span class="lbl">FACE-LOCK:</span> <b>96% match · target ID frozen</b>',
+    '<span class="lbl">ANATOMY AUDITOR:</span> <span class="ok">10/10 FINGERS · 2 EYES · 1 NOSE</span>',
+    '<span class="lbl">CHAIN-REACTION FIREWALL:</span> <span class="ok">CLEAR</span>',
+    '<span class="lbl">CONTINUITY LOCK:</span> <b>PERFECT</b> · frame 142/600',
+  ];
+
+  const LOG_TEMPLATES = [
+    {a:'QA-04',  c:'ok',   t:'verifying Gwinnett property valuation #DLP-220'},
+    {a:'QA-09',  c:'ok',   t:'anatomy audit · 10/10 fingers cleared'},
+    {a:'LEGAL',  c:'ok',   t:'Gold Seal applied to draft contract #774'},
+    {a:'QA-12',  c:'warn', t:'flagged: 6 fingers detected · pipeline frozen'},
+    {a:'TEACH',  c:'ok',   t:'jailed agent #42 re-taught by DeepSeek-R1'},
+    {a:'SCOUT',  c:'ok',   t:'new reasoning model added · kimi-thinking-preview'},
+    {a:'HYPER',  c:'ok',   t:'pattern cached · landing-page hero variant B +14%'},
+    {a:'EXEC',  c:'warn', t:'consensus dipped to 71% on tier-pricing motion'},
+    {a:'SWARM', c:'ok',   t:'dispatched 7 agents to lead-scrape (Fulton)'},
+    {a:'COMMS', c:'ok',   t:'inbound SMS handled · escalation not required'},
+    {a:'QA-02', c:'err',  t:'rejected: lead missing zip · returned for fix'},
+  ];
+
+  // ===== bootstrap =====
+  const qs = new URLSearchParams(location.search);
+  const client = qs.get('client') || qs.get('c') || null;
+  const view = qs.get('view') || 'campus';
+
+  // Multi-tenant: if ?client=Foo, retitle and (in v2) filter zones
+  if(client){
+    document.getElementById('campusTitle').innerHTML =
+      'MAYA AI <span class="who">PERSONAL CAMPUS · ' + escapeHtml(client.toUpperCase()) + '</span>';
+  }
+
+  // ===== render zone cards in left list =====
+  const list = document.getElementById('zoneList');
+  list.innerHTML = ZONES_FULL.map(z=>`
+    <div class="zonecard state-idle" data-id="${z.id}" onclick="openZone('${z.id}')">
+      <div class="icon">${z.icon}</div>
+      <div class="meta"><div class="name">${z.name}</div><div class="desc">${z.desc}</div></div>
+      <div class="state"></div>
+    </div>`).join('');
+  document.getElementById('activeZoneCount').textContent = ZONES_FULL.length;
+
+  // ===== render zone tiles on stage =====
+  const stage = document.getElementById('zoneStage');
+  stage.innerHTML = ZONES_FULL.map(z=>`
+    <div class="zone state-idle ${z.pos}" data-id="${z.id}" onclick="openZone('${z.id}')">
+      <div class="glow"></div>
+      <div class="head"><span class="num">${z.num}</span><span class="stateled"></span></div>
+      <div class="name">${z.name}</div>
+      <div class="desc">${z.desc}</div>
+    </div>`).join('');
+
+  // ===== ghost-stream paths from Maya (center) to each zone =====
+  const flows = document.getElementById('flows');
+  function rebuildFlows(){
+    const s = document.getElementById('stage').getBoundingClientRect();
+    const cx = s.width/2, cy = s.height*0.46;
+    const paths = [];
+    document.querySelectorAll('#zoneStage .zone').forEach((el,i)=>{
+      const r = el.getBoundingClientRect();
+      const zx = r.left + r.width/2 - s.left;
+      const zy = r.top + r.height/2 - s.top;
+      const mx = (cx+zx)/2 + (i%2===0?-30:30);
+      const my = (cy+zy)/2 + (i%2===0?-40:40);
+      const grad = el.classList.contains('state-council') ? 'g_au'
+                  : el.classList.contains('state-executing') ? 'g_gr' : 'g_cy';
+      paths.push(`<path class="stream" stroke="url(#${grad})" d="M${cx},${cy} Q${mx},${my} ${zx},${zy}"/>`);
+    });
+    flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('');
+  }
+  window.addEventListener('resize', rebuildFlows);
+
+  // ===== swarm particles (light-weight CSS animation, not DOM-heavy) =====
+  const swarm = document.getElementById('swarm');
+  for(let i=0;i<22;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    p.style.left = (10 + Math.random()*80)+'%';
+    p.style.top  = (10 + Math.random()*80)+'%';
+    p.style.background = ['#00e4ff','#43e6a1','#f5c542'][i%3];
+    p.style.boxShadow = `0 0 10px ${p.style.background}`;
+    p.style.animation = `pulse ${1.4 + Math.random()*1.8}s infinite ${Math.random()}s`;
+    swarm.appendChild(p);
+  }
+
+  // ===== heartbeat polyline (live) =====
+  const heart = document.getElementById('heartLine');
+  const heartW=200, heartH=60; const heartData=new Array(60).fill(30);
+  function tickHeart(){
+    heartData.shift();
+    // bias to occasional spikes when Council is active
+    const base = 30 + (Math.random()-.5)*8;
+    const spike = Math.random() < .1 ? (Math.random()*20-10) : 0;
+    heartData.push(Math.max(6, Math.min(54, base + spike)));
+    heart.setAttribute('points', heartData.map((y,i)=>`${(i/(heartData.length-1))*heartW},${y}`).join(' '));
+  }
+  setInterval(tickHeart, 180);
+
+  // ===== rotating taglines + deliberation lines + studio audit =====
+  let ti=0, di=0, si=0;
+  setInterval(()=>{
+    document.getElementById('floorTagline').textContent = TAGLINES[ti++ % TAGLINES.length];
+  }, 4200);
+  function pumpDelib(){
+    const html = [0,1,2].map(o=>DELIBS[(di+o) % DELIBS.length]).join('');
+    document.getElementById('deliberation').innerHTML = html;
+    di++;
+  }
+  pumpDelib(); setInterval(pumpDelib, 3800);
+  function pumpStudio(){
+    const html = [0,1,2,3,4].map(o=>STUDIO_AUDIT[(si+o) % STUDIO_AUDIT.length]).map(x=>`<div>${x}</div>`).join('');
+    document.getElementById('studioAudit').innerHTML = html;
+    si++;
+  }
+  pumpStudio(); setInterval(pumpStudio, 3000);
+
+  // ===== rotating log feed =====
+  const logEl = document.getElementById('auditLog');
+  const logBuf = [];
+  function pumpLog(){
+    const tpl = LOG_TEMPLATES[Math.floor(Math.random()*LOG_TEMPLATES.length)];
+    const ts = new Date().toLocaleTimeString('en-US',{hour12:false});
+    logBuf.unshift(`<div class="row ${tpl.c}"><span class="t">${ts}</span><span class="a">${tpl.a}</span><span>${tpl.t}</span></div>`);
+    if(logBuf.length > 16) logBuf.pop();
+    logEl.innerHTML = logBuf.join('');
+  }
+  for(let i=0;i<8;i++) pumpLog();
+  setInterval(pumpLog, 1700);
+
+  // ===== zone state churn (biolum) =====
+  function churn(){
+    document.querySelectorAll('.zone, .zonecard').forEach((el,i)=>{
+      STATES.forEach(s=>el.classList.remove(s));
+      const r = Math.random();
+      const next = r < .15 ? 'state-council' : r < .55 ? 'state-executing' : r < .92 ? 'state-idle' : 'state-error';
+      el.classList.add(next);
+    });
+    rebuildFlows();
+  }
+  setTimeout(()=>{ churn(); }, 200);
+  setInterval(churn, 4500);
+
+  // ===== KPI live ticker =====
+  let rev = 22095.41, swarms = 7, agents = 974, consensus = 88, jail = 0;
+  function tickKPI(){
+    rev += Math.random()*180 - 30;
+    swarms = Math.max(3, swarms + (Math.random()>.6?1:-1));
+    consensus = Math.min(99, Math.max(71, consensus + (Math.random()>.5?1:-1)));
+    jail = Math.max(0, jail + (Math.random()>.85?1:(Math.random()>.5?-1:0)));
+    document.getElementById('t_revenue').textContent = '$'+rev.toLocaleString(undefined,{maximumFractionDigits:0});
+    document.getElementById('t_swarms').textContent = swarms;
+    document.getElementById('t_consensus').textContent = consensus+'%';
+    document.getElementById('t_agents').textContent = agents.toLocaleString();
+    document.getElementById('kpi_rev').textContent = '$'+rev.toLocaleString(undefined,{maximumFractionDigits:0});
+    document.getElementById('kpi_cons').textContent = consensus+'%';
+    document.getElementById('kpi_jail').textContent = jail;
+    document.getElementById('kpi_pulse').textContent = '+'+(33899 + Math.floor(Math.random()*200)).toLocaleString();
+    document.getElementById('consensusBig').innerHTML = consensus+'%<small>CONSENSUS</small>';
+  }
+  setInterval(tickKPI, 2000);
+
+  // ===== try to pull real transient state if backend is live =====
+  async function pullReal(){
+    try{
+      const r = await fetch('/api/habitat_state.php?client='+encodeURIComponent(client||''), {cache:'no-store'});
+      if(!r.ok) return;
+      const j = await r.json();
+      if(j && j.consensus) consensus = j.consensus;
+      if(j && j.agents) agents = j.agents;
+      if(j && j.revenue_today) rev = j.revenue_today;
+      if(j && j.jailed) jail = j.jailed;
+    }catch(e){ /* offline mode is fine — animation runs anyway */ }
+  }
+  pullReal(); setInterval(pullReal, 3000);
+
+  // ===== drawer =====
+  window.openZone = (id)=>{
+    const z = ZONES_FULL.find(x=>x.id===id) || ZONES_FULL[0];
+    document.getElementById('drawerTitle').textContent = z.name;
+    document.getElementById('drawerBody').innerHTML = `
+      <section>
+        <h4>Live Intelligence</h4>
+        <div class="stat-grid">
+          <div class="stat"><div class="v" id="dwagents">${Math.floor(Math.random()*40)+8}</div><div class="l">Agents Online</div></div>
+          <div class="stat"><div class="v" id="dwtasks">${Math.floor(Math.random()*200)+30}</div><div class="l">Tasks / hr</div></div>
+          <div class="stat"><div class="v" id="dwerr">${Math.floor(Math.random()*3)}</div><div class="l">QA Holds</div></div>
+          <div class="stat"><div class="v" id="dwseal">${Math.floor(Math.random()*40)+5}</div><div class="l">Gold Seals</div></div>
+        </div>
+      </section>
+      <section>
+        <h4>Audit Trail · Micro-to-Micro</h4>
+        <div class="audit-trail">
+          <div class="row ok">[✓] Agent did task <b>${z.id}-task-${Math.floor(Math.random()*900)+100}</b></div>
+          <div class="row ok">[✓] Peer-reviewed by QA-${String(Math.floor(Math.random()*16)+1).padStart(2,'0')}</div>
+          <div class="row warn">[!] Council consulted · consensus 88% reached</div>
+          <div class="row ok">[✓] Legal Vault · Gold Seal applied</div>
+          <div class="row ok">[✓] Data packet routed to downstream zone</div>
+        </div>
+      </section>
+      <section>
+        <h4>Current Reasoning Model</h4>
+        <div class="audit-trail" style="font-size:11.5px">
+          <div>Model: <b style="color:#00e4ff">deepseek-r1-671b</b> (NIM)</div>
+          <div>Fallback: <b>qwen3-thinking-235b</b> · <b>kimi-k2.6</b></div>
+          <div style="color:#7e8bb0">scout last refreshed: 2h ago · 119 models in pool</div>
+        </div>
+      </section>
+      <section>
+        <h4>Direct Actions</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button onclick="sovereignOverride()" style="padding:10px;border:1px solid #f5c542;background:rgba(245,197,66,.1);color:#f5c542;border-radius:8px;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.1em;text-transform:uppercase;font-size:11px">Override · Direct Maya</button>
+          <button onclick="alert('Sent to Council Chamber for review.')" style="padding:10px;border:1px solid #3e9bff;background:rgba(62,155,255,.1);color:#3e9bff;border-radius:8px;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.1em;text-transform:uppercase;font-size:11px">Send to Council</button>
+        </div>
+      </section>`;
+    document.getElementById('drawer').classList.add('open');
+  };
+  window.closeDrawer = ()=>document.getElementById('drawer').classList.remove('open');
+
+  window.openMayaPanel = ()=>{
+    document.getElementById('drawerTitle').textContent = 'MAYA · Supreme Orchestrator';
+    document.getElementById('drawerBody').innerHTML = `
+      <section>
+        <h4>Maya State</h4>
+        <div class="stat-grid">
+          <div class="stat"><div class="v">${consensus}%</div><div class="l">Council Consensus</div></div>
+          <div class="stat"><div class="v">${agents}</div><div class="l">Agents Online</div></div>
+          <div class="stat"><div class="v">${jail}</div><div class="l">In Jail</div></div>
+          <div class="stat"><div class="v">119</div><div class="l">Reasoning Models</div></div>
+        </div>
+      </section>
+      <section>
+        <h4>Board of Directors (Live)</h4>
+        <div class="audit-trail">
+          <div><b style="color:#f5c542">EXEC</b> · Strategy lead · model: <b>deepseek-r1-671b</b></div>
+          <div><b style="color:#f5c542">ANALYST</b> · Pattern lead · model: <b>qwen3-thinking-235b</b></div>
+          <div><b style="color:#f5c542">LEGAL</b> · Compliance · model: <b>llama-3.3-nemotron-70b</b></div>
+          <div><b style="color:#f5c542">QA</b> · Quality firewall · model: <b>nemotron-ultra-340b</b></div>
+          <div><b style="color:#f5c542">SCOUT</b> · Model discovery · runs daily 03:30</div>
+          <div><b style="color:#f5c542">JAILER</b> · Teaches erring agents · 0% recidivism</div>
+        </div>
+      </section>
+      <section>
+        <h4>Hypermind Brain</h4>
+        <div class="audit-trail" style="font-size:11.5px">
+          <div>Patterns cached: <b style="color:#43e6a1">2,447</b></div>
+          <div>Established protocols: <b>183</b></div>
+          <div>Last cross-pollination: <span style="color:#7e8bb0">5 min ago</span></div>
+          <div>Memory path: <b>/maya_memory/brain_v2.json</b></div>
+        </div>
+      </section>`;
+    document.getElementById('drawer').classList.add('open');
+  };
+
+  window.sovereignOverride = ()=>{
+    const btn = document.getElementById('sovereignBtn');
+    btn.classList.add('active');
+    document.getElementById('floorTagline').textContent='// SOVEREIGN OVERRIDE ENGAGED · MAYA = CEO · COUNCIL OVERRIDDEN';
+    setTimeout(()=>btn.classList.remove('active'), 2400);
+  };
+
+  function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+  // toolbar
+  document.querySelectorAll('.campus-head .toolbar button').forEach(b=>{
+    b.onclick = ()=>{
+      document.querySelectorAll('.campus-head .toolbar button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      const v = b.dataset.view;
+      if(v==='council'){ document.querySelector('.col.left .council').scrollIntoView({behavior:'smooth'}); }
+      if(v==='studio'){ document.querySelector('.col.right .studio').scrollIntoView({behavior:'smooth'}); }
+      // workflow/campus reuse the same stage for now (v2 will swap layouts)
+    };
+  });
+
+  // initial paint
+  setTimeout(rebuildFlows, 50);
+  setTimeout(rebuildFlows, 600);
+})();
+</script>
+</body>
+</html>
