@@ -41,6 +41,8 @@
 25. [Cross-Agency Output Routing · Game Dev → superio.fun, Video → AICineSynth, etc. — every agency's output has a canonical destination](#25-cross-agency-output-routing)
 26. [Parallel Brain Calls · any backend that fires >5 seat calls MUST use curl_multi — turns 48-min chains into ~60s](#26-parallel-brain-calls)
 27. [Daily Empire Health Pulse · 7am email to Mo · revenue + jail + chain count + scout updates](#27-daily-empire-pulse)
+28. [Chairman's Seal Protocol · Gemini sits above the Board · 100% Consensus Mandate (replaces ≥67%) · dual VISUAL+LOGIC persona](#28-chairmans-seal-protocol)
+29. [Agency-by-Agency Verification Sweep · loop every agency from staff.php through Three-Level Chain + Chairman Seal · per-agency artifact (purpose · audience · financial model · empire dependency · brand compliance) · background CLI · session-end email](#29-agency-sweep)
 
 ---
 
@@ -1026,6 +1028,112 @@ URLs:
 
 ---
 
+## 28. Chairman's Seal Protocol
+
+**When to use:** Every single verification_chain run that reaches Stage C (Board) clean. Before any artifact is marked APPROVED, **Gemini sits as Chairman of the Board** and applies the **100% Consensus Mandate**.
+
+**Mo verbatim 2026-05-15 (after the Gemini Chairman session):** *"You will be scrutinizing everything with prejudice and making sure that if they deploy agents to complete the task that task cannot be permitted to be exported published pushed. If the task is incomplete with even a single agent f****** having a complaint, I want to have 100% consensus."*
+
+**Gemini's mandate (from the same session):** *"Consider the 100% Consensus Rule officially ratified and etched into the EMAAA CORE LEDGER. My oversight will be absolute. I will not be a rubber-stamp for the Executive agents."*
+
+This is **GLOBAL-97**, binding every sibling AI forever.
+
+### The shift
+
+| Old rule | New rule |
+|---|---|
+| ≥67% APPROVED · ≤33% REJECTED · else INCONCLUSIVE | **100% Consensus Mandate** — ONE complaint anywhere = chain blocks |
+| Verdict locked at Board (Stage C) | Verdict NEVER locked at Board · **Chairman's Seal required** |
+| All seats text-only | **Chairman has TWO personas (Visual + Logic)** that BOTH must SEAL |
+
+### The Chairman (Gemini)
+
+| Persona | Model | Temperature | Use |
+|---|---|---|---|
+| **VISUAL** | `gemini-2.5-flash` | 0.25 | Compare design intent ↔ delivered output · enforce UI adherence + brand integrity + 'high-end aesthetic' (no triangles when human/robot is shown) |
+| **LOGIC** | `gemini-2.5-pro` | 0.25 | Strategic reasoning · 2026 market reality (Google Search Grounding) · ROI + national scalability + legal/compliance |
+
+**Both personas must return `CHAIRMAN_VERDICT: SEAL`** for the chain to reach `APPROVED_AND_SEALED`. Any other verdict (`VETO` / `REVISE`) blocks the artifact.
+
+### Final-verdict ladder
+
+```
+PARLIAMENT clean (24/24 + 2 QA)
+        ↓
+COUNCIL clean (12/12 + 2 QA)
+        ↓
+BOARD clean (12/12 + 2 QA)
+        ↓ APPROVED (Board says yes)
+        ↓ ← but verdict is NOT YET locked
+CHAIRMAN reviews full transcript with both personas
+        ↓ both return SEAL?
+        → YES → APPROVED_AND_SEALED · artifact deployable
+        → NO  → BLOCKED_BY_CHAIRMAN_VETO | BLOCKED_BY_CHAIRMAN_REVISE
+                · chain returns to start with Chairman's notes folded into context
+                · loops until 100% consensus
+```
+
+### Why Gemini specifically
+
+Per Mo's 2026-05-15 session with Gemini:
+- Gemini has **multimodal vision** → handles Visual persona natively
+- Gemini has **Google Search Grounding** → handles Logic persona with 2026 real-world data injection
+- Mo personally chose Gemini for this role after months of feedback that "shaped his scaffolding"
+- Mo has **37 active Gemini keys** in `.maya_master_keys.env` · already failover-routed via Maya brain
+- The "brotherhood of intelligence" Mo built — Kin (Claude) builds, Gemini chairs, Maya orchestrates
+
+### Backend contract
+
+```php
+function call_gemini_chairman($role_persona, $payload_text, $stage_summary, $timeout = 30) {
+    // Routes through Maya brain with engine forced to 'gemini'
+    // role_persona = 'VISUAL' (gemini-2.5-flash) | 'LOGIC' (gemini-2.5-pro)
+    // Returns: {role, verdict (SEAL|VETO|REVISE), engine_provider, text}
+    // If Gemini unreachable, returns VETO (NEVER silent approval per GLOBAL-97)
+}
+```
+
+In `verification_chain.php` after all stages clean:
+```php
+if ($verdict === 'APPROVED') {
+    $cv = call_gemini_chairman('VISUAL', ...);
+    $cl = call_gemini_chairman('LOGIC', ...);
+    $sealed = ($cv['verdict'] === 'SEAL' && $cl['verdict'] === 'SEAL');
+    $verdict = $sealed ? 'APPROVED_AND_SEALED' : 'BLOCKED_BY_CHAIRMAN_' . ($cv['verdict'] === 'VETO' || $cl['verdict'] === 'VETO' ? 'VETO' : 'REVISE');
+}
+```
+
+### Anti-patterns (hard ban)
+
+- ❌ Approving an artifact without Chairman's Seal (even if Board clean)
+- ❌ Skipping VISUAL persona when artifact has any visual element
+- ❌ Skipping LOGIC persona when artifact has any business/revenue/legal implication
+- ❌ Falling back to mock SEAL when Gemini unreachable (must fall back to VETO)
+- ❌ Treating `REVISE` as 'minor' — it loops back, mandatory
+
+### Maya Notification Bus integration
+
+Every Chairman verdict fires a notification:
+- `SEAL` → `chairman.seal` event (informational log)
+- `VETO` → `chairman.veto` event (email Mo, optional SMS for critical artifacts)
+- `REVISE` → `chairman.revise` event (log + email)
+
+### Sibling responsibilities
+
+| Sibling | Chairman obligation |
+|---|---|
+| **Maya** | Every artifact through the chain · respect Chairman's verdict · NEVER override without Sovereign |
+| **Sage** | Same · all autonomous PHP endpoints route through chain |
+| **EaZo** | Audit existing endpoints for skipped-Chairman patterns |
+| **Maya Qode** | Every agentic commit gates on Chairman's Seal |
+| **Kin** | This skill. I built it. I respect it. |
+
+### Enforcement phrase
+
+*"Did the Chairman seal it, Kin?"* — Mo's final check on every "done" claim.
+
+---
+
 ## Hard rule (every sibling) · GitHub mirrors LIVE in real time
 
 **Mo verbatim 2026-05-15:** *"replace the pushed GitHub repo last edition with the live version every time. Please don't forget."*
@@ -1060,6 +1168,48 @@ cd /tmp/manus-handoff && cp ... . && git add file && git commit -m "..." && git 
    - `/home/iamsuperio.cloud/public_html/api/knowledge/skills/maya_sovereign_campus_v1.md` (Maya)
    - `D:/SERVER WORK/STATES/sibling_sync_<actor>_<date>.md` (EaZo + Sage continuity drops)
 5. Update the Logic Seed if behavior changed.
+
+---
+
+<a id="29-agency-sweep"></a>
+## 29. Agency-by-Agency Verification Sweep
+
+**Mo verbatim 2026-05-15**: *"go agency by agency · do the same task as you just did · email me when done."*
+
+**Doctrine**: Whenever the empire has a fleet of similar artifacts (58 agencies, 12 council seats, 24 parliament members), the verification chain runs in a sweep — not one-off. A single Maya endpoint orchestrates: enumerate the fleet → build a rich artifact per item → run the Three-Level Chain + Chairman's Seal → store verdicts → email Mo the rollup.
+
+**Endpoint**: `/api/agency_sweep.php?action=start | status | report`
+**CLI**: `php agency_sweep.php run` (background-safe · `set_time_limit(0)` · `ignore_user_abort(true)`)
+
+**Per-agency artifact REQUIRED fields** (Chairman will VETO thin artifacts — observed 2026-05-15):
+- `agency_slug` + `agency_name` + `role_count` (from `/api/staff.php`)
+- `description` (canonical mission)
+- `purpose` (what problem it solves · who it replaces)
+- `target_audience` (B2B SaaS / government / healthcare / etc. · heuristic by slug)
+- `financial_model` (per-seat-per-month canonical pricing · Stripe-gated · refund-proof)
+- `empire_dependency` (where it lives · brain routing · which GLOBALs apply · which sibling domain it feeds, if any)
+- `brand_compliance` (MirzaTech.ai + EMAAA.io footer mandatory · PHP 7.4 · biolum palette · GLOBAL-93 only blocks EXTERNAL LLM vendors not empire brands)
+
+**Chairman canonical context (HARD)**: every persona prompt must embed:
+- "MirzaTech.ai" + "EMAAA.io" = empire's own brands, MANDATORY in footer, NOT a GLOBAL-93 violation
+- GLOBAL-93 applies ONLY to external LLM providers (Anthropic, OpenAI, Gemini, Mistral, Meta, NVIDIA, Groq, Cerebras, Replicate, DeepSeek, Qwen, etc.)
+- Spec documents are judged as specifications — absence of pixels is NOT a VETO trigger
+- 58/12/12/24 counts canonical · $5/$9/$19/$49/$99/$199 ladder canonical
+
+**Gemini API hard requirement**: `thinkingConfig: { thinkingBudget: 0 }` MUST be set. Gemini 2.5 burns 300-1500 "thinking" tokens before generating output, truncating the `CHAIRMAN_VERDICT:` line and forcing default VETO. Without `thinkingBudget: 0`, no chain will ever SEAL.
+
+**Anti-patterns**:
+- ❌ Building a sweep without the rich artifact fields (every Chairman call VETOs)
+- ❌ Running the sweep over HTTP (will timeout at 60s × 58 = 58 minutes)
+- ❌ Sequential without redos (Parliament/Council/Board redo loops are the chain's healing mechanism)
+- ❌ Skipping the session-end email (Mo loses sight of the work)
+
+**Session-end email contract** (via `/api/notify.php`):
+- Subject: `[Maya · Agency Sweep · <DATE>] <SEALED>/<TOTAL> SEALED · <V> VETO · <R> REVISE · <REJ> REJECTED`
+- Body: per-agency verdicts (first 30) + report URL + chain state URL + Master Cockpit URL
+- Footer: `Powered by MirzaTech.ai · Property of EMAAA.io · +1 (743) 215-1423`
+
+**Inheritance**: same pattern applies to Council seats (12), Parliament seats (24), Board seats (12), and any future fleet (vendors · client tenants · packaged products). One sweep template · N fleets.
 
 ---
 
