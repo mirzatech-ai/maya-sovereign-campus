@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>Maya AI · Sovereign Campus · ai-staffing.agency</title>
-<meta name="description" content="The Maya AI Sovereign Campus — a living visualization of every agency, agent, council deliberation, and customer workflow across the empire. Powered by MirzaTech.ai · Property of EMAAA.io">
+<title>MirzaTech · LLM Arena · mirzatech.ai</title>
+<meta name="description" content="MirzaTech LLM Arena — where frontier models compete on every Mo question. Anthropic · OpenAI · Mistral · NVIDIA · DeepSeek · Qwen · Manus · all 22 seats live. + Add Your Model in 30 seconds. Powered by MirzaTech.ai · Property of EMAAA.io">
 <link rel="icon" href="/favicon.svg">
 <link rel="preconnect" href="https://iamsuperio.cloud">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -292,8 +292,10 @@ body.ambient-error{
   transform-style:preserve-3d;
 }
 .zone.tile:hover{background:linear-gradient(135deg, rgba(18,28,52,.55), rgba(8,12,24,.42));border-color:var(--line-strong)}
-/* v2.1 (Mo 2026-05-15 · forever-equal-spacing fix · canonical across all habitats):
-   Positions are JS-computed by layoutRing() · NEVER hardcode data-pos again.
+/* v2.1 (Mo 2026-05-15 · forever-equal-spacing fix):
+   Positions are JS-computed by layoutRing() in renderZones · NEVER hardcode data-pos again.
+   Initial defaults below only used during the millisecond before layoutRing() fires —
+   they stack diagonally rather than overlap, so refresh flash is harmless.
    The CSS guarantee: no tile is positioned by a static % rule anymore. */
 .zone.tile{left:50%;top:50%;transform:translate(-50%,-50%) scale(0.92);opacity:0;transition:opacity .25s ease,transform .25s ease}
 .zone.tile.placed{opacity:1;transform:none}
@@ -587,7 +589,7 @@ body.ambient-error{
 
   <!-- ============ TOP STRIP ============ -->
   <div class="topstrip">
-    <div class="brand"><div class="dot"></div>MAYA AI · SOVEREIGN CAMPUS</div>
+    <div class="brand"><div class="dot"></div>MIRZATECH · LLM ARENA <span style="color:var(--gold);letter-spacing:.16em;font-size:9px;margin-left:6px">· OWNER COMMAND VIEW</span></div>
     <div class="ticker" id="ticker">
       <div class="item"><div class="pulse"></div><b id="t_revenue">$0</b>&nbsp;Live Revenue Ticker</div>
       <div class="item blue"><div class="pulse"></div><b id="t_swarms">0</b>&nbsp;Active Swarms</div>
@@ -655,7 +657,7 @@ body.ambient-error{
     <!-- CENTER -->
     <div class="col center campus">
       <div class="campus-head">
-        <h1 id="campusTitle">MAYA AI <span class="who">UNIVERSAL SOVEREIGN SHELL</span></h1>
+        <h1 id="campusTitle">MIRZATECH <span class="who">LLM ARENA · COUNCIL + PARLIAMENT</span></h1>
         <div class="toolbar">
           <button class="active" data-view="campus">Campus</button>
           <button data-view="gallery">Gallery</button>
@@ -679,8 +681,8 @@ body.ambient-error{
         <div class="swarm" id="swarm"></div>
 
         <!-- Maya central sphere · RESTORED in v2.0 as the SimCity hub Gemini drew -->
-        <div class="maya-sphere" onclick="openMayaPanel()">
-          <div class="label">MAYA AI<small>SUPREME ORCHESTRATOR</small></div>
+        <div class="maya-sphere" onclick="openMayaPanel()" style="background:radial-gradient(circle at 50% 35%, rgba(255,242,192,.95) 0%, rgba(245,197,66,.55) 18%, rgba(184,138,24,.3) 42%, rgba(8,14,28,.85) 72%, rgba(3,6,12,.95) 100%);box-shadow:0 0 80px rgba(245,197,66,.45), inset 0 0 60px rgba(245,197,66,.18)">
+          <div class="label" style="color:#fff2c0;text-shadow:0 0 24px rgba(245,197,66,.9)">CONSENSUS<small style="color:var(--gold)">ORB</small></div>
         </div>
 
         <!-- Filter bar (chips by department) -->
@@ -713,7 +715,7 @@ body.ambient-error{
         </div>
         <div class="maya-cmd in-stage">
           <div class="pre">▸ Order Maya</div>
-          <input id="mayaInput" placeholder="Tell Maya — e.g. create agency Crypto Trading · publish X · pause render #142" autocomplete="off">
+          <input id="mayaInput" placeholder="Convene Council on [topic] · seat a vendor in Seat 09 · run a Parliament round · pause Seat 04 · ask the Chancellor about pricing v3" autocomplete="off">
           <button onclick="sendOrder()">Send</button>
         </div>
       </div>
@@ -748,6 +750,48 @@ body.ambient-error{
   <button class="tab" data-slide="jail" onclick="toggleSlide('jail')">🔒<span class="label">Agent Jail</span></button>
   <button class="tab" data-slide="scout" onclick="toggleSlide('scout')">🛰<span class="label">Reasoning Scout</span></button>
   <button class="tab" onclick="openOnboarding()" style="margin-top:8px;border-color:var(--gold);color:var(--gold)">🚀<span class="label">Onboard Customer</span></button>
+  <button class="tab" onclick="toggleSlide('vendor')" style="margin-top:8px;border-color:var(--gold);color:var(--gold)">🤝<span class="label">Vendor Participation</span></button>
+</div>
+
+<div class="slide-panel" id="slide-vendor">
+  <h3 style="color:var(--gold)">🤝 LLM Vendor Participation <span class="badge" style="background:var(--gold-soft);color:var(--gold)">OPEN</span><button class="x" onclick="toggleSlide('vendor')">×</button></h3>
+  <div style="font-size:12.5px;line-height:1.65;color:var(--text)">
+    <div style="color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px">The Pitch</div>
+    <p>MirzaTech runs a <b>10-seat Council</b> and a <b>22-seat / 5-round Parliament</b> (Proponents · Skeptics · Specialists · Polygeists · Synthesis + Chancellor). Every paid run captures <b>step-by-step tool-use traces</b> + <b>expert-vetted annotations</b> across multiple models on the same problem. <i>The data LLM providers trade API credits for.</i></p>
+
+    <div style="color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">What you get (vendor)</div>
+    <ul style="margin:0;padding-left:18px;color:var(--text)">
+      <li><b>Agentic traces</b> — full tool-call sequences across your seat's responses</li>
+      <li><b>Adversarial robustness data</b> — your model debated by 21 peers across 5 rounds</li>
+      <li><b>Expert RLHF annotations</b> — Chancellor synthesis + per-round verdicts</li>
+      <li><b>Comparative win-rate metrics</b> — quiet positioning vs. the other 21 seats</li>
+      <li><b>Tuning-cycle-ready bundles</b> — JSONL drops gated by your seat ID</li>
+    </ul>
+
+    <div style="color:var(--gold);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">What we ask</div>
+    <ul style="margin:0;padding-left:18px;color:var(--text)">
+      <li><b>API credits</b> — sponsored token volume to seat your model on a capability lane</li>
+      <li><b>OR free-tier endpoint</b> — chat-completions-compatible URL + bearer key</li>
+      <li><b>Lane preference</b> — Reasoning Lead · Strategic Systems · Architecture · Agentic · Practical · Conversion · Web-aware · Agentic Orchestration · Multilingual Reasoning · Independent Voice</li>
+      <li><b>Rate budget</b> — rpm / tpm you're comfortable with</li>
+      <li><b>Round role</b> — Council seat · Parliament senator · both</li>
+    </ul>
+
+    <div style="color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">How to participate (30 sec)</div>
+    <ol style="margin:0;padding-left:18px;color:var(--text)">
+      <li>Email <a href="mailto:mo@emaaa.io" style="color:var(--gold)">mo@emaaa.io</a> with subject <b>SEAT REQUEST</b></li>
+      <li>Drop your endpoint + key + lane in <code style="background:rgba(0,228,255,.1);padding:1px 6px;border-radius:4px">VENDOR_INTEGRATION.json</code> in <a href="https://github.com/mirzatech-ai/maya-sovereign-campus" style="color:var(--cyan)">our handoff repo</a></li>
+      <li>Maya wires you in within 24h · your seat goes live anonymously · you receive your data drop schedule</li>
+    </ol>
+
+    <div style="color:var(--gold);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 6px">Privacy + Anonymity</div>
+    <p>Per <b>GLOBAL-93</b>: your brand is <b>never displayed publicly</b> until you formally claim the seat. Seats are labeled by capability lane and param size only. This protects both sides — no vendor is publicly attached to uncompensated usage.</p>
+
+    <div style="margin-top:14px;padding:10px;border:1px solid var(--gold);border-radius:8px;background:rgba(245,197,66,.06);font-size:11.5px">
+      <b style="color:var(--gold)">▶ Direct contact:</b> <a href="mailto:mo@emaaa.io" style="color:var(--gold)">mo@emaaa.io</a> · phone <a href="tel:+17432151423" style="color:var(--gold)">+1 (743) 215-1423</a><br>
+      <b style="color:var(--gold)">▶ Empire:</b> EMAAA, LLC · EIN 33-4262937
+    </div>
+  </div>
 </div>
 
 <div class="slide-panel" id="slide-pulse">
@@ -934,17 +978,26 @@ body.ambient-error{
     return VIDEO_HINTS.some(h => blob.indexOf(h) !== -1);
   };
 
-  // ===== Mo's ACTIVE ROSTER (v2.0 · Gemini's SimCity vision) =====
-  // Only these 8 agencies are visible in the default Campus view. Others browseable via Gallery.
+  // ===== MIRZATECH · ANONYMIZED COUNCIL SEATS (NO LLM VENDOR NAMES) =====
+  // Canonical pattern from /council/index.html · seats labeled by ROLE + param size + capability lane.
+  // GLOBAL-93 (2026-05-15): NEVER reveal underlying LLM vendor names on public surfaces.
   const DEFAULT_ROSTER = [
-    'real-estate-proptech',  // Adeeo
-    'media-entertainment',   // AICineSynth output
-    'design-creative',       // AICineSynth front
-    'operations-logistics',  // Opencrest
-    'retail-ecommerce',      // Storefronts
-    'ai-research',           // Maya brain
-    'cybersecurity',         // always-on protection
-    'customer-success',      // inbound channel
+    'seat-01','seat-02','seat-03','seat-04',
+    'seat-05','seat-06','seat-07','seat-10',
+  ];
+  const LLM_SEATS = [
+    {id:'seat-01', name:'Reasoning Lead',         icon:'🧠', tagline:'~1T params · 256K context · frontier reasoning', description:'The Council\'s primary thinker. Long-context · careful chain-of-thought · anchor verdict on every motion. Win-rate 73%.', role_count:1, color:'#00e4ff', _stance:'approve', _stake:'frontier-asia'},
+    {id:'seat-02', name:'Strategic Systems',      icon:'♟', tagline:'Multi-step strategic systems', description:'Long-horizon framing · what-if branching · the Council\'s seat for go/no-go business decisions. Win-rate 68%.', role_count:1, color:'#3e9bff', _stance:'approve', _stake:'frontier-us'},
+    {id:'seat-03', name:'Architecture',           icon:'🏗', tagline:'~480B params · architecture + refactor', description:'System design + code architecture · refactor planning · the seat that catches structural smells before they ship. Win-rate 64%.', role_count:1, color:'#43e6a1', _stance:'approve', _stake:'open-weights'},
+    {id:'seat-04', name:'Agentic',                icon:'⚙', tagline:'~120B params · agentic orchestration', description:'Enterprise-stack agent orchestration · tool-use depth · the Council\'s execution voice. Win-rate 71%.', role_count:1, color:'#f5c542', _stance:'approve', _stake:'frontier-us'},
+    {id:'seat-05', name:'Practical',              icon:'🛠', tagline:'MoE · practical execution lane', description:'Mixture-of-experts · cost-aware · ships fast. The Council\'s pragmatist. Win-rate 66%.', role_count:1, color:'#ff6bd6', _stance:'approve', _stake:'open-weights'},
+    {id:'seat-06', name:'Conversion',             icon:'🔁', tagline:'120B params · open-weight conversion', description:'Format-conversion + structured output specialist · the seat that turns Council verdicts into machine-readable contracts. Win-rate 62%.', role_count:1, color:'#7547ff', _stance:'approve', _stake:'open-weights'},
+    {id:'seat-07', name:'Web-aware',              icon:'🌐', tagline:'Search-aware · web-grounded', description:'Retrieval-augmented voice · cites current sources · the Council\'s journalist seat. Win-rate 65%.', role_count:1, color:'#00c8ff', _stance:'approve', _stake:'frontier-us'},
+    {id:'seat-08', name:'Agentic Orchestration',  icon:'🕸', tagline:'358B params · agentic + tool-use', description:'Heavy-weight orchestrator · long tool chains · the Council\'s logistics seat. Win-rate 70%.', role_count:1, color:'#3580fe', _stance:'approve', _stake:'open-weights'},
+    {id:'seat-09', name:'Multilingual Reasoning', icon:'🌍', tagline:'675B params · multilingual EU-frontier', description:'Structured multilingual reasoning · regulatory-aware · the Council\'s European sovereign voice. Win-rate 64%.', role_count:1, color:'#ff7000', _stance:'approve', _stake:'frontier-eu'},
+    {id:'seat-10', name:'Independent Voice',      icon:'⚔', tagline:'Contrarian · adversarial dissent', description:'Mandatory disagreement seat · finds the flaw nobody else sees · the friction that keeps the Council honest. Win-rate 58%.', role_count:1, color:'#ff5b6a', _stance:'abstain', _stake:'independent'},
+    {id:'seat-open-1', name:'Vendor Seat (Open)', icon:'＋', tagline:'+ Add Your Model · 30-second onboarding', description:'Unclaimed seat reserved for vendor integration. Wire your endpoint, pick a capability lane, your model takes a Council seat. Mo\'s direct contact for vendor talks: mo@emaaa.io.', role_count:0, color:'#888', _stance:'unclaimed', _stake:'available'},
+    {id:'seat-open-2', name:'Vendor Seat (Open)', icon:'＋', tagline:'+ Add Your Model · 30-second onboarding', description:'Unclaimed seat reserved for vendor integration. Specialist lanes available (vision · multimodal · ultra-long-context · domain-specific).', role_count:0, color:'#888', _stance:'unclaimed', _stake:'available'},
   ];
   function loadRoster(){
     try{
@@ -994,12 +1047,12 @@ body.ambient-error{
   const STATES = ['state-idle','state-executing','state-council','state-error'];
 
   const TAGLINES = [
-    '// PARLIAMENT IN SESSION · DELIBERATION 88% CONSENSUS',
-    '// MAYA REASONING SCOUT FOUND 2 NEW MODELS',
-    '// LEGAL VAULT SEALED 3 CONTRACTS THIS HOUR',
-    '// JAILED AGENT #42 RELEASED · PEER-TAUGHT BY DEEPSEEK-R1',
-    '// HYPERMIND PATTERN CACHE +1 (CONVERSION-LIFT 14%)',
-    '// SWARM DISPATCHED TO REAL-ESTATE-LEADS-GWINNETT',
+    '// 22-SEAT PARLIAMENT · QUORUM REACHED · MOTION CARRIED',
+    '// DEEPSEEK-R1 VS GPT · BRACKET LIVE · WIN-RATE LEADER DEEPSEEK',
+    '// NVIDIA NIM REFRESHED · 122 MODELS CLASSIFIED ACROSS 6 LANES',
+    '// + ADD YOUR MODEL · 30-SECOND VENDOR ONBOARDING OPEN',
+    '// CONSENSUS ORB · 88% APPROVE · STRATEGIC MOTION SEALED',
+    '// THIS IS ARENA.AI · BUT BETTER · AND OURS',
   ];
 
   const DELIBS = [
@@ -1080,67 +1133,63 @@ body.ambient-error{
       tiles.push(`<div class="zone tile add-office" data-pos="${i}" onclick="document.querySelector('.campus-head .toolbar button[data-view=&quot;gallery&quot;]').click()"><div class="plus">+</div><div class="lbl">Add Office</div></div>`);
     }
     stage.innerHTML = tiles.join('');
-    layoutRing();   // v2.1 · canonical equal-spacing layout · Mo 2026-05-15
+    layoutRing();   // v2.1 · place every tile on the ring at equal angles · NEVER overlap again
   }
 
-  /* v2.1 · layoutRing · 2026-05-15 (Mo's forever-equal-spacing law · canonical across all habitats):
-     Reads stage size + Maya orb size · places every .zone.tile at equal angles on an ellipse.
-     Works for ANY count. Recomputes on resize. Tile center-stack→ring-place fade prevents flash. */
+  /* v2.1 · layoutRing · 2026-05-15 (Mo's forever-equal-spacing law):
+     Reads the stage size + Maya orb size · places ALL .zone.tile descendants at
+     evenly-spaced angles on an ellipse around the orb. Works for ANY count.
+     Recomputes on resize. Tiles fade in via .placed class once positioned so the
+     initial center-stacked default state never flashes the user. */
   function layoutRing(){
     const stage = document.getElementById('zoneStage');
     if(!stage) return;
     const tiles = Array.from(stage.querySelectorAll('.zone.tile'));
     const N = tiles.length;
     if(N === 0) return;
-    const W = stage.clientWidth, H = stage.clientHeight;
+    const W = stage.clientWidth;
+    const H = stage.clientHeight;
+    /* Measure actual tile size once (use the first tile · all match per CSS) */
     const measure = tiles[0].getBoundingClientRect();
     const tileW = Math.max(180, measure.width  || 220);
     const tileH = Math.max(100, measure.height || 130);
-    const orbHalf = 105, edgeMargin = 14, orbGap = 22;
+    /* Maya orb occupies a ~210px diameter circle in the center (per .maya-sphere CSS) */
+    const orbHalf = 105;
+    /* Clearance · tile must not touch orb edge or viewport edge */
+    const edgeMargin = 14;
+    const orbGap     = 22;
     const maxRx = (W / 2) - tileW / 2 - edgeMargin;
     const maxRy = (H / 2) - tileH / 2 - edgeMargin;
+    /* Minimum radius keeps the nearest tile corner clear of the orb */
     const minR  = orbHalf + Math.max(tileW, tileH) / 2 + orbGap;
     const rx    = Math.max(minR, maxRx);
     const ry    = Math.max(minR, maxRy);
+    /* Place each tile at angle (i/N)*2π · start at top (angle = -π/2) · clockwise */
     tiles.forEach((el, i) => {
-      const a = (i / N) * Math.PI * 2 - Math.PI / 2;
-      const x = W/2 + rx * Math.cos(a) - tileW/2;
-      const y = H/2 + ry * Math.sin(a) - tileH/2;
+      const a  = (i / N) * Math.PI * 2 - Math.PI / 2;
+      const x  = W/2 + rx * Math.cos(a) - tileW/2;
+      const y  = H/2 + ry * Math.sin(a) - tileH/2;
       el.style.left   = Math.round(Math.max(edgeMargin, Math.min(W - tileW - edgeMargin, x))) + 'px';
       el.style.top    = Math.round(Math.max(edgeMargin, Math.min(H - tileH - edgeMargin, y))) + 'px';
-      el.style.right  = 'auto'; el.style.bottom = 'auto'; el.style.transform = 'none';
+      el.style.right  = 'auto';
+      el.style.bottom = 'auto';
+      el.style.transform = 'none';
       el.classList.add('placed');
     });
   }
+  /* Recompute on resize · throttled */
   let _layoutRingT = null;
   window.addEventListener('resize', () => {
     clearTimeout(_layoutRingT);
-    _layoutRingT = setTimeout(() => { layoutRing(); if(typeof rebuildFlows==='function') rebuildFlows(); }, 100);
+    _layoutRingT = setTimeout(() => { layoutRing(); rebuildFlows(); }, 100);
   });
 
-  async function loadAgencies(){
-    try{
-      const r = await fetch('/api/staff.php', {cache:'no-store'});
-      if(!r.ok) throw new Error('staff api '+r.status);
-      const j = await r.json();
-      if(j && j.success && Array.isArray(j.agencies)){
-        ZONES_FULL = j.agencies;
-        // Merge any DRAFT agencies Mo created in prior sessions
-        try{
-          const drafts = JSON.parse(localStorage.getItem('maya_draft_agencies')||'[]');
-          if(Array.isArray(drafts) && drafts.length) ZONES_FULL = [...drafts, ...ZONES_FULL];
-        }catch(e){}
-        document.getElementById('floorTagline').textContent =
-          '// '+ZONES_FULL.length+' AGENCIES ONLINE · MAYA ORCHESTRATING';
-        renderZones();
-        renderFilters();
-        setTimeout(rebuildFlows, 80);
-      }
-    }catch(e){
-      console.warn('agency load failed', e);
-      document.getElementById('zoneStage').innerHTML =
-        '<div style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase">Roster unreachable · /api/staff.php offline</div>';
-    }
+  function loadAgencies(){
+    // MirzaTech variant: LLM-vendor seats are LOCAL (no API fetch needed)
+    ZONES_FULL = LLM_SEATS;
+    document.getElementById('floorTagline').textContent = '// ' + ZONES_FULL.length + ' VENDOR SEATS · COUNCIL CONSENSUS 88%';
+    renderZones(); renderFilters();
+    setTimeout(rebuildFlows, 80);
   }
   loadAgencies();
 
@@ -1159,14 +1208,14 @@ body.ambient-error{
   renderMacro();
 
   // ===== Filter chips (department roll-up of the 57 agencies) =====
-  // Curated department buckets — clean human labels, NOT auto-scraped first-words
+  // MirzaTech filter buckets · capability-based (NO vendor names · GLOBAL-93)
   const FILTER_BUCKETS = [
-    {key:'all',         label:'All',          match:()=>true},
-    {key:'tech',        label:'Tech',         match:a=>/engineer|developer|data|cyber|ai|cloud|devops|robot|space/i.test(a.name+' '+a.tagline)},
-    {key:'creative',    label:'Creative',     match:a=>/design|creative|content|media|music|art|video|cinema|film|fashion/i.test(a.name+' '+a.tagline)},
-    {key:'business',    label:'Business',     match:a=>/sales|marketing|customer|finance|account|operation|hr|human|recruit|legal/i.test(a.name+' '+a.tagline)},
-    {key:'industry',    label:'Industry',     match:a=>/manufactur|construct|automotive|aviation|energy|defense|pharma|agriculture|retail/i.test(a.name+' '+a.tagline)},
-    {key:'services',    label:'Services',     match:a=>/hospital|tourism|education|government|nonprofit|insurance|telecom|sport|pet|culinary/i.test(a.name+' '+a.tagline)},
+    {key:'all',       label:'All Seats',     match:()=>true},
+    {key:'seated',    label:'Live Seats',    match:a=>a._stance!=='unclaimed'},
+    {key:'reasoning', label:'Reasoners',     match:a=>/reasoning|strategic|architecture|multilingual/i.test(a.name+' '+a.tagline)},
+    {key:'agentic',   label:'Agentic',       match:a=>/agentic|orchestration|practical/i.test(a.name+' '+a.tagline)},
+    {key:'open',      label:'Open-Weights',  match:a=>a._stake==='open-weights'},
+    {key:'open-seat', label:'+ Add Your Model', match:a=>a._stance==='unclaimed'},
   ];
   function getFilters(){ return FILTER_BUCKETS; }
   function renderFilters(){

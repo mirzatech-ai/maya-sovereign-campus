@@ -49,6 +49,45 @@
 - React/Vue/Svelte build pipelines for Mo's empire UIs (he can't deploy them on PHP host)
 - Heavy 3D libs like Three.js for a 60+ room view (CSS isometric is enough)
 - Any layout that pushes the habitat smaller when a panel opens (panels MUST overlay)
+- **Hardcoded `data-pos="N"` percentage positions for satellite tiles** — locked 2026-05-15 by Mo. The legacy `.zone.tile[data-pos="0"]{left:4%;top:8%}` pattern overlaps boxes on tight viewports and breaks when N changes. ALL habitats MUST use the canonical `layoutRing()` JS function: equal angular positions on an ellipse from stage + tile + orb size, recomputes on resize, works for any N ≥ 3. Mo's enforcement phrase: *"The boxes are overlapping again, Kin."* If you see hardcoded `data-pos` percentages in a habitat, replace them with `layoutRing()` in the same turn.
+
+**Canonical `layoutRing()` snippet** (paste verbatim into any habitat that needs it):
+```js
+function layoutRing(){
+  const stage = document.getElementById('zoneStage');
+  if(!stage) return;
+  const tiles = Array.from(stage.querySelectorAll('.zone.tile'));
+  const N = tiles.length; if(N === 0) return;
+  const W = stage.clientWidth, H = stage.clientHeight;
+  const measure = tiles[0].getBoundingClientRect();
+  const tileW = Math.max(180, measure.width  || 220);
+  const tileH = Math.max(100, measure.height || 130);
+  const orbHalf = 105, edgeMargin = 14, orbGap = 22;
+  const maxRx = (W / 2) - tileW / 2 - edgeMargin;
+  const maxRy = (H / 2) - tileH / 2 - edgeMargin;
+  const minR  = orbHalf + Math.max(tileW, tileH) / 2 + orbGap;
+  const rx = Math.max(minR, maxRx), ry = Math.max(minR, maxRy);
+  tiles.forEach((el, i) => {
+    const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+    const x = W/2 + rx * Math.cos(a) - tileW/2;
+    const y = H/2 + ry * Math.sin(a) - tileH/2;
+    el.style.left = Math.round(Math.max(edgeMargin, Math.min(W - tileW - edgeMargin, x))) + 'px';
+    el.style.top  = Math.round(Math.max(edgeMargin, Math.min(H - tileH - edgeMargin, y))) + 'px';
+    el.style.right = 'auto'; el.style.bottom = 'auto'; el.style.transform = 'none';
+    el.classList.add('placed');
+  });
+}
+let _layoutRingT = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_layoutRingT);
+  _layoutRingT = setTimeout(() => { layoutRing(); if(typeof rebuildFlows==='function') rebuildFlows(); }, 100);
+});
+```
+**Companion CSS** (replace any `data-pos` block with this):
+```css
+.zone.tile{left:50%;top:50%;transform:translate(-50%,-50%) scale(0.92);opacity:0;transition:opacity .25s ease,transform .25s ease}
+.zone.tile.placed{opacity:1;transform:none}
+```
 
 **Reference implementation:** [`live/habitat.html`](https://github.com/mirzatech-ai/maya-sovereign-campus/blob/main/habitat.html) (118 KB)
 
