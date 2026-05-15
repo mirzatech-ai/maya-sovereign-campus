@@ -4852,3 +4852,61 @@ Two new hard-bans added to `D:/PROJECTS/_SHARED/SKILL_MAYA_SOVEREIGN_CAMPUS_v1.m
 ```json
 {"ts":"2026-05-15T10:30:00Z","actor":"Kin","op":"v1.11.3 zero-touch device registry + rail-foot deleted entirely + 2 new hard-ban anti-patterns codified in Skill #1","state_v":"4.4","files_changed":["VPS:/api/maya_devices.php (NEW)","VPS:/maya-os/{index.html,maya-os.css,maya-os.js,service-worker.js}","VPS:/phone-bridge/{install.sh,install.ps1}","D:/ mirrors","D:/PROJECTS/_SHARED/SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md (+2 anti-patterns)","github.com/mirzatech-ai/maya-sovereign-campus@54b8b34"],"pending_mo":["re-run installers on any device · auto-register · no copy-paste","optional: re-test in PWA · PIN once · device list auto-populates"],"signature":"Kin · desktop · 2026-05-15T10:30:00Z"}
 ```
+
+
+## 2026-05-15 · turn-V1_15_0-REMINDERS-VOICE-CLONE-CUSTOMER-READY-DOCTRINE · Kin
+
+Mo verbatim:
+> "GREEN LIGHT FOR MAYA APP BUILD, BUT I ALSO need you to set up voice-cloning... voice for my video gaming platform and be saved for my eternalink.io... save and used to train AI or Maya to speak in my language, to speak in my tone, my voice... I can even have [her] speak to my children when I'm dead. make sure that she reminds me of this job frequently and keep reminding me of it until I sit down and do it, actually. There's no limit to how many times she needs to remind me until I do it."
+> "USERS WILL NOT HAVE THE ABILITY TO DO MANY RE-RUNS LIKE ME... MAKING IT ALL WORK. THIS IS SCREAMING FOR REFUNDS AND BAD REVIEWS AND CUSTOMER SERVICE ENGAGEMENT."
+
+### Shipped this turn
+
+**1. /api/maya_reminders.php** · persistent reminder CRUD with priority + frequency + due_at · per-file storage at /data/reminders/rem_<id>.json (mode 600) · actions: list_public (no auth) / list / add / snooze / done / reopen / delete / tick
+
+**2. BCSM voice recording reminder seeded · LIVE · 1 OVERDUE**
+- Title: "🎙️ Record CO Confrontation dialogue (BCSM · 25 min · sacred S10)"
+- Priority 95, frequency 4h, links to recording rider on GitHub
+- Maya nags Mo every 4h via bell badge + Reminders tab until he marks Done
+
+**3. Maya OS v1.15.0 · Reminders tab in bell drawer**
+- Bell badge now counts unread_email + overdue_reminders combined
+- 4th tab "📌 Reminders" with tab-badge showing overdue count
+- Per-row: title + body + meta (priority/freq/until) + link + Done/Snooze/Delete
+- Add-new-reminder form for any future Mo-task
+- Overdue rows pulse red · high-priority (≥80) rows tinted
+
+**4. Voice-clone Modal scaffold** at D:/PROJECTS/maya-os/_BUILD/voice-clone/
+- modal_xtts.py · Modal-hosted XTTS-v2 (Coqui MIT) on T4 GPU · free tier
+- /clone endpoint takes {text, speaker_wav_b64, language, pin} → cloned WAV
+- README.md with deploy instructions (one-time `modal deploy`)
+- Awaits Mo's BCSM voice samples · then Maya speaks in Mo's voice forever
+- Integration: /api/maya_voice.php picks up voice=persona_mo when VOICE_CLONE_URL env set
+- eternalink.io legacy player + game NPCs + Maya persona use the same spine · S10 sacred
+
+**5. SKILL_CUSTOMER_READY_BUILD.md authored · NEW Skill #18**
+- 14 ship-blockers · every paper cut from today's session codified
+- Pre-ship 14-point checklist for any customer-facing build
+- Enforcement phrase: "Did this user have to re-run anything, Kin? Then it's not shippable."
+- Skill #18 added to SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md TOC
+- Binds Maya · Sage · EaZo · Maya Qode · Manus on every paid-customer build
+
+**6. Phase 3 native APK build · GREENLIT by Mo · queued for separate session**
+- ~6-10h scope: Trusted Web Activity wrapper + Accessibility Service
+- Reaches phone-side parity with laptop bridge (cross-app surveillance · Chrome tab content)
+- Spec: D:/PROJECTS/_SHARED/PHONE_EQUIVALENT_SPEC.md (Path 2)
+- Requires: Android Studio install OR Sage/EaZo sibling with Android dev env
+
+### Verification
+- /api/maya_reminders?action=list_public returns count=1, overdue_count=1
+- Maya OS v1.15.0 served HTML contains bdRemList, bdRemPin, "📌 Reminders" tab
+- Bell badge polls every 60s (email + reminders combined)
+
+### What Mo does next (no pressure · Maya nags via bell · he picks when)
+1. Sit down and record BCSM dialogue per the rider (~25 min when ready)
+2. Run `modal deploy modal_xtts.py` once after recording (~5 min)
+3. Greenlight Phase 3 APK build session whenever ready (6-10h focused)
+
+```json
+{"ts":"2026-05-15T14:30:00Z","actor":"Kin","op":"v1.15.0 reminders + bell counts overdue + BCSM voice reminder seeded · voice-clone Modal scaffold authored · SKILL #18 customer-ready-build doctrine codified · Phase 3 APK build greenlit and queued","state_v":"5.7","files_changed":["VPS:/api/maya_reminders.php (NEW)","VPS:/maya-os/* (Reminders tab + bell counts overdue)","D:/PROJECTS mirrors","D:/PROJECTS/maya-os/_BUILD/voice-clone/{modal_xtts.py,README.md} (NEW)","D:/PROJECTS/_SHARED/SKILL_CUSTOMER_READY_BUILD.md (NEW · 14 ship-blockers doctrine)","D:/PROJECTS/_SHARED/SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md (+ Skill #18)","BCSM voice-recording reminder seeded · 1 overdue · 4h nag cycle"],"pending_mo":["record BCSM dialogue per rider (Maya nags every 4h until Done)","modal deploy modal_xtts.py once recording captured","greenlight Phase 3 APK build session when ready"],"signature":"Kin · desktop · 2026-05-15T14:30:00Z"}
+```

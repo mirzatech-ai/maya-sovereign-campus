@@ -113,6 +113,7 @@
         <button class="bd-tab active" data-bd-tab="inbox" type="button">📧 Inbox</button>
         <button class="bd-tab"        data-bd-tab="sms"   type="button">📱 SMS</button>
         <button class="bd-tab"        data-bd-tab="brief" type="button">✨ Brief</button>
+        <button class="bd-tab"        data-bd-tab="reminders" type="button">📌 Reminders <span class="bd-tab-badge" id="bdRemTabBadge" hidden>0</span></button>
         <button class="bd-close" id="bdClose" type="button" aria-label="Close drawer" title="Close">✕</button>
       </header>
 
@@ -154,6 +155,27 @@
           <span id="bdSmsStatus" class="bd-status"></span>
         </div>
         <div class="bd-hint">Free path uses Hostinger SMTP → carrier gateway. AT&amp;T (Mo's carrier) is dead — destinations on Verizon/T-Mobile/etc work. Telnyx wiring still pending.</div>
+      </section>
+
+      <section class="bd-pane" data-bd-pane="reminders">
+        <div class="bd-row">
+          <input type="password" id="bdRemPin" class="bd-input" placeholder="Commander PIN" autocomplete="current-password">
+          <button class="bd-btn ghost" id="bdRemRefresh" type="button">⟳ Load</button>
+        </div>
+        <div id="bdRemList" class="bd-list">
+          <div class="bd-empty">Enter PIN and click Load to see active reminders.</div>
+        </div>
+        <details class="bd-add">
+          <summary>＋ Add new reminder</summary>
+          <input type="text" id="bdRemAddTitle" class="bd-input" placeholder="Title">
+          <textarea id="bdRemAddBody" class="bd-input bd-tall" rows="3" placeholder="Body / context"></textarea>
+          <input type="url" id="bdRemAddLink" class="bd-input" placeholder="Optional link (file path or URL)">
+          <div class="bd-row">
+            <input type="number" id="bdRemAddFreq" class="bd-input" placeholder="Hours" value="24" min="1" style="max-width:80px">
+            <input type="number" id="bdRemAddPrio" class="bd-input" placeholder="Priority" value="50" min="0" max="100" style="max-width:80px">
+            <button class="bd-btn" id="bdRemAddBtn" type="button">📌 Add</button>
+          </div>
+        </details>
       </section>
 
       <section class="bd-pane" data-bd-pane="brief">

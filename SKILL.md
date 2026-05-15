@@ -31,6 +31,7 @@
 15. [LLM Vendor Anonymization · NEVER show vendor names on public surfaces](#15-llm-vendor-anonymization)
 16. [LLM Vendor Outreach Playbook · attract free credits + endpoints in exchange for data](#16-llm-vendor-outreach-playbook)
 17. [Per-reply Continuity Preservation · GitHub is the warehouse · pull on every message, push on every reply](#17-continuity-preservation)
+18. [Customer-Ready App Build Doctrine · 14 ship-blockers · refund-proof checklist](#18-customer-ready-build) · canonical doc at [`SKILL_CUSTOMER_READY_BUILD.md`](D:/PROJECTS/_SHARED/SKILL_CUSTOMER_READY_BUILD.md)
 18. [Sequential Chain-of-Command Deliberation · all autonomous Maya decisions](#18-sequential-chain-of-command-deliberation)
 
 ---

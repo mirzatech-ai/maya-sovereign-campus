@@ -957,6 +957,39 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .bd-brief em { color: var(--text-dim); font-style: italic; }
 .bd-brief.loading { color: var(--text-mut); font-style: italic; }
 
+/* v1.15.0 · Reminders tab · pulse-on-overdue · 2026-05-15 */
+.bd-tab-badge {
+  display: inline-block; min-width: 16px; height: 16px; padding: 0 4px;
+  background: var(--hot); color: #fff; font-size: 9px; font-weight: 700; line-height: 16px;
+  border-radius: 8px; margin-left: 4px; vertical-align: middle;
+}
+.bd-tab-badge[hidden] { display: none; }
+.bd-rem-row {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 10px 12px; background: var(--bg-3);
+  border: 1px solid var(--border-mt); border-left: 3px solid var(--accent);
+  border-radius: var(--rad-sm); cursor: pointer;
+}
+.bd-rem-row[data-overdue="1"] { border-left-color: var(--hot); animation: bellPulse 1.6s ease-in-out infinite; }
+.bd-rem-row[data-priority-high="1"] { background: rgba(255,51,85,0.04); }
+.bd-rem-row:hover { border-color: var(--accent); }
+.bd-rem-title { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.35; }
+.bd-rem-body { font-size: 11px; color: var(--text-mut); line-height: 1.5; max-height: 64px; overflow: hidden; text-overflow: ellipsis; }
+.bd-rem-meta { display: flex; gap: 10px; font-size: 9px; color: var(--text-dim); letter-spacing: 0.04em; }
+.bd-rem-meta b { color: var(--text-mut); font-weight: 600; }
+.bd-rem-actions { display: flex; gap: 4px; margin-top: 4px; }
+.bd-rem-actions button {
+  padding: 3px 9px; font-size: 10px; background: transparent;
+  color: var(--text-mut); border: 1px solid var(--border); border-radius: 99px;
+  cursor: pointer; font-family: inherit;
+}
+.bd-rem-actions button:hover { color: var(--accent); border-color: var(--accent); }
+.bd-rem-actions button.danger:hover { color: var(--hot); border-color: var(--hot); }
+.bd-rem-actions button.done:hover { color: var(--ok); border-color: var(--ok); }
+.bd-add summary { cursor: pointer; color: var(--text-mut); font-size: 11px; padding: 6px 10px; background: var(--panel-soft); border: 1px solid var(--border-mt); border-radius: var(--rad-sm); margin-top: 8px; }
+.bd-add[open] summary { color: var(--accent); border-color: var(--accent); }
+.bd-add input, .bd-add textarea { margin-top: 6px; }
+
 @media (max-width: 480px) {
   .bell-btn { width: 32px; height: 30px; font-size: 14px; }
   .bell-badge { min-width: 14px; height: 14px; line-height: 14px; font-size: 8px; }

@@ -2699,25 +2699,143 @@
   phoneCheck();
   setInterval(() => { if (_phoneCfg) phoneCheck(); }, 30000);
 
-  // ── BELL POLLING · update unread badge every 60s ──
+  // ── BELL POLLING · update badge with unread email + overdue reminders ──
+  const REMINDERS_URL = 'https://iamsuperio.cloud/api/maya_reminders';
+  const PIN_KEY_REM = 'maya_os_rem_pin_v1';
+
   async function pollUnreadBadge() {
     if (!bellBadge) return;
+    let email = 0, overdue = 0;
     try {
       const r = await fetch(GMAIL_URL + '?action=unread_count', { cache: 'no-store' });
       const j = await r.json();
-      const n = (j && j.ok) ? (j.unread_24h | 0) : 0;
-      if (n > 0) {
-        bellBadge.textContent = n > 99 ? '99+' : String(n);
-        bellBadge.hidden = false;
-        bellBtn.title = 'Inbox + SMS · ' + n + ' unread email' + (n===1?'':'s') + ' (last 24h)';
-      } else {
-        bellBadge.hidden = true;
-        bellBtn.title = 'Inbox + SMS · Maya can brief you';
+      email = (j && j.ok) ? (j.unread_24h | 0) : 0;
+    } catch (_) {}
+    try {
+      const r = await fetch(REMINDERS_URL + '?action=list_public', { cache: 'no-store' });
+      const j = await r.json();
+      overdue = (j && j.ok) ? (j.overdue_count | 0) : 0;
+      const tabBadge = $('bdRemTabBadge');
+      if (tabBadge) {
+        if (overdue > 0) { tabBadge.textContent = overdue > 99 ? '99+' : String(overdue); tabBadge.hidden = false; }
+        else { tabBadge.hidden = true; }
       }
     } catch (_) {}
+    const total = email + overdue;
+    if (total > 0) {
+      bellBadge.textContent = total > 99 ? '99+' : String(total);
+      bellBadge.hidden = false;
+      bellBtn.title = 'Inbox + Reminders · ' + email + ' unread email, ' + overdue + ' overdue reminder' + (overdue===1?'':'s');
+    } else {
+      bellBadge.hidden = true;
+      bellBtn.title = 'Inbox + SMS + Reminders · Maya can brief you';
+    }
   }
   pollUnreadBadge();
   setInterval(pollUnreadBadge, 60000);
+
+  // ── v1.15.0 · Reminders tab logic · 2026-05-15 ──
+  const bdRemPin = $('bdRemPin'), bdRemRefresh = $('bdRemRefresh'), bdRemList = $('bdRemList');
+  const bdRemAddBtn = $('bdRemAddBtn');
+  function remGetPin() {
+    const v = (bdRemPin?.value || '').trim();
+    if (v) sessionStorage.setItem(PIN_KEY_REM, v);
+    return v;
+  }
+  function fmtAgo(ts) {
+    if (!ts) return '';
+    const d = Math.max(0, Math.floor(Date.now()/1000) - ts);
+    if (d < 60)    return d + 's ago';
+    if (d < 3600)  return Math.floor(d/60) + 'm ago';
+    if (d < 86400) return Math.floor(d/3600) + 'h ago';
+    return Math.floor(d/86400) + 'd ago';
+  }
+  function fmtUntil(ts) {
+    if (!ts) return '';
+    const d = ts - Math.floor(Date.now()/1000);
+    if (d <= 0)    return 'overdue ' + fmtAgo(ts);
+    if (d < 3600)  return 'in ' + Math.ceil(d/60) + 'm';
+    if (d < 86400) return 'in ' + Math.ceil(d/3600) + 'h';
+    return 'in ' + Math.ceil(d/86400) + 'd';
+  }
+  async function remRefresh() {
+    const pin = remGetPin();
+    if (!pin) { bdRemList.innerHTML = '<div class="bd-empty">Enter PIN above.</div>'; return; }
+    bdRemList.innerHTML = '<div class="bd-empty">Loading…</div>';
+    try {
+      const r = await fetch(REMINDERS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'list', pin}) });
+      const j = await r.json();
+      if (!j.ok) { bdRemList.innerHTML = '<div class="bd-empty">' + escapeHTML(j.error || 'error') + '</div>'; return; }
+      if (!j.reminders || j.reminders.length === 0) { bdRemList.innerHTML = '<div class="bd-empty">No active reminders. Add one below.</div>'; return; }
+      const now = Math.floor(Date.now() / 1000);
+      bdRemList.innerHTML = j.reminders.map(rem => {
+        const overdue = (rem.due_at || 0) <= now ? 1 : 0;
+        const hiPrio = (rem.priority || 0) >= 80 ? 1 : 0;
+        const linkBit = rem.link ? '<a href="' + escapeHTML(rem.link) + '" target="_blank" rel="noopener" style="color:var(--accent);font-size:10px;text-decoration:none">🔗 open link</a>' : '';
+        return (
+          '<div class="bd-rem-row" data-overdue="' + overdue + '" data-priority-high="' + hiPrio + '" data-id="' + escapeHTML(rem.id) + '">'
+          + '<div class="bd-rem-title">' + escapeHTML(rem.title) + '</div>'
+          + (rem.body ? '<div class="bd-rem-body">' + escapeHTML(rem.body) + '</div>' : '')
+          + '<div class="bd-rem-meta">'
+          +   '<span>priority <b>' + (rem.priority || 50) + '</b></span>'
+          +   '<span>every <b>' + (rem.frequency_hours || 24) + 'h</b></span>'
+          +   '<span>' + fmtUntil(rem.due_at) + '</span>'
+          +   (rem.fire_count ? '<span>fired <b>' + rem.fire_count + '</b></span>' : '')
+          + '</div>'
+          + (linkBit ? '<div>' + linkBit + '</div>' : '')
+          + '<div class="bd-rem-actions">'
+          +   '<button class="done" data-rem-action="done">✓ Done</button>'
+          +   '<button data-rem-action="snooze">⏰ Snooze ' + (rem.frequency_hours||24) + 'h</button>'
+          +   '<button class="danger" data-rem-action="delete">🗑 Delete</button>'
+          + '</div>'
+          + '</div>'
+        );
+      }).join('');
+      qsAll('.bd-rem-row button[data-rem-action]').forEach(btn => btn.addEventListener('click', async (ev) => {
+        ev.stopPropagation();
+        const row = btn.closest('.bd-rem-row');
+        const id = row.dataset.id;
+        const act = btn.dataset.remAction;
+        try {
+          await fetch(REMINDERS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action: act, pin: remGetPin(), id}) });
+        } catch(_) {}
+        remRefresh();
+        pollUnreadBadge();
+      }));
+    } catch (e) {
+      bdRemList.innerHTML = '<div class="bd-empty">Network: ' + escapeHTML(e.message) + '</div>';
+    }
+  }
+  if (bdRemRefresh) bdRemRefresh.addEventListener('click', remRefresh);
+  if (bdRemPin) {
+    const cached = sessionStorage.getItem(PIN_KEY_REM);
+    if (cached) bdRemPin.value = cached;
+  }
+  if (bdRemAddBtn) bdRemAddBtn.addEventListener('click', async () => {
+    const pin = remGetPin();
+    if (!pin) return;
+    const title = $('bdRemAddTitle').value.trim();
+    if (!title) { $('bdRemAddTitle').focus(); return; }
+    try {
+      await fetch(REMINDERS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
+        action:'add', pin, title,
+        body: $('bdRemAddBody').value,
+        link: $('bdRemAddLink').value,
+        frequency_hours: parseInt($('bdRemAddFreq').value) || 24,
+        priority: parseInt($('bdRemAddPrio').value) || 50,
+      })});
+      $('bdRemAddTitle').value = ''; $('bdRemAddBody').value = ''; $('bdRemAddLink').value = '';
+      remRefresh(); pollUnreadBadge();
+    } catch(_) {}
+  });
+  // Auto-load reminders when the Reminders tab is clicked
+  qsAll('.bd-tab').forEach(t => {
+    if (t.dataset.bdTab === 'reminders') {
+      t.addEventListener('click', () => {
+        if (bdRemPin && bdRemPin.value.trim()) remRefresh();
+      });
+    }
+  });
 
   // v1.13.0 · Web Share Target · 2026-05-15
   // When Maya OS is installed as PWA and Mo taps "Maya OS" in Android share sheet,
