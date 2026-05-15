@@ -120,7 +120,13 @@
     flows.setAttribute('viewBox','0 0 '+Math.round(W)+' '+Math.round(H));
     var cx = W/2, cy = H/2;
     var tiles = seatsHost.querySelectorAll('.seat');
+    var N = tiles.length;
     var paths = [], packets = [];
+    // Sequential chain-of-command wave (GLOBAL-94 · Skill #17)
+    // Maya/Orb fires outbound (cyan) → seat i thinks → seat i returns (gold) → next seat
+    var cycle  = Math.max(8, N * 0.55);
+    var travel = 0.045;
+    var settle = 0.03;
     tiles.forEach(function(el, i){
       var r = el.getBoundingClientRect();
       var hr = host.getBoundingClientRect();
@@ -134,7 +140,24 @@
                 : 'hbg_cy';
       var pid = 'hbp'+i;
       paths.push('<path id="'+pid+'" class="stream" stroke="url(#'+grad+')" d="M'+cx+','+cy+' Q'+mx+','+my+' '+zx+','+zy+'"/>');
-      packets.push('<circle r="3" fill="currentColor" style="color:#00d2ff"><animateMotion dur="'+(2.4+Math.random()*1.4)+'s" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion></circle>');
+      var t0 = i / N;
+      var t1 = Math.min(0.999, t0 + travel);
+      var t2 = Math.min(0.999, t1 + settle);
+      var t3 = Math.min(0.999, t2 + travel);
+      // Outbound (cyan, Orb → seat)
+      packets.push(
+        '<circle r="3.2" fill="#00d2ff" opacity="0" filter="drop-shadow(0 0 6px #00d2ff)">'+
+        '<animate attributeName="opacity" dur="'+cycle+'s" keyTimes="0;'+t0+';'+(t0+0.001)+';'+t1+';'+(t1+0.001)+';1" values="0;0;1;1;0;0" repeatCount="indefinite"/>'+
+        '<animateMotion dur="'+cycle+'s" keyTimes="0;'+t0+';'+t1+';1" keyPoints="0;0;1;1" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion>'+
+        '</circle>'
+      );
+      // Return (gold, seat → Orb)
+      packets.push(
+        '<circle r="3.6" fill="#f0c040" opacity="0" filter="drop-shadow(0 0 7px #f0c040)">'+
+        '<animate attributeName="opacity" dur="'+cycle+'s" keyTimes="0;'+t2+';'+(t2+0.001)+';'+t3+';'+(t3+0.001)+';1" values="0;0;1;1;0;0" repeatCount="indefinite"/>'+
+        '<animateMotion dur="'+cycle+'s" keyTimes="0;'+t2+';'+t3+';1" keyPoints="1;1;0;0" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion>'+
+        '</circle>'
+      );
     });
     flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
   }

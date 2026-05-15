@@ -31,6 +31,7 @@
 15. [LLM Vendor Anonymization · NEVER show vendor names on public surfaces](#15-llm-vendor-anonymization)
 16. [LLM Vendor Outreach Playbook · attract free credits + endpoints in exchange for data](#16-llm-vendor-outreach-playbook)
 17. [Per-reply Continuity Preservation · GitHub is the warehouse · pull on every message, push on every reply](#17-continuity-preservation)
+18. [Sequential Chain-of-Command Deliberation · all autonomous Maya decisions](#18-sequential-chain-of-command-deliberation)
 
 ---
 
@@ -461,6 +462,91 @@ Mo's strategic intent: **disrupt LMSYS Arena**. Their value prop is "vote on the
 Every vendor we onboard accelerates the moat. Once 5+ frontier labs have seats, MirzaTech becomes the **default agentic-traces marketplace** — a category LMSYS doesn't compete in. The UI (Sovereign Campus pattern from Skill #1) is the recruiting funnel; the data is the product; the seat is the deal-sweetener.
 
 **Enforcement phrase:** *"Pull Skill #16 before you draft, Kin."*
+
+---
+
+## 18. Sequential Chain-of-Command Deliberation
+
+**When to use:** EVERY autonomous business decision Maya makes for the network. Council deliberations · Parliament rounds · Board of Directors verdicts · Agency Jail teaching cycles · Anti-fraud checks · Strategic pivots · Pricing changes · Vendor contracts · Customer escalations. ALL of them.
+
+**Mo verbatim 2026-05-15:** *"There should be some kind of order and control in which Maya feeds the parliament with instructions and directions ... I don't think that they should all get the same task at the same time. There should be an order to go from one to another. And then to complete the circle ... There should be an order in which the council and the parliament and the board of directors for the staffing agency make decisions. Not all of them should be getting the same information at the same time. You know what I mean? chain of command. assembly line or something like that."*
+
+This is now **GLOBAL-94**, binding every sibling AI.
+
+### The core principle (assembly-line, not broadcast)
+
+Decisions go through seats **in sequence**, not in parallel. Each seat sees the prior seats' opinions in its context. The chain ripples around the ring once forward (each seat adds its lane), then once backward (each seat critiques the next). Verdict locked at the Chancellor.
+
+### The canonical 10-step flow (every autonomous decision)
+
+1. **Trigger** arrives at Maya (Mo, customer, scheduled event, autonomous detection)
+2. **Maya formats the question** with context · risk class · budget impact · timeline · GLOBAL rules touched
+3. **Routes to the Chair Seat** (Council = SEAT 01 Reasoning Lead · Parliament = R1 first Proponent · Board of Directors = EXEC)
+4. **Chair frames the question** for the floor and passes deliberation packet to **Seat 02**
+5. **Each seat opines IN SEQUENCE** (not parallel), the deliberation packet accumulates prior opinions as it travels
+6. **After all seats opine** → **Round-2 reverse-order scrutiny**: Seat N reviews Seat N-1's stance · ... · Seat 02 reviews Seat 01's · Seat 01 reviews Seat N's (the loop closes)
+7. **Quorum verdict** computed (≥67% APPROVE · ≤33% REJECT · else INCONCLUSIVE)
+8. **Synthesis** — Council = optional Chair summary · Parliament = R5 Synthesis seat + Chancellor · Board = EXEC final sign-off
+9. **Verdict returned** to Mo (or auto-executed if Mo's risk-appetite + budget-cap permit)
+10. **Full deliberation transcript folded into Hypermind** (Skill #4) for future pattern recognition
+
+### Visual representation (Skill #1 habitat embeds)
+
+The visual MUST show this assembly-line, not a broadcast:
+- **Outbound packet (cyan)** travels Maya/Orb → Seat i at staggered timing (`begin = i/N` of cycle)
+- **Seat i settles** for a brief "thinking" window (3-4% of cycle)
+- **Return packet (gold)** travels Seat i → Maya/Orb before the wave fires the next seat
+- All N seats complete in one cycle (typically 8-13 seconds depending on N)
+- This makes the chain VISIBLE — Mo sees the order, not chaos
+
+**Reference implementations (sequential-wave packet generators):**
+- [`mirzatech.ai/parliament-theater.html` (24 seats · R1→R5 wave)](https://github.com/mirzatech-ai/maya-sovereign-campus/blob/main/habitat_embed_parliament.html)
+- [`mirzatech.ai/council/` (12 seats · SEAT 01→12 wave)](https://github.com/mirzatech-ai/maya-sovereign-campus/blob/main/habitat_embed_council.html)
+- [`ai-staffing.agency/habitat.html` (8 rooms · ring wave)](https://github.com/mirzatech-ai/maya-sovereign-campus/blob/main/habitat.html)
+
+### Backend contract (Board of Directors API)
+
+The existing `api/board_of_directors.php` deliberation must update from parallel-fan-out to sequential-chain:
+
+```php
+// Round 1 · sequential opinions
+$running_transcript = "QUESTION: {$question}\nCONTEXT: {$context}\n\n";
+$opinions = array();
+foreach ($SEATS as $key => $cfg) {
+    $prompt = $running_transcript . "PRIOR SEATS:\n";
+    foreach ($opinions as $k2 => $op2) {
+        $prompt .= "[{$k2}/{$op2['stance']}] {$op2['text']}\n";
+    }
+    $prompt .= "\nNow give your opinion as the {$cfg['label']} seat. End with STANCE: approve | reject | abstain.";
+    $text = call_maya_brain($prompt, $model, $key);
+    $opinions[$key] = parse_stance($text);
+}
+// Round 2 · reverse-order scrutiny (each seat critiques the next, loop closes)
+// ... reverse iteration ...
+```
+
+This is fundamentally different from the v1 implementation that fanned out to all seats simultaneously. Sequential = each seat builds on prior reasoning.
+
+### Sibling responsibilities (binding)
+
+| Sibling | When you make/recommend an autonomous decision for Mo's empire |
+|---|---|
+| **Maya** | Run it through Skill #18 sequential chain. Never broadcast. |
+| **Sage (OpenCode)** | Same. If you're writing autonomous-decision PHP, use sequential pattern. |
+| **EaZo (VS Code Cline)** | Same. Audit any decision API you find for parallel-fan-out and refactor. |
+| **Maya Qode** | Same. Agentic loops respect chain-of-command. |
+
+### Anti-patterns (hard ban)
+
+- ❌ **Broadcasting** — calling all seats with the same prompt at the same time
+- ❌ **No reverse-scrutiny round** — single-pass opinion is not a Council
+- ❌ **No Hypermind fold** — every decision must inform future ones
+- ❌ **Skipping the Chair** — every chain starts with the Chair seat reframing
+- ❌ **Visual that shows all packets firing at once** — that's broadcast, not chain
+
+### Enforcement phrase
+
+*"Did you sequence it, Kin?"* — Mo's check when reviewing any new autonomous-decision code or Council UI.
 
 ---
 

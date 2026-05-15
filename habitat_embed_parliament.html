@@ -47,7 +47,7 @@
 </style>
 <div class="habitat-embed-parl-section" id="habitat-embed-parl-section">
   <div class="toggle-row">
-    <span class="pulse-tag">◉ Live Parliament · Habitat View · 22 seats / 5 rounds</span>
+    <span class="pulse-tag">◉ Live Parliament · Habitat View · 24 seats / 5 rounds · sequential chain-of-command</span>
     <button class="toggle-classic" onclick="document.getElementById('habitat-embed-parl-section').classList.toggle('classic-hidden')">Toggle Classic View</button>
   </div>
   <div class="habitat-embed-parl" id="habitat-embed-parl">
@@ -70,8 +70,8 @@
   // Canonical 22 seats across 5 rounds (Proponents 9 · Skeptics 4 · Specialists 5 · Polygeists 3 · Synthesis 1)
   var SEATS = [];
   var roundDef = [
-    {r:1, label:'Proponents',  count:9, role:'agentic happy-path'},
-    {r:2, label:'Skeptics',    count:4, role:'find every flaw'},
+    {r:1, label:'Proponents',  count:10, role:'agentic happy-path'},
+    {r:2, label:'Skeptics',    count:5, role:'find every flaw'},
     {r:3, label:'Specialists', count:5, role:'domain depth'},
     {r:4, label:'Polygeists',  count:3, role:'adversarial robustness'},
     {r:5, label:'Synthesis',   count:1, role:'Aggregator + Chancellor'},
@@ -125,7 +125,16 @@
     flows.setAttribute('viewBox','0 0 '+Math.round(W)+' '+Math.round(H));
     var cx = W/2, cy = H/2;
     var tiles = seatsHost.querySelectorAll('.seat');
+    var N = tiles.length;
     var paths = [], packets = [];
+    // Sequential chain-of-command wave (GLOBAL-94 · Skill #17):
+    // 1) Chancellor sends outbound (cyan) packet to seat i at time fraction i/N
+    // 2) Seat i thinks (settle ~4% of cycle)
+    // 3) Seat i returns (gold) packet to Chancellor before next seat fires
+    // 4) Wave ripples through R1 (seats 1-10 Proponents) → R2 → R3 → R4 → R5
+    var cycle  = Math.max(10, N * 0.55); // full cycle = ~13s for 24 seats
+    var travel = 0.04;                   // 4% of cycle for one-way travel
+    var settle = 0.025;                  // 2.5% of cycle for seat to "think"
     tiles.forEach(function(el, i){
       var r = el.getBoundingClientRect();
       var hr = host.getBoundingClientRect();
@@ -135,7 +144,24 @@
       var my = (cy+zy)/2 + (i%2===0?-30:30);
       var pid = 'hbpp'+i;
       paths.push('<path id="'+pid+'" class="stream" stroke="url(#hbpg_cy)" d="M'+cx+','+cy+' Q'+mx+','+my+' '+zx+','+zy+'"/>');
-      if (i % 3 === 0) packets.push('<circle r="2.5" fill="currentColor" style="color:#00d2ff"><animateMotion dur="'+(2.6+Math.random()*1.4)+'s" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion></circle>');
+      var t0 = i / N;                    // outbound fires
+      var t1 = Math.min(0.999, t0 + travel);          // outbound arrives at seat
+      var t2 = Math.min(0.999, t1 + settle);          // seat finished thinking
+      var t3 = Math.min(0.999, t2 + travel);          // return arrives at Chancellor
+      // Outbound (cyan, → seat)
+      packets.push(
+        '<circle r="3.2" fill="#00d2ff" opacity="0" filter="drop-shadow(0 0 6px #00d2ff)">'+
+        '<animate attributeName="opacity" dur="'+cycle+'s" keyTimes="0;'+t0+';'+(t0+0.001)+';'+t1+';'+(t1+0.001)+';1" values="0;0;1;1;0;0" repeatCount="indefinite"/>'+
+        '<animateMotion dur="'+cycle+'s" keyTimes="0;'+t0+';'+t1+';1" keyPoints="0;0;1;1" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion>'+
+        '</circle>'
+      );
+      // Return (gold, seat → Chancellor) — fires AFTER seat finished thinking
+      packets.push(
+        '<circle r="3.5" fill="#f0c040" opacity="0" filter="drop-shadow(0 0 7px #f0c040)">'+
+        '<animate attributeName="opacity" dur="'+cycle+'s" keyTimes="0;'+t2+';'+(t2+0.001)+';'+t3+';'+(t3+0.001)+';1" values="0;0;1;1;0;0" repeatCount="indefinite"/>'+
+        '<animateMotion dur="'+cycle+'s" keyTimes="0;'+t2+';'+t3+';1" keyPoints="1;1;0;0" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion>'+
+        '</circle>'
+      );
     });
     flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
   }

@@ -148,24 +148,43 @@ if ($action === 'deliberate') {
         exit;
     }
 
-    // Round 1: each seat gives an opinion
+    // ===== ROUND 1 · SEQUENTIAL CHAIN-OF-COMMAND (GLOBAL-94 · Skill #18) =====
+    // Each seat sees ALL prior seats' opinions in its context — not parallel fan-out.
+    // The Chair (first seat in $SEATS) frames the question · subsequent seats build on it.
     $opinions = array();
-    foreach ($SEATS as $key => $cfg) {
+    $seat_keys = array_keys($SEATS);
+    foreach ($seat_keys as $idx => $key) {
+        $cfg = $SEATS[$key];
         $model = pick_best_model($cfg['model_pref'], $SCOUT_FILE);
-        $prompt = "QUESTION: {$question}\nCONTEXT: {$context}\nGive your opinion as a {$cfg['label']} (lane: {$cfg['lane']}). End with one line: STANCE: approve | reject | abstain.";
+        $prior_block = "";
+        if ($idx === 0) {
+            $prior_block = "You are the Chair (first seat in the chain). Frame the question for the council and give your opinion first.";
+        } else {
+            $prior_block = "PRIOR SEATS HAVE SPOKEN (in order):\n";
+            foreach ($opinions as $k2 => $op2) {
+                $prior_block .= "[{$k2}/{$op2['stance']}] " . substr($op2['text'], 0, 240) . "\n";
+            }
+            $prior_block .= "\nNow add YOUR opinion as the {$cfg['label']} seat (lane: {$cfg['lane']}). Build on or dissent from prior seats explicitly.";
+        }
+        $prompt = "QUESTION: {$question}\nCONTEXT: {$context}\n\n{$prior_block}\n\nEnd your reply with one line: STANCE: approve | reject | abstain.";
         $text = call_maya_brain($prompt, $model, $key);
         $stance = 'abstain';
         if (preg_match('/STANCE:\s*(approve|reject|abstain)/i', $text, $m)) $stance = strtolower($m[1]);
-        $opinions[$key] = array('seat'=>$key,'model'=>$model,'text'=>$text,'stance'=>$stance);
+        $opinions[$key] = array('seat'=>$key,'model'=>$model,'text'=>$text,'stance'=>$stance,'order'=>$idx);
     }
 
-    // Round 2: peer scrutiny — each seat reviews opponents
+    // ===== ROUND 2 · REVERSE-ORDER PEER SCRUTINY (loop closes) =====
+    // Each seat critiques the NEXT seat in original order · last seat critiques the Chair.
     $critiques = array();
-    foreach ($opinions as $key => $op) {
-        $others = array();
-        foreach ($opinions as $k2 => $op2) { if ($k2 !== $key) $others[] = "[{$k2}/{$op2['stance']}] {$op2['text']}"; }
-        $model = pick_best_model($SEATS[$key]['model_pref'], $SCOUT_FILE);
-        $prompt = "ORIGINAL QUESTION: {$question}\nYOUR PRIOR OPINION: {$op['text']}\nPEER OPINIONS:\n" . implode("\n", $others) . "\nIn ≤60 words, critique peers. End with: REVISED STANCE: approve | reject | abstain.";
+    $rev_keys = array_reverse($seat_keys);
+    foreach ($rev_keys as $idx => $key) {
+        $cfg = $SEATS[$key];
+        // The seat being critiqued = the next-up seat in the original forward order
+        $orig_pos = array_search($key, $seat_keys);
+        $target_key = $seat_keys[($orig_pos + 1) % count($seat_keys)];
+        $target_op = $opinions[$target_key];
+        $model = pick_best_model($cfg['model_pref'], $SCOUT_FILE);
+        $prompt = "ORIGINAL QUESTION: {$question}\nYOUR PRIOR OPINION (Round 1): {$opinions[$key]['text']}\n\nNow critique seat [{$target_key}/{$target_op['stance']}] as your responsibility in the reverse-scrutiny round. Their reasoning:\n{$target_op['text']}\n\nIn ≤80 words, agree or push back. End with: REVISED STANCE: approve | reject | abstain.";
         $text = call_maya_brain($prompt, $model, $key . '_REVIEW');
         $stance = $op['stance'];
         if (preg_match('/REVISED STANCE:\s*(approve|reject|abstain)/i', $text, $m)) $stance = strtolower($m[1]);

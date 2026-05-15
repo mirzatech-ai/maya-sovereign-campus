@@ -1289,9 +1289,27 @@ body.ambient-error{
       const cls = el.classList.contains('state-council') ? 'gold'
                 : el.classList.contains('state-executing') ? 'green' : '';
       paths.push(`<path id="${pid}" class="stream" stroke="url(#${grad})" d="M${cx},${cy} Q${mx},${my} ${zx},${zy}"/>`);
-      // packet dots — one outbound from Maya, one inbound back
-      packets.push(`<circle class="packet ${cls}" r="3.5"><animateMotion dur="${2.4+Math.random()*1.4}s" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion></circle>`);
-      packets.push(`<circle class="packet ${cls}" r="2.5" opacity=".6"><animateMotion dur="${3.2+Math.random()*1.6}s" repeatCount="indefinite" rotate="auto" keyPoints="1;0" keyTimes="0;1"><mpath href="#${pid}"/></animateMotion></circle>`);
+      // Sequential chain-of-command wave (GLOBAL-94 · Skill #17)
+      // Maya fires outbound (cyan) → room i works → room i returns (gold) → next room
+      // Wave goes around the ring · NOT all rooms get the task simultaneously
+      const N = visible.length;
+      const cycle  = Math.max(6, N * 0.7);
+      const travel = 0.05;
+      const settle = 0.04;
+      const t0 = i / N;
+      const t1 = Math.min(0.999, t0 + travel);
+      const t2 = Math.min(0.999, t1 + settle);
+      const t3 = Math.min(0.999, t2 + travel);
+      // Outbound (cyan, Maya → room)
+      packets.push(`<circle r="4" fill="#00e4ff" opacity="0" filter="drop-shadow(0 0 8px #00e4ff)">
+        <animate attributeName="opacity" dur="${cycle}s" keyTimes="0;${t0};${t0+0.001};${t1};${t1+0.001};1" values="0;0;1;1;0;0" repeatCount="indefinite"/>
+        <animateMotion dur="${cycle}s" keyTimes="0;${t0};${t1};1" keyPoints="0;0;1;1" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion>
+      </circle>`);
+      // Return (gold, room → Maya)
+      packets.push(`<circle r="4.2" fill="#f5c542" opacity="0" filter="drop-shadow(0 0 9px #f5c542)">
+        <animate attributeName="opacity" dur="${cycle}s" keyTimes="0;${t2};${t2+0.001};${t3};${t3+0.001};1" values="0;0;1;1;0;0" repeatCount="indefinite"/>
+        <animateMotion dur="${cycle}s" keyTimes="0;${t2};${t3};1" keyPoints="1;1;0;0" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion>
+      </circle>`);
     });
     flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
   }
