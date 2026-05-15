@@ -64,7 +64,7 @@ function build_artifact($a) {
     elseif (preg_match('/education|training|nonprofit/i', $slug)) $audience = 'Schools · training orgs · nonprofits · workforce-development programs';
     elseif (preg_match('/agri|food|transport|automotive|aviation|space|robotics|manufacturing|energy|supply|telecom|quantum/i', $slug)) $audience = 'Industrial operators · logistics + supply-chain · vertical-specific enterprise buyers';
 
-    $financial = 'Per-seat-per-month canonical pricing $5/$9/$19/$49/$99/$199 · Stripe-gated payment before any real LLM call · refund-proof per Skill #18 · scalable across all 58 agencies with no per-agency manual config.';
+    $financial = 'Per-seat-per-month canonical pricing $5/$9/$19/$49/$99/$199 · Stripe-gated payment before any real LLM call · refund-proof per Skill #18 · scalable across all 100 agencies with no per-agency manual config.';
 
     $empire_dep = 'Hosted on ai-staffing.agency · brain routed via /api/index · Council/Parliament/Board verification per GLOBAL-96 · vendor anonymization per GLOBAL-93 · Sovereign Campus visual language per Skill #1.';
     if ($slug === 'game-development') {
