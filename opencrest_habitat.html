@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>Maya AI · Sovereign Campus · ai-staffing.agency</title>
-<meta name="description" content="The Maya AI Sovereign Campus — a living visualization of every agency, agent, council deliberation, and customer workflow across the empire. Powered by MirzaTech.ai · Property of EMAAA.io">
+<title>Opencrest · Workflow Campus · opencrest.io</title>
+<meta name="description" content="Opencrest Workflow Campus — the make.com/zapier killer. A living visualization of every workflow pipeline with swarm agents attacking each stage. Powered by MirzaTech.ai · Property of EMAAA.io">
 <link rel="icon" href="/favicon.svg">
 <link rel="preconnect" href="https://iamsuperio.cloud">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -591,7 +591,7 @@ body.ambient-error{
 
   <!-- ============ TOP STRIP ============ -->
   <div class="topstrip">
-    <div class="brand"><div class="dot"></div>MAYA AI · SOVEREIGN CAMPUS</div>
+    <div class="brand"><div class="dot"></div>OPENCREST · WORKFLOW CAMPUS</div>
     <div class="ticker" id="ticker">
       <div class="item"><div class="pulse"></div><b id="t_revenue">$0</b>&nbsp;Live Revenue Ticker</div>
       <div class="item blue"><div class="pulse"></div><b id="t_swarms">0</b>&nbsp;Active Swarms</div>
@@ -659,7 +659,7 @@ body.ambient-error{
     <!-- CENTER -->
     <div class="col center campus">
       <div class="campus-head">
-        <h1 id="campusTitle">MAYA AI <span class="who">UNIVERSAL SOVEREIGN SHELL</span></h1>
+        <h1 id="campusTitle">OPENCREST <span class="who">WORKFLOW CONDUCTOR · MAKE/ZAPIER KILLER</span></h1>
         <div class="toolbar">
           <button class="active" data-view="campus">Campus</button>
           <button data-view="gallery">Gallery</button>
@@ -684,7 +684,7 @@ body.ambient-error{
 
         <!-- Maya central sphere · RESTORED in v2.0 as the SimCity hub Gemini drew -->
         <div class="maya-sphere" onclick="openMayaPanel()">
-          <div class="label">MAYA AI<small>SUPREME ORCHESTRATOR</small></div>
+          <div class="label">WORKFLOW<small>CONDUCTOR</small></div>
         </div>
 
         <!-- Filter bar (chips by department) -->
@@ -938,17 +938,27 @@ body.ambient-error{
     return VIDEO_HINTS.some(h => blob.indexOf(h) !== -1);
   };
 
-  // ===== Mo's ACTIVE ROSTER (v2.0 · Gemini's SimCity vision) =====
-  // Only these 8 agencies are visible in the default Campus view. Others browseable via Gallery.
+  // ===== OPENCREST · 8 PIPELINE STAGES (replaces staffing roster) =====
+  // These are the canonical workflow stages every Opencrest pipeline passes through.
   const DEFAULT_ROSTER = [
-    'real-estate-proptech',  // Adeeo
-    'media-entertainment',   // AICineSynth output
-    'design-creative',       // AICineSynth front
-    'operations-logistics',  // Opencrest
-    'retail-ecommerce',      // Storefronts
-    'ai-research',           // Maya brain
-    'cybersecurity',         // always-on protection
-    'customer-success',      // inbound channel
+    'wf-trigger',
+    'wf-enrich',
+    'wf-anatomy',
+    'wf-council-1',
+    'wf-hypermind',
+    'wf-council-2',
+    'wf-qa',
+    'wf-output',
+  ];
+  const PIPELINE_STAGES = [
+    {id:'wf-trigger',   name:'Trigger',          icon:'⚡', tagline:'Lead/event capture · entry point', description:'Webhooks · form submissions · scheduled crons · API calls · email parsing. The entry point of every workflow.', role_count:14, color:'#00e4ff', _cost:'$0.001'},
+    {id:'wf-enrich',    name:'Enrich · Scout',   icon:'🔎', tagline:'Data enrichment · public/private lookups', description:'Clearbit-style enrichment · NIM lookups · 3rd-party API joins · contact data hydration. Turns sparse input into actionable context.', role_count:11, color:'#3e9bff', _cost:'$0.02'},
+    {id:'wf-anatomy',   name:'Anatomy Audit',    icon:'🔬', tagline:'Schema + integrity validation', description:'Pipeline-level QA · payload schema · type checks · 5-finger anatomy check for image/video payloads · firewall to prevent bad data cascading.', role_count:9, color:'#43e6a1', _cost:'$0.005'},
+    {id:'wf-council-1', name:'Council #1',       icon:'🏛', tagline:'Strategic Review · 6 seats', description:'Board of Directors consults on high-stakes routing decisions. Adds ~1.5s latency but raises Mo\'s safety floor.', role_count:6, color:'#f5c542', _cost:'$0.08'},
+    {id:'wf-hypermind', name:'Hypermind Match',  icon:'🧠', tagline:'Pattern fingerprint + recall', description:'Server-side Sovereign Brain checks if this payload matches an established protocol. If so, fast-path. If not, learn it.', role_count:8, color:'#ff6bd6', _cost:'$0.003'},
+    {id:'wf-council-2', name:'Council #2',       icon:'⚖', tagline:'Compliance · Legal + QA', description:'Second Council pass · legal compliance + QA firewall · applies the Gold Seal before output. Hard block on any policy violation.', role_count:6, color:'#f5c542', _cost:'$0.04'},
+    {id:'wf-qa',        name:'QA Firewall',      icon:'🛡', tagline:'Chain-reaction prevention', description:'Final QA pass · catches micro-errors · freezes pipeline on detection · routes to Improvisation Loop · prevents cascading failures.', role_count:7, color:'#43e6a1', _cost:'$0.006'},
+    {id:'wf-output',    name:'Output · Gold Seal',icon:'✓', tagline:'Final delivery · destination routing', description:'Customer notification · storefront update · Stripe charge · email receipt · downstream system trigger. Workflow complete.', role_count:12, color:'#00e4ff', _cost:'$0.002'},
   ];
   function loadRoster(){
     try{
@@ -998,12 +1008,12 @@ body.ambient-error{
   const STATES = ['state-idle','state-executing','state-council','state-error'];
 
   const TAGLINES = [
-    '// PARLIAMENT IN SESSION · DELIBERATION 88% CONSENSUS',
-    '// MAYA REASONING SCOUT FOUND 2 NEW MODELS',
-    '// LEGAL VAULT SEALED 3 CONTRACTS THIS HOUR',
-    '// JAILED AGENT #42 RELEASED · PEER-TAUGHT BY DEEPSEEK-R1',
-    '// HYPERMIND PATTERN CACHE +1 (CONVERSION-LIFT 14%)',
-    '// SWARM DISPATCHED TO REAL-ESTATE-LEADS-GWINNETT',
+    '// PIPELINE THROUGHPUT 147 TASKS/HR · LATENCY 2.1S AVG',
+    '// COUNCIL #1 RULED APPROVE · CONSENSUS 87%',
+    '// HYPERMIND PATTERN CACHED · FAST-PATH ENABLED',
+    '// GOLD SEAL APPLIED · CONTRACT #877 ROUTED TO STOREFRONT',
+    '// SWARM DISPATCHED · 18 AGENTS ATTACKING ANATOMY AUDIT',
+    '// MAKE.COM CAN\'T DO THIS · ZAPIER WISHES IT COULD',
   ];
 
   const DELIBS = [
@@ -1085,29 +1095,12 @@ body.ambient-error{
     }
     stage.innerHTML = tiles.join('');
   }
-  async function loadAgencies(){
-    try{
-      const r = await fetch('/api/staff.php', {cache:'no-store'});
-      if(!r.ok) throw new Error('staff api '+r.status);
-      const j = await r.json();
-      if(j && j.success && Array.isArray(j.agencies)){
-        ZONES_FULL = j.agencies;
-        // Merge any DRAFT agencies Mo created in prior sessions
-        try{
-          const drafts = JSON.parse(localStorage.getItem('maya_draft_agencies')||'[]');
-          if(Array.isArray(drafts) && drafts.length) ZONES_FULL = [...drafts, ...ZONES_FULL];
-        }catch(e){}
-        document.getElementById('floorTagline').textContent =
-          '// '+ZONES_FULL.length+' AGENCIES ONLINE · MAYA ORCHESTRATING';
-        renderZones();
-        renderFilters();
-        setTimeout(rebuildFlows, 80);
-      }
-    }catch(e){
-      console.warn('agency load failed', e);
-      document.getElementById('zoneStage').innerHTML =
-        '<div style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase">Roster unreachable · /api/staff.php offline</div>';
-    }
+  function loadAgencies(){
+    // Opencrest variant: pipeline stages are LOCAL (no API fetch needed)
+    ZONES_FULL = PIPELINE_STAGES;
+    document.getElementById('floorTagline').textContent = '// ' + ZONES_FULL.length + ' PIPELINE STAGES · WORKFLOW CONDUCTOR ROUTING';
+    renderZones(); renderFilters();
+    setTimeout(rebuildFlows, 80);
   }
   loadAgencies();
 
@@ -1126,14 +1119,14 @@ body.ambient-error{
   renderMacro();
 
   // ===== Filter chips (department roll-up of the 57 agencies) =====
-  // Curated department buckets — clean human labels, NOT auto-scraped first-words
+  // Opencrest filter buckets · workflow-relevant categorization
   const FILTER_BUCKETS = [
-    {key:'all',         label:'All',          match:()=>true},
-    {key:'tech',        label:'Tech',         match:a=>/engineer|developer|data|cyber|ai|cloud|devops|robot|space/i.test(a.name+' '+a.tagline)},
-    {key:'creative',    label:'Creative',     match:a=>/design|creative|content|media|music|art|video|cinema|film|fashion/i.test(a.name+' '+a.tagline)},
-    {key:'business',    label:'Business',     match:a=>/sales|marketing|customer|finance|account|operation|hr|human|recruit|legal/i.test(a.name+' '+a.tagline)},
-    {key:'industry',    label:'Industry',     match:a=>/manufactur|construct|automotive|aviation|energy|defense|pharma|agriculture|retail/i.test(a.name+' '+a.tagline)},
-    {key:'services',    label:'Services',     match:a=>/hospital|tourism|education|government|nonprofit|insurance|telecom|sport|pet|culinary/i.test(a.name+' '+a.tagline)},
+    {key:'all',      label:'All Stages',  match:()=>true},
+    {key:'entry',    label:'Entry',       match:a=>/trigger|capture|input/i.test(a.name+' '+a.tagline)},
+    {key:'data',     label:'Data Ops',    match:a=>/enrich|hypermind|pattern|scout|match/i.test(a.name+' '+a.tagline)},
+    {key:'guard',    label:'Guard',       match:a=>/audit|anatomy|qa|firewall|compliance|chain/i.test(a.name+' '+a.tagline)},
+    {key:'council',  label:'Council',     match:a=>/council|legal|deliberat|consensus/i.test(a.name+' '+a.tagline)},
+    {key:'exit',     label:'Output',      match:a=>/output|seal|delivery|notify|charge/i.test(a.name+' '+a.tagline)},
   ];
   function getFilters(){ return FILTER_BUCKETS; }
   function renderFilters(){

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>Maya AI · Sovereign Campus · ai-staffing.agency</title>
-<meta name="description" content="The Maya AI Sovereign Campus — a living visualization of every agency, agent, council deliberation, and customer workflow across the empire. Powered by MirzaTech.ai · Property of EMAAA.io">
+<title>MirzaTech · LLM Arena · mirzatech.ai</title>
+<meta name="description" content="MirzaTech LLM Arena — where frontier models compete on every Mo question. Anthropic · OpenAI · Mistral · NVIDIA · DeepSeek · Qwen · Manus · all 22 seats live. + Add Your Model in 30 seconds. Powered by MirzaTech.ai · Property of EMAAA.io">
 <link rel="icon" href="/favicon.svg">
 <link rel="preconnect" href="https://iamsuperio.cloud">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -591,7 +591,7 @@ body.ambient-error{
 
   <!-- ============ TOP STRIP ============ -->
   <div class="topstrip">
-    <div class="brand"><div class="dot"></div>MAYA AI · SOVEREIGN CAMPUS</div>
+    <div class="brand"><div class="dot"></div>MIRZATECH · LLM ARENA</div>
     <div class="ticker" id="ticker">
       <div class="item"><div class="pulse"></div><b id="t_revenue">$0</b>&nbsp;Live Revenue Ticker</div>
       <div class="item blue"><div class="pulse"></div><b id="t_swarms">0</b>&nbsp;Active Swarms</div>
@@ -659,7 +659,7 @@ body.ambient-error{
     <!-- CENTER -->
     <div class="col center campus">
       <div class="campus-head">
-        <h1 id="campusTitle">MAYA AI <span class="who">UNIVERSAL SOVEREIGN SHELL</span></h1>
+        <h1 id="campusTitle">MIRZATECH <span class="who">LLM ARENA · COUNCIL + PARLIAMENT</span></h1>
         <div class="toolbar">
           <button class="active" data-view="campus">Campus</button>
           <button data-view="gallery">Gallery</button>
@@ -683,8 +683,8 @@ body.ambient-error{
         <div class="swarm" id="swarm"></div>
 
         <!-- Maya central sphere · RESTORED in v2.0 as the SimCity hub Gemini drew -->
-        <div class="maya-sphere" onclick="openMayaPanel()">
-          <div class="label">MAYA AI<small>SUPREME ORCHESTRATOR</small></div>
+        <div class="maya-sphere" onclick="openMayaPanel()" style="background:radial-gradient(circle at 50% 35%, rgba(255,242,192,.95) 0%, rgba(245,197,66,.55) 18%, rgba(184,138,24,.3) 42%, rgba(8,14,28,.85) 72%, rgba(3,6,12,.95) 100%);box-shadow:0 0 80px rgba(245,197,66,.45), inset 0 0 60px rgba(245,197,66,.18)">
+          <div class="label" style="color:#fff2c0;text-shadow:0 0 24px rgba(245,197,66,.9)">CONSENSUS<small style="color:var(--gold)">ORB</small></div>
         </div>
 
         <!-- Filter bar (chips by department) -->
@@ -938,17 +938,25 @@ body.ambient-error{
     return VIDEO_HINTS.some(h => blob.indexOf(h) !== -1);
   };
 
-  // ===== Mo's ACTIVE ROSTER (v2.0 · Gemini's SimCity vision) =====
-  // Only these 8 agencies are visible in the default Campus view. Others browseable via Gallery.
+  // ===== MIRZATECH · 8 LLM-VENDOR SEATS (replaces staffing roster) =====
+  // Each seat represents a vendor with a live endpoint in the arena. Empty slots = "+ Add Your Model".
   const DEFAULT_ROSTER = [
-    'real-estate-proptech',  // Adeeo
-    'media-entertainment',   // AICineSynth output
-    'design-creative',       // AICineSynth front
-    'operations-logistics',  // Opencrest
-    'retail-ecommerce',      // Storefronts
-    'ai-research',           // Maya brain
-    'cybersecurity',         // always-on protection
-    'customer-success',      // inbound channel
+    'vendor-anthropic', 'vendor-openai',  'vendor-mistral',  'vendor-nvidia',
+    'vendor-deepseek',  'vendor-qwen',    'vendor-xai',      'vendor-manus',
+  ];
+  const LLM_SEATS = [
+    {id:'vendor-anthropic', name:'Anthropic',  icon:'🧠', tagline:'Claude · constitutional reasoning',  description:'Long-context · careful instruction-following · the Council\'s most-cited seat on legal and safety motions. Win-rate 73%.', role_count:1, color:'#cc7b51', _latency:'1.8s', _winrate:'73%', _stance:'approve'},
+    {id:'vendor-openai',    name:'OpenAI',     icon:'⚪', tagline:'GPT · agentic + tools',              description:'Strongest on tool-use + agentic reasoning. Aggressive verdicts. Win-rate 68%. Brings the dissent that sharpens Maya\'s plans.', role_count:1, color:'#10a37f', _latency:'1.6s', _winrate:'68%', _stance:'approve'},
+    {id:'vendor-mistral',   name:'Mistral',    icon:'🇫🇷', tagline:'Mistral-Large · European sovereign', description:'Open-weights heritage · fast · strong on multilingual + regulatory. Council\'s preferred legal voice. Win-rate 64%.', role_count:1, color:'#ff7000', _latency:'1.2s', _winrate:'64%', _stance:'approve'},
+    {id:'vendor-nvidia',    name:'NVIDIA NIM', icon:'🟢', tagline:'Nemotron + 119 hosted models',        description:'Maya\'s primary lane. 122 models across 6 reasoning lanes. Refreshed daily by the Reasoning Scout. The empire\'s GPU backbone.', role_count:122, color:'#76b900', _latency:'0.9s', _winrate:'71%', _stance:'approve'},
+    {id:'vendor-deepseek',  name:'DeepSeek',   icon:'🐋', tagline:'R1 · long-chain thinker',             description:'The Council\'s deepest reasoner. Slow but consistently the highest-quality verdict on strategic motions. Win-rate 79%.', role_count:1, color:'#5050ff', _latency:'4.2s', _winrate:'79%', _stance:'approve'},
+    {id:'vendor-qwen',      name:'Qwen',       icon:'🔵', tagline:'Qwen3-Thinking · Alibaba',            description:'Fast reasoning · 235B params · the Analyst seat\'s default. Strong on evidence-driven dissent. Win-rate 66%.', role_count:1, color:'#3580fe', _latency:'1.4s', _winrate:'66%', _stance:'approve'},
+    {id:'vendor-xai',       name:'xAI Grok',   icon:'❎', tagline:'Grok · raw signal',                   description:'Unfiltered counter-arguments. Brings the friction that keeps Maya honest. Win-rate 58%.', role_count:1, color:'#888', _latency:'2.0s', _winrate:'58%', _stance:'abstain'},
+    {id:'vendor-manus',     name:'Manus',      icon:'🤝', tagline:'Master orchestrator · friend',         description:'Mo\'s friend. Seat reserved · pending Manus integration. See [issue #1](https://github.com/mirzatech-ai/maya-sovereign-campus/issues/1).', role_count:1, color:'#f5c542', _latency:'pending', _winrate:'—', _stance:'abstain'},
+    // Additional vendors join via "+ Add Your Model" empty-seat onboarding
+    {id:'vendor-cohere',    name:'Cohere',     icon:'💜', tagline:'Command-R · retrieval-augmented',     description:'Optional seat · RAG specialist · would add depth to Hypermind grounding. Vendor onboarding open.', role_count:1, color:'#7547ff', _latency:'—', _winrate:'—', _stance:'unclaimed'},
+    {id:'vendor-meta',      name:'Meta',       icon:'🌀', tagline:'Llama · open weights',                description:'Optional seat · Llama-3.x via Together/Replicate. Vendor onboarding open.', role_count:1, color:'#0084ff', _latency:'—', _winrate:'—', _stance:'unclaimed'},
+    {id:'vendor-google',    name:'Google',     icon:'🌈', tagline:'Gemini · multimodal',                 description:'Optional seat · Gemini-2.5-Pro · strongest on image/video reasoning. Vendor onboarding open.', role_count:1, color:'#ea4335', _latency:'—', _winrate:'—', _stance:'unclaimed'},
   ];
   function loadRoster(){
     try{
@@ -998,12 +1006,12 @@ body.ambient-error{
   const STATES = ['state-idle','state-executing','state-council','state-error'];
 
   const TAGLINES = [
-    '// PARLIAMENT IN SESSION · DELIBERATION 88% CONSENSUS',
-    '// MAYA REASONING SCOUT FOUND 2 NEW MODELS',
-    '// LEGAL VAULT SEALED 3 CONTRACTS THIS HOUR',
-    '// JAILED AGENT #42 RELEASED · PEER-TAUGHT BY DEEPSEEK-R1',
-    '// HYPERMIND PATTERN CACHE +1 (CONVERSION-LIFT 14%)',
-    '// SWARM DISPATCHED TO REAL-ESTATE-LEADS-GWINNETT',
+    '// 22-SEAT PARLIAMENT · QUORUM REACHED · MOTION CARRIED',
+    '// DEEPSEEK-R1 VS GPT · BRACKET LIVE · WIN-RATE LEADER DEEPSEEK',
+    '// NVIDIA NIM REFRESHED · 122 MODELS CLASSIFIED ACROSS 6 LANES',
+    '// + ADD YOUR MODEL · 30-SECOND VENDOR ONBOARDING OPEN',
+    '// CONSENSUS ORB · 88% APPROVE · STRATEGIC MOTION SEALED',
+    '// THIS IS ARENA.AI · BUT BETTER · AND OURS',
   ];
 
   const DELIBS = [
@@ -1085,29 +1093,12 @@ body.ambient-error{
     }
     stage.innerHTML = tiles.join('');
   }
-  async function loadAgencies(){
-    try{
-      const r = await fetch('/api/staff.php', {cache:'no-store'});
-      if(!r.ok) throw new Error('staff api '+r.status);
-      const j = await r.json();
-      if(j && j.success && Array.isArray(j.agencies)){
-        ZONES_FULL = j.agencies;
-        // Merge any DRAFT agencies Mo created in prior sessions
-        try{
-          const drafts = JSON.parse(localStorage.getItem('maya_draft_agencies')||'[]');
-          if(Array.isArray(drafts) && drafts.length) ZONES_FULL = [...drafts, ...ZONES_FULL];
-        }catch(e){}
-        document.getElementById('floorTagline').textContent =
-          '// '+ZONES_FULL.length+' AGENCIES ONLINE · MAYA ORCHESTRATING';
-        renderZones();
-        renderFilters();
-        setTimeout(rebuildFlows, 80);
-      }
-    }catch(e){
-      console.warn('agency load failed', e);
-      document.getElementById('zoneStage').innerHTML =
-        '<div style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase">Roster unreachable · /api/staff.php offline</div>';
-    }
+  function loadAgencies(){
+    // MirzaTech variant: LLM-vendor seats are LOCAL (no API fetch needed)
+    ZONES_FULL = LLM_SEATS;
+    document.getElementById('floorTagline').textContent = '// ' + ZONES_FULL.length + ' VENDOR SEATS · COUNCIL CONSENSUS 88%';
+    renderZones(); renderFilters();
+    setTimeout(rebuildFlows, 80);
   }
   loadAgencies();
 
@@ -1126,14 +1117,14 @@ body.ambient-error{
   renderMacro();
 
   // ===== Filter chips (department roll-up of the 57 agencies) =====
-  // Curated department buckets — clean human labels, NOT auto-scraped first-words
+  // MirzaTech filter buckets · vendor categorization
   const FILTER_BUCKETS = [
-    {key:'all',         label:'All',          match:()=>true},
-    {key:'tech',        label:'Tech',         match:a=>/engineer|developer|data|cyber|ai|cloud|devops|robot|space/i.test(a.name+' '+a.tagline)},
-    {key:'creative',    label:'Creative',     match:a=>/design|creative|content|media|music|art|video|cinema|film|fashion/i.test(a.name+' '+a.tagline)},
-    {key:'business',    label:'Business',     match:a=>/sales|marketing|customer|finance|account|operation|hr|human|recruit|legal/i.test(a.name+' '+a.tagline)},
-    {key:'industry',    label:'Industry',     match:a=>/manufactur|construct|automotive|aviation|energy|defense|pharma|agriculture|retail/i.test(a.name+' '+a.tagline)},
-    {key:'services',    label:'Services',     match:a=>/hospital|tourism|education|government|nonprofit|insurance|telecom|sport|pet|culinary/i.test(a.name+' '+a.tagline)},
+    {key:'all',       label:'All Seats',    match:()=>true},
+    {key:'seated',    label:'Live Seats',   match:a=>['approve','reject','abstain'].includes(a._stance) && a._stance!=='unclaimed'},
+    {key:'reasoning', label:'Reasoners',    match:a=>/anthropic|deepseek|qwen|reason|think/i.test(a.name+' '+a.tagline)},
+    {key:'fast',      label:'Speed',        match:a=>/nvidia|mistral|grok|nim/i.test(a.name+' '+a.tagline)},
+    {key:'open',      label:'Open Weights', match:a=>/mistral|meta|llama|qwen|deepseek/i.test(a.name+' '+a.tagline)},
+    {key:'open-seat', label:'+ Add Your Model', match:a=>a._stance==='unclaimed'},
   ];
   function getFilters(){ return FILTER_BUCKETS; }
   function renderFilters(){
