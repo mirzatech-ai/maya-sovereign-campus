@@ -187,11 +187,11 @@ body.ambient-error{
 .flows .stream{stroke-dasharray:6 14;animation:flow 1.8s linear infinite}
 @keyframes flow{to{stroke-dashoffset:-200}}
 
-/* legacy big sphere — hidden in v1.5 (replaced by maya-strip mini sphere) */
+/* central Maya sphere — restored in v2.0 (the SimCity hub Gemini drew) */
 .maya-sphere{
-  display:none;
-  position:absolute;left:50%;top:198px;transform:translate(-50%,-50%);
-  width:124px;height:124px;border-radius:50%;
+  display:flex;
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:170px;height:170px;border-radius:50%;
   background:
     radial-gradient(circle at 50% 35%, rgba(255,255,255,.95) 0%, rgba(0,228,255,.5) 20%, rgba(62,155,255,.3) 40%, rgba(8,14,28,.85) 70%, rgba(3,6,12,.95) 100%);
   box-shadow:
@@ -205,8 +205,10 @@ body.ambient-error{
 .maya-sphere::after{content:"";position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(0,228,255,.08);animation:halo 8s linear infinite reverse}
 @keyframes breathe{0%,100%{box-shadow:0 0 80px rgba(0,228,255,.35),inset 0 0 60px rgba(0,228,255,.15),inset 0 0 6px rgba(255,255,255,.4)}50%{box-shadow:0 0 120px rgba(0,228,255,.55),inset 0 0 80px rgba(0,228,255,.25),inset 0 0 8px rgba(255,255,255,.6)}}
 @keyframes halo{to{transform:rotate(360deg)}}
-.maya-sphere .label{font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.24em;color:var(--white);font-weight:700;text-shadow:0 0 24px rgba(0,228,255,.8);text-align:center}
-.maya-sphere .label small{display:block;font-size:7.5px;letter-spacing:.35em;margin-top:3px;color:var(--cyan)}
+.maya-sphere{flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.maya-sphere .label{font-family:'Space Grotesk',sans-serif;font-size:16px;letter-spacing:.28em;color:var(--white);font-weight:700;text-shadow:0 0 24px rgba(0,228,255,.8);text-align:center}
+.maya-sphere .label small{display:block;font-size:8.5px;letter-spacing:.4em;margin-top:4px;color:var(--cyan)}
+.maya-sphere .consensus{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--gold);letter-spacing:.18em;font-family:'JetBrains Mono',monospace;white-space:nowrap;display:none}
 .maya-sphere .consensus{position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--gold);letter-spacing:.2em;font-family:'JetBrains Mono',monospace;white-space:nowrap}
 
 /* satellite zones — positioned around Maya */
@@ -236,8 +238,7 @@ body.ambient-error{
 
 /* Maya-strip + mini-sphere removed in v1.7 (tagline moved to top ticker) */
 .maya-strip,.maya-sphere-mini,.maya-strip-meta{display:none !important}
-/* also fully kill the legacy big sphere and any of its halos that might bleed through */
-.maya-sphere,.maya-sphere::before,.maya-sphere::after{display:none !important;content:none !important}
+/* Big Maya sphere RESTORED in v2.0 (center hub of the SimCity campus) */
 /* Studio face-dropzone must never leak out of its modal — clip it to the Studio modal stacking context */
 #mod-studio:not(.show) .face-dropzone{display:none !important}
 
@@ -280,20 +281,31 @@ body.ambient-error{
 .filter-bar .chip:hover{color:var(--text);border-color:var(--line-strong)}
 .filter-bar .chip.active{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-soft)}
 
-/* TILE GRID — micro view, the 57 staffing agencies */
-#zoneStage{position:absolute;left:20px;right:20px;top:60px;bottom:20px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:9px;z-index:4;padding-right:6px;
-  scrollbar-width:thin;scrollbar-color:rgba(0,228,255,.3) transparent;}
-#zoneStage::-webkit-scrollbar{width:6px}
-#zoneStage::-webkit-scrollbar-thumb{background:rgba(0,228,255,.3);border-radius:3px}
-/* ===== ISOMETRIC ROOM look — each tile is a 3D office, not a flat card ===== */
+/* SPATIAL CAMPUS · v2.0 · 8 ACTIVE rooms around Maya (Gemini's SimCity vision) */
+#zoneStage{position:absolute;left:20px;right:20px;top:60px;bottom:20px;z-index:4;overflow:visible}
+/* Each satellite room is positioned absolutely · ghost-streams flow visibly between them */
 .zone.tile{
-  position:relative;width:auto;min-height:96px;align-self:start;
-  background:
-    linear-gradient(135deg, rgba(28,40,72,.85), rgba(10,16,32,.65)),
-    linear-gradient(180deg, rgba(0,228,255,.04) 0%, transparent 50%);
-  border:1px solid var(--line);
+  position:absolute;width:220px;min-height:112px;
+  background:linear-gradient(135deg, rgba(18,28,52,.32), rgba(8,12,24,.20));
+  border:1px solid rgba(110,170,255,.32);
+  backdrop-filter:blur(3px);
   transform-style:preserve-3d;
 }
+.zone.tile:hover{background:linear-gradient(135deg, rgba(18,28,52,.55), rgba(8,12,24,.42));border-color:var(--line-strong)}
+/* 8-position ring around Maya (clockwise from top-left) */
+.zone.tile[data-pos="0"]{left:4%;top:8%}
+.zone.tile[data-pos="1"]{left:38%;top:2%}
+.zone.tile[data-pos="2"]{right:4%;top:8%}
+.zone.tile[data-pos="3"]{right:4%;top:42%}
+.zone.tile[data-pos="4"]{right:4%;bottom:8%}
+.zone.tile[data-pos="5"]{left:38%;bottom:2%}
+.zone.tile[data-pos="6"]{left:4%;bottom:8%}
+.zone.tile[data-pos="7"]{left:4%;top:42%}
+/* "Add Office" gold-dashed tile — Mo opens Gallery to grow his roster */
+.zone.tile.add-office{background:linear-gradient(135deg,rgba(245,197,66,.10),rgba(245,197,66,.04));border:1px dashed rgba(245,197,66,.5);display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;flex-direction:column;color:var(--gold)}
+.zone.tile.add-office:hover{background:linear-gradient(135deg,rgba(245,197,66,.20),rgba(245,197,66,.08));border-color:var(--gold)}
+.zone.tile.add-office .plus{font-size:34px;line-height:1;color:var(--gold);font-weight:300}
+.zone.tile.add-office .lbl{font-size:9.5px;letter-spacing:.18em;margin-top:4px;font-family:'Space Grotesk',sans-serif;text-transform:uppercase}
 .zone.tile::after{
   /* "floor" lighting glow inside the room */
   content:"";position:absolute;left:8px;right:8px;bottom:8px;height:14px;border-radius:50%;
@@ -667,6 +679,11 @@ body.ambient-error{
 
         <div class="swarm" id="swarm"></div>
 
+        <!-- Maya central sphere · RESTORED in v2.0 as the SimCity hub Gemini drew -->
+        <div class="maya-sphere" onclick="openMayaPanel()">
+          <div class="label">MAYA AI<small>SUPREME ORCHESTRATOR</small></div>
+        </div>
+
         <!-- Filter bar (chips by department) -->
         <!-- Maya-strip removed in v1.7 · rotating tagline moved to the top ticker bar -->
         <div class="filter-bar" id="filterBar"></div>
@@ -918,6 +935,42 @@ body.ambient-error{
     return VIDEO_HINTS.some(h => blob.indexOf(h) !== -1);
   };
 
+  // ===== Mo's ACTIVE ROSTER (v2.0 · Gemini's SimCity vision) =====
+  // Only these 8 agencies are visible in the default Campus view. Others browseable via Gallery.
+  const DEFAULT_ROSTER = [
+    'real-estate-proptech',  // Adeeo
+    'media-entertainment',   // AICineSynth output
+    'design-creative',       // AICineSynth front
+    'operations-logistics',  // Opencrest
+    'retail-ecommerce',      // Storefronts
+    'ai-research',           // Maya brain
+    'cybersecurity',         // always-on protection
+    'customer-success',      // inbound channel
+  ];
+  function loadRoster(){
+    try{
+      const r = JSON.parse(localStorage.getItem('mo_active_roster')||'null');
+      if(Array.isArray(r) && r.length) return r;
+    }catch(e){}
+    return DEFAULT_ROSTER.slice();
+  }
+  function saveRoster(r){ try{ localStorage.setItem('mo_active_roster', JSON.stringify(r)); }catch(e){} }
+  let MO_ROSTER = loadRoster();
+  window.addToRoster = (id)=>{
+    if(!MO_ROSTER.includes(id)) MO_ROSTER.unshift(id);
+    if(MO_ROSTER.length > 8) MO_ROSTER = MO_ROSTER.slice(0,8); // keep ring at 8
+    saveRoster(MO_ROSTER);
+    document.getElementById('stage').classList.remove('view-gallery');
+    document.querySelectorAll('.campus-head .toolbar button').forEach(x=>x.classList.remove('active'));
+    document.querySelector('.campus-head .toolbar button[data-view="campus"]')?.classList.add('active');
+    renderZones(); setTimeout(rebuildFlows, 100);
+  };
+  window.removeFromRoster = (id)=>{
+    MO_ROSTER = MO_ROSTER.filter(x=>x!==id);
+    saveRoster(MO_ROSTER);
+    renderZones(); setTimeout(rebuildFlows, 100);
+  };
+
   // MACRO empire domains — Mo's god-view (the 6+ platforms the empire runs on top of the agencies)
   const MACRO = [
     {id:'mirzatech',  ic:'🏛', name:'MirzaTech.ai',     desc:'<b>Council + Parliament</b> · 22-seat dissent engine'},
@@ -996,27 +1049,38 @@ body.ambient-error{
   function renderZones(){
     const list = document.getElementById('zoneList');
     const stage = document.getElementById('zoneStage');
-    document.getElementById('activeZoneCount').textContent = ZONES_FULL.length;
-    // Left list: short cards (top 12 by role_count for scannability)
-    const topForList = [...ZONES_FULL].sort((a,b)=>(b.role_count||0)-(a.role_count||0)).slice(0,12);
-    list.innerHTML = topForList.map(z=>`
+    document.getElementById('activeZoneCount').textContent = MO_ROSTER.length;
+    // Left list: show ONLY active roster + a count of remaining agencies
+    const activeAgencies = MO_ROSTER.map(id => ZONES_FULL.find(a => a.id === id)).filter(Boolean);
+    list.innerHTML = activeAgencies.map(z=>`
       <div class="zonecard state-idle" data-id="${z.id}" onclick="openZone('${z.id}')">
         <div class="icon" style="${z.color?'border-color:'+z.color+';color:'+z.color+';background:'+z.color+'18':''}">${z.icon||'•'}</div>
         <div class="meta"><div class="name">${escapeHtml(z.name)}</div><div class="desc"><b>${z.role_count||0}</b> roles · ${escapeHtml(z.tagline||'').slice(0,42)}</div></div>
         <div class="state"></div>
-      </div>`).join('');
-    // Stage: ALL agencies as ISOMETRIC ROOMS — humanoid sprites walking inside each office.
-    stage.innerHTML = ZONES_FULL.map((z,i)=>`
-      <div class="zone tile state-idle" data-id="${z.id}" onclick="openZone('${z.id}')">
+      </div>`).join('') + (ZONES_FULL.length > activeAgencies.length ?
+        `<div style="font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:8px;border:1px dashed var(--line);border-radius:8px;margin-top:4px">+ ${ZONES_FULL.length - activeAgencies.length} more in Gallery</div>` : '');
+
+    // Stage: 8 active rooms positioned in a ring around Maya · + Add-Office tile if < 8
+    const ringSlots = 8;
+    const tiles = [];
+    activeAgencies.slice(0, ringSlots).forEach((z, i)=>{
+      tiles.push(`
+      <div class="zone tile state-idle" data-id="${z.id}" data-pos="${i}" onclick="openZone('${z.id}')">
         <div class="glow"></div>
         <div class="head"><span class="num" style="${z.color?'color:'+z.color+';border-color:'+z.color+';background:'+z.color+'22':''}">${(i+1)}</span><span class="stateled"></span></div>
         <div class="name">${z.icon||''} ${escapeHtml(z.name)}</div>
-        <div class="desc"><i>${z.role_count||0} roles</i> · ${escapeHtml(z.tagline||'').slice(0,40)}</div>
+        <div class="desc"><i>${z.role_count||0} roles</i> · ${escapeHtml(z.tagline||'').slice(0,46)}</div>
         <div class="stage-floor"></div>
         <div class="sprite"></div>
         <div class="sprite s2"></div>
         <div class="sprite s3"></div>
-      </div>`).join('');
+      </div>`);
+    });
+    // Fill remaining ring slots with Add-Office tiles
+    for(let i = activeAgencies.length; i < ringSlots; i++){
+      tiles.push(`<div class="zone tile add-office" data-pos="${i}" onclick="document.querySelector('.campus-head .toolbar button[data-view=&quot;gallery&quot;]').click()"><div class="plus">+</div><div class="lbl">Add Office</div></div>`);
+    }
+    stage.innerHTML = tiles.join('');
   }
   async function loadAgencies(){
     try{
@@ -1172,13 +1236,12 @@ body.ambient-error{
   const flows = document.getElementById('flows');
   function rebuildFlows(){
     const s = document.getElementById('stage').getBoundingClientRect();
-    const cx = s.width/2, cy = s.height*0.27; // sphere is at top:198 (rough); flow originates near top center
+    const cx = s.width/2, cy = s.height/2; // Maya is now centered (v2.0)
     const paths = [];
     const packets = [];
-    // Only draw streams to ~12 random rooms at a time, to keep visual focus from being noise
-    const visible = Array.from(document.querySelectorAll('#zoneStage .zone.tile')).filter(el=>el.style.display!=='none');
-    const sample = visible.sort(()=>Math.random()-0.5).slice(0,12);
-    sample.forEach((el,i)=>{
+    // ALL active rooms (8 max) get a stream · packets travel both ways
+    const visible = Array.from(document.querySelectorAll('#zoneStage .zone.tile:not(.add-office)')).filter(el=>el.style.display!=='none');
+    visible.forEach((el,i)=>{
       const r = el.getBoundingClientRect();
       const zx = r.left + r.width/2 - s.left;
       const zy = r.top + r.height/2 - s.top;
@@ -1190,8 +1253,9 @@ body.ambient-error{
       const cls = el.classList.contains('state-council') ? 'gold'
                 : el.classList.contains('state-executing') ? 'green' : '';
       paths.push(`<path id="${pid}" class="stream" stroke="url(#${grad})" d="M${cx},${cy} Q${mx},${my} ${zx},${zy}"/>`);
-      // packet dot traveling along the path
-      packets.push(`<circle class="packet ${cls}" r="3"><animateMotion dur="${2.4+Math.random()*1.6}s" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion></circle>`);
+      // packet dots — one outbound from Maya, one inbound back
+      packets.push(`<circle class="packet ${cls}" r="3.5"><animateMotion dur="${2.4+Math.random()*1.4}s" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion></circle>`);
+      packets.push(`<circle class="packet ${cls}" r="2.5" opacity=".6"><animateMotion dur="${3.2+Math.random()*1.6}s" repeatCount="indefinite" rotate="auto" keyPoints="1;0" keyTimes="0;1"><mpath href="#${pid}"/></animateMotion></circle>`);
     });
     flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
   }
@@ -1687,16 +1751,20 @@ body.ambient-error{
     if(!track) return;
     track.innerHTML = ZONES_FULL.map((z,i)=>{
       const featured = (i===galleryIdx) ? 'featured' : '';
+      const inRoster = MO_ROSTER.includes(z.id);
+      const rosterBtn = inRoster
+        ? `<button class="enter" style="background:rgba(255,91,106,.15);color:var(--red);border:1px solid var(--red)" onclick="event.stopPropagation();removeFromRoster('${z.id}')">− Remove from Roster</button>`
+        : `<button class="enter" style="background:linear-gradient(135deg,#f5c542,#b88a18);color:#03060c" onclick="event.stopPropagation();addToRoster('${z.id}')">+ Add to Roster</button>`;
       return `<div class="gallery-card ${featured}" data-id="${z.id}" onclick="enterGalleryCard('${z.id}', ${i})">
         <div class="ic">${z.icon||'•'}</div>
-        <div class="nm">${escapeHtml(z.name)}</div>
+        <div class="nm">${escapeHtml(z.name)}${inRoster?' <span style="font-size:10px;color:var(--green);letter-spacing:.16em">· IN ROSTER</span>':''}</div>
         <div class="tg">${escapeHtml(z.tagline||'')}</div>
         <div class="ds">${escapeHtml((z.description||'').slice(0,180))}${(z.description||'').length>180?'…':''}</div>
         <div class="stats">
           <div class="stat"><div class="v">${z.role_count||0}</div><div class="l">Roles</div></div>
           <div class="stat"><div class="v">${Math.floor(Math.random()*40)+8}</div><div class="l">Agents</div></div>
         </div>
-        <button class="enter">▸ Enter Office</button>
+        ${rosterBtn}
       </div>`;
     }).join('');
     // scroll so featured card is centered-ish
