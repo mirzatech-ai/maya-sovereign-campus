@@ -64,10 +64,10 @@ body.ambient-error{
 }
 .topstrip .brand{display:flex;align-items:center;gap:10px;color:var(--white);font-weight:700;letter-spacing:.2em}
 .topstrip .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
-.ticker{flex:1;min-width:0;overflow:hidden;position:relative;height:100%;display:flex;align-items:center;gap:22px}
-.ticker .item{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;color:var(--text);flex:0 0 auto}
-.ticker .item.notif{flex:1 1 auto;min-width:120px;max-width:360px;overflow:hidden;text-overflow:ellipsis}
-.ticker .item.notif span{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ticker{flex:1;min-width:0;overflow:hidden;position:relative;height:100%;display:flex;align-items:center;gap:18px}
+.ticker .item{display:flex;align-items:center;gap:8px;white-space:nowrap;color:var(--text);flex:0 0 auto}
+.ticker .item.notif{flex:0 0 280px;width:280px;overflow:hidden;text-overflow:ellipsis;justify-content:flex-start}
+.ticker .item.notif span{display:inline-block;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ticker .item b{color:var(--white);font-weight:600}
 .ticker .item .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.6s infinite}
 .ticker .item.gold .pulse{background:var(--gold);box-shadow:0 0 10px var(--gold)}
@@ -160,11 +160,11 @@ body.ambient-error{
 
 /* ==================== CAMPUS (CENTER) ==================== */
 .campus{position:relative;display:flex;flex-direction:column;padding:0;background:transparent;border:none;box-shadow:none}
-.campus-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px 12px;color:var(--white)}
-.campus-head h1{margin:0;font-family:'Space Grotesk',sans-serif;font-size:18px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.campus-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px 12px;color:var(--white);gap:14px;flex-wrap:nowrap}
+.campus-head h1{margin:0;font-family:'Space Grotesk',sans-serif;font-size:15px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .campus-head h1 .who{color:var(--cyan)}
-.campus-head .toolbar{display:flex;gap:8px}
-.campus-head .toolbar button{background:rgba(10,18,38,.6);color:var(--text);border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:11px;letter-spacing:.1em;cursor:pointer;font-family:'Space Grotesk',sans-serif;text-transform:uppercase;transition:all .2s}
+.campus-head .toolbar{display:flex;gap:6px;flex:0 0 auto}
+.campus-head .toolbar button{background:rgba(10,18,38,.6);color:var(--text);border:1px solid var(--line);border-radius:99px;padding:6px 11px;font-size:10.5px;letter-spacing:.08em;cursor:pointer;font-family:'Space Grotesk',sans-serif;text-transform:uppercase;transition:all .2s}
 .campus-head .toolbar button:hover{border-color:var(--line-strong);color:var(--white)}
 .campus-head .toolbar button.active{background:var(--cyan-soft);color:var(--cyan);border-color:var(--cyan)}
 
@@ -244,15 +244,18 @@ body.ambient-error{
 /* (legacy macro-band CSS retained but unused) */
 .macro-band{display:none}
 
-/* Maya command bar — relocated INSIDE the stage frame at the bottom (above heartbeat strip) */
-.maya-cmd.in-stage{position:absolute;left:18px;right:18px;bottom:14px;z-index:7;border-radius:99px;padding:5px 6px 5px 16px}
-.maya-cmd.in-stage input{font-size:12.5px}
-.maya-cmd.in-stage .pre{font-size:10.5px}
-.maya-balloon{position:absolute;left:18px;right:18px;bottom:58px;z-index:7}
+/* Maya command bar — FIXED to viewport bottom above heartbeat strip · ALWAYS visible */
+.maya-cmd.in-stage{position:fixed;left:344px;right:60px;bottom:96px;z-index:60;border-radius:99px;padding:6px 6px 6px 18px;box-shadow:0 14px 40px rgba(0,0,0,.55), 0 0 22px rgba(0,228,255,.15)}
+.maya-cmd.in-stage input{font-size:13px}
+.maya-cmd.in-stage .pre{font-size:11px}
+.maya-balloon{position:fixed;left:344px;right:60px;bottom:148px;z-index:59}
 
-/* shrink zoneStage bottom so it doesn't overlap with the in-stage cmd bar */
-@media (min-width:980px){
-  #zoneStage{bottom:60px !important}
+/* keep heartbeat strip below the cmd bar */
+.heartbeat-strip{position:relative;z-index:5}
+/* the zoneStage still gets bottom room because the cmd bar is fixed (overlaps if needed but won't be clipped by stage frame) */
+@media (max-width:1100px){
+  .maya-cmd.in-stage{left:14px;right:14px}
+  .maya-balloon{left:14px;right:14px}
 }
 .macro{position:relative;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(18,28,52,.85),rgba(8,12,24,.7));cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .3s;font-size:11px;backdrop-filter:blur(8px)}
 .macro:hover{transform:translateY(-2px);border-color:var(--line-strong)}
