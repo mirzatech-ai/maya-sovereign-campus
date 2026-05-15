@@ -39,7 +39,10 @@
   localStorage.setItem(SESSION_KEY, sessionId);
   let history = [];
   try { const c = localStorage.getItem(HIST_KEY_FN(sessionId)) || sessionStorage.getItem(HIST_KEY_FN(sessionId)); if (c) history = JSON.parse(c); } catch (_) {}
-  let ttsOn = sessionStorage.getItem(TTS_KEY) === '1';
+  // v1.16.0 · TTS default ON · Mo verbatim "I want the real experience"
+  // Only off if explicitly toggled off (stored as '0')
+  let ttsOn = sessionStorage.getItem(TTS_KEY) !== '0';
+  let convoMode = sessionStorage.getItem('maya_os_convo_mode_v1') === '1';  // continuous mic re-arm
   let currentEngine = localStorage.getItem(ENG_KEY) || 'auto';
   let currentMode = 'chat';
 
@@ -637,6 +640,10 @@
           if (btn) btn.classList.remove('speaking');
           setAudioState('idle', 'no audio');
           _currentAudio = null;
+          // v1.16.0 · convo mode · re-arm mic after Maya finishes speaking
+          if (convoMode && typeof window._mayaSpeakAndListen === 'function') {
+            setTimeout(() => window._mayaSpeakAndListen(), 300);
+          }
         };
         await _currentAudio.play();
         return;
@@ -647,7 +654,14 @@
     if (window.speechSynthesis) {
       const u = new SpeechSynthesisUtterance(text);
       u.rate = 1.05; u.pitch = persona === 'maya' || persona === 'madzida' ? 1.1 : 0.9;
-      u.onend = u.onerror = () => { if (btn) btn.classList.remove('speaking'); setAudioState('idle', 'no audio'); };
+      u.onend = u.onerror = () => {
+        if (btn) btn.classList.remove('speaking');
+        setAudioState('idle', 'no audio');
+        // v1.16.0 · convo re-arm on fallback path too
+        if (convoMode && typeof window._mayaSpeakAndListen === 'function') {
+          setTimeout(() => window._mayaSpeakAndListen(), 300);
+        }
+      };
       window.speechSynthesis.speak(u);
     } else {
       if (btn) btn.classList.remove('speaking');
@@ -659,20 +673,59 @@
   $('asResume').addEventListener('click', () => { if (window.speechSynthesis) { window.speechSynthesis.resume(); setAudioState('speaking', asText.textContent); } });
   $('asStop')  .addEventListener('click', () => { if (window.speechSynthesis) { window.speechSynthesis.cancel(); setAudioState('idle', 'no audio'); } });
 
-  // ── STT ───────────────────────────────────────────────────────────
+  // ── STT · v1.16.0 · Web Speech + auto-send + convo mode ───────────
+  // Shared SR class for both chat composer and Campus cmd bar.
+  // Convo mode keeps the loop running: Maya speaks → mic re-arms → Mo speaks → send → Maya speaks → ...
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  window._mayaSR = SR;   // expose for Campus mic to share
   if (SR) {
     const recog = new SR();
     recog.continuous = false; recog.interimResults = true;
     recog.lang = navigator.language || 'en-US';
-    recog.onresult = e => { let txt = ''; for (let i = e.resultIndex; i < e.results.length; i++) txt += e.results[i][0].transcript; msgEl.value = txt; autosize(); };
-    recog.onerror = () => micBt.classList.remove('recording');
-    recog.onend   = () => micBt.classList.remove('recording');
+    let _gotFinalSpeech = false;
+    recog.onresult = e => {
+      let txt = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        txt += e.results[i][0].transcript;
+        if (e.results[i].isFinal) _gotFinalSpeech = true;
+      }
+      msgEl.value = txt; autosize();
+    };
+    recog.onerror = () => { micBt.classList.remove('recording'); _gotFinalSpeech = false; };
+    recog.onend = () => {
+      micBt.classList.remove('recording');
+      // v1.16.0 · auto-send on speech end if there's content
+      const final = (msgEl.value || '').trim();
+      if (_gotFinalSpeech && final.length > 1) {
+        _gotFinalSpeech = false;
+        // Trigger send the same way the Send button does
+        if (typeof handleSend === 'function') handleSend();
+        else if ($('sendBtn')) $('sendBtn').click();
+      }
+    };
+    window._mayaSpeakAndListen = function() {
+      // Used by convo mode after Maya finishes speaking
+      if (convoMode && msgEl) {
+        try { recog.start(); micBt.classList.add('recording'); } catch (_) {}
+      }
+    };
     micBt.addEventListener('click', () => {
       if (micBt.classList.contains('recording')) { recog.stop(); return; }
       try { recog.start(); micBt.classList.add('recording'); } catch (_) {}
     });
   } else { micBt.disabled = true; micBt.title = 'Speech recognition not supported'; }
+
+  // v1.16.0 · convo mode toggle in audio strip · re-arms mic after Maya speaks
+  const asConvoToggle = $('asConvoToggle');
+  function setConvoMode(v) {
+    convoMode = !!v;
+    if (asConvoToggle) asConvoToggle.classList.toggle('on', v);
+    sessionStorage.setItem('maya_os_convo_mode_v1', v ? '1' : '0');
+  }
+  if (asConvoToggle) {
+    asConvoToggle.classList.toggle('on', convoMode);
+    asConvoToggle.addEventListener('click', () => setConvoMode(!convoMode));
+  }
 
   // ── Attach ────────────────────────────────────────────────────────
   attachBt.addEventListener('click', () => {
@@ -2398,6 +2451,11 @@
     campusCmdInput.value = '';
     campusCmdSend.disabled = false;
 
+    // v1.16.0 · auto-speak Maya's answer in Campus when TTS is on (default ON)
+    if (ttsOn && typeof speakText === 'function') {
+      speakText(answer, null);
+    }
+
     // Emit "done" event so packet completes
     try {
       await fetch('https://iamsuperio.cloud/api/maya_event', {
@@ -2410,6 +2468,40 @@
   if (campusCmdInput) campusCmdInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); campusCmdRun(); }
   });
+
+  // v1.16.0 · Mic button on Campus cmd bar · Web Speech API · auto-send when speech ends
+  const campusCmdMic = $('campusCmdMic');
+  if (campusCmdMic && window._mayaSR) {
+    const SR2 = window._mayaSR;
+    const cr = new SR2();
+    cr.continuous = false; cr.interimResults = true;
+    cr.lang = navigator.language || 'en-US';
+    let _gotFinal = false;
+    cr.onresult = e => {
+      let txt = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        txt += e.results[i][0].transcript;
+        if (e.results[i].isFinal) _gotFinal = true;
+      }
+      campusCmdInput.value = txt;
+    };
+    cr.onerror = () => { campusCmdMic.classList.remove('recording'); _gotFinal = false; };
+    cr.onend = () => {
+      campusCmdMic.classList.remove('recording');
+      const final = (campusCmdInput.value || '').trim();
+      if (_gotFinal && final.length > 1) {
+        _gotFinal = false;
+        campusCmdRun();
+      }
+    };
+    campusCmdMic.addEventListener('click', () => {
+      if (campusCmdMic.classList.contains('recording')) { cr.stop(); return; }
+      try { cr.start(); campusCmdMic.classList.add('recording'); } catch (_) {}
+    });
+  } else if (campusCmdMic) {
+    campusCmdMic.disabled = true;
+    campusCmdMic.title = 'Speech recognition not supported in this browser';
+  }
 
   // ── v1.11.1 · PHONE BRIDGE · Mo's Samsung Fold 5 / Termux · Phase 1 · 2026-05-15 ──
   const PHONE_KEY_URL   = 'maya_os_phone_url_v1';

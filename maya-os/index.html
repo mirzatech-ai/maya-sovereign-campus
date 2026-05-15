@@ -205,6 +205,7 @@
       <span class="as-text"  id="asText">no audio</span>
       <span class="as-spacer"></span>
       <button id="asTtsToggle" type="button" title="Auto-read replies">🔊 auto</button>
+      <button id="asConvoToggle" type="button" title="Continuous conversation · Maya listens, replies, listens again">💬 convo</button>
       <button id="asPause"  type="button" title="Pause">⏸</button>
       <button id="asResume" type="button" title="Resume">▶</button>
       <button id="asStop"   type="button" title="Stop" class="hot">⏹</button>
@@ -927,10 +928,11 @@
           </div>
         </aside>
 
-        <!-- v1.12.0 · Maya Command Bar inside the Campus floor · Skill #8 · Mo 2026-05-15 -->
+        <!-- v1.16.0 · Maya Command Bar inside the Campus floor · Skill #8 · auto-speak + mic ·  2026-05-15 -->
         <div class="campus-cmd">
           <span class="cc-pre">MAYA</span>
-          <input id="campusCmdInput" type="text" placeholder="Tell Maya what to do · she runs it · packets show in the floor (e.g. 'open files in /downloads' · 'ssh root@76.13.26.130 uptime' · 'brief my email')" />
+          <input id="campusCmdInput" type="text" placeholder="Talk to Maya · type or tap 🎤 to speak · she answers in voice (Kokoro)" />
+          <button id="campusCmdMic" type="button" title="Tap to speak · tap again to stop">🎤</button>
           <button id="campusCmdSend" type="button" title="Send">→</button>
         </div>
         <div class="campus-balloon" id="campusBalloon" hidden></div>

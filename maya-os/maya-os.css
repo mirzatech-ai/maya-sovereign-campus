@@ -1331,6 +1331,20 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .campus-cmd button:hover  { filter: brightness(1.12); }
 .campus-cmd button:active { transform: translateY(1px); }
 .campus-cmd button:disabled { opacity: .45; cursor: not-allowed; }
+
+/* v1.16.0 · Campus mic button · separate styling from the send arrow */
+#campusCmdMic {
+  background: transparent; color: var(--camp-cyan); border: 1px solid var(--camp-cyan);
+  padding: 6px 12px; font-size: 14px;
+}
+#campusCmdMic:hover { background: rgba(0,228,255,.10); }
+#campusCmdMic.recording {
+  background: var(--camp-red); color: #fff; border-color: var(--camp-red);
+  animation: bellPulse 1s ease-in-out infinite;
+}
+
+/* Convo mode toggle in audio strip */
+#asConvoToggle.on { background: rgba(0,228,255,.18); color: var(--accent); }
 .campus-balloon {
   grid-area: balloon;
   background: linear-gradient(135deg, rgba(10,18,38,.95), rgba(8,12,24,.92));
