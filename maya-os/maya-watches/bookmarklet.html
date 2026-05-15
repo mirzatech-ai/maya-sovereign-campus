@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Maya Watches · Bookmarklet</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 720px; margin: 40px auto; padding: 20px; background: #0a0f1c; color: #eef2f9; }
+  h1 { font-size: 22px; color: #00d4ff; margin-bottom: 8px; }
+  .lead { color: #9aa4bb; margin-bottom: 32px; line-height: 1.6; }
+  .drag-block {
+    background: linear-gradient(135deg, rgba(0,212,255,0.10), rgba(245,197,66,0.06));
+    border: 2px dashed rgba(0,212,255,0.5);
+    border-radius: 12px; padding: 28px; text-align: center; margin: 24px 0;
+  }
+  .bookmarklet {
+    display: inline-block; padding: 12px 22px;
+    background: linear-gradient(135deg, #00d4ff, #b347ff); color: #fff;
+    border-radius: 99px; text-decoration: none; font-weight: 700; font-size: 16px;
+    cursor: grab; user-select: none;
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+  }
+  .bookmarklet:active { cursor: grabbing; }
+  ol { padding-left: 20px; line-height: 1.7; }
+  ol li { margin-bottom: 8px; }
+  code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .note { font-size: 13px; color: #6a7589; background: rgba(245,197,66,0.06); border-left: 3px solid #f5c542; padding: 10px 14px; margin: 16px 0; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<h1>🔍 Maya Watches · Bookmarklet</h1>
+<p class="lead">Drag the cyan-purple pill below onto your Chrome bookmark bar. Click it on any page, anytime — Maya sees the URL, page title, and any text you've highlighted. Works on desktop AND phone Chrome (long-press to add).</p>
+
+<div class="drag-block">
+  <p style="margin-bottom: 20px;"><strong>👇 Drag this onto your bookmark bar 👇</strong></p>
+  <a class="bookmarklet"
+     href="javascript:(function(){var s=window.getSelection?window.getSelection().toString():'';var d={actor:'browser_bookmarklet',action:'page_captured',target:location.href.slice(0,200),status:'done',room:'maya_brain',result:JSON.stringify({title:document.title.slice(0,120),h1:(document.querySelector('h1')||{}).innerText||'',selection:s.slice(0,800),snippet:(document.body.innerText||'').slice(0,240).replace(/\s+/g,' ').trim(),url:location.href}).slice(0,1500)};fetch('https://iamsuperio.cloud/api/maya_event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(j){var n=document.createElement('div');n.style.cssText='position:fixed;top:18px;right:18px;z-index:2147483647;padding:12px 18px;background:linear-gradient(135deg,%2300d4ff,%23b347ff);color:%23fff;border-radius:99px;font-family:sans-serif;font-size:14px;font-weight:600;box-shadow:0 4px 18px rgba(0,212,255,0.4);';n.textContent='✓ Maya got it';document.body.appendChild(n);setTimeout(function(){n.style.opacity='0';n.style.transition='opacity 0.5s';setTimeout(function(){n.remove()},500)},1800)}).catch(function(e){alert('Maya not reachable: '+e.message)})})();">
+     🔍 Send to Maya
+  </a>
+</div>
+
+<h2 style="font-size: 16px; color: #00d4ff; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 32px;">How to install (15 seconds)</h2>
+
+<ol>
+  <li><strong>Make sure the bookmark bar is visible</strong> · in Chrome press <code>Ctrl+Shift+B</code> if it's hidden</li>
+  <li><strong>Drag the cyan pill above</strong> from this page onto your bookmark bar</li>
+  <li>Done. You'll see a bookmark titled "🔍 Send to Maya" in your bar</li>
+</ol>
+
+<h2 style="font-size: 16px; color: #00d4ff; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 32px;">How to use</h2>
+
+<ol>
+  <li>Go to ANY web page</li>
+  <li>(Optional) highlight some text on the page</li>
+  <li>Click the "🔍 Send to Maya" bookmark</li>
+  <li>A small "✓ Maya got it" badge pops up top-right for ~2 seconds</li>
+  <li>Maya OS Campus floor shows the packet · Maya's event log has the entry</li>
+</ol>
+
+<div class="note">
+  <strong>What Maya gets:</strong> URL · page title · first H1 · 240-char text snippet from the page · any text you highlighted (up to 800 chars). Nothing else. Nothing automatic — you choose what to send by clicking. Less surveillance than the extension would have been; less friction too.
+</div>
+
+<h2 style="font-size: 16px; color: #00d4ff; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 32px;">Phone Chrome (Samsung Fold 5)</h2>
+
+<p>Phones don't have a visible bookmark bar but you can still trigger this:</p>
+<ol>
+  <li>Open this page on your phone: <a href="https://iamsuperio.cloud/maya-watches/bookmarklet.html" style="color:#00d4ff">iamsuperio.cloud/maya-watches/bookmarklet.html</a></li>
+  <li>Long-press the cyan pill → "Copy link address"</li>
+  <li>In Chrome on phone: tap the URL bar → start typing "send to maya" → choose "Add new bookmark" → paste the link as URL → save</li>
+  <li>On any page: tap URL bar → type "send to maya" → tap the bookmark suggestion that appears → done</li>
+</ol>
+
+<div class="note">
+  <strong>Why not the extension?</strong> Google quietly deprecated the <code>--load-extension</code> flag in Chrome 137 as an anti-malware measure. Auto-installing unpacked extensions on standard Chrome no longer works — only Chrome Web Store extensions install programmatically. The bookmarklet is the friction-free alternative that survives this Chrome policy.
+</div>
+
+</body>
+</html>
