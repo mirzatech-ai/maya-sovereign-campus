@@ -1,0 +1,174 @@
+<!-- ============ HABITAT EMBED · Parliament v1 · 22 seats / 5 rounds · injected 2026-05-15 ============ -->
+<style>
+.habitat-embed-parl{position:relative;height:600px;border-radius:18px;border:1px solid rgba(0,210,255,.22);background:linear-gradient(180deg,rgba(6,10,22,.6),rgba(3,5,12,.85));overflow:hidden;margin:24px 0 18px;font-family:'Syne','Space Grotesk',sans-serif}
+.habitat-embed-parl .grid-floor{position:absolute;inset:0;background-image:linear-gradient(rgba(0,210,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.06) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);pointer-events:none}
+.habitat-embed-parl svg.flows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.habitat-embed-parl svg.flows path{fill:none;stroke-width:1.4;stroke-linecap:round;filter:drop-shadow(0 0 5px currentColor)}
+.habitat-embed-parl svg.flows .stream{stroke-dasharray:5 12;animation:hbflowp 1.8s linear infinite}
+@keyframes hbflowp{to{stroke-dashoffset:-180}}
+.habitat-embed-parl .chancellor{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(255,242,192,.95) 0%,rgba(240,192,64,.55) 18%,rgba(184,138,24,.3) 42%,rgba(8,14,28,.85) 72%,rgba(3,6,12,.95) 100%);box-shadow:0 0 100px rgba(240,192,64,.55),inset 0 0 70px rgba(240,192,64,.22);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:3;animation:hbbreathep 6s ease-in-out infinite}
+.habitat-embed-parl .chancellor::before{content:"";position:absolute;inset:-12px;border-radius:50%;border:1px solid rgba(240,192,64,.22);animation:hbhalop 4s linear infinite}
+.habitat-embed-parl .chancellor::after{content:"";position:absolute;inset:-28px;border-radius:50%;border:1px solid rgba(240,192,64,.12);animation:hbhalop 8s linear infinite reverse}
+@keyframes hbbreathep{0%,100%{box-shadow:0 0 100px rgba(240,192,64,.55),inset 0 0 70px rgba(240,192,64,.22)}50%{box-shadow:0 0 140px rgba(240,192,64,.7),inset 0 0 90px rgba(240,192,64,.32)}}
+@keyframes hbhalop{to{transform:rotate(360deg)}}
+.habitat-embed-parl .chancellor b{color:#fff2c0;font-size:13px;letter-spacing:.26em;text-shadow:0 0 22px rgba(240,192,64,.9);font-weight:700;text-align:center}
+.habitat-embed-parl .chancellor small{color:#f0c040;font-size:8px;letter-spacing:.34em;margin-top:5px;display:block}
+.habitat-embed-parl .seat{position:absolute;width:148px;min-height:72px;padding:8px 10px;border-radius:12px;background:linear-gradient(135deg,rgba(18,28,52,.36),rgba(8,12,24,.28));border:1px solid rgba(110,170,255,.32);backdrop-filter:blur(3px);z-index:4;left:50%;top:50%;transform:translate(-50%,-50%) scale(.92);opacity:0;transition:opacity .25s ease,transform .25s ease,border-color .3s,box-shadow .3s;font-size:.65rem}
+.habitat-embed-parl .seat.placed{opacity:1;transform:none}
+.habitat-embed-parl .seat .num{position:absolute;top:5px;left:6px;width:18px;height:18px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;color:#00d2ff;background:rgba(0,210,255,.10)}
+.habitat-embed-parl .seat .led{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:#444}
+.habitat-embed-parl .seat .rd{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;margin-left:22px;color:#7e8bb0}
+.habitat-embed-parl .seat .nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.74rem;color:#fff;margin-left:22px;line-height:1.15;margin-top:1px}
+.habitat-embed-parl .seat .lat{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.08em;color:#7e8bb0;margin-top:5px;margin-left:22px}
+/* round-tinted seat borders */
+.habitat-embed-parl .seat.r1{border-color:rgba(38,215,130,.55);box-shadow:0 0 16px rgba(38,215,130,.15) inset}
+.habitat-embed-parl .seat.r1 .num,.habitat-embed-parl .seat.r1 .rd{color:#26d782}
+.habitat-embed-parl .seat.r1 .led{background:#26d782;box-shadow:0 0 9px #26d782}
+.habitat-embed-parl .seat.r2{border-color:rgba(255,84,105,.50);box-shadow:0 0 16px rgba(255,84,105,.14) inset}
+.habitat-embed-parl .seat.r2 .num,.habitat-embed-parl .seat.r2 .rd{color:#ff5469}
+.habitat-embed-parl .seat.r2 .led{background:#ff5469;box-shadow:0 0 9px #ff5469}
+.habitat-embed-parl .seat.r3{border-color:rgba(0,210,255,.55);box-shadow:0 0 16px rgba(0,210,255,.14) inset}
+.habitat-embed-parl .seat.r3 .num,.habitat-embed-parl .seat.r3 .rd{color:#00d2ff}
+.habitat-embed-parl .seat.r3 .led{background:#00d2ff;box-shadow:0 0 9px #00d2ff}
+.habitat-embed-parl .seat.r4{border-color:rgba(140,80,255,.55);box-shadow:0 0 16px rgba(140,80,255,.16) inset}
+.habitat-embed-parl .seat.r4 .num,.habitat-embed-parl .seat.r4 .rd{color:#a47bff}
+.habitat-embed-parl .seat.r4 .led{background:#a47bff;box-shadow:0 0 9px #a47bff}
+.habitat-embed-parl .seat.r5{border-color:rgba(240,192,64,.55);box-shadow:0 0 16px rgba(240,192,64,.18) inset}
+.habitat-embed-parl .seat.r5 .num,.habitat-embed-parl .seat.r5 .rd{color:#f0c040}
+.habitat-embed-parl .seat.r5 .led{background:#f0c040;box-shadow:0 0 9px #f0c040}
+.habitat-embed-parl .seat.active{transform:scale(1.06);z-index:5}
+.habitat-embed-parl .seat.done{opacity:.65}
+.habitat-embed-parl-section{margin:24px 0}
+.habitat-embed-parl-section .toggle-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 2px}
+.habitat-embed-parl-section .toggle-classic{background:rgba(8,12,18,.55);border:1px solid rgba(0,210,255,.22);color:#a8b3c4;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 12px;border-radius:99px;cursor:pointer;transition:all .2s}
+.habitat-embed-parl-section .toggle-classic:hover{border-color:#00d2ff;color:#00d2ff}
+.habitat-embed-parl-section .pulse-tag{color:#f0c040;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase}
+.habitat-embed-parl-section.classic-hidden #chamber,.habitat-embed-parl-section.classic-hidden .verdict-strip,.habitat-embed-parl-section.classic-hidden .round-rail{display:none}
+</style>
+<div class="habitat-embed-parl-section" id="habitat-embed-parl-section">
+  <div class="toggle-row">
+    <span class="pulse-tag">◉ Live Parliament · Habitat View · 22 seats / 5 rounds</span>
+    <button class="toggle-classic" onclick="document.getElementById('habitat-embed-parl-section').classList.toggle('classic-hidden')">Toggle Classic View</button>
+  </div>
+  <div class="habitat-embed-parl" id="habitat-embed-parl">
+    <div class="grid-floor"></div>
+    <svg class="flows" id="habitat-flows-parl" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="hbpg_cy" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00d2ff" stop-opacity="0"/><stop offset="50%" stop-color="#00d2ff" stop-opacity=".7"/><stop offset="100%" stop-color="#00d2ff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="hbpg_au" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f0c040" stop-opacity="0"/><stop offset="50%" stop-color="#f0c040" stop-opacity=".85"/><stop offset="100%" stop-color="#f0c040" stop-opacity="0"/></linearGradient>
+      </defs>
+    </svg>
+    <div class="chancellor"><b>CHANCELLOR</b><small>22 SEATS · 5 ROUNDS</small></div>
+    <div id="habitat-parl-seats"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var host = document.getElementById('habitat-embed-parl');
+  var seatsHost = document.getElementById('habitat-parl-seats');
+  var flows = document.getElementById('habitat-flows-parl');
+  // Canonical 22 seats across 5 rounds (Proponents 9 · Skeptics 4 · Specialists 5 · Polygeists 3 · Synthesis 1)
+  var SEATS = [];
+  var roundDef = [
+    {r:1, label:'Proponents',  count:9, role:'agentic happy-path'},
+    {r:2, label:'Skeptics',    count:4, role:'find every flaw'},
+    {r:3, label:'Specialists', count:5, role:'domain depth'},
+    {r:4, label:'Polygeists',  count:3, role:'adversarial robustness'},
+    {r:5, label:'Synthesis',   count:1, role:'Aggregator + Chancellor'},
+  ];
+  var i=1;
+  roundDef.forEach(function(rd){
+    for (var k=0; k<rd.count; k++) SEATS.push({num:i++, r:rd.r, label:rd.label, role:rd.role});
+  });
+
+  function placeSeats(){
+    seatsHost.innerHTML = SEATS.map(function(s){
+      return '<div class="seat r'+s.r+'" data-i="'+s.num+'">'+
+             '<span class="num">'+s.num+'</span>'+
+             '<span class="led"></span>'+
+             '<div class="rd">R'+s.r+' · '+s.label+'</div>'+
+             '<div class="nm">SEAT '+String(s.num).padStart(2,'0')+'</div>'+
+             '<div class="lat">'+s.role+'</div>'+
+             '</div>';
+    }).join('');
+    requestAnimationFrame(function(){ requestAnimationFrame(layoutRing); });
+    setTimeout(layoutRing, 80);
+    setTimeout(layoutRing, 320);
+    setTimeout(layoutRing, 900);
+  }
+
+  function layoutRing(){
+    var W = host.clientWidth, H = host.clientHeight;
+    var tiles = seatsHost.querySelectorAll('.seat');
+    var N = tiles.length; if(N === 0) return;
+    var m = tiles[0].getBoundingClientRect();
+    var tileW = Math.max(140, m.width || 148), tileH = Math.max(70, m.height || 80);
+    var orbHalf = 100, edge = 12, gap = 18;
+    var maxRx = (W/2) - tileW/2 - edge;
+    var maxRy = (H/2) - tileH/2 - edge;
+    var minR  = orbHalf + Math.max(tileW, tileH)/2 + gap;
+    var rx = Math.max(minR, maxRx), ry = Math.max(minR, maxRy);
+    tiles.forEach(function(el, i){
+      var a = (i / N) * Math.PI * 2 - Math.PI/2;
+      var x = W/2 + rx * Math.cos(a) - tileW/2;
+      var y = H/2 + ry * Math.sin(a) - tileH/2;
+      el.style.left = Math.round(Math.max(edge, Math.min(W - tileW - edge, x))) + 'px';
+      el.style.top  = Math.round(Math.max(edge, Math.min(H - tileH - edge, y))) + 'px';
+      el.style.transform = 'none';
+      el.classList.add('placed');
+    });
+    buildFlows();
+  }
+
+  function buildFlows(){
+    var W = host.clientWidth, H = host.clientHeight;
+    flows.setAttribute('viewBox','0 0 '+Math.round(W)+' '+Math.round(H));
+    var cx = W/2, cy = H/2;
+    var tiles = seatsHost.querySelectorAll('.seat');
+    var paths = [], packets = [];
+    tiles.forEach(function(el, i){
+      var r = el.getBoundingClientRect();
+      var hr = host.getBoundingClientRect();
+      var zx = r.left + r.width/2 - hr.left;
+      var zy = r.top + r.height/2 - hr.top;
+      var mx = (cx+zx)/2 + (i%2===0?-22:22);
+      var my = (cy+zy)/2 + (i%2===0?-30:30);
+      var pid = 'hbpp'+i;
+      paths.push('<path id="'+pid+'" class="stream" stroke="url(#hbpg_cy)" d="M'+cx+','+cy+' Q'+mx+','+my+' '+zx+','+zy+'"/>');
+      if (i % 3 === 0) packets.push('<circle r="2.5" fill="currentColor" style="color:#00d2ff"><animateMotion dur="'+(2.6+Math.random()*1.4)+'s" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion></circle>');
+    });
+    flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
+  }
+
+  // Hook to existing parliament-theater scripted demo: when a round-pill goes .active,
+  // pulse all seats with that round number. When .done, dim them.
+  function syncFromRoundPills(){
+    document.querySelectorAll('.round-pill').forEach(function(p){
+      var r = p.dataset.round;
+      if(!r) return;
+      var matching = seatsHost.querySelectorAll('.seat.r'+r);
+      if(p.classList.contains('active')){
+        matching.forEach(function(s){ s.classList.add('active'); s.classList.remove('done'); });
+      } else if(p.classList.contains('done')){
+        matching.forEach(function(s){ s.classList.remove('active'); s.classList.add('done'); });
+      } else {
+        matching.forEach(function(s){ s.classList.remove('active','done'); });
+      }
+    });
+  }
+  // Watch the round-pill DOM for class changes
+  var observer = new MutationObserver(syncFromRoundPills);
+  document.querySelectorAll('.round-pill').forEach(function(p){
+    observer.observe(p, {attributes:true, attributeFilter:['class']});
+  });
+
+  placeSeats();
+  syncFromRoundPills();
+
+  var rt = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt); rt = setTimeout(function(){ layoutRing(); }, 100);
+  });
+})();
+</script>
+<!-- ============ END PARLIAMENT HABITAT EMBED ============ -->

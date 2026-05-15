@@ -1,0 +1,162 @@
+<!-- ============ HABITAT EMBED · v1 · injected 2026-05-15 · replaces the live-grid VISUAL · feed unchanged ============ -->
+<style>
+.habitat-embed{position:relative;height:520px;border-radius:18px;border:1px solid rgba(0,210,255,.22);background:linear-gradient(180deg,rgba(6,10,22,.6),rgba(3,5,12,.85));overflow:hidden;margin:24px 0 18px;font-family:'Syne','Space Grotesk',sans-serif}
+.habitat-embed .grid-floor{position:absolute;inset:0;background-image:linear-gradient(rgba(0,210,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.06) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);pointer-events:none}
+.habitat-embed svg.flows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.habitat-embed svg.flows path{fill:none;stroke-width:1.5;stroke-linecap:round;filter:drop-shadow(0 0 6px currentColor)}
+.habitat-embed svg.flows .stream{stroke-dasharray:6 14;animation:hbflow 1.8s linear infinite}
+@keyframes hbflow{to{stroke-dashoffset:-200}}
+.habitat-embed .orb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:170px;height:170px;border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(255,242,192,.95) 0%,rgba(240,192,64,.55) 18%,rgba(184,138,24,.3) 42%,rgba(8,14,28,.85) 72%,rgba(3,6,12,.95) 100%);box-shadow:0 0 80px rgba(240,192,64,.45),inset 0 0 60px rgba(240,192,64,.18);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:3;animation:hbbreathe 6s ease-in-out infinite}
+.habitat-embed .orb::before{content:"";position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(240,192,64,.18);animation:hbhalo 4s linear infinite}
+.habitat-embed .orb::after{content:"";position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(240,192,64,.10);animation:hbhalo 8s linear infinite reverse}
+@keyframes hbbreathe{0%,100%{box-shadow:0 0 80px rgba(240,192,64,.45),inset 0 0 60px rgba(240,192,64,.18)}50%{box-shadow:0 0 120px rgba(240,192,64,.6),inset 0 0 80px rgba(240,192,64,.28)}}
+@keyframes hbhalo{to{transform:rotate(360deg)}}
+.habitat-embed .orb b{color:#fff2c0;font-size:14px;letter-spacing:.26em;text-shadow:0 0 24px rgba(240,192,64,.9);font-weight:700}
+.habitat-embed .orb small{color:#f0c040;font-size:9px;letter-spacing:.36em;margin-top:6px;display:block}
+.habitat-embed .seat{position:absolute;width:200px;min-height:96px;padding:12px;border-radius:14px;background:linear-gradient(135deg,rgba(18,28,52,.36),rgba(8,12,24,.28));border:1px solid rgba(110,170,255,.32);backdrop-filter:blur(3px);z-index:4;left:50%;top:50%;transform:translate(-50%,-50%) scale(.92);opacity:0;transition:opacity .25s ease,transform .25s ease,border-color .3s,box-shadow .3s}
+.habitat-embed .seat.placed{opacity:1;transform:none}
+.habitat-embed .seat.online{border-color:rgba(38,215,130,.55);box-shadow:0 0 22px rgba(38,215,130,.22) inset,0 0 12px rgba(38,215,130,.18)}
+.habitat-embed .seat.slow{border-color:rgba(240,192,64,.55);box-shadow:0 0 22px rgba(240,192,64,.22) inset,0 0 12px rgba(240,192,64,.18)}
+.habitat-embed .seat.error,.habitat-embed .seat.offline{border-color:rgba(255,84,105,.65);box-shadow:0 0 22px rgba(255,84,105,.22) inset,0 0 12px rgba(255,84,105,.20);animation:hbpulse 1.4s infinite}
+.habitat-embed .seat.configuring{border-color:rgba(92,196,255,.5)}
+@keyframes hbpulse{0%,100%{opacity:1}50%{opacity:.7}}
+.habitat-embed .seat .num{position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;color:#00d2ff;background:rgba(0,210,255,.10)}
+.habitat-embed .seat.online .num{color:#26d782;background:rgba(38,215,130,.10)}
+.habitat-embed .seat.slow .num{color:#f0c040;background:rgba(240,192,64,.10)}
+.habitat-embed .seat.error .num,.habitat-embed .seat.offline .num{color:#ff5469;background:rgba(255,84,105,.10)}
+.habitat-embed .seat .nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:#fff;margin:0 0 4px 30px;line-height:1.15}
+.habitat-embed .seat .role{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.16em;color:#00d2ff;text-transform:uppercase;margin-bottom:4px}
+.habitat-embed .seat .meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.1em;color:#7e8bb0;display:flex;justify-content:space-between;margin-top:6px}
+.habitat-embed .seat .meta .status{font-weight:700;text-transform:uppercase}
+.habitat-embed .seat.online .meta .status{color:#26d782}
+.habitat-embed .seat.slow .meta .status{color:#f0c040}
+.habitat-embed .seat.error .meta .status,.habitat-embed .seat.offline .meta .status{color:#ff5469}
+.habitat-embed .seat.configuring .meta .status{color:#5cc4ff}
+.habitat-embed .stateled{position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#444}
+.habitat-embed .seat.online .stateled{background:#26d782;box-shadow:0 0 10px #26d782;animation:hbpulse 1.6s infinite}
+.habitat-embed .seat.slow .stateled{background:#f0c040;box-shadow:0 0 10px #f0c040}
+.habitat-embed .seat.error .stateled,.habitat-embed .seat.offline .stateled{background:#ff5469;box-shadow:0 0 10px #ff5469}
+.habitat-embed .toggle-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 2px}
+.habitat-embed-section{margin:24px 0}
+.habitat-embed-section .toggle-classic{background:rgba(8,12,18,.55);border:1px solid rgba(0,210,255,.22);color:#a8b3c4;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 12px;border-radius:99px;cursor:pointer;transition:all .2s}
+.habitat-embed-section .toggle-classic:hover{border-color:#00d2ff;color:#00d2ff}
+.habitat-embed-section .label-pulse{color:#f0c040;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase}
+.habitat-embed-section.classic-hidden #live-parliament-grid,.habitat-embed-section.classic-hidden .live-meta{display:none}
+</style>
+<div class="habitat-embed-section" id="habitat-embed-section">
+  <div class="toggle-row">
+    <span class="label-pulse">◉ Live Council · Habitat View</span>
+    <button class="toggle-classic" onclick="document.getElementById('habitat-embed-section').classList.toggle('classic-hidden')">Toggle Classic Grid View</button>
+  </div>
+  <div class="habitat-embed" id="habitat-embed">
+    <div class="grid-floor"></div>
+    <svg class="flows" id="habitat-flows" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="hbg_cy" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00d2ff" stop-opacity="0"/><stop offset="50%" stop-color="#00d2ff" stop-opacity=".85"/><stop offset="100%" stop-color="#00d2ff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="hbg_au" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f0c040" stop-opacity="0"/><stop offset="50%" stop-color="#f0c040" stop-opacity=".95"/><stop offset="100%" stop-color="#f0c040" stop-opacity="0"/></linearGradient>
+        <linearGradient id="hbg_gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#26d782" stop-opacity="0"/><stop offset="50%" stop-color="#26d782" stop-opacity=".9"/><stop offset="100%" stop-color="#26d782" stop-opacity="0"/></linearGradient>
+        <linearGradient id="hbg_rd" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff5469" stop-opacity="0"/><stop offset="50%" stop-color="#ff5469" stop-opacity=".9"/><stop offset="100%" stop-color="#ff5469" stop-opacity="0"/></linearGradient>
+      </defs>
+    </svg>
+    <div class="orb"><b>CONSENSUS</b><small>ORB</small></div>
+    <div id="habitat-seats"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var EP = 'https://ai-staffing.agency/api/council/parliament_status.php';
+  var seatsHost = document.getElementById('habitat-seats');
+  var flows = document.getElementById('habitat-flows');
+  var lastData = null;
+
+  function placeSeats(seats){
+    seatsHost.innerHTML = seats.map(function(s,i){
+      var st = (s.status||'idle').toLowerCase();
+      var role = (s.role||s.seat||'').replace(/^SEAT\s*\d+\s*/i,'') || 'Seat '+(i+1);
+      return '<div class="seat '+st+'" data-i="'+i+'">'+
+             '<span class="num">'+String(i+1).padStart(2,'0')+'</span>'+
+             '<span class="stateled"></span>'+
+             '<div class="nm">'+(s.seat||role)+'</div>'+
+             '<div class="role">▶ SEAT '+String(i+1).padStart(2,'0')+'</div>'+
+             '<div class="meta"><span class="status">'+st+'</span><span>'+(s.latency_ms||0)+' ms</span></div>'+
+             '</div>';
+    }).join('');
+    // Multi-trigger layout: rAF + setTimeout + onload guarantee fire under any DOM-ready state
+    requestAnimationFrame(function(){ requestAnimationFrame(layoutRing); });
+    setTimeout(layoutRing, 80);
+    setTimeout(layoutRing, 320);
+    setTimeout(layoutRing, 900);
+  }
+
+  function layoutRing(){
+    var host = document.getElementById('habitat-embed');
+    if(!host) return;
+    var W = host.clientWidth, H = host.clientHeight;
+    var tiles = seatsHost.querySelectorAll('.seat');
+    var N = tiles.length; if(N === 0) return;
+    var m = tiles[0].getBoundingClientRect();
+    var tileW = Math.max(180, m.width || 200), tileH = Math.max(90, m.height || 96);
+    var orbHalf = 95, edge = 14, gap = 18;
+    var maxRx = (W/2) - tileW/2 - edge;
+    var maxRy = (H/2) - tileH/2 - edge;
+    var minR  = orbHalf + Math.max(tileW, tileH)/2 + gap;
+    var rx = Math.max(minR, maxRx), ry = Math.max(minR, maxRy);
+    tiles.forEach(function(el, i){
+      var a = (i / N) * Math.PI * 2 - Math.PI/2;
+      var x = W/2 + rx * Math.cos(a) - tileW/2;
+      var y = H/2 + ry * Math.sin(a) - tileH/2;
+      el.style.left = Math.round(Math.max(edge, Math.min(W - tileW - edge, x))) + 'px';
+      el.style.top  = Math.round(Math.max(edge, Math.min(H - tileH - edge, y))) + 'px';
+      el.style.transform = 'none';
+      el.classList.add('placed');
+    });
+    buildFlows();
+  }
+
+  function buildFlows(){
+    var host = document.getElementById('habitat-embed');
+    if(!host) return;
+    var W = host.clientWidth, H = host.clientHeight;
+    flows.setAttribute('viewBox','0 0 '+Math.round(W)+' '+Math.round(H));
+    var cx = W/2, cy = H/2;
+    var tiles = seatsHost.querySelectorAll('.seat');
+    var paths = [], packets = [];
+    tiles.forEach(function(el, i){
+      var r = el.getBoundingClientRect();
+      var hr = host.getBoundingClientRect();
+      var zx = r.left + r.width/2 - hr.left;
+      var zy = r.top + r.height/2 - hr.top;
+      var mx = (cx+zx)/2 + (i%2===0?-30:30);
+      var my = (cy+zy)/2 + (i%2===0?-40:40);
+      var grad = el.classList.contains('online') ? 'hbg_gr'
+                : el.classList.contains('slow') ? 'hbg_au'
+                : (el.classList.contains('error')||el.classList.contains('offline')) ? 'hbg_rd'
+                : 'hbg_cy';
+      var pid = 'hbp'+i;
+      paths.push('<path id="'+pid+'" class="stream" stroke="url(#'+grad+')" d="M'+cx+','+cy+' Q'+mx+','+my+' '+zx+','+zy+'"/>');
+      packets.push('<circle r="3" fill="currentColor" style="color:#00d2ff"><animateMotion dur="'+(2.4+Math.random()*1.4)+'s" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion></circle>');
+    });
+    flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
+  }
+
+  function poll(){
+    fetch(EP,{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      if(!d || !d.seats) return;
+      lastData = d;
+      placeSeats(d.seats);
+    }).catch(function(){});
+  }
+  // initial render with placeholder seats so layout is ready before data arrives
+  var placeholder = Array.from({length:10}).map(function(_,i){return {seat:'Loading',role:'…',status:'configuring',latency_ms:0};});
+  placeSeats(placeholder);
+  poll();
+  setInterval(poll, 25000);
+
+  var resizeT = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function(){ layoutRing(); }, 100);
+  });
+})();
+</script>
+<!-- ============ END HABITAT EMBED ============ -->
