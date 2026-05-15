@@ -1311,12 +1311,29 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .campus-balloon .cb-head .live { width: 7px; height: 7px; border-radius: 50%; background: var(--camp-cyan); box-shadow: 0 0 10px var(--camp-cyan); animation: campPulse 1.4s infinite; }
 .campus-balloon pre { white-space: pre-wrap; word-wrap: break-word; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-mut); }
 
+/* v1.14.0 · live "Maya is watching" banner · top of Campus floor · 2026-05-15 */
+.campus-watch {
+  grid-area: watch;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px; margin: 0 4px;
+  background: linear-gradient(135deg, rgba(67,230,161,.10), rgba(0,228,255,.05));
+  border: 1px solid var(--camp-green);
+  border-radius: 99px;
+  font-size: 11px; letter-spacing: .04em;
+}
+.campus-watch[hidden] { display: none; }
+.cw-eye { font-size: 14px; animation: campPulse 2s infinite; }
+.cw-label { color: var(--camp-green); font-weight: 600; text-transform: uppercase; letter-spacing: .12em; font-size: 9px; }
+.cw-target { color: var(--text); font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cw-process { color: var(--text-dim); font-size: 9px; font-family: 'Share Tech Mono', monospace; flex-shrink: 0; }
+
 /* Re-layout the stage to make room for cmd + balloon */
 .campus-stage {
-  grid-template-rows: 56px 1fr auto auto 36px;
+  grid-template-rows: 56px auto 1fr auto auto 36px;
   grid-template-columns: 1fr 280px;
   grid-template-areas:
     "head head"
+    "watch watch"
     "floor log"
     "balloon balloon"
     "cmd cmd"

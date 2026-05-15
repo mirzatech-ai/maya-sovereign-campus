@@ -2238,9 +2238,40 @@
     if (_campusTimer) return;
     pollCampus();
     _campusTimer = setInterval(pollCampus, 3000);   // Skill #6 · 3s polling, no faster
+    // v1.14.0 · also poll the device bridge for "what window is Mo on right now"
+    pollWatchBanner();
+    _watchTimer = setInterval(pollWatchBanner, 5000);
   }
   function campusStop() {
     if (_campusTimer) { clearInterval(_campusTimer); _campusTimer = null; }
+    if (_watchTimer)  { clearInterval(_watchTimer);  _watchTimer = null; }
+  }
+
+  // v1.14.0 · live "Maya is watching: <window title>" via bridge /active-window
+  let _watchTimer = null;
+  async function pollWatchBanner() {
+    const banner = $('campusWatch');
+    const targetEl = $('campusWatchTarget');
+    const procEl = $('campusWatchProcess');
+    if (!banner || !_phoneCfg) {
+      // Bridge not connected · keep banner hidden so we don't show stale state
+      if (banner) banner.hidden = true;
+      return;
+    }
+    try {
+      const r = await fetch(_phoneCfg.url.replace(/\/$/, '') + '/active-window', {
+        headers: { 'X-Maya-Bridge-Token': _phoneCfg.token },
+        cache: 'no-store'
+      });
+      if (!r.ok) { banner.hidden = true; return; }
+      const j = await r.json();
+      if (!j.ok || !j.title) { banner.hidden = true; return; }
+      banner.hidden = false;
+      targetEl.textContent = j.title.slice(0, 80);
+      procEl.textContent = j.process ? '· ' + j.process : '';
+    } catch (e) {
+      banner.hidden = true;
+    }
   }
 
   // Hook into mode switching · poll only when campus is visible · use MutationObserver

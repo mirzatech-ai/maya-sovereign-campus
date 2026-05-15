@@ -3,7 +3,7 @@
  * Answer (for now): YES. Network-first for everything. Cache only as fallback when offline.
  * When v1 locks, flip back to cache-first.
  */
-const VERSION = 'maya-os-v1.13.1-2026-05-15-global95-theme-safe-contrast';
+const VERSION = 'maya-os-v1.14.0-2026-05-15-bridge-has-eyes-active-window-screenshot';
 
 self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => {

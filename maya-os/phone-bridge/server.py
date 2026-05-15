@@ -375,6 +375,120 @@ async def sys_verb(verb: str, req: Request, x_maya_bridge_token: Optional[str] =
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
+# ── /active-window · what app/tab Mo is currently looking at ────────────
+@app.get("/active-window")
+def active_window(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    try:
+        if PLATFORM["is_windows"]:
+            # PowerShell + Win32 API · returns title + process name of foreground window
+            ps = r"""
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+public class W {
+    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] public static extern int GetWindowTextLength(IntPtr hWnd);
+    [DllImport("user32.dll", CharSet=CharSet.Unicode)] public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+    [DllImport("user32.dll")] public static extern int GetWindowThreadProcessId(IntPtr hWnd, out int procId);
+}
+"@ -ErrorAction SilentlyContinue
+$h = [W]::GetForegroundWindow()
+$len = [W]::GetWindowTextLength($h) + 1
+$sb = New-Object System.Text.StringBuilder $len
+[W]::GetWindowText($h, $sb, $len) | Out-Null
+$pid = 0
+[W]::GetWindowThreadProcessId($h, [ref]$pid) | Out-Null
+$proc = (Get-Process -Id $pid -ErrorAction SilentlyContinue).ProcessName
+ConvertTo-Json @{title = $sb.ToString(); process = $proc; pid = $pid} -Compress
+"""
+            r = subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps], capture_output=True, text=True, timeout=8)
+            if r.returncode == 0 and r.stdout.strip():
+                data = json.loads(r.stdout)
+                return {"ok": True, **data, "platform": "windows"}
+            return {"ok": False, "error": r.stderr or "powershell failed", "stdout": r.stdout}
+        elif PLATFORM["is_macos"]:
+            ascript = 'tell application "System Events" to get {name, frontmost} of (first process whose frontmost is true)'
+            r = subprocess.run(["osascript", "-e", ascript], capture_output=True, text=True, timeout=8)
+            return {"ok": r.returncode == 0, "title": r.stdout.strip(), "platform": "macos"}
+        elif PLATFORM["is_linux"]:
+            r = subprocess.run(["xdotool", "getactivewindow", "getwindowname"], capture_output=True, text=True, timeout=5)
+            return {"ok": r.returncode == 0, "title": r.stdout.strip(), "platform": "linux"}
+        else:
+            return {"ok": False, "error": f"not implemented for {PLATFORM['kind']}"}
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "error": "timeout"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+# ── /open-windows · list of all visible top-level windows ───────────────
+@app.get("/open-windows")
+def open_windows(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    try:
+        if PLATFORM["is_windows"]:
+            ps = (
+                "Get-Process | Where-Object { $_.MainWindowTitle -ne '' } | "
+                "Select-Object Id, ProcessName, MainWindowTitle | ConvertTo-Json -Compress"
+            )
+            r = subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps], capture_output=True, text=True, timeout=10)
+            try:
+                data = json.loads(r.stdout) if r.stdout.strip() else []
+            except json.JSONDecodeError:
+                data = []
+            if isinstance(data, dict): data = [data]  # single window comes back as dict
+            return {"ok": True, "count": len(data), "windows": data}
+        else:
+            return {"ok": False, "error": f"not implemented for {PLATFORM['kind']}"}
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "error": "timeout"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+# ── /screenshot-screen · captures desktop · returns base64 PNG ──────────
+@app.get("/screenshot-screen")
+def screenshot_screen(x_maya_bridge_token: Optional[str] = Header(None)):
+    require_token(x_maya_bridge_token)
+    try:
+        if PLATFORM["is_windows"]:
+            # PowerShell can use System.Windows.Forms for screen capture without Pillow dependency
+            tmp_path = str(HOME / ".maya_bridge_screenshot.png").replace("\\", "\\\\")
+            ps = r"""
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+$screen = [System.Windows.Forms.Screen]::PrimaryScreen
+$bmp = New-Object System.Drawing.Bitmap $screen.Bounds.Width, $screen.Bounds.Height
+$g = [System.Drawing.Graphics]::FromImage($bmp)
+$g.CopyFromScreen($screen.Bounds.Location, [System.Drawing.Point]::Empty, $screen.Bounds.Size)
+$bmp.Save('""" + tmp_path + r"""', [System.Drawing.Imaging.ImageFormat]::Png)
+$g.Dispose(); $bmp.Dispose()
+Write-Output 'OK'
+"""
+            r = subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps], capture_output=True, text=True, timeout=12)
+            tmp = HOME / ".maya_bridge_screenshot.png"
+            if r.returncode != 0 or not tmp.exists():
+                return {"ok": False, "error": r.stderr or "capture failed", "stdout": r.stdout}
+            raw = tmp.read_bytes()
+            try: tmp.unlink()
+            except Exception: pass
+            return {"ok": True, "format": "png", "size": len(raw), "base64": base64.b64encode(raw).decode("ascii")}
+        elif PLATFORM["is_macos"]:
+            tmp = HOME / ".maya_bridge_screenshot.png"
+            r = subprocess.run(["screencapture", "-x", str(tmp)], capture_output=True, text=True, timeout=10)
+            if r.returncode != 0 or not tmp.exists():
+                return {"ok": False, "error": r.stderr or "screencapture failed"}
+            raw = tmp.read_bytes()
+            try: tmp.unlink()
+            except Exception: pass
+            return {"ok": True, "format": "png", "size": len(raw), "base64": base64.b64encode(raw).decode("ascii")}
+        else:
+            return {"ok": False, "error": f"not implemented for {PLATFORM['kind']}"}
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "error": "timeout"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
 # ── Main ──────────────────────────────────────────────────────────────────
 def main():
     # Force UTF-8 stdout on Windows (default cp1252 dies on box-drawing chars)
