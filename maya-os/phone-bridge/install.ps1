@@ -114,6 +114,39 @@ if (-not (Test-Path $tokenPath)) {
 }
 $token = (Get-Content $tokenPath -Raw).Trim()
 
+# Auto-register with Maya OS · zero copy-paste
+Banner "Auto-registering this device with Maya OS"
+$pin = $env:MAYA_COMMANDER_PIN
+if (-not $pin) {
+    Write-Host "  Commander PIN required ONCE to register this device with Maya OS."
+    Write-Host "  Set `$env:MAYA_COMMANDER_PIN before re-running to skip this prompt next time."
+    $pinSecure = Read-Host -AsSecureString "  Commander PIN"
+    $pin = [System.Net.NetworkCredential]::new('', $pinSecure).Password
+}
+$registered = $false
+$regId = $null
+try {
+    $payload = @{
+        action        = 'register'
+        pin           = $pin
+        device_name   = $env:COMPUTERNAME
+        platform      = 'windows'
+        url           = 'http://127.0.0.1:8765'
+        token         = $token
+        capabilities  = @{ files = $true; shell = $true; ssh = $true; termux_api = $false; clipboard = $true; open = $true; notify = $true }
+    } | ConvertTo-Json -Depth 4 -Compress
+    $resp = Invoke-RestMethod -Uri 'https://iamsuperio.cloud/api/maya_devices' -Method Post -Body $payload -ContentType 'application/json' -TimeoutSec 15
+    if ($resp.ok) {
+        $registered = $true
+        $regId = $resp.id
+        OK ("registered as '$($env:COMPUTERNAME)' (id: $regId)")
+    } else {
+        Warn ("auto-register failed: " + ($resp | ConvertTo-Json -Compress))
+    }
+} catch {
+    Warn ("auto-register error: $($_.Exception.Message)")
+}
+
 Write-Host ""
 Write-Host "$Esc[32m============================================================$Esc[0m"
 Write-Host "$Esc[32m  INSTALLED$Esc[0m"
@@ -121,10 +154,17 @@ Write-Host ""
 Write-Host "  Bridge directory:  $bridgeDir"
 Write-Host "  Launcher:          $launcher"
 Write-Host ""
-Write-Host "  Your bridge token (paste into Maya OS - Device Bridge):"
-Write-Host "$Esc[33m    $token$Esc[0m"
+if ($registered) {
+    Write-Host "  $Esc[32m✓ AUTO-REGISTERED$Esc[0m with Maya OS as '$($env:COMPUTERNAME)' (windows)"
+    Write-Host "    Device id: $regId"
+    Write-Host "    NO MANUAL SETUP NEEDED IN MAYA OS · just open + go"
+} else {
+    Write-Host "  ✗ Auto-registration failed. Manual fallback:"
+    Write-Host "    Bridge token (paste into Maya OS - Device Bridge):"
+    Write-Host "$Esc[33m      $token$Esc[0m"
+    Write-Host "    Bridge URL: http://127.0.0.1:8765"
+}
 Write-Host ""
 Write-Host "  Start the bridge now: $Esc[36mmaya-bridge.bat$Esc[0m  (from $bridgeDir)"
 Write-Host "  Or from Start Menu:   'Maya Bridge'"
-Write-Host "  Default URL:          http://127.0.0.1:8765"
 Write-Host "$Esc[32m============================================================$Esc[0m"

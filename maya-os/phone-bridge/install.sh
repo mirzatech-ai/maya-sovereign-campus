@@ -80,11 +80,55 @@ BRIDGE_TOKEN=$(cat /tmp/_maya_token.txt)
 rm -f /tmp/_maya_token.txt
 
 echo ""
+echo "→ Auto-registering this device with Maya OS..."
+DEVICE_NAME=$(hostname 2>/dev/null || echo "unknown")
+case "$(uname -s)" in
+    *)   PLATFORM="termux";;
+esac
+if [ -n "${OSTYPE:-}" ]; then
+    case "$OSTYPE" in
+        darwin*) PLATFORM="macos";;
+        linux*)  [ -n "${TERMUX_VERSION:-}" ] && PLATFORM="termux" || PLATFORM="linux";;
+    esac
+fi
+# Read PIN from env or prompt once
+PIN="${MAYA_COMMANDER_PIN:-}"
+if [ -z "$PIN" ]; then
+    echo ""
+    echo "  Commander PIN required ONCE to register this device with Maya OS."
+    echo "  Set MAYA_COMMANDER_PIN env var to skip this prompt on future installs."
+    echo ""
+    printf "  Commander PIN: "
+    read -r PIN
+fi
+
+DEFAULT_URL="http://127.0.0.1:8765"
+REG_PAYLOAD=$(cat <<JSON
+{"action":"register","pin":"$PIN","device_name":"$DEVICE_NAME","platform":"$PLATFORM","url":"$DEFAULT_URL","token":"$BRIDGE_TOKEN","capabilities":{"files":true,"shell":true,"ssh":true,"termux_api":$([ "$PLATFORM" = "termux" ] && echo true || echo false),"clipboard":true,"open":true,"notify":true}}
+JSON
+)
+REG_RESPONSE=$(curl -s -X POST "https://iamsuperio.cloud/api/maya_devices" \
+    -H 'Content-Type: application/json' -d "$REG_PAYLOAD" --max-time 15 2>&1)
+if echo "$REG_RESPONSE" | grep -q '"ok":true'; then
+    REG_ID=$(echo "$REG_RESPONSE" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+    REGISTERED=1
+else
+    REGISTERED=0
+fi
+
+echo ""
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "┃ ✓ INSTALLED"
 echo "┃"
-echo "┃ Your bridge token (paste into Maya OS · Phone Bridge):"
-echo "┃   $BRIDGE_TOKEN"
+if [ "$REGISTERED" = "1" ]; then
+echo "┃ ✓ AUTO-REGISTERED with Maya OS as device: $DEVICE_NAME ($PLATFORM)"
+echo "┃   device id: $REG_ID"
+echo "┃   no manual setup needed in Maya OS · just open + go"
+else
+echo "┃ ✗ Auto-registration failed: $REG_RESPONSE"
+echo "┃   (manual fallback: paste the token below into Maya OS)"
+echo "┃   token: $BRIDGE_TOKEN"
+fi
 echo "┃"
 echo "┃ Start the bridge now:    maya-bridge"
 echo "┃ Or expose to LAN:        maya-bridge --bind 0.0.0.0"

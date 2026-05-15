@@ -50,9 +50,8 @@
       <button class="mode-btn"        data-mode="qode"     role="tab" aria-selected="false">🤖 <span>Qode</span></button>
       <button class="mode-btn"        data-mode="evolution" role="tab" aria-selected="false">🧬 <span>Evolution</span></button>
     </nav>
-    <div class="rail-foot">
-      <span class="version-tag" title="Build">v1.10.2</span>
-    </div>
+    <!-- rail-foot deleted v1.11.3 per Mo · "clean it all, not in pieces" rule · enforcement phrase: "Don't make me come back to flag the same area." -->
+
   </aside>
 
   <!-- CENTER · canvas -->
@@ -802,28 +801,35 @@
             <p>Launch with: <code>maya-bridge</code> (added to PATH).</p>
           </details>
 
-          <label class="pm-label">Bridge URL</label>
-          <input type="url"  id="pmUrl"   class="pm-input" placeholder="http://127.0.0.1:8765 (or your tunnel URL)">
-
-          <label class="pm-label">Bridge Token</label>
-          <input type="password" id="pmToken" class="pm-input" placeholder="paste the token printed by install.sh">
-
-          <div class="pm-row">
-            <button class="pm-btn ghost" id="pmTestBtn" type="button">⟳ Test connection</button>
-            <button class="pm-btn"       id="pmSaveBtn" type="button">💾 Save + Connect</button>
-            <button class="pm-btn ghost" id="pmDisconnectBtn" type="button">✕ Disconnect</button>
+          <div class="pm-registry">
+            <label class="pm-label">🌐 Registered devices <span class="pm-hint">auto-populated when you run the installer</span></label>
+            <div class="pm-row">
+              <input type="password" id="pmRegPin" class="pm-input" placeholder="Commander PIN · saved this session">
+              <button id="pmRefreshBtn" class="pm-btn ghost" type="button">⟳ Refresh list</button>
+            </div>
+            <div id="pmDeviceList" class="pm-device-list"><div class="pm-empty">Enter your PIN and click Refresh · or run the installer on any device · auto-registers itself.</div></div>
           </div>
 
-          <div class="pm-caps" id="pmCaps" hidden>
-            <h4>📡 Capabilities detected</h4>
-            <div id="pmCapsList"></div>
-          </div>
+          <details class="pm-advanced">
+            <summary>⚙ Manual override (rarely needed)</summary>
+            <p>If auto-registration failed during install, you can paste manually:</p>
+            <label class="pm-label">Bridge URL</label>
+            <input type="url"  id="pmUrl"   class="pm-input" placeholder="http://127.0.0.1:8765">
+            <label class="pm-label">Bridge Token</label>
+            <input type="password" id="pmToken" class="pm-input" placeholder="paste the token printed by installer">
+            <div class="pm-row">
+              <button class="pm-btn ghost" id="pmTestBtn" type="button">⟳ Test</button>
+              <button class="pm-btn"       id="pmSaveBtn" type="button">💾 Save</button>
+              <button class="pm-btn ghost" id="pmDisconnectBtn" type="button">✕ Disconnect</button>
+            </div>
+            <div class="pm-caps" id="pmCaps" hidden><h4>📡 Capabilities</h4><div id="pmCapsList"></div></div>
+          </details>
 
           <details class="pm-honesty">
             <summary>🟡 Honest limits</summary>
-            <p>Phase 1 (now): Maya can read your phone's files, run shell, SSH out, use Termux:API (clipboard, camera, contacts, SMS, etc.).</p>
-            <p>Phase 2 (Cloudflare tunnel · TODO): Maya brain on VPS can reach the phone from anywhere.</p>
-            <p>Phase 3 (native APK · TODO): Maya watches what's in Chrome / Gmail / any app · requires a wrapped Android app with Accessibility Service permission.</p>
+            <p>Phase 1 (now): Files + shell + SSH + clipboard + native open/notify · plus Termux:API (camera, contacts, SMS) on phone.</p>
+            <p>Phase 2 (Cloudflare tunnel · TODO): Maya brain on VPS reaches your devices from anywhere.</p>
+            <p>Phase 3 (native APK · TODO): Maya reads Chrome tabs / OCR any screen · requires Android Accessibility Service.</p>
           </details>
         </div>
       </div>

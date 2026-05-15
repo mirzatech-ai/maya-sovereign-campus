@@ -73,12 +73,7 @@ kbd { border: 1px solid var(--border-mt); }
 .mode-btn.active { background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(179,71,255,0.10)); color: var(--text); border-color: var(--border-hot); }
 .mode-btn span { flex: 1; }
 
-/* v1.10.2 · rail-foot reduced to just version-tag · theme/PIN/⌘K removed per Mo 2026-05-15
-   (theme is operational in chat composer · PIN flow lives in bell drawer + commander_auth from any empire site)
-   ⌘K moved to canvas-head where it has more room
-*/
-.rail-foot { display: flex; align-items: center; justify-content: center; padding: 8px 6px; border-top: 1px solid var(--border); margin-top: 4px; flex-shrink: 0; min-height: 28px; }
-.rail-foot .version-tag { font-size: 10px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 0.12em; opacity: 0.7; }
+/* v1.11.3 · rail-foot deleted entirely per Mo · clean-it-all rule */
 
 /* ⌘K palette button · canvas-head home · subtle cyan (no longer the only purple in the rail-foot) */
 .palette-cue {
@@ -1003,6 +998,29 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
 .pm-cap[data-ok="1"] .pm-cap-dot { background: var(--accent-2); }
 .pm-cap[data-ok="0"] .pm-cap-dot { background: var(--text-dim); }
 .pm-cap[data-ok="0"] { opacity: 0.55; }
+
+/* v1.11.3 · Auto-populated device registry list · 2026-05-15 */
+.pm-registry { padding: 10px 12px; background: rgba(0,228,255,0.04); border: 1px solid var(--border); border-radius: var(--rad-sm); display: flex; flex-direction: column; gap: 8px; }
+.pm-hint { font-size: 9px; color: var(--text-dim); font-style: italic; margin-left: 6px; letter-spacing: 0.06em; text-transform: none; }
+.pm-device-list { display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
+.pm-empty { font-size: 11px; color: var(--text-dim); padding: 12px 6px; text-align: center; font-style: italic; }
+.pm-device-row {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 8px 10px; align-items: center;
+  padding: 8px 10px; background: var(--bg-3); border: 1px solid var(--border-mt); border-radius: var(--rad-sm); cursor: pointer;
+  transition: all .12s;
+}
+.pm-device-row:hover { border-color: var(--accent); background: var(--panel-h); }
+.pm-device-row[data-active="1"] { border-color: var(--accent-2); background: rgba(0,255,168,0.06); }
+.pm-device-icon { font-size: 18px; line-height: 1; }
+.pm-device-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pm-device-name { font-size: 12px; font-weight: 700; color: var(--text); }
+.pm-device-sub { font-size: 10px; color: var(--text-dim); letter-spacing: 0.04em; }
+.pm-device-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.pm-device-btn { padding: 3px 8px; background: transparent; color: var(--text-mut); border: 1px solid var(--border); border-radius: 99px; cursor: pointer; font-size: 10px; }
+.pm-device-btn:hover { color: var(--accent); border-color: var(--accent); }
+.pm-device-btn.danger:hover { color: var(--hot); border-color: var(--hot); }
+.pm-device-active-badge { display: inline-block; padding: 2px 7px; background: var(--accent-2); color: #001423; border-radius: 99px; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; }
+.pm-advanced { margin-top: 6px; }
 
 /* ── v1.10.2 · SOVEREIGN CAMPUS · Skill #1 (Kinetic Habitat UI) · GLOBAL-92 ── */
 .campus-stage {

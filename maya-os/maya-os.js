@@ -2265,6 +2265,94 @@
   const pmUrl = $('pmUrl'), pmToken = $('pmToken'), pmStatus = $('pmStatus');
   const pmTestBtn = $('pmTestBtn'), pmSaveBtn = $('pmSaveBtn'), pmDisconnectBtn = $('pmDisconnectBtn');
   const pmCaps = $('pmCaps'), pmCapsList = $('pmCapsList');
+  // v1.11.3 · auto-populated device registry
+  const pmRegPin = $('pmRegPin'), pmRefreshBtn = $('pmRefreshBtn'), pmDeviceList = $('pmDeviceList');
+  const DEVICES_URL = 'https://iamsuperio.cloud/api/maya_devices';
+  const PIN_KEY_DEV = 'maya_os_dev_pin_v1';
+
+  function platformIcon(p) { return ({termux:'📱', windows:'💻', macos:'🖥️', linux:'🐧'}[p] || '🌐'); }
+  function devGetPin() {
+    const v = (pmRegPin?.value || '').trim();
+    if (v) sessionStorage.setItem(PIN_KEY_DEV, v);
+    return v;
+  }
+  async function devListRefresh() {
+    const pin = devGetPin();
+    if (!pin) { pmDeviceList.innerHTML = '<div class="pm-empty">Enter PIN above to load registered devices.</div>'; return; }
+    pmDeviceList.innerHTML = '<div class="pm-empty">Loading…</div>';
+    try {
+      const r = await fetch(DEVICES_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'list', pin}) });
+      const j = await r.json();
+      if (!j.ok) { pmDeviceList.innerHTML = '<div class="pm-empty">' + escapeHTML(j.error || 'error') + '</div>'; return; }
+      if (!j.devices || j.devices.length === 0) {
+        pmDeviceList.innerHTML = '<div class="pm-empty">No devices registered yet. Run the installer on any device · it auto-registers itself.</div>';
+        return;
+      }
+      pmDeviceList.innerHTML = j.devices.map(d => {
+        const caps = Object.entries(d.capabilities || {}).filter(([_, v]) => v).map(([k]) => k).join(' · ');
+        return (
+          '<div class="pm-device-row" data-active="' + (d.is_active ? 1 : 0) + '" data-id="' + escapeHTML(d.id) + '">'
+          + '<span class="pm-device-icon">' + platformIcon(d.platform) + '</span>'
+          + '<div class="pm-device-meta">'
+          +   '<span class="pm-device-name">' + escapeHTML(d.device_name) + (d.is_active ? ' <span class="pm-device-active-badge">ACTIVE</span>' : '') + '</span>'
+          +   '<span class="pm-device-sub">' + escapeHTML(d.platform + ' · ' + d.url + ' · ' + caps.slice(0, 60)) + '</span>'
+          + '</div>'
+          + '<div class="pm-device-actions">'
+          +   (d.is_active ? '' : '<button class="pm-device-btn" data-act="activate" data-id="' + escapeHTML(d.id) + '">Use this</button>')
+          +   '<button class="pm-device-btn danger" data-act="remove" data-id="' + escapeHTML(d.id) + '" title="Forget this device">✕</button>'
+          + '</div>'
+          + '</div>'
+        );
+      }).join('');
+      // Wire buttons
+      qsAll('.pm-device-btn').forEach(b => b.addEventListener('click', async (ev) => {
+        ev.stopPropagation();
+        const act = b.dataset.act, id = b.dataset.id;
+        if (act === 'activate') await devActivate(id);
+        if (act === 'remove')   await devRemove(id);
+      }));
+      // Click row to activate quick
+      qsAll('.pm-device-row').forEach(row => row.addEventListener('click', () => {
+        if (row.dataset.active !== '1') devActivate(row.dataset.id);
+      }));
+    } catch (e) {
+      pmDeviceList.innerHTML = '<div class="pm-empty">Network: ' + escapeHTML(e.message) + '</div>';
+    }
+  }
+  async function devActivate(id) {
+    const pin = devGetPin();
+    if (!pin) return;
+    try {
+      // 1. server-side mark active
+      await fetch(DEVICES_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'set_active', pin, id}) });
+      // 2. pull full record (token included) for this Maya OS instance to use
+      const r = await fetch(DEVICES_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'full_record', pin, id}) });
+      const j = await r.json();
+      if (j.ok && j.device) {
+        phoneSaveCfg(j.device.url, j.device.token);
+        await phoneCheck();
+      }
+      await devListRefresh();
+    } catch (_) {}
+  }
+  async function devRemove(id) {
+    const pin = devGetPin();
+    if (!pin) return;
+    if (!confirm('Forget this device? You can always re-register by running the installer again.')) return;
+    try {
+      await fetch(DEVICES_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'remove', pin, id}) });
+      // If we just removed the active device, clear local cfg
+      if (_phoneCfg) phoneClearCfg();
+      await phoneCheck();
+      await devListRefresh();
+    } catch (_) {}
+  }
+  // Restore PIN from session if present
+  if (pmRegPin) {
+    const cached = sessionStorage.getItem(PIN_KEY_DEV);
+    if (cached) pmRegPin.value = cached;
+  }
+  if (pmRefreshBtn) pmRefreshBtn.addEventListener('click', devListRefresh);
 
   let _phoneState = 'unknown';   // 'unknown' | 'ok' | 'err' | 'idle'
   let _phoneCfg = null;
@@ -2330,6 +2418,8 @@
   function phoneOpenModal() {
     phoneLoadCfg();
     if (phoneModal) phoneModal.hidden = false;
+    // v1.11.3 · auto-load registry on open if PIN is cached
+    if (pmRegPin && pmRegPin.value.trim()) devListRefresh();
   }
   function phoneCloseModal() { if (phoneModal) phoneModal.hidden = true; }
   if (phonePill) phonePill.addEventListener('click', phoneOpenModal);
