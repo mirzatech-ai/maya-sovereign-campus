@@ -214,6 +214,73 @@ if ($action === 'start' && !$is_cli) {
     exit;
 }
 
+// ---- REDO_VETOES (CLI · re-run only VETO'd agencies from last report · idempotent) ----
+if ($action === 'redo_vetoes' && $is_cli) {
+    if (!file_exists($LATEST)) { fwrite(STDERR, "no completed sweep to redo\n"); exit(1); }
+    $prev = json_decode(@file_get_contents($LATEST), true);
+    if (!is_array($prev) || empty($prev['results'])) { fwrite(STDERR, "empty previous report\n"); exit(1); }
+    $vetoed = array();
+    foreach ($prev['results'] as $slug => $row) {
+        $v = isset($row['verdict']) ? $row['verdict'] : '';
+        if ($v !== 'APPROVED_AND_SEALED') $vetoed[] = $slug;
+    }
+    $all_agencies = fetch_staff($BASE);
+    $by_slug = array();
+    foreach ($all_agencies as $a) { $sl = isset($a['slug']) ? $a['slug'] : (isset($a['id']) ? $a['id'] : ''); if ($sl) $by_slug[$sl] = $a; }
+    $total_redo = count($vetoed);
+    $started_at = date('c');
+    $state = array('status'=>'running','mode'=>'redo_vetoes','started_at'=>$started_at,'total'=>$total_redo,'done'=>0,'current'=>'','results'=>$prev['results']);
+    save_state($STATE, $state);
+    foreach ($vetoed as $idx => $slug) {
+        if (!isset($by_slug[$slug])) continue;
+        $state['current'] = $slug; save_state($STATE, $state);
+        $artifact = build_artifact($by_slug[$slug]);
+        $r = run_chain_for($BASE, $artifact, 'quick', 1, 180);
+        $v = isset($r['verdict']) ? $r['verdict'] : 'CHAIN_ERROR';
+        $state['results'][$slug] = array(
+            'agency_name'=> isset($by_slug[$slug]['name']) ? $by_slug[$slug]['name'] : $slug,
+            'artifact_id'=> $artifact['artifact_id'],
+            'verdict'    => $v,
+            'total_cycle_ms' => isset($r['total_cycle_ms']) ? $r['total_cycle_ms'] : 0,
+            'chairman'   => isset($r['chairman']) ? array(
+                'visual_verdict' => isset($r['chairman']['visual']['verdict']) ? $r['chairman']['visual']['verdict'] : null,
+                'logic_verdict'  => isset($r['chairman']['logic']['verdict'])  ? $r['chairman']['logic']['verdict']  : null,
+                'sealed'         => isset($r['chairman']['sealed']) ? $r['chairman']['sealed'] : false,
+            ) : null,
+            'redo'       => true,
+        );
+        $state['done'] = $idx + 1;
+        save_state($STATE, $state);
+    }
+    // Re-tally
+    $counts = array('APPROVED_AND_SEALED'=>0,'BLOCKED_BY_CHAIRMAN_VETO'=>0,'BLOCKED_BY_CHAIRMAN_REVISE'=>0,'REJECTED'=>0,'ERROR'=>0);
+    foreach ($state['results'] as $slug => $row) {
+        $v = $row['verdict'];
+        if ($v === 'APPROVED_AND_SEALED') $counts['APPROVED_AND_SEALED']++;
+        elseif ($v === 'BLOCKED_BY_CHAIRMAN_VETO') $counts['BLOCKED_BY_CHAIRMAN_VETO']++;
+        elseif ($v === 'BLOCKED_BY_CHAIRMAN_REVISE') $counts['BLOCKED_BY_CHAIRMAN_REVISE']++;
+        elseif (strpos((string)$v, 'REJECTED_') === 0) $counts['REJECTED']++;
+        else $counts['ERROR']++;
+    }
+    $report = array(
+        'ts'=>date('c'),
+        'started_at'=>$started_at,
+        'finished_at'=>date('c'),
+        'total'=>count($state['results']),
+        'counts'=>$counts,
+        'results'=>$state['results'],
+        'chain'=>'Parliament (24) -> Council (12) -> Board (12) -> Chairman Seal',
+        'mandate'=>'100% consensus · Skill #28 · GLOBAL-97',
+        'redo_pass'=>true,
+        'redo_count'=>$total_redo,
+    );
+    @file_put_contents($LATEST, json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    $state['status']='complete'; $state['finished_at']=date('c'); $state['counts']=$counts;
+    save_state($STATE, $state);
+    notify_done($BASE, $report);
+    exit;
+}
+
 // ---- RUN (CLI · the actual sweep) ----
 if ($action === 'run' && $is_cli) {
     $agencies = fetch_staff($BASE);
