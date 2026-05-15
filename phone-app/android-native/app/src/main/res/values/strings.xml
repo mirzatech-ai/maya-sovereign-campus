@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Maya</string>
+    <string name="accessibility_service_label">Maya OS · Sovereign Bridge</string>
+    <string name="accessibility_service_summary">Lets Maya see foreground apps + tab content + click for you (per your privacy toggles)</string>
+    <string name="accessibility_service_description">Maya needs Accessibility permission to (1) read which app/tab you\'re on, (2) optionally click for you when you ask, (3) capture screen snippets when Mo enables eyes. Default OFF for hands · ON for eyes. Toggle either OFF from Maya OS Campus banner any time. Nothing leaves the device without going to your own iamsuperio.cloud server.</string>
+    <string name="bridge_service_channel_name">Maya Bridge</string>
+    <string name="bridge_service_channel_description">Persistent notification while the Maya local bridge is serving the PWA on 127.0.0.1:8765</string>
+    <string name="bridge_notification_title">Maya is active</string>
+    <string name="bridge_notification_text">Bridge serving on 127.0.0.1:8765 · tap to manage</string>
+</resources>

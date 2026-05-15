@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="maya_bg">#05070d</color>
+    <color name="maya_accent">#00d4ff</color>
+    <color name="maya_gold">#f5c542</color>
+    <color name="maya_green">#43e6a1</color>
+</resources>
