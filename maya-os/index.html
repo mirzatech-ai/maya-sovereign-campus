@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,viewport-fit=cover">
+<meta name="theme-color" content="#05070d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Maya OS">
+<meta name="description" content="Maya OS · empire cockpit · 14 modes · multi-tab browser · Ctrl+K palette · live tools.">
+<meta name="robots" content="noindex">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./assets/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./assets/icon-192.png">
+<title>Maya OS · v1.9</title>
+<link rel="stylesheet" href="./maya-os.css?v=199b-mobile-flex">
+</head>
+<body>
+
+<div class="os-shell" id="osShell">
+
+  <!-- LEFT RAIL · full nav (still all 14 modes here for deep access) -->
+  <aside class="rail rail-left" id="railLeft" aria-label="Modes">
+    <button class="rail-brand" type="button" title="Maya OS">
+      <span class="orb" aria-hidden="true"></span>
+      <span class="brand-text">Maya OS</span>
+      <span class="brand-v">v1.9</span>
+    </button>
+    <nav class="rail-nav" id="railNav" role="tablist" aria-label="All surface modes">
+      <button class="mode-btn active" data-mode="chat"     role="tab" aria-selected="true" >💬 <span>Chat</span></button>
+      <button class="mode-btn"        data-mode="browser"  role="tab" aria-selected="false">🌐 <span>Browser</span></button>
+      <button class="mode-btn"        data-mode="build"    role="tab" aria-selected="false">💻 <span>Build</span></button>
+      <button class="mode-btn"        data-mode="vision"   role="tab" aria-selected="false">👁️ <span>Vision</span></button>
+      <button class="mode-btn"        data-mode="image"    role="tab" aria-selected="false">🖼️ <span>Image</span></button>
+      <button class="mode-btn"        data-mode="staff"    role="tab" aria-selected="false">👥 <span>Staff</span></button>
+      <div class="rail-sep">SECONDARY</div>
+      <button class="mode-btn"        data-mode="video"    role="tab" aria-selected="false">🎬 <span>Video</span></button>
+      <button class="mode-btn"        data-mode="music"    role="tab" aria-selected="false">🎵 <span>Music</span></button>
+      <button class="mode-btn"        data-mode="voice"    role="tab" aria-selected="false">🗣️ <span>Voice</span></button>
+      <button class="mode-btn"        data-mode="chain"    role="tab" aria-selected="false">⛓️ <span>Chain</span></button>
+      <button class="mode-btn"        data-mode="three_d"  role="tab" aria-selected="false">🧊 <span>3D</span></button>
+      <button class="mode-btn"        data-mode="files"    role="tab" aria-selected="false">📁 <span>Files</span></button>
+      <button class="mode-btn"        data-mode="executor" role="tab" aria-selected="false">⚙️ <span>Executor</span></button>
+      <button class="mode-btn"        data-mode="sentinels" role="tab" aria-selected="false">🛡️ <span>Sentinels</span></button>
+      <button class="mode-btn"        data-mode="console"  role="tab" aria-selected="false">⌨️ <span>Console</span></button>
+      <button class="mode-btn"        data-mode="qode"     role="tab" aria-selected="false">🤖 <span>Qode</span></button>
+      <button class="mode-btn"        data-mode="evolution" role="tab" aria-selected="false">🧬 <span>Evolution</span></button>
+    </nav>
+    <div class="rail-foot">
+      <button class="theme-toggle" id="themeToggle" type="button" title="Toggle day/night">◐</button>
+      <button class="pin-chip"     id="pinChip"     type="button" title="Commander PIN">PIN</button>
+      <button class="palette-cue"  id="paletteCue"  type="button" title="Quick search (Ctrl+K)">⌘K</button>
+      <span class="version-tag" title="Build">v1.9</span>
+    </div>
+  </aside>
+
+  <!-- CENTER · canvas -->
+  <main class="canvas" role="main" aria-label="Maya canvas">
+
+    <header class="canvas-head">
+      <button class="rail-toggle" id="railToggle" type="button" aria-label="Toggle navigation" title="Toggle nav">☰</button>
+      <!-- v1.9 · HORIZONTAL TOP SWITCHER · top 6 verbs always visible -->
+      <div class="top-switch" role="tablist" aria-label="Primary modes">
+        <button class="ts-btn active" data-mode="chat"    type="button">💬 Chat</button>
+        <button class="ts-btn"        data-mode="browser" type="button">🌐 Browser</button>
+        <button class="ts-btn"        data-mode="build"   type="button">💻 Build</button>
+        <button class="ts-btn"        data-mode="vision"  type="button">👁️ Vision</button>
+        <button class="ts-btn"        data-mode="image"   type="button">🖼️ Image</button>
+        <button class="ts-btn"        data-mode="staff"   type="button">👥 Staff</button>
+        <button class="ts-more" id="tsMore" type="button" aria-haspopup="true" aria-expanded="false">More ▾</button>
+        <div class="ts-drawer" id="tsDrawer" role="menu" hidden>
+          <button data-mode="campus"    role="menuitem">🏛️ Campus</button>
+          <button data-mode="video"     role="menuitem">🎬 Video</button>
+          <button data-mode="music"     role="menuitem">🎵 Music</button>
+          <button data-mode="voice"     role="menuitem">🗣️ Voice</button>
+          <button data-mode="chain"     role="menuitem">⛓️ Chain</button>
+          <button data-mode="three_d"   role="menuitem">🧊 3D</button>
+          <button data-mode="files"     role="menuitem">📁 Files</button>
+          <button data-mode="executor"  role="menuitem">⚙️ Executor</button>
+          <button data-mode="sentinels" role="menuitem">🛡️ Sentinels</button>
+          <button data-mode="console"   role="menuitem">⌨️ Console</button>
+          <button data-mode="qode"      role="menuitem">🤖 Qode</button>
+          <button data-mode="evolution" role="menuitem">🧬 Evolution</button>
+        </div>
+      </div>
+      <select id="enginePicker" class="engine-pick" title="Engine">
+        <option value="auto" title="Smart routing per GLOBAL-105 · brain picks lane per task">🤖 Auto Smart (she picks)</option>
+        <option value="groq" title="Llama 3.3 70B · 13 keys · fast chat">⚡ Groq · chat</option>
+        <option value="gemini" title="Gemini 2.5 · 37 keys · research + vision · 1M context">🔍 Gemini · research</option>
+        <option value="deepseek" title="DeepSeek V4 · 48 keys · code + reasoning">💻 DeepSeek · code</option>
+        <option value="glm" title="GLM-5 · agentic / tool-use">🧠 GLM-5 · agentic</option>
+        <option value="nim" title="NVIDIA NIM · 42 keys · frontier models">⚡ NIM · frontier</option>
+        <option value="kimi" title="Kimi K2.6 · 256K long context">💠 Kimi · long-ctx</option>
+        <option value="mistral" title="Mistral codestral · 6 keys · code">🇫🇷 Mistral · code</option>
+      </select>
+      <div class="canvas-status" id="canvasStatus" aria-live="polite">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">connecting…</span>
+      </div>
+      <button class="bell-btn" id="bellBtn" type="button" aria-label="Notifications · email + SMS" title="Inbox + SMS · Maya can brief you">
+        <span class="bell-ico" aria-hidden="true">🔔</span>
+        <span class="bell-badge" id="bellBadge" hidden>0</span>
+      </button>
+      <button class="rail-toggle right" id="liveToggle" type="button" aria-label="Toggle live rail" title="Toggle live rail (or reopen if closed)">⌗</button>
+    </header>
+
+    <!-- v1.10 · NOTIFICATION DRAWER · email inbox + SMS · Maya briefs Mo · 2026-05-15 -->
+    <aside class="bell-drawer" id="bellDrawer" hidden aria-label="Inbox and SMS drawer">
+      <header class="bd-head">
+        <button class="bd-tab active" data-bd-tab="inbox" type="button">📧 Inbox</button>
+        <button class="bd-tab"        data-bd-tab="sms"   type="button">📱 SMS</button>
+        <button class="bd-tab"        data-bd-tab="brief" type="button">✨ Brief</button>
+        <button class="bd-close" id="bdClose" type="button" aria-label="Close drawer" title="Close">✕</button>
+      </header>
+
+      <section class="bd-pane active" data-bd-pane="inbox">
+        <div class="bd-row">
+          <select id="bdAccount" class="bd-input" aria-label="Gmail account">
+            <option value="">— choose Gmail account —</option>
+          </select>
+          <button id="bdConnectBtn" class="bd-btn ghost" type="button" title="Connect a new Gmail account via OAuth">+ Connect</button>
+        </div>
+        <div class="bd-row">
+          <input type="password" id="bdPin" class="bd-input" placeholder="Commander PIN (saved this session)" autocomplete="current-password">
+          <button id="bdRefresh" class="bd-btn" type="button" title="Refresh inbox">⟳ Refresh</button>
+        </div>
+        <div class="bd-list" id="bdInboxList" aria-label="Email list"></div>
+        <div class="bd-preview" id="bdPreview" hidden>
+          <div class="bd-preview-head">
+            <strong id="bdPrevSubject">(no subject)</strong>
+            <span id="bdPrevFrom" class="bd-prev-from">—</span>
+            <button class="bd-back" id="bdPrevBack" type="button" title="Back to list">← back</button>
+          </div>
+          <div class="bd-preview-body" id="bdPrevBody"></div>
+          <div class="bd-preview-actions">
+            <textarea id="bdReply" class="bd-input" rows="3" placeholder="Reply (Maya saves as draft · you send manually from Gmail)"></textarea>
+            <button id="bdDraftBtn" class="bd-btn" type="button">💾 Save draft</button>
+            <button id="bdBriefSelBtn" class="bd-btn" type="button" title="Brief just this email">✨ Brief this</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="bd-pane" data-bd-pane="sms">
+        <div class="bd-row">
+          <input type="tel" id="bdSmsTo" class="bd-input" placeholder="To (default: Mo's phone)" inputmode="tel">
+        </div>
+        <textarea id="bdSmsBody" class="bd-input bd-tall" rows="5" placeholder="Message (160 chars per segment · Maya can spin it)"></textarea>
+        <div class="bd-row">
+          <button id="bdSmsSend" class="bd-btn" type="button">📤 Send SMS</button>
+          <button id="bdSmsSpin" class="bd-btn ghost" type="button" title="Have Maya rewrite this message">✨ Spin it</button>
+          <span id="bdSmsStatus" class="bd-status"></span>
+        </div>
+        <div class="bd-hint">Free path uses Hostinger SMTP → carrier gateway. AT&amp;T (Mo's carrier) is dead — destinations on Verizon/T-Mobile/etc work. Telnyx wiring still pending.</div>
+      </section>
+
+      <section class="bd-pane" data-bd-pane="brief">
+        <div class="bd-row">
+          <select id="bdBriefEngine" class="bd-input" title="Pick which brain summarizes (Mo's choice · not Maya's auto-pick)">
+            <option value="gemini" selected>🔍 Gemini · richer (default · 1M context)</option>
+            <option value="groq">⚡ Groq · faster (Llama 3.3 70B)</option>
+            <option value="glm">🧠 GLM-5 · agentic</option>
+            <option value="nim">🟢 NIM · frontier</option>
+            <option value="kimi">💠 Kimi · long-ctx</option>
+            <option value="deepseek">💻 DeepSeek · reasoning</option>
+          </select>
+          <button id="bdBriefRunBtn" class="bd-btn" type="button">✨ Brief my unread (last 24h)</button>
+          <button id="bdBriefSpeakBtn" class="bd-btn ghost" type="button" disabled title="Have Maya read the brief aloud (Kokoro)">🔊 Speak</button>
+        </div>
+        <div class="bd-brief" id="bdBriefOut">
+          <em>Click "Brief my unread" — Maya pulls your unread email from the last 24 hours and gives you a 3-section brief: what matters, info-only, and a draft reply for the most urgent one. Default engine is Gemini · pick another from the dropdown to override.</em>
+        </div>
+      </section>
+    </aside>
+    <!-- v1.3 · floating reopen button · appears when right rail is closed -->
+    <button class="rail-reopen" id="railReopen" type="button" hidden title="Reopen live rail">◀ LIVE</button>
+
+    <!-- v1.9 · PERSISTENT SLIM AUDIO STRIP · always visible · shows idle/speaking/paused -->
+    <div class="audio-strip" id="audioStrip" data-state="idle">
+      <span class="as-state" id="asState">🔊 idle</span>
+      <span class="as-text"  id="asText">no audio</span>
+      <span class="as-spacer"></span>
+      <button id="asTtsToggle" type="button" title="Auto-read replies">🔊 auto</button>
+      <button id="asPause"  type="button" title="Pause">⏸</button>
+      <button id="asResume" type="button" title="Resume">▶</button>
+      <button id="asStop"   type="button" title="Stop" class="hot">⏹</button>
+    </div>
+
+    <!-- ── PANEL · CHAT ── -->
+    <section class="panel active" data-panel="chat" role="tabpanel">
+      <!-- v1.9.7 · multi-session chat sidebar -->
+      <div class="chat-shell">
+        <aside class="chat-sessions" id="chatSessions" aria-label="Chat sessions">
+          <div class="cs-head">
+            <button class="cs-new" id="csNew" type="button" title="New chat">＋ New chat</button>
+            <button class="cs-toggle" id="csToggle" type="button" title="Collapse sidebar">‹</button>
+          </div>
+          <div class="cs-list" id="csList"><div class="empty-sm">No sessions yet.</div></div>
+        </aside>
+        <div class="chat-main">
+          <div class="chat-bar" id="chatBar">
+            <button class="chat-bar-open" id="csOpenBtn" type="button" title="Open sessions sidebar" hidden>☰</button>
+            <span class="chat-title" id="chatTitle">New chat</span>
+            <button class="chat-bar-rename" id="csRenameBtn" type="button" title="Rename this chat">✎</button>
+            <button class="chat-bar-delete" id="csDeleteBtn" type="button" title="Delete this chat">🗑</button>
+          </div>
+          <div class="feed" id="feed" aria-live="polite" aria-label="Conversation">
+            <div class="bubble system">
+              <strong>Maya OS · v1.9 · Total Kingdom</strong><br>
+              16 modes · multi-tab browser · multi-session chat · <kbd>Ctrl+K</kbd> command palette · 📎 attach with PIN.
+            </div>
+          </div>
+      <div class="qrow" id="qrow">
+        <button class="qb" data-q="vps">🖥️ VPS</button>
+        <button class="qb" data-q="apis">🆓 APIs</button>
+        <button class="qb" data-q="boot">⚡ Boot</button>
+        <button class="qb" data-q="build">🏗️ Build</button>
+        <button class="qb" data-q="parliament">⚖️ Parliament</button>
+        <button class="qb" data-q="council">🏛️ Council</button>
+        <button class="qb" data-q="health">💊 Health</button>
+        <button class="qb" data-q="self_improve">🧬 Self-Improve</button>
+        <button class="qb" data-q="repair">🔧 Repair</button>
+        <button class="qb" data-q="video">📺 Video</button>
+        <button class="qb" data-q="vision">👁️ Vision</button>
+      </div>
+      <footer class="composer">
+        <div class="composer-row">
+          <button class="cmp-btn cmp-attach" id="attachBtn" type="button" title="Attach (PIN required)" aria-label="Attach">📎</button>
+          <textarea id="msg" placeholder="Talk to Maya...   ·   Ctrl+K for command palette" rows="1" aria-label="Message Maya"></textarea>
+          <button class="cmp-btn cmp-mic"  id="micBtn"  type="button" title="Voice input" aria-label="Voice input">🎤</button>
+          <button class="cmp-btn cmp-tts"  id="ttsBtn"  type="button" title="Auto-read replies" aria-label="TTS toggle">🔊</button>
+          <button class="cmp-btn cmp-send" id="sendBtn" type="button" title="Send" aria-label="Send">➤</button>
+        </div>
+        <div class="composer-meta">
+          <span id="lastModel">—</span>
+          <span class="dot-sep">·</span>
+          <span id="lastMs">—</span>
+          <span class="grow"></span>
+          <button id="clearBtn" type="button" class="cmp-clear">Clear</button>
+        </div>
+        <input type="file" id="attachFile" hidden accept="image/*,.pdf,.txt,.md,.json,.html,.css,.js,.log,.zip">
+      </footer>
+        </div><!-- /.chat-main -->
+      </div><!-- /.chat-shell -->
+    </section>
+
+    <section class="panel" data-panel="image" role="tabpanel">
+      <div class="panel-pad">
+        <h2>🖼️ Image · generate</h2>
+        <p class="muted">Gemini 2.5 Flash Image · routes through brain action <code>image</code>.</p>
+        <div class="gen-row">
+          <textarea id="imgPrompt" placeholder="A neon cyberpunk skyline at dusk, hyper-realistic, 8K..." rows="3"></textarea>
+          <button class="cmp-btn cmp-send" id="imgGen" type="button">Generate</button>
+        </div>
+        <div id="imgResult" class="gen-result"><div class="empty-sm">No image yet · drop a prompt above.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="video" role="tabpanel">
+      <div class="panel-pad">
+        <h2>🎬 Video Studio</h2>
+        <p class="muted">VEO 3.1 / Pollinations / Kling fallback · brain action <code>video</code>. Attach reference + dial in the shot.</p>
+
+        <!-- v1.8 · Talk to Maya · co-pilot dials the studio for you -->
+        <div class="studio-copilot" data-studio="video">
+          <div class="sc-head"><span class="sc-icon">💬</span> Talk to Maya · describe what you want, she'll dial the studio</div>
+          <div class="sc-row">
+            <textarea class="sc-input" id="vidCoPilot" rows="2" placeholder="e.g. 'a 9:16 vertical of a drone weaving through fog over a Bosnian mountain village at sunrise · cinematic · 8 seconds'"></textarea>
+            <button class="cmp-btn cmp-send sc-go" id="vidCoPilotGo" type="button">Dial it in</button>
+          </div>
+          <div class="sc-out" id="vidCoPilotOut"></div>
+        </div>
+
+        <div class="studio-controls">
+          <label>Style
+            <select id="vidStyle">
+              <optgroup label="Cinematic">
+                <option value="cinematic">Cinematic (35mm · shallow DoF)</option>
+                <option value="anamorphic">Anamorphic (Hollywood lens flare)</option>
+                <option value="film_noir">Film Noir (b&amp;w · high contrast)</option>
+                <option value="hyperrealistic">Hyperrealistic 8K</option>
+              </optgroup>
+              <optgroup label="Documentary">
+                <option value="documentary">Documentary</option>
+                <option value="nature_doc">Nature doc (BBC Planet Earth)</option>
+                <option value="news_broadcast">News broadcast</option>
+              </optgroup>
+              <optgroup label="Animated">
+                <option value="anime">Anime (Studio Ghibli)</option>
+                <option value="anime_modern">Anime modern (Makoto Shinkai)</option>
+                <option value="pixar3d">Pixar 3D</option>
+                <option value="claymation">Claymation</option>
+                <option value="cel_animation">Cel animation 2D</option>
+              </optgroup>
+              <optgroup label="Stylized">
+                <option value="cyberpunk">Cyberpunk neon</option>
+                <option value="vaporwave">Vaporwave</option>
+                <option value="vintage">Vintage 80s VHS</option>
+                <option value="super8">Super 8 film grain</option>
+                <option value="surreal">Surreal (Dalí)</option>
+                <option value="psychedelic">Psychedelic</option>
+              </optgroup>
+              <optgroup label="Commercial">
+                <option value="commercial">TV commercial</option>
+                <option value="product_shot">Product shot (Apple-style)</option>
+                <option value="music_video">Music video</option>
+                <option value="social_short">Social short (TikTok/Reels)</option>
+              </optgroup>
+            </select>
+          </label>
+          <label>Aspect
+            <select id="vidAspect">
+              <option value="16:9">16:9 landscape</option>
+              <option value="9:16">9:16 vertical</option>
+              <option value="1:1">1:1 square</option>
+              <option value="21:9">21:9 cinematic</option>
+            </select>
+          </label>
+          <label>Duration <span id="vidDurVal">5</span>s
+            <input type="range" id="vidDur" min="3" max="30" step="1" value="5" oninput="document.getElementById('vidDurVal').textContent=this.value">
+          </label>
+          <label>Camera
+            <select id="vidCam">
+              <option value="static">Static</option>
+              <option value="dolly_in">Dolly in</option>
+              <option value="dolly_out">Dolly out</option>
+              <option value="pan_left">Pan left</option>
+              <option value="pan_right">Pan right</option>
+              <option value="drone">Drone aerial</option>
+              <option value="handheld">Handheld</option>
+              <option value="orbit">Orbit</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="gen-attach-row" id="vidAttachList"></div>
+        <div class="gen-row">
+          <button class="cmp-btn cmp-attach" id="vidAttachBtn" type="button" title="Attach reference (image/video/audio)">📎</button>
+          <textarea id="vidPrompt" placeholder="A drone shot flying through a glowing data center · neon-lit racks · server-glow ambience..." rows="3"></textarea>
+          <button class="cmp-btn cmp-send" id="vidGen" type="button">Generate</button>
+        </div>
+        <input type="file" id="vidAttachFile" hidden accept="image/*,video/*,audio/*" multiple>
+        <div id="vidResult" class="gen-result"><div class="empty-sm">No video yet · drop a prompt + pick a style.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="music" role="tabpanel">
+      <div class="panel-pad">
+        <h2>🎵 Music Studio</h2>
+        <p class="muted">Lyria · brain action <code>music</code>. Attach reference audio / lyrics / mood-board.</p>
+
+        <!-- v1.8 · Talk to Maya · co-pilot dials the studio for you -->
+        <div class="studio-copilot" data-studio="music">
+          <div class="sc-head"><span class="sc-icon">💬</span> Talk to Maya · describe the song, she'll pick genre/mood/instruments</div>
+          <div class="sc-row">
+            <textarea class="sc-input" id="musCoPilot" rows="2" placeholder="e.g. 'Bosnian sevdah meets lo-fi hip-hop · saz lead · cajón drums · melancholy but hopeful · 95 BPM · 3 minutes · lyrics about coming home'"></textarea>
+            <button class="cmp-btn cmp-send sc-go" id="musCoPilotGo" type="button">Dial it in</button>
+          </div>
+          <div class="sc-out" id="musCoPilotOut"></div>
+        </div>
+
+        <div class="studio-controls">
+          <label>Primary Genre
+            <select id="musGenre">
+              <optgroup label="Electronic">
+                <option value="synthwave">Synthwave</option><option value="lofi">Lo-fi hip-hop</option>
+                <option value="house">House</option><option value="techno">Techno</option><option value="trance">Trance</option>
+                <option value="dnb">Drum &amp; Bass</option><option value="dubstep">Dubstep</option><option value="future_bass">Future Bass</option>
+                <option value="ambient">Ambient</option><option value="idm">IDM</option><option value="phonk">Phonk</option>
+              </optgroup>
+              <optgroup label="Hip-Hop/R&amp;B">
+                <option value="trap">Trap</option><option value="boom_bap">Boom Bap</option>
+                <option value="drill">Drill</option><option value="rnb">R&amp;B</option><option value="neo_soul">Neo Soul</option>
+              </optgroup>
+              <optgroup label="Rock/Pop">
+                <option value="rock">Rock</option><option value="indie_rock">Indie Rock</option>
+                <option value="punk">Punk</option><option value="metal">Metal</option><option value="pop">Pop</option>
+                <option value="dream_pop">Dream Pop</option><option value="shoegaze">Shoegaze</option>
+              </optgroup>
+              <optgroup label="World/Ethnic">
+                <option value="balkan_folk">Balkan folk fusion</option><option value="bosnian_sevdah">Bosnian Sevdah</option>
+                <option value="afrobeats">Afrobeats</option><option value="latin">Latin</option>
+                <option value="celtic">Celtic</option><option value="middle_eastern">Middle Eastern</option>
+                <option value="indian_classical">Indian Classical</option><option value="kpop">K-Pop</option>
+              </optgroup>
+              <optgroup label="Cinematic/Orchestral">
+                <option value="cinematic">Cinematic</option><option value="orchestral">Orchestral</option>
+                <option value="trailer">Trailer Epic</option><option value="film_score">Film Score</option>
+                <option value="hybrid_orchestral">Hybrid Orchestral</option>
+              </optgroup>
+              <optgroup label="Acoustic/Roots">
+                <option value="folk_acoustic">Folk acoustic</option><option value="country">Country</option>
+                <option value="bluegrass">Bluegrass</option><option value="americana">Americana</option>
+              </optgroup>
+              <optgroup label="Jazz/Classical">
+                <option value="jazz">Jazz</option><option value="bossa_nova">Bossa Nova</option>
+                <option value="classical">Classical</option><option value="baroque">Baroque</option>
+              </optgroup>
+            </select>
+          </label>
+          <label>Mix-of (blend a second genre · optional)
+            <select id="musGenre2">
+              <option value="">— pure primary —</option>
+              <option value="synthwave">+ Synthwave</option><option value="lofi">+ Lo-fi</option>
+              <option value="trap">+ Trap</option><option value="orchestral">+ Orchestral</option>
+              <option value="balkan_folk">+ Balkan folk</option><option value="ambient">+ Ambient</option>
+              <option value="rock">+ Rock</option><option value="jazz">+ Jazz</option>
+              <option value="afrobeats">+ Afrobeats</option><option value="cinematic">+ Cinematic</option>
+              <option value="dream_pop">+ Dream Pop</option><option value="phonk">+ Phonk</option>
+            </select>
+          </label>
+          <label>Mood
+            <select id="musMood">
+              <option value="uplifting">Uplifting</option>
+              <option value="dark">Dark</option>
+              <option value="melancholic">Melancholic</option>
+              <option value="energetic">Energetic</option>
+              <option value="dreamy">Dreamy</option>
+              <option value="aggressive">Aggressive</option>
+              <option value="romantic">Romantic</option>
+              <option value="suspense">Suspense</option>
+            </select>
+          </label>
+          <label>BPM <span id="musBpmVal">90</span>
+            <input type="range" id="musBpm" min="60" max="180" step="5" value="90" oninput="document.getElementById('musBpmVal').textContent=this.value">
+          </label>
+          <label>Duration <span id="musDurVal">60</span>s
+            <input type="range" id="musDur" min="15" max="180" step="5" value="60" oninput="document.getElementById('musDurVal').textContent=this.value">
+          </label>
+          <label>Key
+            <select id="musKey">
+              <option value="auto">Auto</option>
+              <option value="C">C major</option>
+              <option value="Am">A minor</option>
+              <option value="G">G major</option>
+              <option value="Em">E minor</option>
+              <option value="D">D major</option>
+              <option value="Dm">D minor</option>
+              <option value="F">F major</option>
+            </select>
+          </label>
+          <label>Lead instrument
+            <select id="musLead">
+              <optgroup label="Strings (plucked)">
+                <option value="acoustic_guitar">Acoustic guitar</option>
+                <option value="electric_guitar">Electric guitar (clean)</option>
+                <option value="electric_guitar_dist">Electric guitar (distorted)</option>
+                <option value="classical_guitar">Classical guitar</option>
+                <option value="12_string_guitar">12-string guitar</option>
+                <option value="bass_guitar">Bass guitar (electric)</option>
+                <option value="upright_bass">Upright bass</option>
+                <option value="ukulele">Ukulele</option>
+                <option value="banjo">Banjo (5-string)</option>
+                <option value="banjo_4">Banjo (4-string tenor)</option>
+                <option value="mandolin">Mandolin</option>
+                <option value="oud">Oud (Arabic)</option>
+                <option value="saz">Saz / Bağlama (Turkish)</option>
+                <option value="sitar">Sitar (Indian)</option>
+                <option value="tampura">Tampura drone</option>
+                <option value="koto">Koto (Japanese)</option>
+                <option value="shamisen">Shamisen (Japanese)</option>
+                <option value="guzheng">Guzheng (Chinese)</option>
+                <option value="balalaika">Balalaika (Russian)</option>
+                <option value="bouzouki">Bouzouki (Greek)</option>
+                <option value="dotara">Dotara (Bengali)</option>
+                <option value="harp">Harp (concert)</option>
+                <option value="celtic_harp">Celtic harp</option>
+                <option value="lyre">Lyre</option>
+                <option value="lute">Lute (Renaissance)</option>
+                <option value="charango">Charango (Andean)</option>
+              </optgroup>
+              <optgroup label="Strings (bowed)">
+                <option value="strings">Strings section</option>
+                <option value="violin">Violin solo</option>
+                <option value="cello">Cello solo</option>
+                <option value="viola">Viola</option>
+                <option value="double_bass">Double bass</option>
+              </optgroup>
+              <optgroup label="Keys">
+                <option value="piano">Piano</option>
+                <option value="grand_piano">Grand piano</option>
+                <option value="rhodes">Rhodes electric</option>
+                <option value="organ">Organ</option>
+                <option value="accordion">Accordion</option>
+                <option value="harpsichord">Harpsichord</option>
+              </optgroup>
+              <optgroup label="Wind">
+                <option value="flute">Flute</option>
+                <option value="saxophone">Saxophone</option>
+                <option value="trumpet">Trumpet</option>
+                <option value="french_horn">French horn</option>
+                <option value="clarinet">Clarinet</option>
+                <option value="oboe">Oboe</option>
+                <option value="duduk">Duduk (Armenian)</option>
+                <option value="bansuri">Bansuri (Indian flute)</option>
+              </optgroup>
+              <optgroup label="Synth">
+                <option value="synth_pad">Synth pad</option>
+                <option value="synth_lead">Synth lead</option>
+                <option value="synth_arp">Synth arp</option>
+                <option value="synth_bass">Synth bass</option>
+                <option value="moog">Moog warm</option>
+                <option value="prophet">Prophet 5</option>
+              </optgroup>
+              <optgroup label="Vocal">
+                <option value="vocal">Vocal (lead · lyrics required below)</option>
+                <option value="vocal_choir">Vocal choir</option>
+                <option value="vocal_chops">Vocal chops</option>
+                <option value="rap_flow">Rap flow</option>
+              </optgroup>
+              <optgroup label="Percussion (featured)">
+                <option value="tabla">Tabla (Indian)</option>
+                <option value="djembe">Djembe (West African)</option>
+                <option value="cajon">Cajón</option>
+                <option value="bongos">Bongos</option>
+                <option value="congas">Congas</option>
+                <option value="frame_drum">Frame drum / daf</option>
+                <option value="darbuka">Darbuka / doumbek (Middle Eastern)</option>
+                <option value="taiko">Taiko (Japanese)</option>
+                <option value="tablanam">Tabla + Mridangam fusion</option>
+                <option value="berimbau">Berimbau (Brazilian)</option>
+                <option value="hand_drum">Generic hand drum</option>
+                <option value="hang_drum">Hang drum / handpan</option>
+              </optgroup>
+              <optgroup label="Mallet / Tuned percussion">
+                <option value="marimba">Marimba</option>
+                <option value="vibraphone">Vibraphone</option>
+                <option value="xylophone">Xylophone</option>
+                <option value="glockenspiel">Glockenspiel</option>
+                <option value="kalimba">Kalimba (thumb piano)</option>
+                <option value="steel_drum">Steel drum</option>
+                <option value="celesta">Celesta</option>
+              </optgroup>
+            </select>
+          </label>
+          <label>Second instrument (layered)
+            <select id="musSecond">
+              <option value="">— none —</option>
+              <option value="strings">+ Strings pad</option>
+              <option value="piano">+ Piano</option>
+              <option value="synth_pad">+ Synth pad</option>
+              <option value="acoustic_guitar">+ Acoustic guitar</option>
+              <option value="cello">+ Cello</option>
+              <option value="flute">+ Flute</option>
+              <option value="choir">+ Choir vocals</option>
+              <option value="trumpet">+ Trumpet</option>
+            </select>
+          </label>
+          <label>Drums style
+            <select id="musDrums">
+              <option value="acoustic">Acoustic kit</option>
+              <option value="electronic_808">808 trap</option>
+              <option value="boom_bap">Boom bap</option>
+              <option value="house_4_on_floor">House 4-on-floor</option>
+              <option value="dnb_breaks">Drum &amp; Bass breaks</option>
+              <option value="orchestral_perc">Orchestral percussion</option>
+              <option value="latin_perc">Latin percussion</option>
+              <option value="balkan_perc">Balkan percussion</option>
+              <option value="none">No drums (ambient)</option>
+            </select>
+          </label>
+          <label>Structure
+            <select id="musStructure">
+              <option value="verse_chorus">Verse-Chorus</option>
+              <option value="ababcb">ABABCB</option>
+              <option value="loop_16bar">16-bar loop</option>
+              <option value="intro_buildup_drop">Intro-Buildup-Drop</option>
+              <option value="cinematic_arc">Cinematic arc (slow build · climax · resolve)</option>
+              <option value="minimalist">Minimalist (no structure · drift)</option>
+            </select>
+          </label>
+          <label style="grid-column: 1 / -1">Lyrics (optional · for vocal tracks · Suno-class)
+            <textarea id="musLyrics" rows="3" placeholder="Drop lyrics here for vocal tracks · or leave blank for instrumental" style="background:var(--panel-soft);border:1px solid var(--border);border-radius:var(--rad-sm);color:var(--text);padding:8px 10px;resize:vertical;font-family:'Inter',sans-serif;font-size:13px"></textarea>
+          </label>
+        </div>
+
+        <div class="gen-attach-row" id="musAttachList"></div>
+        <div class="gen-row">
+          <button class="cmp-btn cmp-attach" id="musAttachBtn" type="button" title="Attach reference (audio/image/text)">📎</button>
+          <textarea id="musPrompt" placeholder="The vibe · the story · what should this song make me feel..." rows="3"></textarea>
+          <button class="cmp-btn cmp-send" id="musGen" type="button">Generate</button>
+        </div>
+        <input type="file" id="musAttachFile" hidden accept="audio/*,image/*,.txt,.md" multiple>
+        <div id="musResult" class="gen-result"><div class="empty-sm">No music yet · dial in the studio above + drop a vibe.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="voice" role="tabpanel">
+      <div class="panel-pad">
+        <h2>🗣️ Voice · TTS lab</h2>
+        <p class="muted">Modal F5 / Style / Kokoro · brain action <code>tts</code>.</p>
+        <div class="gen-row">
+          <textarea id="voicePrompt" placeholder="Type what Maya should say..." rows="3"></textarea>
+          <select id="voiceModel" class="search" style="max-width:200px">
+            <option value="maya_default">Maya default (warm female)</option>
+            <option value="kokoro_male">Kokoro male</option>
+            <option value="f5_clone">F5 clone</option>
+          </select>
+          <button class="cmp-btn cmp-send" id="voiceGen" type="button">Speak</button>
+        </div>
+        <div id="voiceResult" class="gen-result"><div class="empty-sm">No audio yet.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="vision" role="tabpanel">
+      <div class="panel-pad">
+        <h2>👁️ Vision · analyze image</h2>
+        <p class="muted">Drop screenshot · Maya describes it via gemini-2.5-flash-vision (live empire-wide · GLOBAL-56).</p>
+        <div class="drop-zone" id="visionDrop">
+          <input type="file" id="visionFile" accept="image/*" hidden>
+          <p>Click or drop an image · Commander PIN required.</p>
+          <button class="cmp-btn cmp-send" id="visionPick" type="button">Pick image</button>
+        </div>
+        <div id="visionResult" class="gen-result"><div class="empty-sm">No analysis yet.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="build" role="tabpanel">
+      <div class="panel-pad">
+        <h2>💻 Build · codegen</h2>
+        <p class="muted">DeepSeek V4 / Mistral codestral / Qwen3-Coder · brain action <code>code</code>.</p>
+        <div class="gen-row">
+          <textarea id="buildPrompt" placeholder='Build a sleek dark landing page for MirzaTech.ai...' rows="4"></textarea>
+          <button class="cmp-btn cmp-send" id="buildGen" type="button">Build</button>
+        </div>
+        <div id="buildResult" class="gen-result"><div class="empty-sm">No build output yet.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="chain" role="tabpanel">
+      <div class="panel-pad">
+        <h2>⛓️ Chain · multi-step plan</h2>
+        <p class="muted">Maya breaks a goal into steps · executes each · reports back.</p>
+        <div class="gen-row">
+          <textarea id="chainPrompt" placeholder="Goal: scrape 50 new real-estate leads in Atlanta, score them, draft outreach..." rows="4"></textarea>
+          <button class="cmp-btn cmp-send" id="chainGen" type="button">Plan + Run</button>
+        </div>
+        <div id="chainResult" class="gen-result"><div class="empty-sm">No chain yet.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="three_d" role="tabpanel">
+      <div class="panel-pad">
+        <h2>🧊 3D · model generate</h2>
+        <p class="muted">Trellis on Modal · text → reference image → 3D mesh. Or drop your own image.</p>
+
+        <!-- v1.8 · Talk to Maya · describe the model · she generates a reference image then Trellis-meshes it -->
+        <div class="studio-copilot" data-studio="three_d">
+          <div class="sc-head"><span class="sc-icon">💬</span> Talk to Maya · describe the 3D model you want</div>
+          <div class="sc-row">
+            <textarea class="sc-input" id="threeDCoPilot" rows="2" placeholder="e.g. 'a low-poly mountain cabin · stone base · wooden upper · snow on roof · for a game asset' · or 'realistic bust of a wolf · for printing'"></textarea>
+            <button class="cmp-btn cmp-send sc-go" id="threeDCoPilotGo" type="button">Generate</button>
+          </div>
+          <div class="sc-out" id="threeDCoPilotOut"></div>
+        </div>
+
+        <div class="drop-zone" id="threeDDrop">
+          <input type="file" id="threeDFile" accept="image/*" hidden>
+          <p>… or drop a reference image directly.</p>
+          <button class="cmp-btn cmp-send" id="threeDPick" type="button">Pick image</button>
+        </div>
+        <div id="threeDResult" class="gen-result"><div class="empty-sm">No model yet.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="browser" role="tabpanel">
+      <div class="browser-frame">
+        <!-- v1.4 · fullscreen-exit overlay · ONLY shows when shell.browser-fullscreen -->
+        <button class="browser-fs-exit" id="browserFsExit" type="button" title="Exit fullscreen">✕ Exit fullscreen</button>
+        <div class="browser-bar">
+          <div class="browser-tabs" id="browserTabs"></div>
+          <button class="browser-newtab" id="newTabBtn" type="button" title="New tab">+</button>
+        </div>
+        <div class="browser-url">
+          <button id="browserBack" type="button" title="Back">‹</button>
+          <button id="browserFwd"  type="button" title="Forward">›</button>
+          <button id="browserReload" type="button" title="Reload">⟳</button>
+          <input type="text" id="browserAddr" placeholder="https://" spellcheck="false">
+          <button id="browserGo" type="button" title="Go">Go</button>
+          <button id="browserWatch" type="button" title="Maya watches this page (vision · learns patterns)" class="browser-eyes">👁️ Watch</button>
+          <button id="browserHelp" type="button" title="Maya helps you · automate / sign up / fix what's stuck (Playwright stealth)" class="browser-hands">✋ Help</button>
+          <button id="browserFullscreen" type="button" title="Toggle fullscreen browser">⛶</button>
+        </div>
+        <div class="browser-quick">
+          <button data-href="https://mirzatech.ai">mirzatech.ai</button>
+          <button data-href="https://emaaa.io">emaaa.io</button>
+          <button data-href="https://adeeo.io">adeeo.io</button>
+          <button data-href="https://osman.is">osman.is</button>
+          <button data-href="https://topforge.io">topforge.io</button>
+          <button data-href="https://app-forge.pro">app-forge.pro</button>
+          <button data-href="https://ai-staffing.agency">ai-staffing.agency</button>
+          <button data-href="https://eternalink.io">eternalink.io</button>
+          <button data-href="https://opencrest.io">opencrest.io</button>
+          <button data-href="https://iamsuperio.cloud/maya-face">maya-face</button>
+          <button data-href="https://iamsuperio.cloud/admin">admin</button>
+        </div>
+        <div class="browser-iframe-wrap" id="browserIframeWrap"></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="staff" role="tabpanel">
+      <div class="panel-pad">
+        <h2>👥 Staff · empire's crew</h2>
+        <p class="muted">Maya orchestrates these · click any to address in chat.</p>
+        <input type="search" id="staffSearch" placeholder="Search by name / role / skill..." class="search">
+        <div id="staffGrid" class="staff-grid"></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="files" role="tabpanel">
+      <div class="panel-pad">
+        <h2>📁 Files</h2>
+        <p class="muted">Uploaded files appear here · drop a file anywhere or use 📎 in chat.</p>
+        <div id="fileList" class="file-list"><div class="empty-sm">No files yet.</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="executor" role="tabpanel">
+      <div class="panel-pad">
+        <h2>⚙️ Executor · Maya's full arsenal</h2>
+        <p class="muted">1,520 HTTP-callable tools · 225 engine providers · 27,866 modules · 215 executors · 91 crystals · 51 skills. Type to filter or browse below.</p>
+        <input type="search" id="execSearch" placeholder="Search tools / engines / models / agents..." class="search">
+        <div class="exec-tabs">
+          <button class="exec-tab active" data-exec="engines">Engines (12+ providers · 650 keys)</button>
+          <button class="exec-tab" data-exec="agents">Agents (10 ASG + sentinels)</button>
+          <button class="exec-tab" data-exec="skills">Skills (51)</button>
+          <button class="exec-tab" data-exec="modules">Modules (27,866)</button>
+        </div>
+        <div id="execResults" class="exec-results"><div class="empty-sm">Loading...</div></div>
+      </div>
+    </section>
+
+    <!-- v1.3 · SENTINELS PANEL · the army Mo wants visible -->
+    <section class="panel" data-panel="sentinels" role="tabpanel">
+      <div class="panel-pad">
+        <h2>🛡️ Sentinels · the AI module army</h2>
+        <p class="muted"><strong id="sentinelTotal">…</strong> sentinels live on VPS · click a category · hover any card for purpose + last-used.</p>
+        <input type="search" id="sentinelSearch" placeholder="Search sentinels by name or category..." class="search">
+        <div id="sentinelCategories" class="sentinel-cats"></div>
+        <div id="sentinelGrid" class="sentinel-grid"><div class="empty-sm">Loading sentinel catalog from /api/sentinel_meta...</div></div>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="console" role="tabpanel">
+      <div class="panel-pad">
+        <h2>⌨️ Console · raw access to Maya's brain</h2>
+        <p class="muted">For developers + power users · the same brain Maya OS uses, but you control the exact JSON. Useful for: testing actions before wiring UI · invoking sentinels by id · checking health · listing all engines.</p>
+        <div class="console-examples">
+          <strong style="display:block;margin-bottom:8px;color:var(--text);font-size:12px">⚡ Quick examples · click any to load</strong>
+          <button class="cmp-clear console-ex" data-payload='{"action":"health"}'>Health check</button>
+          <button class="cmp-clear console-ex" data-payload='{"action":"chat","message":"Maya, what is your current state?"}'>Chat with Maya</button>
+          <button class="cmp-clear console-ex" data-payload='{"action":"list"}'>List engines (12 providers)</button>
+          <button class="cmp-clear console-ex" data-payload='{"action":"memory"}'>Read Maya's memory</button>
+          <button class="cmp-clear console-ex" data-payload='{"action":"chat","message":"Invoke sentinel sentinel_blitz_001 and summarize."}'>Invoke a sentinel via Maya</button>
+          <button class="cmp-clear console-ex" data-payload='{"action":"image","prompt":"a cyberpunk cityscape at sunset"}'>Generate image</button>
+          <button class="cmp-clear console-ex" data-payload='{"action":"chain","prompt":"Plan a viral 60s TikTok video about Maya OS."}'>Multi-step chain</button>
+        </div>
+        <textarea id="rawIn" class="raw-in" placeholder='{"action":"health"}' rows="5">{"action":"health"}</textarea>
+        <div class="console-actions">
+          <button id="rawSend" class="cmp-clear" type="button">Send →</button>
+          <button id="rawClear" class="cmp-clear" type="button">Clear</button>
+          <span class="grow"></span>
+          <span class="muted" style="font-size:11px" id="rawStat">—</span>
+        </div>
+        <pre id="rawOut" class="raw-out">// response appears here</pre>
+      </div>
+    </section>
+
+    <!-- v1.9.7 · Qode mode is now an external launcher · panel removed · click rail Qode button opens https://iamsuperio.cloud/maya-qode in a separate window -->
+
+    <!-- v1.10.2 · CAMPUS mode · Sovereign Campus port · Skill #1 + #6 + GLOBAL-92 · 2026-05-15 -->
+    <section class="panel" data-panel="campus" role="tabpanel">
+      <div class="campus-stage" id="campusStage" aria-label="Maya Sovereign Campus · live state">
+        <header class="campus-head">
+          <div class="campus-title">
+            <span class="campus-dot"></span>
+            <strong>Maya · Sovereign Campus</strong>
+            <span class="campus-sub">Mo's personal command surface · GLOBAL-92</span>
+          </div>
+          <div class="campus-pulse" id="campusPulse">
+            <span class="cp-stat"><b id="cpEdits">0</b><i>edits today</i></span>
+            <span class="cp-stat"><b id="cpThr">0</b><i>tasks/min</i></span>
+            <span class="cp-stat"><b id="cpAgents">0</b><i>agents idle</i></span>
+            <span class="cp-stat cp-gold"><b id="cpConsensus">88%</b><i>council</i></span>
+          </div>
+        </header>
+
+        <div class="campus-floor" id="campusFloor">
+          <!-- SVG stream layer · ghost-streams between rooms · injected by JS -->
+          <svg class="campus-streams" id="campusStreams" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+          <!-- Central hub · breathing orb · Maya Brain -->
+          <div class="hub-orb" id="hubOrb">
+            <div class="hub-orb-ring"></div>
+            <div class="hub-orb-core">
+              <span class="hub-orb-pct" id="hubOrbPct">88%</span>
+              <span class="hub-orb-lbl">CONSENSUS</span>
+            </div>
+            <div class="hub-orb-name">MAYA · Sovereign</div>
+          </div>
+
+          <!-- Satellite rooms · 5 canonical · positions assigned via CSS .room-N -->
+          <div class="campus-rooms" id="campusRooms">
+            <!-- rooms injected by JS from /api/maya_os_habitat_state -->
+            <div class="empty-sm">Booting habitat…</div>
+          </div>
+        </div>
+
+        <aside class="campus-log" aria-label="Audit log">
+          <h3>📜 Live activity</h3>
+          <div class="campus-log-rows" id="campusLogRows">
+            <div class="empty-sm">Connecting to state stream…</div>
+          </div>
+        </aside>
+
+        <footer class="campus-foot">
+          <span class="cf-brand">Powered by MirzaTech.ai · Property of EMAAA.io</span>
+          <span class="cf-phone">📞 +1 (743) 215-1423</span>
+          <span class="cf-phase" id="campusPhase">Phase A · stub rooms · Phase B wires self-edit queue</span>
+        </footer>
+      </div>
+    </section>
+
+    <!-- v1.9.5 · Evolution mode · daily self-improvement scoreboard -->
+    <section class="panel" data-panel="evolution" role="tabpanel">
+      <div class="panel-pad">
+        <h2>🧬 Evolution Engine</h2>
+        <p class="muted">Daily self-improvement · cron <code>7 4 * * *</code> (04:07 UTC) tests every API key in the arsenal, marks alive/dead, scores each provider. Read-only here · the real scan runs nightly via <code>maya_evolution.php</code>.</p>
+
+        <div class="evo-header" id="evoHeader">
+          <div class="evo-loading">Loading latest scan…</div>
+        </div>
+
+        <div class="evo-actions">
+          <button id="evoRefresh" class="cmp-clear" type="button">↻ Refresh report</button>
+          <button id="evoHistoryToggle" class="cmp-clear" type="button">📜 Show history</button>
+          <span class="evo-next" id="evoNext"></span>
+        </div>
+
+        <div class="evo-history" id="evoHistory" hidden>
+          <div class="empty-sm">Loading history…</div>
+        </div>
+
+        <h3 class="evo-section-title">Provider scoreboard · <span id="evoProviderCount">0</span> providers</h3>
+        <div class="evo-scoreboard" id="evoScoreboard">
+          <div class="empty-sm">Waiting for report…</div>
+        </div>
+
+        <h3 class="evo-section-title">Capability evolution</h3>
+        <div class="evo-capabilities" id="evoCapabilities">
+          <div class="empty-sm">No capability deltas yet.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- v1.9 · RIGHT RAIL · stacked single-column · collapsible sections -->
+  <aside class="rail rail-right" id="railRight" aria-label="Live activity">
+    <header class="rail-r-head">
+      <span class="r-title">LIVE</span>
+      <button class="rail-r-clear" id="rrClear" type="button" title="Clear all entries">🗑 CLEAR</button>
+      <button class="rail-r-close" id="rrClose" type="button" title="Close rail · floating reopen tab appears">✕ CLOSE</button>
+    </header>
+    <section class="rail-section" data-section="tools">
+      <button class="rail-h" data-toggle="tools" type="button">▾ Tool calls <span class="rh-count" id="toolCallsCount">0</span></button>
+      <div id="toolCalls" class="rail-list">
+        <div class="empty-sm">No tool calls yet.</div>
+      </div>
+    </section>
+    <section class="rail-section" data-section="files">
+      <button class="rail-h" data-toggle="files" type="button">▾ Recent files <span class="rh-count" id="recentFilesCount">0</span></button>
+      <div id="recentFiles" class="rail-list">
+        <div class="empty-sm">None.</div>
+      </div>
+    </section>
+    <section class="rail-section" data-section="tickets">
+      <button class="rail-h" data-toggle="tickets" type="button">▾ Tickets <span class="rh-count" id="recentTicketsCount">0</span></button>
+      <div id="recentTickets" class="rail-list">
+        <div class="empty-sm">None.</div>
+      </div>
+    </section>
+    <section class="rail-section" data-section="brain">
+      <button class="rail-h" data-toggle="brain" type="button">▾ Brain</button>
+      <div class="rail-list" id="brainBox">
+        <div class="rail-card"><div class="rc-title" id="brainTitle">connecting…</div><div class="rc-meta" id="brainMeta">—</div></div>
+      </div>
+    </section>
+  </aside>
+
+</div>
+
+<!-- v1.9 · COMMAND PALETTE (Ctrl+K) -->
+<div class="palette-backdrop" id="paletteBackdrop" hidden>
+  <div class="palette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <input type="text" id="paletteInput" class="palette-input" placeholder="Jump to a mode · staff member · engine · tool... (↑↓ Enter · Esc to close)" autocomplete="off" spellcheck="false">
+    <div class="palette-results" id="paletteResults" role="listbox"></div>
+    <div class="palette-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>Enter</kbd> select</span>
+      <span><kbd>Esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script src="./maya-os.js?v=199b-mobile-flex" defer></script>
+
+<!-- v1.9.9b · DEBUG OVERLAY · only shows when URL has ?debug=1 · helps diagnose mobile issues -->
+<script>
+(function () {
+  if (!/[?&]debug=1/.test(location.search)) return;
+  function paint() {
+    var d = document.getElementById('mayaDebugOverlay');
+    if (!d) {
+      d = document.createElement('div');
+      d.id = 'mayaDebugOverlay';
+      d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.92);color:#0f0;font:11px/1.4 monospace;padding:8px 10px;z-index:99999;border-bottom:2px solid #0f0;max-height:50vh;overflow:auto;white-space:pre-wrap;';
+      document.body.appendChild(d);
+      var c = document.createElement('button');
+      c.textContent = 'X CLOSE';
+      c.style.cssText = 'position:fixed;top:6px;right:6px;background:#f00;color:#fff;border:0;padding:4px 8px;z-index:100000;font:bold 11px monospace;';
+      c.onclick = function () { d.remove(); c.remove(); };
+      document.body.appendChild(c);
+    }
+    var shell = document.getElementById('osShell');
+    var main  = document.querySelector('main.canvas');
+    var panel = document.querySelector('.panel.active');
+    var sw    = navigator.serviceWorker && navigator.serviceWorker.controller;
+    var lines = [
+      '═══ Maya OS · debug ═══',
+      'UA       : ' + navigator.userAgent,
+      'viewport : ' + innerWidth + ' x ' + innerHeight + '  (devicePixelRatio ' + devicePixelRatio + ')',
+      'shell    : ' + (shell ? shell.getBoundingClientRect().width + ' x ' + shell.getBoundingClientRect().height : 'MISSING') + '  display=' + (shell ? getComputedStyle(shell).display : '?'),
+      'main     : ' + (main ? main.getBoundingClientRect().width + ' x ' + main.getBoundingClientRect().height : 'MISSING'),
+      'panel    : ' + (panel ? panel.dataset.panel + '  ' + panel.getBoundingClientRect().width + ' x ' + panel.getBoundingClientRect().height : 'NONE ACTIVE'),
+      'CSS link : ' + (document.querySelector('link[rel=stylesheet]') ? document.querySelector('link[rel=stylesheet]').href : 'NONE'),
+      'SW       : ' + (sw ? sw.scriptURL + ' (' + sw.state + ')' : 'NOT CONTROLLING'),
+      '',
+      'tap any rail-nav button below · this overlay updates'
+    ];
+    d.textContent = lines.join('\n');
+  }
+  paint();
+  setInterval(paint, 1000);
+  document.addEventListener('click', function () { setTimeout(paint, 200); }, true);
+})();
+</script>
+</body>
+</html>
