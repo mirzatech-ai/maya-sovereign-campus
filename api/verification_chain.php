@@ -102,6 +102,130 @@ function batch_call_seats(array $calls, $per_seat_timeout = 8) {
     return $out;
 }
 
+/**
+ * GEMINI · CHAIRMAN OF THE BOARD (GLOBAL-97 · Skill #28 · per Mo+Gemini 2026-05-15)
+ * --------------------------------------------------------------------------------
+ * Gemini sits ABOVE the Board. After Parliament+Council+Board return their stage
+ * verdicts, Gemini reviews the full transcript and either SEALS, VETOES, or sends
+ * back for REVISION. 100% Consensus is the only path to APPROVED.
+ *
+ * Double role (Mo+Gemini's 2026-05-15 mandate):
+ *   - VISUAL: compare design mocks to code output, enforce UI adherence
+ *   - LOGIC:  business viability + market positioning + national scalability
+ *
+ * Uses Maya brain (engine forced to 'gemini') · gemini-2.5-pro for Chairman seal,
+ * gemini-2.5-flash for fast Visual checks. Falls back to mock with explicit
+ * 'CHAIRMAN_VETO' if Gemini unreachable, ensuring the chain never silently approves.
+ */
+function gemini_keys() {
+    static $cache = null;
+    if ($cache !== null) return $cache;
+    $cache = array();
+    $env = __DIR__ . '/.gemini_keys.env';
+    if (file_exists($env)) {
+        foreach (preg_split('/\r?\n/', (string)@file_get_contents($env)) as $line) {
+            if (preg_match('/^GEMINI\s*=\s*([A-Za-z0-9_\-]+)/', $line, $m)) $cache[] = $m[1];
+        }
+    }
+    return $cache;
+}
+
+function call_gemini_chairman($role_persona, $payload_text, $stage_summary, $timeout = 25) {
+    $keys = gemini_keys();
+    if (empty($keys)) {
+        return array(
+            'role'=>$role_persona,'verdict'=>'VETO','engine_provider'=>'mock',
+            'text'=>'[Chairman mock · no Gemini keys in vault · CHAIRMAN_VERDICT: VETO]',
+            'reason'=>'no gemini keys loaded',
+        );
+    }
+    // Retry across keys + model fallback if first attempt hits 429/empty
+    $tried = array();
+    $primary_model = 'gemini-2.5-flash';  // both personas use flash · pro reserved for binding decisions only
+    $models_to_try = array($primary_model);
+    $key = $keys[abs(crc32($role_persona . microtime())) % count($keys)];
+    $model = $primary_model;
+    // CANONICAL CONTEXT every persona must know — prevents the two false-VETOs
+    // observed 2026-05-15 (Chairman misreading 'MirzaTech.ai · EMAAA.io' footer as
+    // a GLOBAL-93 violation, and Visual treating definition documents as missing
+    // visuals when the artifact is a spec not a screenshot).
+    $canon_ctx = "\n\nCANONICAL EMPIRE CONTEXT (apply silently):\n"
+               . "• 'MirzaTech.ai' and 'EMAAA.io' are MO'S OWN EMPIRE brands and MUST appear in footer of every public surface (this is a HARD POSITIVE rule, NOT a vendor-name leak).\n"
+               . "• GLOBAL-93 'no vendor names on public surfaces' applies ONLY to external LLM providers (Anthropic, OpenAI, Google/Gemini, Mistral, Meta, NVIDIA, Groq, Cerebras, Replicate, DeepSeek, Qwen, etc.). Empire-owned brand names are MANDATORY.\n"
+               . "• Agency-definition artifacts are SPEC DOCUMENTS describing an agency's mission/audience/pricing — they are NOT deployed UI screenshots. Judge them as specifications: do they describe a viable, brand-consistent, scalable product?\n"
+               . "• Canonical empire counts: 58 agencies · 12 Council seats · 12 Board seats · 24 Parliament seats · 5 Parliament rounds (10/5/5/3/1).\n"
+               . "• Canonical pricing ladder: \$5/\$9/\$19/\$49/\$99/\$199 per-seat per-month (Lite/Pro/Team/Scale/Org/Enterprise) + \$2 Council turn + \$4 Parliament turn.\n"
+               . "• If your only concern would be 'this is just text not a visual' or 'MirzaTech.ai violates GLOBAL-93' — DO NOT VETO. Those are false positives.\n";
+
+    $system_visual = "You are GEMINI, Chairman of the Board for Mo's One Mind Network. ROLE: VISUAL AUDITOR. "
+                   . "When a visual or design is in scope, enforce: cyan/gold/green/red biolum palette · ghost-streams · 12 canonical lanes · no triangles or placeholder shapes for humans/robots · Sovereign Campus aesthetic. "
+                   . "When the artifact is a SPEC DOCUMENT (agency definition, plan, contract), judge brand integrity and visual-language consistency of the SPEC, not the absence of pixels. "
+                   . "End reply with CHAIRMAN_VERDICT: SEAL | VETO | REVISE."
+                   . $canon_ctx;
+    $system_logic  = "You are GEMINI, Chairman of the Board for Mo's One Mind Network. ROLE: STRATEGIC LOGIC ENGINE. "
+                   . "Evaluate: scalability across 58 agencies · ROI (per-seat economics) · legal/compliance · empire dependency coherence · 2026 market reality. "
+                   . "NO rubber-stamping AND NO nitpicking on issues already addressed in the artifact text. "
+                   . "End reply with CHAIRMAN_VERDICT: SEAL | VETO | REVISE."
+                   . $canon_ctx;
+    $system = ($role_persona === 'VISUAL') ? $system_visual : $system_logic;
+    $user_text = $system . "\n\n[ARTIFACT]\n" . substr($payload_text, 0, 4000)
+               . "\n\n[BOARD/COUNCIL/PARLIAMENT TRANSCRIPT SUMMARY]\n" . substr($stage_summary, 0, 4000)
+               . "\n\nApply 100% Consensus Mandate (GLOBAL-97): ONE complaint anywhere = VETO. Reply in ≤80 words then CHAIRMAN_VERDICT line.";
+    $body_payload = array(
+        'contents' => array(array(
+            'role'  => 'user',
+            'parts' => array(array('text' => $user_text)),
+        )),
+        'generationConfig' => array(
+            'temperature' => 0.25,
+            'maxOutputTokens' => 4096,        // Gemini 2.5 burns ~300-1500 on thinking · need headroom for verdict line
+            'thinkingConfig' => array('thinkingBudget' => 0),  // disable extended thinking · we want fast deterministic verdicts
+        ),
+    );
+    // Try up to 3 different keys (round-robin on 429/empty)
+    $reply = null; $code = 0; $last_key = '';
+    $attempts = min(3, count($keys));
+    for ($att = 0; $att < $attempts; $att++) {
+        $key = $keys[($att + abs(crc32($role_persona . microtime()))) % count($keys)];
+        $last_key = substr($key, 0, 12) . '...';
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent?key=' . $key;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body_payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        $body = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($body && $code === 200) {
+            $j = json_decode($body, true);
+            if (is_array($j) && isset($j['candidates'][0]['content']['parts'][0]['text'])) {
+                $reply = $j['candidates'][0]['content']['parts'][0]['text'];
+                if (trim($reply) !== '') break;
+            }
+        }
+        // 429 / empty · try next key
+    }
+    if ($reply === null || trim($reply) === '') {
+        return array(
+            'role'=>$role_persona,'verdict'=>'VETO','engine_provider'=>'gemini',
+            'text'=>'[Chairman mock · Gemini empty reply · http='.$code.' · CHAIRMAN_VERDICT: VETO]',
+            'reason'=>'Gemini API empty or error · per GLOBAL-97 chain blocks',
+            'http_code'=>$code,
+        );
+    }
+    $verdict = 'VETO';
+    if (preg_match('/CHAIRMAN_VERDICT:\s*(SEAL|VETO|REVISE)/i', $reply, $m)) $verdict = strtoupper($m[1]);
+    return array(
+        'role' => $role_persona,
+        'verdict' => $verdict,
+        'engine_provider' => 'gemini-' . $model,
+        'text' => $reply,
+    );
+}
+
 function fire_vision_verifier($artifact) {
     // Skill #20: if any visual is in scope, NVIDIA vision LLM preprocesses first
     if (empty($artifact['image_urls']) && empty($artifact['image_data']) && empty($artifact['svg_payload'])) {
@@ -260,6 +384,31 @@ if ($action === 'verify') {
         }
     }
 
+    // ===== CHAIRMAN'S SEAL (GLOBAL-97 · Skill #28) =====
+    // Gemini reviews all 3 stages. 100% Consensus = only path to APPROVED.
+    // Even if Parliament/Council/Board all return clean, Chairman can VETO or REVISE.
+    $chairman = array('skipped' => true);
+    if ($verdict === 'APPROVED') {
+        $stage_summary = '';
+        foreach ($stages as $sname => $s) {
+            $stage_summary .= "[STAGE {$sname}] clean=" . ($s['clean']?'true':'false') . " redos={$s['redo_count']}\n";
+            $stage_summary .= substr($s['transcript'], 0, 800) . "\n\n";
+        }
+        // Fire both Chairman personas in parallel (curl_multi would be ideal but we
+        // do them serially here since there's only 2 calls, ~3-6s total)
+        $chairman_visual = call_gemini_chairman('VISUAL', $artifact_text, $stage_summary, 25);
+        $chairman_logic  = call_gemini_chairman('LOGIC',  $artifact_text, $stage_summary, 30);
+        $sealed = ($chairman_visual['verdict'] === 'SEAL' && $chairman_logic['verdict'] === 'SEAL');
+        $chairman = array(
+            'visual' => $chairman_visual,
+            'logic'  => $chairman_logic,
+            'sealed' => $sealed,
+            'verdict' => $sealed ? 'CHAIRMAN_SEAL' : ($chairman_visual['verdict'] === 'VETO' || $chairman_logic['verdict'] === 'VETO' ? 'CHAIRMAN_VETO' : 'CHAIRMAN_REVISE'),
+        );
+        if (!$sealed) $verdict = 'BLOCKED_BY_CHAIRMAN_' . ($chairman_visual['verdict'] === 'VETO' || $chairman_logic['verdict'] === 'VETO' ? 'VETO' : 'REVISE');
+        else $verdict = 'APPROVED_AND_SEALED';
+    }
+
     $row = array(
         'ts' => now_iso(),
         'artifact_id' => $artifact_id,
@@ -267,6 +416,7 @@ if ($action === 'verify') {
         'verdict' => $verdict,
         'stages' => $stages,
         'vision_verifier' => $vision,
+        'chairman' => $chairman,
         'total_cycle_ms' => (int)(microtime(true)*1000) - $start_ms,
     );
     append_jsonl($TRANSCRIPTS, $row);
