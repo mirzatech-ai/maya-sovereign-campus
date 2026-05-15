@@ -1,0 +1,134 @@
+name: Build Maya OS Android APK
+
+# Trigger on push to phone-app/** OR manual run from Actions tab
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'phone-app/**'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name (e.g. 1.16.0)'
+        required: false
+        default: '1.16.0'
+
+permissions:
+  contents: write   # needed for the Releases upload at the end
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java 17 (Android Gradle Plugin requires 17+)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Generate keystore from secret OR create new one
+        env:
+          KEYSTORE_BASE64: ${{ secrets.MAYA_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.MAYA_KEYSTORE_PASSWORD }}
+        run: |
+          cd phone-app
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android.keystore
+            echo "Using existing keystore from secret"
+          else
+            keytool -genkeypair -v \
+              -keystore android.keystore \
+              -alias android \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass "${KEYSTORE_PASSWORD:-mayaBuild123!}" \
+              -keypass "${KEYSTORE_PASSWORD:-mayaBuild123!}" \
+              -dname "CN=Maya OS, OU=Mirzatech.ai, O=EMAAA LLC, L=Braselton, ST=GA, C=US"
+            echo "Generated fresh keystore"
+            echo "::warning::FIRST RUN · keystore generated · upload base64 to MAYA_KEYSTORE_BASE64 secret for stable signing"
+            base64 android.keystore > keystore.base64.txt
+          fi
+
+      - name: Bubblewrap init from PWA manifest
+        run: |
+          cd phone-app
+          if [ ! -f gradlew ]; then
+            bubblewrap init \
+              --manifest=https://iamsuperio.cloud/maya-os/manifest.webmanifest \
+              --skipPwaValidation \
+              --directory=. || true
+          fi
+
+      - name: Bubblewrap build (produces signed APK + AAB)
+        env:
+          BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.MAYA_KEYSTORE_PASSWORD || 'mayaBuild123!' }}
+          BUBBLEWRAP_STORE_PASSWORD: ${{ secrets.MAYA_KEYSTORE_PASSWORD || 'mayaBuild123!' }}
+        run: |
+          cd phone-app
+          bubblewrap build \
+            --skipPwaValidation \
+            --skipSigning false || (echo "build failed, dumping logs"; ls -la; exit 1)
+          ls -la *.apk *.aab 2>/dev/null || ls -la app/build/outputs/apk/release/ 2>/dev/null || true
+
+      - name: Find built APK
+        id: find_apk
+        run: |
+          cd phone-app
+          APK=$(find . -name "*.apk" -not -path "*/node_modules/*" | head -1)
+          if [ -z "$APK" ]; then
+            echo "::error::No APK found"
+            find . -type f | head -50
+            exit 1
+          fi
+          echo "apk_path=phone-app/$APK" >> "$GITHUB_OUTPUT"
+          echo "Found APK: $APK ($(du -h "$APK" | cut -f1))"
+
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: maya-os-android-${{ github.run_number }}
+          path: ${{ steps.find_apk.outputs.apk_path }}
+          retention-days: 30
+
+      - name: Upload first-run keystore (one-time · then add to secrets)
+        if: env.HAS_SECRET == 'false'
+        env:
+          HAS_SECRET: ${{ secrets.MAYA_KEYSTORE_BASE64 != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: keystore-base64-FIRST-RUN-ONLY-add-to-secrets
+          path: phone-app/keystore.base64.txt
+          retention-days: 1
+
+      - name: Create GitHub Release with APK attached
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-${{ github.event.inputs.version_name || github.run_number }}
+          name: Maya OS Android ${{ github.event.inputs.version_name || github.run_number }}
+          body: |
+            Maya OS Android · auto-built by GitHub Actions · run #${{ github.run_number }}
+
+            Install on Samsung Fold 5:
+            1. Download the APK below
+            2. Phone Settings → Apps → Special access → Install unknown apps → Chrome → Allow
+            3. Open the downloaded file from Downloads → Install
+            4. "Maya" app icon appears · tap to open
+          files: ${{ steps.find_apk.outputs.apk_path }}
+          generate_release_notes: false
