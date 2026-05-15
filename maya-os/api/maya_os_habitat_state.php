@@ -116,6 +116,69 @@ $rooms = [
     ],
 ];
 
+/* ── PHASE B SPINE · Read real events from events.jsonl · 2026-05-15 ──
+   The 5-room oscillator above gives ambient motion when nothing's happening.
+   When real events fire, they OVERRIDE the oscillator state on the matching room
+   for the next 6s, and add an "active" stream from the actor's room → maya_brain hub.
+*/
+$EVENT_LOG = '/home/iamsuperio.cloud/public_html/data/maya_events/events.jsonl';
+$active_window_s = 6;       // a "running" event keeps the room hot for 6s after last update
+$real_events = [];
+if (is_readable($EVENT_LOG)) {
+    /* read last ~50 lines · avoid loading the whole file */
+    $lines = [];
+    $fp = @fopen($EVENT_LOG, 'rb');
+    if ($fp) {
+        $buf = ''; $pos = -1; $line_count = 0; $want = 80;
+        @fseek($fp, 0, SEEK_END);
+        $size = ftell($fp);
+        while ($size + $pos > 0 && $line_count < $want) {
+            @fseek($fp, $pos--, SEEK_END);
+            $ch = @fgetc($fp);
+            if ($ch === false) break;
+            if ($ch === "\n" && $buf !== '') { $lines[] = strrev($buf); $buf = ''; $line_count++; }
+            else $buf .= $ch;
+        }
+        if ($buf !== '') $lines[] = strrev($buf);
+        @fclose($fp);
+        $lines = array_reverse($lines);
+    }
+    foreach ($lines as $line) {
+        $e = json_decode(trim($line), true);
+        if (is_array($e) && !empty($e['unix'])) $real_events[] = $e;
+    }
+}
+
+/* Override room states from recent active events */
+$now_unix = time();
+$active_streams_map = [];   // room_id => packets
+$active_room_map    = [];   // room_id => latest_event
+foreach ($real_events as $e) {
+    $age = $now_unix - (int)$e['unix'];
+    if ($age > $active_window_s && $e['status'] !== 'running') continue;
+    $r = $e['room'] ?? 'maya_brain';
+    if ($e['status'] === 'start' || $e['status'] === 'running') {
+        $active_room_map[$r] = $e;
+        $active_streams_map[$r] = ($active_streams_map[$r] ?? 0) + 1;
+    } else if ($e['status'] === 'done' && $age <= $active_window_s) {
+        /* recent completion · brief packet flash · gold for council/brief, green for done */
+        $active_streams_map[$r] = ($active_streams_map[$r] ?? 0) + 1;
+    } else if ($e['status'] === 'error') {
+        $active_room_map[$r] = $e;
+    }
+}
+/* Apply state overrides */
+foreach ($rooms as &$room) {
+    $rid = $room['id'];
+    if (isset($active_room_map[$rid])) {
+        $ev = $active_room_map[$rid];
+        if ($ev['status'] === 'error') $room['state'] = 'error';
+        else $room['state'] = 'executing';
+        $room['task'] = ($ev['action'] ?? '') . ($ev['target'] ? ' · ' . $ev['target'] : '');
+    }
+}
+unset($room);
+
 /* Hub · Maya brain's breathing orb · consensus % comes from Skill #2 board_state.json if present */
 $consensus_pct = 88;   // canonical default per ai-staffing habitat
 $board_state_file = '/home/iamsuperio.cloud/public_html/data/board_state.json';
@@ -141,31 +204,58 @@ $pulse = [
     'unread_email_24h'    => null,     // populated by /api/maya_gmail?action=unread_count separately
 ];
 
-/* Streams · ghost-stream connections for the SVG packet animation
-   Each stream connects two rooms · UI animates dots along the path */
+/* Streams · ambient (always-on) low-opacity + active (event-driven) bright
+   Active streams override ambient when the same edge fires */
 $streams = [
-    ['from' => 'maya_brain', 'to' => 'kimi',            'packets' => 2, 'color' => 'cyan'],
-    ['from' => 'maya_brain', 'to' => 'opencode',        'packets' => 1, 'color' => 'cyan'],
-    ['from' => 'maya_brain', 'to' => 'vscode',          'packets' => 1, 'color' => 'cyan'],
-    ['from' => 'maya_brain', 'to' => 'self_edit_queue', 'packets' => 1, 'color' => 'gold'],
-    ['from' => 'kimi',       'to' => 'self_edit_queue', 'packets' => 1, 'color' => 'green'],
-    ['from' => 'opencode',   'to' => 'self_edit_queue', 'packets' => 1, 'color' => 'green'],
-    ['from' => 'vscode',     'to' => 'self_edit_queue', 'packets' => 1, 'color' => 'green'],
+    ['from' => 'maya_brain', 'to' => 'kimi',            'packets' => 1, 'color' => 'cyan', 'active' => false],
+    ['from' => 'maya_brain', 'to' => 'opencode',        'packets' => 1, 'color' => 'cyan', 'active' => false],
+    ['from' => 'maya_brain', 'to' => 'vscode',          'packets' => 1, 'color' => 'cyan', 'active' => false],
+    ['from' => 'maya_brain', 'to' => 'self_edit_queue', 'packets' => 1, 'color' => 'gold', 'active' => false],
 ];
+/* Overlay live streams from recent events · packet flies room → maya_brain (incoming work)
+   or maya_brain → room (outgoing dispatch) based on actor */
+foreach ($active_streams_map as $room_id => $packet_count) {
+    if ($room_id === 'maya_brain') continue;
+    $clr = (isset($active_room_map[$room_id]) && $active_room_map[$room_id]['status'] === 'error') ? 'red'
+         : ((isset($active_room_map[$room_id]) && $active_room_map[$room_id]['status'] === 'running') ? 'green' : 'gold');
+    $streams[] = [
+        'from'    => 'maya_brain',
+        'to'      => $room_id,
+        'packets' => min(4, max(1, $packet_count + 1)),
+        'color'   => $clr,
+        'active'  => true,
+    ];
+}
 
-/* Audit log · recent activity · Skill #1 audit row pattern */
-$audit_pool = [
-    ['ts' => '-12s', 'kind' => 'brief',   'msg' => 'Maya briefed 0 unread emails (Gemini)'],
-    ['ts' => '-38s', 'kind' => 'voice',   'msg' => 'Kokoro synth · persona_maya · 1.2s'],
-    ['ts' => '-1m',  'kind' => 'poll',    'msg' => 'unread_count poll · 0'],
-    ['ts' => '-2m',  'kind' => 'system',  'msg' => 'SW v1.10.1 activated'],
-    ['ts' => '-4m',  'kind' => 'agent',   'msg' => 'Kimi proxy bound · 8086 idle'],
-    ['ts' => '-7m',  'kind' => 'agent',   'msg' => 'OpenCode proxy bound · 8087 idle'],
-    ['ts' => '-11m', 'kind' => 'agent',   'msg' => 'VS Code proxy bound · 8088 idle'],
-    ['ts' => '-14m', 'kind' => 'edit',    'msg' => 'maya-os.css patched · v1.10.0 → v1.10.1'],
-    ['ts' => '-22m', 'kind' => 'brain',   'msg' => 'Gemini lane · 37 keys healthy'],
-    ['ts' => '-31m', 'kind' => 'system',  'msg' => 'bell drawer deployed · v1.10.0'],
-];
+/* Audit log · real events from events.jsonl · falls back to system rows if empty */
+$audit_pool = [];
+$rel_time = function(int $unix) use ($now_unix): string {
+    $diff = max(0, $now_unix - $unix);
+    if ($diff < 5)    return 'now';
+    if ($diff < 60)   return '-' . $diff . 's';
+    if ($diff < 3600) return '-' . intdiv($diff, 60) . 'm';
+    if ($diff < 86400) return '-' . intdiv($diff, 3600) . 'h';
+    return '-' . intdiv($diff, 86400) . 'd';
+};
+$recent_events = array_slice(array_reverse($real_events), 0, 12);
+foreach ($recent_events as $e) {
+    $kind = $e['actor'] === 'maya' ? 'brain' : ($e['actor'] === 'self_edit' ? 'edit' : 'agent');
+    if ($e['status'] === 'error') $kind = 'error';
+    $msg = strtoupper((string)$e['action']);
+    if (!empty($e['target'])) $msg .= ' · ' . $e['target'];
+    if (!empty($e['result'])) $msg .= ' · ' . substr((string)$e['result'], 0, 80);
+    $audit_pool[] = [
+        'ts'   => $rel_time((int)$e['unix']),
+        'kind' => $kind,
+        'msg'  => $msg,
+    ];
+}
+/* Pad with system context if log is sparse */
+if (count($audit_pool) < 3) {
+    $audit_pool[] = ['ts' => 'boot', 'kind' => 'system', 'msg' => 'SOVEREIGN CAMPUS v1.10.3 · 5 rooms · event spine ready'];
+    $audit_pool[] = ['ts' => 'boot', 'kind' => 'agent',  'msg' => 'Coding agents 200 req/min · Kimi 8086 · OpenCode 8087 · VS Code 8088'];
+    $audit_pool[] = ['ts' => 'boot', 'kind' => 'system', 'msg' => 'POST /api/maya_event to emit · GET ?action=tail to read'];
+}
 
 $out = [
     'ok'         => true,

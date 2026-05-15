@@ -2183,16 +2183,33 @@
         if (!a || !b) return;
         const c = colors[s.color] || colors.cyan;
         const pid = 'campStream' + i;
+        // Active (event-driven) streams = brighter path, more packets, faster cycle
+        // Ambient (idle hum) streams = subtle, slow, low-opacity
+        const active = !!s.active;
+        const strokeW   = active ? 0.7 : 0.3;
+        const pathOp    = active ? 0.95 : 0.35;
+        const dashSpec  = active ? '0.8 1.6' : '1.2 2.8';
+        const dashDur   = active ? '1.4s' : '3.5s';
+        const packetDur = (i, p) => (active ? (1.2 + p*0.4) : (3.2 + p*0.9)) + 's';
+        const packetR   = active ? 1.1 : 0.7;
         svg += '<path id="' + pid + '" d="M' + a[0] + ',' + a[1] + ' Q' + ((a[0]+b[0])/2) + ',' + ((a[1]+b[1])/2 - 8) + ' ' + b[0] + ',' + b[1] + '" '
-          + 'stroke="' + c + '" stroke-width="0.4" stroke-dasharray="1.2 2.8" fill="none" opacity="0.55">'
-          + '<animate attributeName="stroke-dashoffset" from="0" to="-12" dur="3.5s" repeatCount="indefinite" /></path>';
+          + 'stroke="' + c + '" stroke-width="' + strokeW + '" stroke-dasharray="' + dashSpec + '" fill="none" opacity="' + pathOp + '"'
+          + (active ? ' filter="url(#campGlow)"' : '') + '>'
+          + '<animate attributeName="stroke-dashoffset" from="0" to="-12" dur="' + dashDur + '" repeatCount="indefinite" /></path>';
         // packet dots
-        for (let p = 0; p < (s.packets || 1); p++) {
-          svg += '<circle r="0.7" fill="' + c + '">'
-            + '<animateMotion dur="' + (3.2 + p*0.9) + 's" repeatCount="indefinite" rotate="auto">'
+        const nPackets = active ? Math.max(2, s.packets || 1) : (s.packets || 1);
+        for (let p = 0; p < nPackets; p++) {
+          svg += '<circle r="' + packetR + '" fill="' + c + '"' + (active ? ' filter="url(#campGlow)"' : '') + '>'
+            + '<animateMotion dur="' + packetDur(i, p) + '" repeatCount="indefinite" rotate="auto">'
             + '<mpath href="#' + pid + '"/></animateMotion></circle>';
         }
       });
+      // Inject glow filter once (idempotent: only if not already present)
+      if (svg && !svg.includes('id="campGlow"')) {
+        svg = '<defs><filter id="campGlow" x="-50%" y="-50%" width="200%" height="200%">'
+          + '<feGaussianBlur in="SourceGraphic" stdDeviation="0.8"/>'
+          + '</filter></defs>' + svg;
+      }
       campusStreams.innerHTML = svg;
     }
 
