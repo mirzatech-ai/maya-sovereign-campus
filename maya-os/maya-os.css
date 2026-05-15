@@ -944,6 +944,66 @@ html[data-theme="day"] .composer { background: rgba(255,255,255,0.7); }
   .bell-drawer { width: 100vw; }
 }
 
+/* ── v1.11.1 · PHONE BRIDGE pill + setup modal · 2026-05-15 ── */
+.phone-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 32px; padding: 0 10px;
+  border: 1px solid var(--border); background: var(--panel-soft);
+  border-radius: var(--rad-sm); cursor: pointer; color: var(--text-mut);
+  font-size: 13px; flex-shrink: 0; transition: all .12s;
+}
+.phone-pill:hover { background: var(--panel-h); border-color: var(--border-hot); color: var(--text); }
+.phone-pill[data-state="ok"]    { color: var(--accent-2); border-color: var(--accent-2); }
+.phone-pill[data-state="err"]   { color: var(--hot);     border-color: var(--hot); }
+.phone-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--text-dim); box-shadow: 0 0 6px transparent;
+  transition: all .15s;
+}
+.phone-pill[data-state="ok"]  .phone-dot { background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: campPulse 2s infinite; }
+.phone-pill[data-state="err"] .phone-dot { background: var(--hot);      box-shadow: 0 0 8px var(--hot); }
+
+/* Modal */
+.phone-modal { position: fixed; inset: 0; z-index: 9500; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.phone-modal[hidden] { display: none; }
+.pm-backdrop { position: absolute; inset: 0; background: rgba(2,5,12,0.72); backdrop-filter: blur(4px); }
+.pm-card {
+  position: relative; max-width: 540px; width: 100%; max-height: 90vh; overflow: hidden;
+  background: var(--bg-2); border: 1px solid var(--border-hot); border-radius: var(--rad-lg);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  display: flex; flex-direction: column;
+  animation: pmFadeIn .18s ease-out;
+}
+@keyframes pmFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.pm-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--bg-3); flex-shrink: 0; }
+.pm-head strong { font-size: 14px; letter-spacing: 0.06em; }
+.pm-close { width: 28px; height: 28px; padding: 0; background: transparent; color: var(--text-mut); border: 1px solid var(--border); border-radius: var(--rad-sm); cursor: pointer; font-size: 14px; }
+.pm-close:hover { color: var(--hot); border-color: var(--hot); }
+.pm-body { padding: 14px 18px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.pm-status { font-size: 12px; color: var(--text-mut); padding: 8px 10px; background: var(--panel-soft); border: 1px solid var(--border); border-radius: var(--rad-sm); }
+.pm-status.ok  { color: var(--accent-2); border-color: var(--accent-2); background: rgba(0,255,168,0.06); }
+.pm-status.err { color: var(--hot);      border-color: var(--hot);      background: rgba(255,51,85,0.06); }
+.pm-install, .pm-honesty { font-size: 12px; color: var(--text-mut); padding: 8px 10px; background: var(--bg-3); border: 1px solid var(--border-mt); border-radius: var(--rad-sm); }
+.pm-install summary, .pm-honesty summary { cursor: pointer; color: var(--text); font-weight: 600; user-select: none; }
+.pm-install p, .pm-honesty p { margin: 6px 0; font-size: 11px; line-height: 1.5; }
+.pm-install a { color: var(--accent); }
+.pm-code { background: #000; color: var(--accent-2); border: 1px solid var(--border); border-radius: var(--rad-sm); padding: 8px 10px; font-family: 'Share Tech Mono', monospace; font-size: 11px; overflow-x: auto; margin: 6px 0; }
+.pm-code code { background: none; padding: 0; color: inherit; }
+.pm-label { font-size: 10px; color: var(--text-mut); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+.pm-input { padding: 8px 10px; background: var(--bg-3); color: var(--text); border: 1px solid var(--border); border-radius: var(--rad-sm); font-size: 12px; font-family: inherit; }
+.pm-input:focus { outline: none; border-color: var(--border-hot); }
+.pm-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+.pm-btn { padding: 7px 12px; background: var(--accent); color: #001423; border: none; border-radius: var(--rad-sm); cursor: pointer; font-size: 12px; font-weight: 700; }
+.pm-btn:hover { opacity: .9; }
+.pm-btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--border); }
+.pm-caps { margin-top: 6px; padding: 8px 10px; background: rgba(0,255,168,0.04); border: 1px solid var(--accent-2); border-radius: var(--rad-sm); }
+.pm-caps h4 { font-size: 11px; color: var(--accent-2); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+.pm-cap { display: flex; align-items: center; gap: 6px; font-size: 11px; padding: 2px 0; }
+.pm-cap .pm-cap-dot { width: 6px; height: 6px; border-radius: 50%; }
+.pm-cap[data-ok="1"] .pm-cap-dot { background: var(--accent-2); }
+.pm-cap[data-ok="0"] .pm-cap-dot { background: var(--text-dim); }
+.pm-cap[data-ok="0"] { opacity: 0.55; }
+
 /* ── v1.10.2 · SOVEREIGN CAMPUS · Skill #1 (Kinetic Habitat UI) · GLOBAL-92 ── */
 .campus-stage {
   --camp-cyan:  #00e4ff; --camp-cyan-soft: rgba(0,228,255,.18);

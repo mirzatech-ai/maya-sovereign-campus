@@ -99,6 +99,7 @@
         <span class="status-text" id="statusText">connecting…</span>
       </div>
       <button class="palette-cue" id="paletteCue" type="button" title="Quick search · Ctrl+K">⌘K</button>
+      <button class="phone-pill" id="phonePill" type="button" aria-label="Phone bridge status" title="Phone Bridge · not connected · click to set up">📱 <span id="phoneDot" class="phone-dot"></span></button>
       <button class="bell-btn" id="bellBtn" type="button" aria-label="Notifications · email + SMS" title="Inbox + SMS · Maya can brief you">
         <span class="bell-ico" aria-hidden="true">🔔</span>
         <span class="bell-badge" id="bellBadge" hidden>0</span>
@@ -768,6 +769,53 @@
     </section>
 
     <!-- v1.9.7 · Qode mode is now an external launcher · panel removed · click rail Qode button opens https://iamsuperio.cloud/maya-qode in a separate window -->
+
+    <!-- v1.11.1 · PHONE BRIDGE setup modal · Mo's Samsung Fold 5 / Termux · 2026-05-15 -->
+    <div class="phone-modal" id="phoneModal" hidden role="dialog" aria-label="Phone Bridge setup">
+      <div class="pm-backdrop" id="pmBackdrop"></div>
+      <div class="pm-card">
+        <header class="pm-head">
+          <strong>📱 Phone Bridge · Phase 1</strong>
+          <button class="pm-close" id="pmClose" type="button" aria-label="Close">✕</button>
+        </header>
+        <div class="pm-body">
+          <p class="pm-status" id="pmStatus">Not connected. Paste your bridge URL + token below, or follow the 30-second install.</p>
+
+          <details class="pm-install">
+            <summary>📦 Install on Samsung Fold 5 (Termux · 30s)</summary>
+            <p>Open Termux on your phone and run:</p>
+            <pre class="pm-code"><code>bash &lt;(curl -fsSL https://iamsuperio.cloud/phone-bridge/install.sh)</code></pre>
+            <p>When it finishes it prints a token · copy it · then start the bridge with:</p>
+            <pre class="pm-code"><code>maya-bridge</code></pre>
+            <p>Paste the printed token into the field below. Bridge URL stays <code>http://127.0.0.1:8765</code> if Maya OS is on the same phone (PWA installed). For your laptop to reach the phone, expose via Cloudflare Tunnel · see <a href="https://iamsuperio.cloud/phone-bridge/README.md" target="_blank" rel="noopener">README</a>.</p>
+          </details>
+
+          <label class="pm-label">Bridge URL</label>
+          <input type="url"  id="pmUrl"   class="pm-input" placeholder="http://127.0.0.1:8765 (or your tunnel URL)">
+
+          <label class="pm-label">Bridge Token</label>
+          <input type="password" id="pmToken" class="pm-input" placeholder="paste the token printed by install.sh">
+
+          <div class="pm-row">
+            <button class="pm-btn ghost" id="pmTestBtn" type="button">⟳ Test connection</button>
+            <button class="pm-btn"       id="pmSaveBtn" type="button">💾 Save + Connect</button>
+            <button class="pm-btn ghost" id="pmDisconnectBtn" type="button">✕ Disconnect</button>
+          </div>
+
+          <div class="pm-caps" id="pmCaps" hidden>
+            <h4>📡 Capabilities detected</h4>
+            <div id="pmCapsList"></div>
+          </div>
+
+          <details class="pm-honesty">
+            <summary>🟡 Honest limits</summary>
+            <p>Phase 1 (now): Maya can read your phone's files, run shell, SSH out, use Termux:API (clipboard, camera, contacts, SMS, etc.).</p>
+            <p>Phase 2 (Cloudflare tunnel · TODO): Maya brain on VPS can reach the phone from anywhere.</p>
+            <p>Phase 3 (native APK · TODO): Maya watches what's in Chrome / Gmail / any app · requires a wrapped Android app with Accessibility Service permission.</p>
+          </details>
+        </div>
+      </div>
+    </div>
 
     <!-- v1.10.2 · CAMPUS mode · Sovereign Campus port · Skill #1 + #6 + GLOBAL-92 · 2026-05-15 -->
     <section class="panel" data-panel="campus" role="tabpanel">

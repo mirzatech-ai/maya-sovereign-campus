@@ -2256,6 +2256,177 @@
     if (campusPanel.classList.contains('active')) campusStart();
   }
 
+  // ── v1.11.1 · PHONE BRIDGE · Mo's Samsung Fold 5 / Termux · Phase 1 · 2026-05-15 ──
+  const PHONE_KEY_URL   = 'maya_os_phone_url_v1';
+  const PHONE_KEY_TOKEN = 'maya_os_phone_token_v1';
+  const EVENT_URL       = 'https://iamsuperio.cloud/api/maya_event';
+  const phonePill = $('phonePill'), phoneDot = $('phoneDot');
+  const phoneModal = $('phoneModal'), pmBackdrop = $('pmBackdrop'), pmClose = $('pmClose');
+  const pmUrl = $('pmUrl'), pmToken = $('pmToken'), pmStatus = $('pmStatus');
+  const pmTestBtn = $('pmTestBtn'), pmSaveBtn = $('pmSaveBtn'), pmDisconnectBtn = $('pmDisconnectBtn');
+  const pmCaps = $('pmCaps'), pmCapsList = $('pmCapsList');
+
+  let _phoneState = 'unknown';   // 'unknown' | 'ok' | 'err' | 'idle'
+  let _phoneCfg = null;
+
+  function phoneLoadCfg() {
+    const u = localStorage.getItem(PHONE_KEY_URL) || '';
+    const t = localStorage.getItem(PHONE_KEY_TOKEN) || '';
+    _phoneCfg = u && t ? { url: u, token: t } : null;
+    if (pmUrl)   pmUrl.value   = u;
+    if (pmToken) pmToken.value = t;
+    return _phoneCfg;
+  }
+  function phoneSaveCfg(url, token) {
+    localStorage.setItem(PHONE_KEY_URL,   url);
+    localStorage.setItem(PHONE_KEY_TOKEN, token);
+    _phoneCfg = { url, token };
+  }
+  function phoneClearCfg() {
+    localStorage.removeItem(PHONE_KEY_URL);
+    localStorage.removeItem(PHONE_KEY_TOKEN);
+    _phoneCfg = null;
+    if (pmUrl) pmUrl.value = '';
+    if (pmToken) pmToken.value = '';
+  }
+  function phoneSetState(s, title) {
+    _phoneState = s;
+    if (phonePill) {
+      phonePill.dataset.state = (s === 'ok' || s === 'err') ? s : '';
+      phonePill.title = title || 'Phone Bridge · click to set up';
+    }
+  }
+  function emitPhoneEvent(action, target, status, result) {
+    // Fire-and-forget · feed the Campus event spine so phone activity shows up in the audit log
+    try {
+      fetch(EVENT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ actor: 'phone', action, target, status, room: 'maya_brain', result: result || '' })
+      });
+    } catch (_) {}
+  }
+  async function phonePing(cfg) {
+    try {
+      const r = await fetch(cfg.url.replace(/\/$/, '') + '/health', { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      if (!j.ok) throw new Error('bridge unhealthy');
+      return j;
+    } catch (e) { throw e; }
+  }
+  async function phoneCheck() {
+    if (!_phoneCfg) { phoneSetState('idle', 'Phone Bridge · not connected · click to set up'); return; }
+    try {
+      const j = await phonePing(_phoneCfg);
+      const caps = j.capabilities || {};
+      const okCount = Object.values(caps).filter(Boolean).length;
+      phoneSetState('ok', `Phone Bridge · connected · ${okCount} capabilities · ${j.device_hint || ''}`);
+      return j;
+    } catch (e) {
+      phoneSetState('err', 'Phone Bridge · unreachable · ' + e.message);
+    }
+  }
+
+  function phoneOpenModal() {
+    phoneLoadCfg();
+    if (phoneModal) phoneModal.hidden = false;
+  }
+  function phoneCloseModal() { if (phoneModal) phoneModal.hidden = true; }
+  if (phonePill) phonePill.addEventListener('click', phoneOpenModal);
+  if (pmClose) pmClose.addEventListener('click', phoneCloseModal);
+  if (pmBackdrop) pmBackdrop.addEventListener('click', phoneCloseModal);
+
+  async function phoneTest(showInModal) {
+    const url   = (pmUrl?.value || '').trim().replace(/\/$/, '');
+    const token = (pmToken?.value || '').trim();
+    if (!url || !token) {
+      if (showInModal && pmStatus) { pmStatus.textContent = 'Need both URL and token first.'; pmStatus.className = 'pm-status err'; }
+      return null;
+    }
+    if (pmStatus) { pmStatus.textContent = 'Testing connection…'; pmStatus.className = 'pm-status'; }
+    try {
+      const j = await phonePing({ url, token });
+      if (pmStatus) { pmStatus.textContent = `✓ Reachable · v${j.version || '?'} · ${j.device_hint || ''}`; pmStatus.className = 'pm-status ok'; }
+      // Capabilities panel
+      const caps = j.capabilities || {};
+      const order = ['files', 'shell', 'ssh', 'termux_api'];
+      const labels = { files: 'Filesystem (~/storage/shared)', shell: 'Shell exec', ssh: 'SSH outbound', termux_api: 'Termux:API (clipboard · camera · contacts · SMS · etc.)' };
+      pmCapsList.innerHTML = order.map(k => (
+        '<div class="pm-cap" data-ok="' + (caps[k] ? 1 : 0) + '">'
+        + '<span class="pm-cap-dot"></span>'
+        + '<span>' + escapeHTML(labels[k]) + (caps[k] ? '' : ' · not detected') + '</span>'
+        + '</div>'
+      )).join('');
+      pmCaps.hidden = false;
+      return j;
+    } catch (e) {
+      if (pmStatus) { pmStatus.textContent = '✗ ' + e.message; pmStatus.className = 'pm-status err'; }
+      pmCaps.hidden = true;
+      return null;
+    }
+  }
+  if (pmTestBtn) pmTestBtn.addEventListener('click', () => phoneTest(true));
+  if (pmSaveBtn) pmSaveBtn.addEventListener('click', async () => {
+    const j = await phoneTest(true);
+    if (!j) return;
+    const url   = (pmUrl.value || '').trim().replace(/\/$/, '');
+    const token = (pmToken.value || '').trim();
+    phoneSaveCfg(url, token);
+    emitPhoneEvent('bridge_connected', j.device_hint || 'phone', 'done', `v${j.version} · ${Object.values(j.capabilities||{}).filter(Boolean).length} caps`);
+    await phoneCheck();
+  });
+  if (pmDisconnectBtn) pmDisconnectBtn.addEventListener('click', () => {
+    phoneClearCfg();
+    emitPhoneEvent('bridge_disconnected', 'phone', 'done', 'user-initiated');
+    phoneSetState('idle', 'Phone Bridge · not connected');
+    if (pmStatus) { pmStatus.textContent = 'Disconnected.'; pmStatus.className = 'pm-status'; }
+    pmCaps.hidden = true;
+  });
+
+  // Expose minimal helpers to other modules (chat composer etc.)
+  window.MayaPhone = {
+    isConnected: () => !!_phoneCfg && _phoneState === 'ok',
+    health: () => _phoneCfg ? phonePing(_phoneCfg) : Promise.reject(new Error('no bridge cfg')),
+    files: (path = '') => {
+      if (!_phoneCfg) return Promise.reject(new Error('phone bridge not connected'));
+      return fetch(_phoneCfg.url + '/files?path=' + encodeURIComponent(path), { headers: { 'X-Maya-Bridge-Token': _phoneCfg.token } }).then(r => r.json());
+    },
+    shell: (cmd, confirm = false) => {
+      if (!_phoneCfg) return Promise.reject(new Error('phone bridge not connected'));
+      emitPhoneEvent('shell', cmd.slice(0, 80), 'start');
+      return fetch(_phoneCfg.url + '/shell', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Maya-Bridge-Token': _phoneCfg.token },
+        body: JSON.stringify({ cmd, confirm })
+      }).then(r => r.json()).then(j => {
+        emitPhoneEvent('shell', cmd.slice(0, 80), j.ok ? 'done' : 'error', j.error || ('exit ' + j.exit));
+        return j;
+      });
+    },
+    ssh: (host, opts = {}) => {
+      if (!_phoneCfg) return Promise.reject(new Error('phone bridge not connected'));
+      emitPhoneEvent('ssh', host, 'start');
+      return fetch(_phoneCfg.url + '/ssh', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Maya-Bridge-Token': _phoneCfg.token },
+        body: JSON.stringify({ host, user: opts.user, cmd: opts.cmd })
+      }).then(r => r.json()).then(j => {
+        emitPhoneEvent('ssh', host, j.ok ? 'done' : 'error', j.error || ('exit ' + j.exit));
+        return j;
+      });
+    },
+    termux: (api, args = {}) => {
+      if (!_phoneCfg) return Promise.reject(new Error('phone bridge not connected'));
+      return fetch(_phoneCfg.url + '/termux/' + encodeURIComponent(api), {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Maya-Bridge-Token': _phoneCfg.token },
+        body: JSON.stringify({ args })
+      }).then(r => r.json());
+    },
+  };
+
+  // Boot · load cfg + ping once + poll every 30s while cfg exists
+  phoneLoadCfg();
+  phoneCheck();
+  setInterval(() => { if (_phoneCfg) phoneCheck(); }, 30000);
+
   // ── BELL POLLING · update unread badge every 60s ──
   async function pollUnreadBadge() {
     if (!bellBadge) return;
