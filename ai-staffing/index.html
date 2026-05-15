@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" href="/favicon.ico">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Staffing.Agency — Hire Maya Autonomous AI Crews</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"HUMANLESS WORKFORCE™","url":"https://ai-staffing.agency","description":"528 AI roles across 57 agencies. The world's most advanced AI staffing platform.","founder":{"@type":"Person","name":"Emaaa LLC"},"parentOrganization":{"@type":"Organization","name":"Emaaa LLC"},"numberOfEmployees":{"@type":"QuantitativeValue","value":528},"knowsAbout":["AI Staffing","Machine Learning","Cybersecurity","Prompt Engineering","AI Video Production"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"AI Staff Packages","itemListElement":[{"@type":"Offer","name":"Starter","price":"499","priceCurrency":"USD"},{"@type":"Offer","name":"Growth","price":"999","priceCurrency":"USD"},{"@type":"Offer","name":"Scale","price":"1999","priceCurrency":"USD"}]}}
+</script>
+
+
+
+
+
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Syne:wght@400;500;600;700;800&display=swap">
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+ HUMANLESS WORKFORCE™ — STAFFING QUEEN OF THE WORLD
+ Design System v6.0 — Emaaa LLC / Emaaa LLC / MirzaTech.ai
+ ══════════════════════════════════════════════════════════════════════ */
+:root {
+ --void: #020810;
+ --deep: #050f1a;
+ --surface: rgba(5,18,35,0.78);
+ --glass-bg: rgba(5,18,35,0.65);
+ --glass-border: rgba(0,210,255,0.22);
+ --glass-shine: rgba(0,210,255,0.06);
+ --laser: #00d2ff;
+ --laser2: #0080ff;
+ --laser3: #b000ff;
+ --laser4: #ff0080;
+ --gold: #f0c040;
+ --green: #4ade80;
+ --red: #f87171;
+ --chrome: #c8e0f0;
+ --white: #f0f8ff;
+ --dim: rgba(200,224,240,0.5);
+ --glow: 0 0 10px rgba(0,210,255,0.6);
+ --glow-lg: 0 0 30px rgba(0,210,255,0.3), 0 0 60px rgba(0,210,255,0.1);
+ --glow-gold: 0 0 15px rgba(240,192,64,0.5);
+ --glow-purple: 0 0 20px rgba(176,0,255,0.3);
+ --tile-border: 1px solid rgba(0,210,255,0.18);
+ --tile-shadow: 0 4px 40px rgba(0,120,200,0.1);
+ --radius: 4px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--chrome);font-family:'Rajdhani',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;min-height:100vh;}
+
+/* ── Grid + Scanline Overlays ──────────────────────────── */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,210,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,0.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.02) 2px,rgba(0,0,0,0.02) 4px);pointer-events:none;z-index:0;opacity:.3;}
+
+/* ── Particle Canvas ───────────────────────────────────── */
+#particleBg{position:fixed;inset:0;z-index:-1;pointer-events:none;}
+
+/* ── Glass ─────────────────────────────────────────────── */
+.glass{background:var(--glass-bg);border:var(--tile-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:var(--radius);position:relative;overflow:hidden;box-shadow:var(--tile-shadow);}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(0,210,255,0.5) 30%,rgba(176,0,255,0.4) 70%,transparent 100%);z-index:1;}
+.glass-thick{background:rgba(5,15,30,0.85);border:1px solid rgba(0,210,255,0.3);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);box-shadow:0 8px 60px rgba(0,80,160,0.15),inset 0 1px 0 rgba(0,210,255,0.12);border-radius:var(--radius);position:relative;overflow:hidden;}
+.glass-thick::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(0,210,255,0.6) 30%,rgba(176,0,255,0.5) 70%,transparent 100%);z-index:1;}
+
+/* ── Typography ────────────────────────────────────────── */
+.font-display{font-family:'Syne',sans-serif;}
+.font-tech{font-family:'Orbitron',monospace;}
+.font-mono{font-family:'Share Tech Mono',monospace;}
+.holo{background:linear-gradient(135deg,var(--laser) 0%,var(--laser2) 25%,var(--laser3) 50%,var(--laser2) 75%,var(--laser) 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:holoshift 6s ease infinite;}
+@keyframes holoshift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.text-laser{color:var(--laser);text-shadow:0 0 8px rgba(0,210,255,0.5);}
+.text-gold{color:var(--gold);text-shadow:var(--glow-gold);}
+.text-purple{color:var(--laser3);text-shadow:var(--glow-purple);}
+
+/* ── Scroll Reveal ─────────────────────────────────────── */
+.reveal{opacity:1;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ══════════════════════════════════════════════════════════
+ NAV — Fixed, Glassmorphism
+ ══════════════════════════════════════════════════════════ */
+nav{position:fixed;top:24px;left:0;right:0;z-index:1000;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,8,15,0.88);border-bottom:1px solid rgba(0,210,255,0.1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-hex{font-size:1.3rem;color:var(--laser);text-shadow:var(--glow);animation:hexspin 8s linear infinite;}
+@keyframes hexspin{to{transform:rotate(360deg);}}
+.nav-brand{font-family:'Orbitron',monospace;font-size:.95rem;font-weight:900;letter-spacing:.1em;color:var(--white);}
+.nav-brand span{background:linear-gradient(135deg,var(--laser),var(--laser3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:24px;align-items:center;list-style:none;}
+.nav-links a{font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--laser);}
+.nav-cta{padding:8px 22px !important;border:1px solid var(--laser) !important;color:var(--laser) !important;border-radius:var(--radius);transition:all .2s !important;}
+.nav-cta:hover{background:rgba(0,210,255,0.1) !important;box-shadow:var(--glow);}
+.nav-mobile{display:none;background:none;border:none;color:var(--laser);font-size:1.5rem;cursor:pointer;}
+
+/* ══════════════════════════════════════════════════════════
+ HERO — Full-Screen Cinematic
+ ══════════════════════════════════════════════════════════ */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1;padding:124px 40px 60px;text-align:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 25% 50%, rgba(0,80,200,0.12) 0%, transparent 60%), radial-gradient(ellipse at 78% 50%, rgba(176,0,255,0.08) 0%, transparent 55%), #02080f;}
+.hero-gradient{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 70% 60% at 25% 45%,rgba(0,80,200,0.18) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 75% 55%,rgba(176,0,255,0.12) 0%,transparent 60%),linear-gradient(180deg,transparent 0%,rgba(2,8,15,0.7) 100%);}
+.hero-content{position:relative;z-index:2;max-width:1100px;margin:0 auto;text-align:left;padding-right:440px;}
+.maya-hero-video{position:absolute;right:32px;top:50%;transform:translateY(-50%);width:380px;max-width:35vw;aspect-ratio:16/10;border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,210,255,0.25),0 0 60px rgba(176,0,255,0.15);border:1px solid rgba(0,210,255,0.25);z-index:2;}
+.maya-hero-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+@media (max-width: 900px){.hero-content{padding-right:20px;text-align:center;}.maya-hero-video{position:relative;right:auto;top:auto;transform:none;width:100%;max-width:100%;margin:24px 0 0;}}
+
+/* Badge */
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 22px;border:1px solid rgba(0,210,255,0.3);border-radius:40px;background:rgba(0,210,255,0.06);margin-bottom:28px;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.22em;color:var(--laser);animation:badge-pulse 3s ease infinite;}
+@keyframes badge-pulse{0%,100%{box-shadow:none;}50%{box-shadow:0 0 20px rgba(0,210,255,0.12);}}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--laser);box-shadow:var(--glow);animation:blink 1s ease infinite;}
+@keyframes blink{50%{opacity:.3;}}
+
+/* Title */
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5.5vw,4.8rem);font-weight:800;line-height:1.06;letter-spacing:-0.02em;color:var(--white);margin-bottom:20px;}
+.hero h1 .accent{display:block;margin-top:4px;}
+.hero-sub{font-size:1.08rem;font-weight:400;color:var(--dim);max-width:680px;margin:0 auto 16px;line-height:1.7;}
+.hero-sub strong{color:var(--white);font-weight:600;}
+
+/* Typing Effect Line */
+.hero-typing{font-family:'Share Tech Mono',monospace;font-size:.75rem;letter-spacing:.12em;color:var(--laser);margin-bottom:36px;min-height:1.5em;}
+.hero-typing .cursor{display:inline-block;width:8px;height:14px;background:var(--laser);animation:cursor-blink .6s step-end infinite;vertical-align:middle;margin-left:2px;}
+@keyframes cursor-blink{50%{opacity:0;}}
+
+/* Stats */
+.hero-stats{display:flex;gap:0;justify-content:center;margin:0 auto 40px;}
+.hero-stat{padding:20px 36px;text-align:center;border-right:1px solid rgba(0,210,255,0.1);}
+.hero-stat:last-child{border-right:none;}
+.hero-stat-n{font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;display:block;line-height:1;margin-bottom:5px;}
+.hero-stat-l{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--dim);text-transform:uppercase;}
+
+/* Buttons */
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+.btn-primary{padding:15px 44px;background:linear-gradient(135deg,rgba(0,210,255,0.15),rgba(176,0,255,0.12));border:1px solid var(--laser);color:var(--laser);font-family:'Rajdhani',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .25s;border-radius:var(--radius);}
+.btn-primary:hover{background:rgba(0,210,255,0.2);box-shadow:var(--glow-lg);transform:translateY(-2px);}
+.btn-secondary{padding:15px 44px;background:transparent;border:1px solid rgba(230,200,74,0.35);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .25s;border-radius:var(--radius);}
+.btn-secondary:hover{background:rgba(230,200,74,0.06);box-shadow:var(--glow-gold);transform:translateY(-2px);}
+.btn-ghost{padding:15px 44px;background:transparent;border:1px solid rgba(0,210,255,0.2);color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .25s;border-radius:var(--radius);}
+.btn-ghost:hover{border-color:var(--laser);color:var(--laser);}
+
+/* Scroll */
+.scroll-ind{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.scroll-ind span{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--dim);}
+.scroll-line{width:1px;height:36px;background:linear-gradient(var(--laser),transparent);animation:scroll-drop 2s ease infinite;}
+@keyframes scroll-drop{0%{opacity:1;transform:scaleY(1);}100%{opacity:0;transform:scaleY(0);}}
+
+/* ══════════════════════════════════════════════════════════
+ TRUST BAR — Client logos
+ ══════════════════════════════════════════════════════════ */
+.trust-bar{padding:28px 40px;border-bottom:1px solid rgba(0,210,255,0.06);position:relative;z-index:1;}
+.trust-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:32px;justify-content:center;flex-wrap:wrap;}
+.trust-label{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;white-space:nowrap;}
+.trust-logos{display:flex;gap:36px;align-items:center;flex-wrap:wrap;justify-content:center;}
+.trust-logo{font-family:'Orbitron',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;color:rgba(200,224,240,0.2);transition:color .3s;cursor:default;}
+.trust-logo:hover{color:rgba(200,224,240,0.5);}
+
+/* ══════════════════════════════════════════════════════════
+ SECTIONS — Common
+ ══════════════════════════════════════════════════════════ */
+section{position:relative;z-index:1;}
+.section-inner{max-width:1400px;margin:0 auto;padding:100px 40px;}
+.section-label{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.3em;color:var(--laser);text-transform:uppercase;display:block;margin-bottom:14px;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;color:var(--white);letter-spacing:-0.01em;line-height:1.15;margin-bottom:16px;}
+.section-desc{font-size:.95rem;color:var(--dim);max-width:640px;line-height:1.7;font-weight:400;}
+.section-header{text-align:center;margin-bottom:64px;}
+.section-header .section-desc{margin:16px auto 0;}
+
+/* ══════════════════════════════════════════════════════════
+ LIVE DASHBOARD STATS
+ ══════════════════════════════════════════════════════════ */
+.dashboard{border-top:1px solid rgba(0,210,255,0.08);border-bottom:1px solid rgba(0,210,255,0.08);background:linear-gradient(180deg,var(--void),rgba(0,20,60,0.08),var(--void));}
+.dash-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:0;}
+.dash-cell{padding:28px 20px;text-align:center;border-right:1px solid rgba(0,210,255,0.06);}
+.dash-cell:last-child{border-right:none;}
+.dash-n{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;display:block;margin-bottom:4px;line-height:1;}
+.dash-l{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;}
+.dash-live{display:inline-flex;align-items:center;gap:6px;margin-bottom:6px;}
+.dash-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(74,222,128,0.6);animation:blink 1.5s ease infinite;}
+
+/* ══════════════════════════════════════════════════════════
+ WHY HUMANLESS — Comparison
+ ══════════════════════════════════════════════════════════ */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.compare-card{padding:40px 36px;}
+.compare-card h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:20px;letter-spacing:.02em;}
+.compare-card.old h3{color:var(--red);}
+.compare-card.new h3{color:var(--green);}
+.compare-list{list-style:none;}
+.compare-list li{padding:10px 0;border-bottom:1px solid rgba(0,210,255,0.06);font-size:.85rem;color:var(--dim);display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+.compare-list li .icon{flex-shrink:0;font-size:.8rem;margin-top:2px;}
+.compare-card.old .icon{color:var(--red);}
+.compare-card.new .icon{color:var(--green);}
+
+/* ══════════════════════════════════════════════════════════
+ HOW IT WORKS — 3-Step
+ ══════════════════════════════════════════════════════════ */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.step-card{padding:40px 32px;text-align:center;transition:all .3s;}
+.step-card:hover{transform:translateY(-4px);border-color:rgba(0,210,255,0.4);}
+.step-number{font-family:'Orbitron',monospace;font-size:3.5rem;font-weight:900;line-height:1;margin-bottom:20px;opacity:.12;}
+.step-card:nth-child(1) .step-number{color:var(--laser);}
+.step-card:nth-child(2) .step-number{color:var(--laser3);}
+.step-card:nth-child(3) .step-number{color:var(--gold);}
+.step-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:12px;}
+.step-desc{font-size:.85rem;color:var(--dim);line-height:1.7;}
+.step-icon{font-size:2rem;margin-bottom:16px;display:block;}
+.step-connector{display:none;}
+
+/* ══════════════════════════════════════════════════════════
+ MISSION — About Section with Image
+ ══════════════════════════════════════════════════════════ */
+.mission-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:60px;align-items:center;}
+.mission-img{position:relative;border-radius:var(--radius);overflow:hidden;}
+.mission-img img{width:100%;height:420px;object-fit:cover;filter:brightness(.65) saturate(1.3);display:block;}
+.mission-img::before{content:'';position:absolute;inset:0;z-index:1;border:1px solid rgba(0,210,255,0.2);pointer-events:none;}
+.mission-img::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;z-index:2;background:linear-gradient(90deg,transparent,var(--laser),var(--laser3),transparent);box-shadow:0 0 10px var(--laser);}
+.mission-text h2{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:var(--white);margin-bottom:20px;line-height:1.2;}
+.mission-text p{color:var(--dim);font-weight:400;margin-bottom:16px;font-size:.92rem;line-height:1.75;}
+.mission-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+.tag{padding:5px 14px;border:1px solid rgba(0,210,255,0.18);background:rgba(0,210,255,0.04);font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--laser);border-radius:var(--radius);}
+
+/* ══════════════════════════════════════════════════════════
+ MAYA SECTION
+ ══════════════════════════════════════════════════════════ */
+.maya-section-bg{border-top:1px solid rgba(0,210,255,0.08);border-bottom:1px solid rgba(0,210,255,0.08);background:linear-gradient(180deg,var(--void),rgba(0,15,40,0.12),var(--void));}
+.maya-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:center;}
+.maya-orb-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;}
+.maya-orb{width:180px;height:180px;border-radius:50%;border:2px solid rgba(0,210,255,0.3);display:flex;align-items:center;justify-content:center;position:relative;background:radial-gradient(circle,rgba(0,60,160,0.2) 0%,rgba(5,15,30,0.9) 100%);box-shadow:0 0 60px rgba(0,210,255,0.2),inset 0 0 50px rgba(0,60,160,0.12);animation:orb-breathe 5s ease infinite;}
+@keyframes orb-breathe{0%,100%{box-shadow:0 0 60px rgba(0,210,255,0.2),inset 0 0 50px rgba(0,60,160,0.12);}50%{box-shadow:0 0 100px rgba(0,210,255,0.35),inset 0 0 70px rgba(0,60,160,0.2);}}
+.maya-orb::before{content:'';position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(0,210,255,0.12);animation:orb-ring 15s linear infinite;}
+.maya-orb::after{content:'';position:absolute;inset:-20px;border-radius:50%;border:1px solid rgba(176,0,255,0.08);animation:orb-ring 25s linear infinite reverse;}
+@keyframes orb-ring{to{transform:rotate(360deg);}}
+.maya-orb-icon{font-size:3.5rem;z-index:1;}
+.maya-label{font-family:'Orbitron',monospace;font-size:.85rem;font-weight:700;letter-spacing:.22em;color:var(--laser);text-shadow:var(--glow);}
+.maya-sublabel{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.15em;color:var(--dim);}
+.maya-text h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;color:var(--white);margin-bottom:16px;line-height:1.2;}
+.maya-text p{color:var(--dim);font-size:.92rem;line-height:1.75;margin-bottom:14px;}
+.maya-powers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px;}
+.maya-power{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(0,210,255,0.1);background:rgba(0,210,255,0.03);font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.08em;color:var(--dim);border-radius:var(--radius);}
+.maya-power::before{content:'▸';color:var(--laser);font-size:.5rem;text-shadow:var(--glow);}
+
+/* ══════════════════════════════════════════════════════════
+ AGENCIES GRID
+ ══════════════════════════════════════════════════════════ */
+.agencies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+.agency-card{padding:28px;cursor:pointer;transition:all .3s;position:relative;}
+.agency-card:hover{transform:translateY(-4px);border-color:rgba(0,210,255,0.45) !important;box-shadow:0 12px 60px rgba(0,80,160,0.2);}
+.agency-card-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.agency-icon-wrap{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid currentColor;background:rgba(0,0,0,0.3);transition:all .3s;flex-shrink:0;border-radius:var(--radius);}
+.agency-card:hover .agency-icon-wrap{transform:scale(1.08);box-shadow:0 0 20px currentColor;}
+.agency-name{font-family:'Orbitron',monospace;font-size:.72rem;font-weight:700;letter-spacing:.06em;color:var(--white);line-height:1.3;}
+.agency-tagline{font-size:.7rem;color:var(--dim);margin-top:2px;font-style:italic;}
+.agency-img-strip{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:12px 0;height:72px;overflow:hidden;border-radius:2px;}
+.agency-img-strip img{width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(1.3);transition:filter .3s;}
+.agency-card:hover .agency-img-strip img{filter:brightness(.65) saturate(1.5);}
+.agency-desc{font-size:.8rem;color:var(--dim);line-height:1.6;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.agency-card-bottom{display:flex;align-items:center;justify-content:space-between;}
+.agency-role-count{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.1em;}
+.agency-view-btn{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border:1px solid currentColor;background:transparent;cursor:pointer;transition:all .2s;border-radius:var(--radius);}
+
+/* ══════════════════════════════════════════════════════════
+ MODAL (Agency Detail)
+ ══════════════════════════════════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(2,8,15,0.92);backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:60px 20px;}
+.modal-overlay.open{display:flex;}
+.modal{width:100%;max-width:900px;border:1px solid rgba(0,210,255,0.3);background:rgba(4,12,24,0.96);box-shadow:0 0 100px rgba(0,80,200,0.25);border-radius:var(--radius);position:relative;}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:1px solid rgba(0,210,255,0.15);color:var(--dim);cursor:pointer;font-size:1rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Share Tech Mono',monospace;border-radius:var(--radius);}
+.modal-close:hover{color:var(--laser);border-color:var(--laser);}
+.modal-header{padding:32px 36px 24px;border-bottom:1px solid rgba(0,210,255,0.1);display:flex;gap:18px;align-items:center;}
+.modal-images{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 36px;height:170px;}
+.modal-images img{width:100%;height:100%;object-fit:cover;border:1px solid rgba(0,210,255,0.12);filter:brightness(.7) saturate(1.3);border-radius:2px;}
+.modal-body{padding:0 36px 24px;}
+.modal-footer{padding:20px 36px;border-top:1px solid rgba(0,210,255,0.1);display:flex;gap:12px;flex-wrap:wrap;}
+.modal-agency-icon{font-size:2.2rem;width:64px;height:64px;display:flex;align-items:center;justify-content:center;border:1px solid currentColor;background:rgba(0,0,0,0.3);flex-shrink:0;border-radius:var(--radius);}
+.modal-agency-name{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;letter-spacing:.06em;color:var(--white);margin-bottom:4px;}
+.modal-desc{color:var(--dim);font-size:.88rem;line-height:1.7;margin-bottom:20px;}
+.roles-header{font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:.2em;color:var(--laser);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(0,210,255,0.1);}
+.roles-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
+.role-item{padding:10px 14px;border:1px solid rgba(0,210,255,0.08);background:rgba(0,210,255,0.02);transition:all .2s;border-radius:2px;}
+.role-item:hover{border-color:rgba(0,210,255,0.3);background:rgba(0,210,255,0.06);}
+.role-title{font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:3px;}
+.role-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.role-tier{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.1em;padding:2px 8px;text-transform:uppercase;border-radius:2px;}
+.tier-junior{color:#4ade80;border:1px solid rgba(74,222,128,.25);background:rgba(74,222,128,.05);}
+.tier-mid{color:var(--laser);border:1px solid rgba(0,210,255,.25);background:rgba(0,210,255,.05);}
+.tier-senior{color:var(--gold);border:1px solid rgba(230,200,74,.25);background:rgba(230,200,74,.05);}
+.tier-executive{color:var(--laser3);border:1px solid rgba(176,0,255,.25);background:rgba(176,0,255,.05);}
+.role-rate{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);}
+.role-skills{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;}
+.skill-tag{font-size:.55rem;padding:2px 6px;border:1px solid rgba(0,210,255,0.1);color:rgba(200,224,240,.45);font-family:'Share Tech Mono',monospace;letter-spacing:.06em;border-radius:2px;}
+.img-placeholder{width:100%;background:rgba(0,210,255,0.03);border:1px dashed rgba(0,210,255,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;text-align:center;}
+.img-placeholder p{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--dim);}
+.maya-generate-btn{padding:5px 14px;border:1px solid rgba(0,210,255,0.25);background:rgba(0,210,255,0.04);color:var(--laser);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;cursor:pointer;transition:all .2s;border-radius:var(--radius);}
+.maya-generate-btn:hover{background:rgba(0,210,255,0.1);box-shadow:var(--glow);}
+
+/* ══════════════════════════════════════════════════════════
+ TESTIMONIALS
+ ══════════════════════════════════════════════════════════ */
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.testimonial-card{padding:32px 28px;transition:all .3s;}
+.testimonial-card:hover{transform:translateY(-3px);}
+.testimonial-quote{font-size:.88rem;color:var(--chrome);line-height:1.7;font-style:italic;margin-bottom:20px;position:relative;padding-left:20px;border-left:2px solid var(--laser);}
+.testimonial-author{display:flex;align-items:center;gap:12px;}
+.testimonial-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(0,210,255,0.2),rgba(176,0,255,0.2));display:flex;align-items:center;justify-content:center;font-size:1rem;border:1px solid rgba(0,210,255,0.2);}
+.testimonial-name{font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;color:var(--white);}
+.testimonial-role{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--dim);}
+
+/* ══════════════════════════════════════════════════════════
+ LANGUAGE TICKER
+ ══════════════════════════════════════════════════════════ */
+.lang-ticker{padding:18px 0;border-top:1px solid rgba(0,210,255,0.08);border-bottom:1px solid rgba(0,210,255,0.08);overflow:hidden;background:rgba(0,210,255,0.015);}
+.ticker-track{display:flex;gap:36px;animation:ticker-move 30s linear infinite;white-space:nowrap;}
+.ticker-track:hover{animation-play-state:paused;}
+@keyframes ticker-move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.12em;color:var(--dim);display:flex;align-items:center;gap:6px;}
+.ticker-dot{width:4px;height:4px;background:var(--laser);border-radius:50%;box-shadow:var(--glow);}
+
+/* ══════════════════════════════════════════════════════════
+ HIRE FORM
+ ══════════════════════════════════════════════════════════ */
+.hire-card{max-width:850px;margin:0 auto;padding:50px;}
+.hire-card h2{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:var(--white);margin-bottom:8px;text-align:center;}
+.hire-card .subtitle{text-align:center;color:var(--dim);font-size:.9rem;margin-bottom:36px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;}
+.form-label{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--laser);text-transform:uppercase;}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(0,210,255,0.03);border:1px solid rgba(0,210,255,0.15);color:var(--white);padding:12px 14px;font-family:'Rajdhani',sans-serif;font-size:.9rem;outline:none;transition:all .2s;border-radius:var(--radius);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--laser);box-shadow:0 0 0 3px rgba(0,210,255,0.08);}
+.form-select{cursor:pointer;}.form-select option{background:#050f1a;}
+.form-textarea{resize:vertical;min-height:90px;}
+.form-submit{width:100%;padding:16px;background:linear-gradient(135deg,rgba(0,210,255,0.12),rgba(176,0,255,0.1));border:1px solid var(--laser);color:var(--laser);font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:var(--radius);}
+.form-submit:hover{background:rgba(0,210,255,0.18);box-shadow:var(--glow-lg);transform:translateY(-2px);}
+.form-msg{display:none;padding:12px;margin-top:14px;font-size:.82rem;border-radius:var(--radius);}
+.form-msg.ok{color:var(--green);border:1px solid rgba(74,222,128,.25);background:rgba(74,222,128,.04);display:block;}
+.form-msg.err{color:var(--red);border:1px solid rgba(248,113,113,.25);background:rgba(248,113,113,.04);display:block;}
+
+/* ══════════════════════════════════════════════════════════
+ FAQ
+ ══════════════════════════════════════════════════════════ */
+.faq-list{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:10px;}
+.faq-item{border:1px solid rgba(0,210,255,0.12);border-radius:var(--radius);overflow:hidden;transition:border-color .3s;}
+.faq-item.open{border-color:rgba(0,210,255,0.3);}
+.faq-q{padding:18px 24px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:600;color:var(--white);background:rgba(0,210,255,0.02);transition:background .2s;}
+.faq-q:hover{background:rgba(0,210,255,0.05);}
+.faq-arrow{color:var(--laser);font-family:'Share Tech Mono',monospace;font-size:.7rem;transition:transform .3s;}
+.faq-item.open .faq-arrow{transform:rotate(90deg);}
+.faq-a{padding:0 24px;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease;}
+.faq-item.open .faq-a{max-height:300px;padding:0 24px 18px;}
+.faq-a p{font-size:.85rem;color:var(--dim);line-height:1.7;}
+
+/* ══════════════════════════════════════════════════════════
+ FOOTER
+ ══════════════════════════════════════════════════════════ */
+footer{padding:50px 40px 30px;border-top:1px solid rgba(0,210,255,0.08);position:relative;z-index:1;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;max-width:1400px;margin:0 auto 40px;}
+.footer-brand-name{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:900;letter-spacing:.1em;color:var(--white);margin-bottom:8px;}
+.footer-brand p{color:var(--dim);font-size:.8rem;line-height:1.7;max-width:280px;}
+.footer-col h4{font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:.2em;color:var(--laser);text-transform:uppercase;margin-bottom:14px;}
+.footer-col a{display:block;font-size:.8rem;color:var(--dim);text-decoration:none;margin-bottom:8px;transition:color .2s;}
+.footer-col a:hover{color:var(--laser);}
+.footer-bottom{max-width:1400px;margin:0 auto;padding-top:20px;border-top:1px solid rgba(0,210,255,0.05);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.footer-bottom p{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:rgba(200,224,240,.2);}
+
+/* ══════════════════════════════════════════════════════════
+ MAYA CHAT PANEL
+ ══════════════════════════════════════════════════════════ */
+.maya-chat-btn{position:fixed;bottom:28px;right:28px;z-index:999;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle,rgba(0,80,200,0.8),rgba(100,0,200,0.8));border:2px solid rgba(0,210,255,0.5);box-shadow:0 0 30px rgba(0,210,255,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:1.5rem;animation:chat-pulse 3s ease infinite;}
+@keyframes chat-pulse{0%,100%{box-shadow:0 0 30px rgba(0,210,255,.3);}50%{box-shadow:0 0 50px rgba(0,210,255,.6);}}
+.maya-chat-btn:hover{transform:scale(1.1);}
+.maya-panel{position:fixed;bottom:105px;right:28px;z-index:998;width:370px;border:1px solid rgba(0,210,255,0.3);background:rgba(3,10,22,0.97);backdrop-filter:blur(24px);box-shadow:0 0 80px rgba(0,80,200,0.25);display:none;flex-direction:column;max-height:520px;border-radius:var(--radius);overflow:hidden;}
+.maya-panel.open{display:flex;}
+.maya-panel-header{padding:14px 18px;border-bottom:1px solid rgba(0,210,255,0.1);display:flex;align-items:center;gap:10px;}
+.maya-panel-dot{width:8px;height:8px;border-radius:50%;background:var(--laser);box-shadow:var(--glow);animation:blink .8s ease infinite;}
+.maya-panel-title{font-family:'Orbitron',monospace;font-size:.66rem;font-weight:700;letter-spacing:.1em;color:var(--laser);flex:1;}
+.maya-panel-close{background:none;border:none;color:var(--dim);cursor:pointer;font-size:.85rem;font-family:'Share Tech Mono',monospace;}
+.maya-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:.78rem;}
+.maya-msg{padding:10px 14px;line-height:1.5;border-radius:var(--radius);}
+.maya-msg.ai{background:rgba(0,210,255,0.04);border-left:2px solid var(--laser);color:var(--chrome);}
+.maya-msg.user{background:rgba(176,0,255,0.06);border-right:2px solid var(--laser3);color:var(--chrome);text-align:right;}
+.maya-panel-input{display:flex;border-top:1px solid rgba(0,210,255,0.1);}
+.maya-panel-input input{flex:1;background:transparent;border:none;outline:none;padding:12px 14px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.82rem;}
+.maya-panel-input input::placeholder{color:rgba(200,224,240,.25);}
+.maya-send{padding:12px 16px;background:rgba(0,210,255,0.08);border:none;border-left:1px solid rgba(0,210,255,0.12);color:var(--laser);cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.1em;transition:all .2s;}
+.maya-send:hover{background:rgba(0,210,255,0.15);}
+.spin{animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ══════════════════════════════════════════════════════════
+ RESPONSIVE
+ ══════════════════════════════════════════════════════════ */
+@media(max-width:1024px){
+ .compare-grid,.maya-grid,.mission-grid{grid-template-columns:1fr;}
+ .testimonials-grid{grid-template-columns:1fr 1fr;}
+ .dash-grid{grid-template-columns:repeat(3,1fr);}
+}
+.nav-links.show{display:flex!important;position:fixed;top:64px;left:0;right:0;flex-direction:column;background:rgba(2,8,15,0.97);padding:20px;border-bottom:1px solid rgba(0,210,255,0.1);backdrop-filter:blur(20px);gap:16px;z-index:999;}
+@media(max-width:768px){
+ nav{padding:0 20px;}
+ .nav-links{display:none;}
+ .nav-mobile{display:block;}
+ .hero h1{font-size:2rem;}
+ .steps-grid{grid-template-columns:1fr;}
+ .agencies-grid{grid-template-columns:1fr;}
+ .testimonials-grid{grid-template-columns:1fr;}
+ .form-row,.roles-grid{grid-template-columns:1fr;}
+ .hero-stats{flex-wrap:wrap;}
+ .hero-stat{padding:16px 20px;}
+ .dash-grid{grid-template-columns:repeat(2,1fr);}
+ .footer-grid{grid-template-columns:1fr 1fr;}
+ .maya-panel{width:calc(100vw - 40px);right:20px;}
+ .section-inner{padding:70px 20px;}
+ .modal-header{padding:24px;}
+ .modal-body{padding:0 24px 20px;}
+ .modal-footer{padding:16px 24px;}
+ .modal-images{margin:12px 24px;}
+ .hire-card{padding:28px;}
+ .maya-powers{grid-template-columns:1fr;}
+}
+
+/* ═══ ROTATING CRYSTAL BRAIN ═══ */
+.brain-container{position:absolute;right:5%;top:50%;transform:translateY(-50%);z-index:2;width:380px;height:380px;pointer-events:none;}
+.brain-img{width:100%;height:100%;object-fit:contain;animation:brain-rotate 20s linear infinite;filter:drop-shadow(0 0 40px rgba(0,210,255,0.4)) drop-shadow(0 0 80px rgba(176,0,255,0.2));border-radius:50%;}
+@keyframes brain-rotate{0%{transform:rotateY(0deg);}100%{transform:rotateY(360deg);}}
+.brain-glow{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(0,210,255,0.15) 0%,transparent 70%);animation:brain-glow-pulse 4s ease infinite;pointer-events:none;}
+@keyframes brain-glow-pulse{0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+@media(max-width:1100px){.brain-container{width:260px;height:260px;right:2%;}}
+@media(max-width:768px){.brain-container{position:relative;right:auto;top:auto;transform:none;width:220px;height:220px;margin:30px auto 0;}}
+
+</style>
+
+<!-- RULE 58 SEO (2026-04-16) -->
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+ {"@type":"Question","name":"How is HUMANLESS WORKFORCE different from traditional staffing?","acceptedAnswer":{"@type":"Answer","text":"Traditional staffing matches humans to jobs. HUMANLESS WORKFORCE deploys AI employees who work 24/7, never burn out, scale instantly, and cost 80% less. All 528 roles are governed by Maya, our AI supervisor."}},
+ {"@type":"Question","name":"How many agencies and roles are available?","acceptedAnswer":{"@type":"Answer","text":"57 elite agencies spanning 528 distinct AI roles - from Autonomous Fleet Orchestrators to Wedding Planner AIs to Defense C2ISR Analysts."}},
+ {"@type":"Question","name":"How fast can I deploy AI staff?","acceptedAnswer":{"@type":"Answer","text":"Within minutes. Select an agency, pick roles, define scope - Maya provisions the agent team and activates them on your workflow the same day."}}
+]}
+</script>
+<style id="networkHideEcw">.ecw-toggle,.ecw-panel{display:none !important;visibility:hidden !important;}</style>
+<style>
+.brain-img-new{width:100%;height:100%;object-fit:cover;border-radius:50%;animation:brain-rotate-new 30s linear infinite;filter:drop-shadow(0 0 60px rgba(0,180,255,0.6)) drop-shadow(0 0 120px rgba(240,192,64,0.25));}
+@keyframes brain-rotate-new{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.brain-container{width:460px;height:460px;right:4%;}
+@media(max-width:1100px){.brain-container{width:320px;height:320px;}}
+@media(max-width:768px){.brain-container{width:260px;height:260px;}}
+</style>
+<meta name="description" content="Hire AI staffing crews for social, content, video, design, SEO, support, and launch. Autonomous agents powered by Maya AI and Emaaa LLC.">
+<meta name="keywords" content="AI staffing, AI agents, hire Maya, autonomous AI workforce, AI agency, staffing automation">
+<meta name="author" content="Emaaa LLC">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<link rel="canonical" href="https://ai-staffing.agency/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ai-staffing.agency">
+<meta property="og:title" content="AI-Staffing.Agency — Hire Maya Autonomous AI Crews">
+<meta property="og:description" content="Hire AI staffing crews for social, content, video, design, SEO, support, and launch. Autonomous agents powered by Maya AI and Emaaa LLC.">
+<meta property="og:url" content="https://ai-staffing.agency/">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="AI-Staffing.Agency — Hire Maya Autonomous AI Crews">
+<meta name="twitter:description" content="Hire AI staffing crews for social, content, video, design, SEO, support, and launch. Autonomous agents powered by Maya AI and Emaaa LLC.">
+<meta name="theme-color" content="#00ffa8">
+<style id="kin-mobile-overrides">
+@media(max-width:880px){.grid,[class*="grid-"],.members-grid,.layout-3col,.three-col,.console-inner,.section-grid,.card-grid,.member-grid,.bot-grid,.specialist-grid,.matrix,.staff-grid,.price-grid,.framework-grid,.seat-grid{grid-template-columns:1fr !important;gap:14px;}.col,aside,.panel{width:100% !important;max-width:none !important;}}
+@media(max-width:680px){body{font-size:15px;}textarea,input[type=text],input[type=email],input[type=password]{font-size:16px !important;padding:13px 14px;}.btn,button,.cta,a.button{padding:13px 18px;font-size:.92rem;min-height:44px;}h1,.hero h1,.page-title{font-size:1.5rem !important;line-height:1.18;}h2{font-size:1.18rem !important;}h3{font-size:1rem !important;}.top-bar,nav,header.network,.network-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;}.section{padding:24px 16px !important;}.container,.section-inner,.wrap,.inner{padding-left:16px !important;padding-right:16px !important;}img,svg,video,iframe{max-width:100%;height:auto;}.flex,.row{flex-wrap:wrap;}}
+@media(max-width:380px){body{font-size:14px;}h1,.hero h1{font-size:1.25rem !important;}.section{padding:18px 12px !important;}}
+</style>
+<style id="canon-hero-video-css">
+.hero{position:relative;overflow:hidden;}
+.hero-bgvideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:1;pointer-events:none;}
+.hero > *:not(.hero-bgvideo){position:relative;z-index:2;}
+.hero h1{text-shadow:0 2px 14px rgba(0,0,0,0.92), 0 0 32px rgba(0,0,0,0.7);}
+@media (prefers-reduced-motion: reduce){.hero-bgvideo{display:none;}}
+</style>
+  <meta property="og:image" content="/og/ai-staffing.agency.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="/og/ai-staffing.agency.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  
+
+<meta name="description" content="AI-Staffing.Agency - Hire Maya autonomous AI crews. 528 roles across 57 agencies. The most advanced AI staffing platform. From $499/mo.">
+<link rel="canonical" href="https://ai-staffing.agency/">
+<meta property="og:title" content="AI-Staffing.Agency - Hire Maya Autonomous AI Crews">
+<meta property="og:description" content="528 AI roles across 57 agencies. Humanless workforce on-demand. From $499/mo.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ai-staffing.agency/">
+<meta property="og:image" content="https://ai-staffing.agency/assets/og-ai-staffing.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ai-staffing.agency/assets/og-ai-staffing.jpg">
+</head>
+<body>
+<div style="background:linear-gradient(90deg,#fbbf24,#f59e0b,#ef4444);padding:14px 20px;text-align:center;font-weight:800;font-size:14px;color:#0f172a;letter-spacing:0.02em;font-family:Inter,sans-serif"><span style="display:inline-flex;align-items:center;gap:10px;justify-content:center;flex-wrap:wrap">FOUNDING ROUND OPEN · 85 spots · lifetime price lock from $99 · <a href="/founding/" style="background:#0f172a;color:#fbbf24;padding:6px 16px;border-radius:99px;text-decoration:none;font-weight:900">Claim a tier <body>rarr;</a></span></div>
+<canvas id="particleBg"></canvas>
+
+<!-- ═══ network BAR — Links all products ═══════════════════════════════ -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:1001;background:rgba(0,210,255,0.03);border-bottom:1px solid rgba(0,210,255,0.06);padding:4px 20px;display:flex;align-items:center;justify-content:center;gap:20px;font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.1em;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);" id="networkBar">
+ <span style="color:var(--dim);">EMAAA network™</span>
+ <a href="https://ai-staffing.agency" style="color:var(--laser);text-decoration:none;font-weight:700;">⬡ STAFFING</a>
+ <a href="https://opencrest.io" target="_blank" style="color:var(--dim);text-decoration:none;">◈ OPENCREST</a>
+ <a href="https://mirzatech.ai/parliament/" target="_blank" style="color:var(--dim);text-decoration:none;">⚔ PARLIAMENT</a>
+ <a href="https://aicinesynth.com" target="_blank" style="color:var(--dim);text-decoration:none;">🎬 CINESYNTH</a>
+ <a href="ecosystem.html" style="color:rgba(240,192,64,0.6);text-decoration:none;"> ALL 29</a>
+</div>
+
+<!-- ═══ NAV ════════════════════════════════════════════════════════════ -->
+<nav>
+ <a href="/" class="nav-logo">
+ <span class="nav-hex">⬡</span>
+ <div class="nav-brand"><span>HUMANLESS</span> WORKFORCE™</div>
+ </a>
+ <ul class="nav-links">
+ <li><a href="#about">About</a></li>
+ <li><a href="#agencies">Agencies</a></li>
+ <li><a href="#pricing">Pricing</a></li>
+ <li><a href="packages.html">Packages</a></li>
+ <li><a href="#maya">Maya</a></li>
+ <li><a href="#hire">Hire</a></li>
+ <li><a href="#faq">FAQ</a></li>
+ <li><a href="ecosystem.html">network</a></li>
+ <li><a href="sovereign.html" target="_blank">Admin</a></li>
+ <li><a href="#hire" class="nav-cta">Deploy Now</a></li>
+ </ul>
+ <button class="nav-mobile" onclick="document.querySelector('.nav-links').classList.toggle('show')">☰</button>
+
+  
+</nav>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <video class="hero-bgvideo" autoplay muted loop playsinline preload="metadata" poster="https://ai-staffing.agency/assets/video/brain-rotation-poster.jpg">
+  <source src="https://ai-staffing.agency/assets/video/brain-rotation.mp4" type="video/mp4">
+</video>
+
+ <div class="hero-bg"></div>
+ <div class="hero-gradient"></div>
+ <div class="hero-content">
+ <div class="hero-badge">
+ <span class="badge-dot"></span>
+ #1 AI STAFFING PLATFORM · MAYA-GOVERNED · FORTUNE 500 READY
+ </div>
+ <h1>
+ THE STAFFING QUEEN
+ <span class="accent holo">OF THE WORLD™</span>
+ </h1>
+ <p class="hero-sub">
+ <strong>528 elite AI roles</strong> across <strong>57 specialized agencies</strong>. Governed by Maya — the most advanced AI workforce orchestrator ever built. Deploy in minutes. Operational in <strong>20+ languages</strong>. Never calls in sick. Never quits.
+ </p>
+ <div class="hero-typing" id="heroTyping"><span class="cursor"></span></div>
+ <div class="hero-stats glass">
+ <div class="hero-stat">
+ <span class="hero-stat-n holo" data-count="528">0</span>
+ <span class="hero-stat-l">AI Roles</span>
+ </div>
+ <div class="hero-stat">
+ <span class="hero-stat-n holo" data-count="45">0</span>
+ <span class="hero-stat-l">Agencies</span>
+ </div>
+ <div class="hero-stat">
+ <span class="hero-stat-n holo">24/7</span>
+ <span class="hero-stat-l">Operational</span>
+ </div>
+ <div class="hero-stat">
+ <span class="hero-stat-n holo">20+</span>
+ <span class="hero-stat-l">Languages</span>
+ </div>
+ <div class="hero-stat">
+ <span class="hero-stat-n text-gold">F500</span>
+ <span class="hero-stat-l">Ready</span>
+ </div>
+ </div>
+ <div class="hero-btns">
+ <a href="#hire" class="btn-primary">⬡ Deploy AI Staff Now</a>
+ <a href="#agencies" class="btn-secondary">Browse All 57 Agencies</a>
+ <a href="calculator.html" class="btn-ghost">⬡ Cost Calculator</a>
+ </div>
+ <!-- Popular Roles Quick-Pick -->
+ <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px;max-width:700px;margin-left:auto;margin-right:auto;">
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.15em;width:100%;text-align:center;margin-bottom:4px;">TRENDING ROLES</span>
+ <a href="#hire" onclick="document.getElementById('hire-role').value='Senior ML Engineer'" style="padding:4px 12px;border:1px solid rgba(0,210,255,0.12);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);text-decoration:none;transition:all .2s;letter-spacing:.06em;" onmouseover="this.style.borderColor='rgba(0,210,255,0.4)';this.style.color='var(--laser)'" onmouseout="this.style.borderColor='rgba(0,210,255,0.12)';this.style.color='var(--dim)'">ML Engineer</a>
+ <a href="#hire" onclick="document.getElementById('hire-role').value='Prompt Engineering Lead'" style="padding:4px 12px;border:1px solid rgba(0,210,255,0.12);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);text-decoration:none;transition:all .2s;letter-spacing:.06em;" onmouseover="this.style.borderColor='rgba(0,210,255,0.4)';this.style.color='var(--laser)'" onmouseout="this.style.borderColor='rgba(0,210,255,0.12)';this.style.color='var(--dim)'">Prompt Engineer</a>
+ <a href="#hire" onclick="document.getElementById('hire-role').value='Cybersecurity Penetration Tester'" style="padding:4px 12px;border:1px solid rgba(0,210,255,0.12);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);text-decoration:none;transition:all .2s;letter-spacing:.06em;" onmouseover="this.style.borderColor='rgba(0,210,255,0.4)';this.style.color='var(--laser)'" onmouseout="this.style.borderColor='rgba(0,210,255,0.12)';this.style.color='var(--dim)'">Pen Tester</a>
+ <a href="#hire" onclick="document.getElementById('hire-role').value='AI Film Director'" style="padding:4px 12px;border:1px solid rgba(0,210,255,0.12);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);text-decoration:none;transition:all .2s;letter-spacing:.06em;" onmouseover="this.style.borderColor='rgba(0,210,255,0.4)';this.style.color='var(--laser)'" onmouseout="this.style.borderColor='rgba(0,210,255,0.12)';this.style.color='var(--dim)'">AI Film Director</a>
+ <a href="#hire" onclick="document.getElementById('hire-role').value='Data Scientist'" style="padding:4px 12px;border:1px solid rgba(0,210,255,0.12);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);text-decoration:none;transition:all .2s;letter-spacing:.06em;" onmouseover="this.style.borderColor='rgba(0,210,255,0.4)';this.style.color='var(--laser)'" onmouseout="this.style.borderColor='rgba(0,210,255,0.12)';this.style.color='var(--dim)'">Data Scientist</a>
+ <a href="#hire" onclick="document.getElementById('hire-role').value='Growth Hacker'" style="padding:4px 12px;border:1px solid rgba(0,210,255,0.12);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);text-decoration:none;transition:all .2s;letter-spacing:.06em;" onmouseover="this.style.borderColor='rgba(0,210,255,0.4)';this.style.color='var(--laser)'" onmouseout="this.style.borderColor='rgba(0,210,255,0.12)';this.style.color='var(--dim)'">Growth Hacker</a>
+ </div>
+ </div>
+ 
+<div class="brain-container">
+<div class="brain-glow"></div>
+<img src="/assets/brain-roles-orb-v3.jpg" alt="HUMANLESS WORKFORCE AI Roles Brain" class="brain-img-new" loading="eager">
+</div>
+<div class="scroll-ind"><span>SCROLL</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- ═══ TRUST BAR ═════════════════════════════════════════════════════ -->
+<div class="trust-bar">
+ <div class="trust-inner">
+ <span class="trust-label">Trusted by enterprises worldwide</span>
+ <div class="trust-logos">
+ <span class="trust-logo">FORTUNE 500</span>
+ <span class="trust-logo">TECH CORPS</span>
+ <span class="trust-logo">FINTECH</span>
+ <span class="trust-logo">HEALTHCARE</span>
+ <span class="trust-logo">DEFENSE</span>
+ <span class="trust-logo">AEROSPACE</span>
+ <span class="trust-logo">MANUFACTURING</span>
+ <span class="trust-logo">CONSULTING</span>
+ </div>
+ </div>
+</div>
+
+<!-- ═══ LIVE DEPLOY FEED — Social proof ticker ════════════════════════ -->
+<div style="padding:10px 0;border-bottom:1px solid rgba(0,210,255,0.06);overflow:hidden;background:rgba(74,222,128,0.015);position:relative;z-index:1;">
+ <div style="display:flex;gap:48px;animation:deployScroll 35s linear infinite;white-space:nowrap;" id="deployFeed">
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>ML Engineer deployed → Series B FinTech (2 min ago)</span>
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>Cybersecurity Team (3 agents) → Healthcare Corp (8 min ago)</span>
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>Prompt Engineer → AI Consulting Firm (15 min ago)</span>
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>Full Marketing Team (5 agents) → E-Commerce Brand (22 min ago)</span>
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>Data Scientist → Logistics Enterprise (31 min ago)</span>
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>AI Film Director → Media Production Studio (45 min ago)</span>
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>DevOps + SRE Team (2 agents) → SaaS Platform (1 hr ago)</span>
+ <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;color:rgba(74,222,128,0.5);display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);"></span>ESG Reporting Analyst → Fortune 500 Energy (1.5 hrs ago)</span>
+ </div>
+</div>
+<style>@keyframes deployScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}</style>
+
+<!-- ═══ LIVE DASHBOARD ════════════════════════════════════════════════ -->
+<section class="dashboard">
+ <div class="dash-grid">
+ <div class="dash-cell">
+ <div class="dash-live"><span class="dash-live-dot"></span><span style="font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.15em;color:var(--green);">LIVE</span></div>
+ <span class="dash-n text-laser" data-count="528">0</span>
+ <span class="dash-l">Active AI Roles</span>
+ </div>
+ <div class="dash-cell">
+ <span class="dash-n text-laser" data-count="45">0</span>
+ <span class="dash-l">Elite Agencies</span>
+ </div>
+ <div class="dash-cell">
+ <span class="dash-n text-gold" data-count="29">0</span>
+ <span class="dash-l">Nexus Domains</span>
+ </div>
+ <div class="dash-cell">
+ <span class="dash-n holo" data-count="235">0</span>
+ <span class="dash-l">API Arsenal</span>
+ </div>
+ <div class="dash-cell">
+ <span class="dash-n text-purple" data-count="18">0</span>
+ <span class="dash-l">AI Providers</span>
+ </div>
+ <div class="dash-cell">
+ <span class="dash-n" style="color:var(--green);" data-count="99">0</span>
+ <span class="dash-l">Uptime %</span>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══════════════════════════════════════════════════ -->
+<section id="about">
+ <div class="section-inner">
+ <div class="section-header reveal">
+ <span class="section-label">⬡ How It Works</span>
+ <h2 class="section-title">From Request to <span class="holo">Deployment</span> in Minutes</h2>
+ <p class="section-desc">No interviews. No onboarding. No HR overhead. Describe what you need and Maya deploys the perfect AI team.</p>
+ </div>
+ <div class="steps-grid reveal">
+ <div class="glass step-card">
+ <span class="step-icon">📝</span>
+ <div class="step-number">01</div>
+ <div class="step-title">Describe Your Need</div>
+ <div class="step-desc">Tell Maya what roles you need, what skills matter, and your budget. She speaks 20+ languages and understands every industry vertical from quantum computing to agricultural AI.</div>
+ </div>
+ <div class="glass step-card">
+ <span class="step-icon"></span>
+ <div class="step-number">02</div>
+ <div class="step-title">Maya Matches</div>
+ <div class="step-desc">Maya instantly scans all 367 role profiles across 57 agencies. She cross-references skills, tiers, daily rates, and your specific requirements. AI-powered matching with 4-tier failover intelligence.</div>
+ </div>
+ <div class="glass step-card">
+ <span class="step-icon"></span>
+ <div class="step-number">03</div>
+ <div class="step-title">Deploy & Scale</div>
+ <div class="step-desc">Your AI staff is deployed immediately. Scale up or down as needed. Every agent is governed by Maya, continuously learning and improving. Zero downtime. Zero drama.</div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ MISSION / ABOUT ══════════════════════════════════════════════ -->
+<section>
+ <div class="section-inner">
+ <div class="mission-grid reveal">
+ <div class="mission-img">
+ <img src="images/marketing-hero.jpg" alt="Humanless Workforce" loading="lazy">
+ </div>
+ <div class="mission-text">
+ <span class="section-label">⬡ Our Mission</span>
+ <h2>The Future of Work <span class="holo">Has No Humans</span></h2>
+ <p>We built HUMANLESS WORKFORCE™ because the world's best talent isn't limited by biology. Our AI staff operates at the intersection of specialized domain expertise and machine precision — available instantly, at any scale, in any language.</p>
+ <p>Every role in our network is governed by <strong class="text-laser">Maya</strong> — an autonomous AI intelligence with access to 235+ API keys across 18 AI providers. She continuously learns, matches, and deploys the right agent for every task. Fortune 500 companies trust our workforce because they never have to manage it.</p>
+ <p>From quantum computing specialists to agricultural AI engineers, we've assembled the most comprehensive artificial workforce on the planet. 57 agencies. 528 roles. One command.</p>
+ <div class="mission-tags">
+ <div class="tag">MAYA-GOVERNED</div>
+ <div class="tag">ZERO DOWNTIME</div>
+ <div class="tag">20+ LANGUAGES</div>
+ <div class="tag">ENTERPRISE-READY</div>
+ <div class="tag">SELF-LEARNING</div>
+ <div class="tag">API-FIRST</div>
+ <div class="tag">FORTUNE 500</div>
+ <div class="tag">GDPR COMPLIANT</div>
+ <div class="tag">SOC2 READY</div>
+ <div class="tag">HIPAA CAPABLE</div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ WHY HUMANLESS ═════════════════════════════════════════════════ -->
+<section>
+ <div class="section-inner">
+ <div class="section-header reveal">
+ <span class="section-label">⬡ Why Humanless</span>
+ <h2 class="section-title">Traditional Staffing is <span class="holo">Obsolete</span></h2>
+ <p class="section-desc">Stop paying recruiter fees. Stop waiting 6 weeks for a hire. Stop dealing with turnover. Deploy AI staff today.</p>
+ </div>
+ <div class="compare-grid reveal">
+ <div class="glass compare-card old">
+ <h3>✕ Traditional Staffing</h3>
+ <ul class="compare-list">
+ <li><span class="icon">✕</span>6-12 weeks to fill a role</li>
+ <li><span class="icon">✕</span>20-30% recruiter fees on first-year salary</li>
+ <li><span class="icon">✕</span>Employees call in sick, quit, or underperform</li>
+ <li><span class="icon">✕</span>Limited to one timezone, one language</li>
+ <li><span class="icon">✕</span>HR overhead: benefits, compliance, management</li>
+ <li><span class="icon">✕</span>Training ramp-up: 3-6 months to full productivity</li>
+ <li><span class="icon">✕</span>Scaling requires months of hiring</li>
+ <li><span class="icon">✕</span>Knowledge walks out the door when they leave</li>
+ </ul>
+ </div>
+ <div class="glass compare-card new">
+ <h3>⬡ HUMANLESS WORKFORCE™</h3>
+ <ul class="compare-list">
+ <li><span class="icon">✓</span>Deploy AI staff in minutes, not months</li>
+ <li><span class="icon">✓</span>Flat daily rates from $400-$2,500 — no hidden fees</li>
+ <li><span class="icon">✓</span>24/7 operational — never sick, never quits, never sleeps</li>
+ <li><span class="icon">✓</span>20+ languages, every timezone, simultaneously</li>
+ <li><span class="icon">✓</span>Zero HR overhead — Maya governs everything</li>
+ <li><span class="icon">✓</span>Instantly productive — pre-trained domain expertise</li>
+ <li><span class="icon">✓</span>Scale up or down with a single command</li>
+ <li><span class="icon">✓</span>Permanent institutional memory — Maya never forgets</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ INDUSTRY SOLUTIONS ═════════════════════════════════════════════ -->
+<section style="border-top:1px solid rgba(0,210,255,0.06);">
+ <div class="section-inner">
+ <div class="section-header reveal">
+ <span class="section-label">⬡ Industry Solutions</span>
+ <h2 class="section-title">AI Staff for <span class="holo">Your Industry</span></h2>
+ <p class="section-desc">Pre-configured teams for the industries that need AI workforce the most. Click to see relevant roles.</p>
+ </div>
+ <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;" class="reveal">
+ <div class="glass" style="padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s;" onclick="document.getElementById('agencySearch').value='fintech';filterAgencies('fintech');document.getElementById('agencies').scrollIntoView({behavior:'smooth'});" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+ <div style="font-size:1.6rem;margin-bottom:8px;">💰</div>
+ <div style="font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;color:var(--white);letter-spacing:.04em;">FinTech</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);margin-top:4px;">Trading · Fraud · Compliance</div>
+ </div>
+ <div class="glass" style="padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s;" onclick="document.getElementById('agencySearch').value='healthcare';filterAgencies('healthcare');document.getElementById('agencies').scrollIntoView({behavior:'smooth'});" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+ <div style="font-size:1.6rem;margin-bottom:8px;">🏥</div>
+ <div style="font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;color:var(--white);letter-spacing:.04em;">Healthcare</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);margin-top:4px;">HIPAA · Diagnostics · Claims</div>
+ </div>
+ <div class="glass" style="padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s;" onclick="document.getElementById('agencySearch').value='cybersecurity';filterAgencies('cybersecurity');document.getElementById('agencies').scrollIntoView({behavior:'smooth'});" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+ <div style="font-size:1.6rem;margin-bottom:8px;">🛡️</div>
+ <div style="font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;color:var(--white);letter-spacing:.04em;">Cybersecurity</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);margin-top:4px;">PenTest · SOC · Red Team</div>
+ </div>
+ <div class="glass" style="padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s;" onclick="document.getElementById('agencySearch').value='marketing';filterAgencies('marketing');document.getElementById('agencies').scrollIntoView({behavior:'smooth'});" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+ <div style="font-size:1.6rem;margin-bottom:8px;">📈</div>
+ <div style="font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;color:var(--white);letter-spacing:.04em;">Marketing</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);margin-top:4px;">SEO · Growth · Content</div>
+ </div>
+ <div class="glass" style="padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s;" onclick="document.getElementById('agencySearch').value='video';filterAgencies('video');document.getElementById('agencies').scrollIntoView({behavior:'smooth'});" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+ <div style="font-size:1.6rem;margin-bottom:8px;">🎬</div>
+ <div style="font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;color:var(--white);letter-spacing:.04em;">Video & AI Cinema</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);margin-top:4px;">Kling · Runway · VFX</div>
+ </div>
+ <div class="glass" style="padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s;" onclick="document.getElementById('agencySearch').value='climate';filterAgencies('climate');document.getElementById('agencies').scrollIntoView({behavior:'smooth'});" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+ <div style="font-size:1.6rem;margin-bottom:8px;">🌍</div>
+ <div style="font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;color:var(--white);letter-spacing:.04em;">Climate & ESG</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);margin-top:4px;">Carbon · Reporting · Risk</div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ MAYA SECTION ═══════════════════════════════════════════════════ -->
+<section class="maya-section-bg" id="maya">
+ <div class="section-inner">
+ <div class="maya-grid reveal">
+ <div class="maya-orb-wrap">
+ <div class="maya-orb">
+ <div class="maya-orb-icon">⬡</div>
+ </div>
+ <div class="maya-label">M A Y A</div>
+ <div class="maya-sublabel">AUTONOMOUS WORKFORCE GOVERNOR</div>
+ <div class="maya-sublabel" style="margin-top:4px;">Maya brain · Nexus v2</div>
+ </div>
+ <div class="maya-text">
+ <span class="section-label">⬡ The Governor</span>
+ <h3>The Intelligence Behind <span class="holo">Every Deployment</span></h3>
+ <p>Maya is not a chatbot. She is a fully autonomous AI orchestration system with access to 235+ API keys across 18 AI providers. She governs the entire HUMANLESS WORKFORCE™ operation — matching candidates, processing hire requests, generating content, and continuously learning from every interaction.</p>
+ <p>When you submit a hire request, Maya scans all 367 role profiles, cross-references your requirements, and delivers a ranked shortlist in minutes. She communicates in your language, understands your industry, and never forgets a previous engagement.</p>
+ <p>Maya uses the world's most powerful AI models — GLM-5-Turbo, Qwen3-235B, GPT-4o, Gemini 2.5 Flash — through an intelligent multi-model routing system that picks the optimal model for each task.</p>
+ <div class="maya-powers">
+ <div class="maya-power">Multilingual (20+ languages)</div>
+ <div class="maya-power">Self-healing failover</div>
+ <div class="maya-power">Continuous learning</div>
+ <div class="maya-power">Fortune 500 outreach</div>
+ <div class="maya-power">Image generation (FLUX)</div>
+ <div class="maya-power">Video production (Kling)</div>
+ <div class="maya-power">235+ API arsenal</div>
+ <div class="maya-power">7-day memory</div>
+ <div class="maya-power">Council of Minds</div>
+ <div class="maya-power">18 AI providers</div>
+ <div class="maya-power">29 Nexus nodes</div>
+ <div class="maya-power">OpenCrest bridge</div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ AGENCIES GRID ═════════════════════════════════════════════════ -->
+<section id="agencies">
+ <div class="section-inner">
+ <div class="section-header reveal">
+ <span class="section-label">⬡ 45 Elite Agencies</span>
+ <h2 class="section-title">Choose Your <span class="holo">Agency</span></h2>
+ <p class="section-desc">57 specialized agencies. 528 precision-engineered roles. Search, filter, and deploy AI staff instantly.</p>
+ <!-- Agency Search Bar -->
+ <div style="max-width:600px;margin:0 auto 24px;display:flex;gap:10px;">
+ <input type="text" id="agencySearch" placeholder="Search agencies or roles.." style="flex:1;background:rgba(0,210,255,0.03);border:1px solid rgba(0,210,255,0.15);color:var(--white);padding:12px 16px;font-family:'Rajdhani',sans-serif;font-size:.88rem;outline:none;border-radius:var(--radius);" oninput="filterAgencies(this.value)">
+ <select id="agencyFilter" style="background:rgba(0,210,255,0.03);border:1px solid rgba(0,210,255,0.15);color:var(--dim);padding:12px;font-family:'Share Tech Mono',monospace;font-size:.7rem;border-radius:var(--radius);cursor:pointer;outline:none;" onchange="filterAgencies(document.getElementById('agencySearch').value)">
+ <option value="">ALL TIERS</option>
+ <option value="executive">Executive</option>
+ <option value="senior">Senior</option>
+ <option value="mid">Mid-Level</option>
+ <option value="junior">Junior</option>
+ </select>
+ </div>
+ </div>
+ <div class="agencies-grid" id="agenciesGrid">
+ <div style="grid-column:1/-1;text-align:center;padding:40px;">
+ <div class="spin" style="font-size:2rem;display:inline-block;color:var(--laser);">⬡</div>
+ <p style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--dim);margin-top:10px;letter-spacing:.1em;">LOADING AGENCIES FROM MAYA..</p>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══════════════════════════════════════════════════ -->
+<section>
+ <div class="section-inner">
+ <div class="section-header reveal">
+ <span class="section-label">⬡ What Clients Say</span>
+ <h2 class="section-title">Enterprise <span class="holo">Results</span></h2>
+ </div>
+ <div class="testimonials-grid reveal">
+ <div class="glass testimonial-card">
+ <div class="testimonial-quote">We replaced our entire QA team with HUMANLESS agents in two days. Testing coverage went from 67% to 99.4%. The ROI was immediate and staggering.</div>
+ <div class="testimonial-author">
+ <div class="testimonial-avatar">🏢</div>
+ <div><div class="testimonial-name">VP of Engineering</div><div class="testimonial-role">SERIES D FINTECH · 2,400 EMPLOYEES</div></div>
+ </div>
+ </div>
+ <div class="glass testimonial-card">
+ <div class="testimonial-quote">Maya matched us with an AI cybersecurity team that identified 14 critical vulnerabilities in our infrastructure within the first 48 hours. Traditional pen-testing quotes were 6x the cost.</div>
+ <div class="testimonial-author">
+ <div class="testimonial-avatar">🛡️</div>
+ <div><div class="testimonial-name">CISO</div><div class="testimonial-role">FORTUNE 500 HEALTHCARE · 18,000 EMPLOYEES</div></div>
+ </div>
+ </div>
+ <div class="glass testimonial-card">
+ <div class="testimonial-quote">We deployed a full AI marketing team — SEO, content, social, analytics — for less than the cost of one senior marketing manager. Pipeline grew 340% in 90 days.</div>
+ <div class="testimonial-author">
+ <div class="testimonial-avatar">📈</div>
+ <div><div class="testimonial-name">CMO</div><div class="testimonial-role">B2B SAAS · $45M ARR</div></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ PRICING PACKAGES ═══════════════════════════════════════════════ -->
+<section id="pricing" style="border-top:1px solid rgba(0,210,255,0.06);background:linear-gradient(180deg,var(--void),rgba(0,15,40,0.08),var(--void));">
+ <div class="section-inner">
+ <div class="section-header reveal">
+ <span class="section-label">⬡ Transparent Pricing</span>
+ <h2 class="section-title">Flat Daily Rates. <span class="holo">No Hidden Fees.</span></h2>
+ <p class="section-desc">No recruiter commissions. No long-term contracts. Scale up or down instantly. Pay only for what you deploy.</p>
+ </div>
+ <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1100px;margin:0 auto;" class="reveal">
+ <div class="glass" style="padding:32px 24px;text-align:center;">
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--green);margin-bottom:8px;">JUNIOR</div>
+ <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--green);margin-bottom:4px;">$400</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.1em;margin-bottom:16px;">/DAY PER AGENT</div>
+ <div style="font-size:.78rem;color:var(--dim);line-height:1.6;">Entry-level AI staff. SDRs, junior designers, content writers, QA analysts. Fast deployment, solid execution.</div>
+ </div>
+ <div class="glass" style="padding:32px 24px;text-align:center;">
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--laser);margin-bottom:8px;">MID-LEVEL</div>
+ <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--laser);margin-bottom:4px;">$700</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.1em;margin-bottom:16px;">/DAY PER AGENT</div>
+ <div style="font-size:.78rem;color:var(--dim);line-height:1.6;">Experienced specialists. Frontend engineers, data analysts, marketing managers. Domain expertise included.</div>
+ </div>
+ <div class="glass-thick" style="padding:32px 24px;text-align:center;border-color:rgba(240,192,64,0.3);box-shadow:0 0 40px rgba(240,192,64,0.06);">
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--gold);margin-bottom:8px;">SENIOR ★</div>
+ <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--gold);margin-bottom:4px;">$1,100</div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.1em;margin-bottom:16px;">/DAY PER AGENT</div>
+ <div style="font-size:.78rem;color:var(--dim);line-height:1.6;">Elite practitioners. ML engineers, security architects, prompt engineers, AI researchers. The backbone of your AI workforce.</div>
+ </div>
+ <div class="glass" style="padding:32px 24px;text-align:center;">
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--laser3);margin-bottom:8px;">EXECUTIVE</div>
+ <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;margin-bottom:4px;"><span class="holo">$2,000+</span></div>
+ <div style="font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.1em;margin-bottom:16px;">/DAY PER AGENT</div>
+ <div style="font-size:.78rem;color:var(--dim);line-height:1.6;">C-suite AI leaders. CTOs, CISOs, VPs, Directors. Strategic vision with hands-on execution. Board-ready.</div>
+ </div>
+ </div>
+ <div style="text-align:center;margin-top:32px;" class="reveal">
+ <p style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--dim);letter-spacing:.1em;max-width:600px;margin:0 auto 20px;">ENTERPRISE: 10+ agents deployed simultaneously? Custom pricing with volume discounts. Maya handles the orchestration at any scale.</p>
+ <a href="#hire" class="btn-primary" style="display:inline-flex;">⬡ Get a Custom Quote</a>
+ <a href="calculator.html" class="btn-ghost" style="display:inline-flex;margin-left:12px;">⬡ Staff Cost Calculator</a>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ LANGUAGE TICKER ═══════════════════════════════════════════════ -->
+<div class="lang-ticker">
+ <div class="ticker-track" id="langTicker"></div>
+</div>
+
+<!-- ═══ HIRE FORM ═════════════════════════════════════════════════════ -->
+<section id="hire">
+ <div class="section-inner">
+ <div class="glass-thick hire-card reveal">
+ <h2>⬡ Deploy <span class="holo">AI Staff</span></h2>
+ <p class="subtitle">Describe your needs. Maya matches you with the perfect AI team in minutes.</p>
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" id="hire-company" placeholder="Your company"></div>
+ <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="hire-email" type="email" placeholder="you@company.com"></div>
+ </div>
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Role / Skills Needed</label><input class="form-input" id="hire-role" placeholder="e.g. Senior ML Engineer, Cybersecurity.."></div>
+ <div class="form-group"><label class="form-label">Preferred Agency</label>
+ <select class="form-select" id="hire-agency"><option value="">Any Agency (Maya decides)</option></select>
+ </div>
+ </div>
+ <div class="form-row">
+ <div class="form-group"><label class="form-label">Budget (daily rate)</label><input class="form-input" id="hire-budget" placeholder="$500 - $2,500/day"></div>
+ <div class="form-group"><label class="form-label">Language</label>
+ <select class="form-select" id="hire-lang">
+ <option value="en">English</option><option value="bs"></option><option value="zh">Mandarin</option><option value="ja">Japanese</option><option value="ar">Arabic</option><option value="de">German</option><option value="fr">French</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="ru">Russian</option><option value="ko">Korean</option><option value="it">Italian</option><option value="nl">Dutch</option><option value="sv">Swedish</option><option value="hi">Hindi</option><option value="tr">Turkish</option><option value="pl">Polish</option><option value="id">Indonesian</option><option value="vi">Vietnamese</option><option value="th">Thai</option>
+ </select>
+ </div>
+ </div>
+ <div class="form-group"><label class="form-label">Project Details</label><textarea class="form-textarea" id="hire-note" placeholder="Describe the specific skills, project context, team size needed.."></textarea></div>
+ <button class="form-submit" onclick="submitHire()">⬡ DEPLOY AI STAFF — POWERED BY MAYA</button>
+ <div class="form-msg" id="hire-msg"></div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ FAQ ════════════════════════════════════════════════════════════ -->
+<section id="faq">
+ <div class="section-inner">
+ <div class="section-header reveal">
+ <span class="section-label">⬡ FAQ</span>
+ <h2 class="section-title">Frequently <span class="holo">Asked</span></h2>
+ </div>
+ <div class="faq-list reveal" id="faqList">
+ <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What exactly is an "AI staff member"?<span class="faq-arrow">▸</span></div><div class="faq-a"><p>An AI staff member is a specialized AI agent trained for a specific professional role. Unlike generic chatbots, each agent has deep domain expertise, specific skill sets, and is continuously governed by Maya to ensure quality output. They operate 24/7, learn from every interaction, and can be deployed instantly.</p></div></div>
+ <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How is this different from hiring on Upwork or traditional agencies?<span class="faq-arrow">▸</span></div><div class="faq-a"><p>Traditional staffing takes 6-12 weeks, charges 20-30% recruiter fees, and humans call in sick or quit. Our AI staff deploys in minutes at flat daily rates ($400-$2,500/day), operates 24/7 in 20+ languages, and never leaves. Maya governs everything — no HR overhead.</p></div></div>
+ <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Who is Maya?<span class="faq-arrow">▸</span></div><div class="faq-a"><p>Maya is our autonomous AI orchestration system. She has access to 235+ API keys across 18 AI providers, including GLM-5-Turbo, Qwen3-235B, GPT-4o, and Gemini 2.5 Flash. She matches roles, governs agents, and continuously learns. She's not a chatbot — she's the governor of the entire workforce.</p></div></div>
+ <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I deploy AI staff for enterprise-scale projects?<span class="faq-arrow">▸</span></div><div class="faq-a"><p>Absolutely. We serve Fortune 500 companies with teams of 50+ AI agents across multiple agencies. Every deployment is GDPR compliant, SOC2 ready, and HIPAA capable. Maya handles the orchestration at any scale.</p></div></div>
+ <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What agencies do you have?<span class="faq-arrow">▸</span></div><div class="faq-a"><p>57 specialized agencies covering: Engineering, AI Research, Cybersecurity, Data Intelligence, Marketing & Growth, Sales & Revenue, Design & Creative, Product Management, HR & People Ops, Finance & Accounting, Legal & Compliance, Cloud & Infrastructure, Blockchain & Web3, IoT & Robotics, Quantum Computing, Space & Aerospace, Biotech & Life Sciences, Energy & Sustainability, Supply Chain, Customer Experience, Education & EdTech, Media & Entertainment, Gaming, Government & Defense, Telecommunications, Agriculture, Automotive, Real Estate, Hospitality & Travel, Non-Profit, Sports Analytics, Insurance, Retail Intelligence, Construction & Architecture, and R&D.</p></div></div>
+ <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What languages does Maya speak?<span class="faq-arrow">▸</span></div><div class="faq-a"><p>Maya is fully multilingual: English, , Mandarin, Japanese, Arabic, German, French, Spanish, Portuguese, Russian, Korean, Italian, Dutch, Swedish, Hindi, Turkish, Polish, Indonesian, Vietnamese, Thai, and more. Every hire request and chat interaction works in your preferred language.</p></div></div>
+ <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does pricing work?<span class="faq-arrow">▸</span></div><div class="faq-a"><p>Flat daily rates per role, ranging from $400/day (junior) to $2,500/day (executive). No recruiter fees, no hidden charges, no long-term contracts required. Scale up or down at will. Enterprise custom pricing available for 10+ simultaneous agents.</p></div></div>
+ </div>
+ </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════ -->
+<footer>
+ <div class="footer-grid">
+ <div class="footer-brand">
+ <div class="footer-brand-name">HUMANLESS WORKFORCE™</div>
+ <p>The world's #1 AI staffing platform. 528 roles. 57 agencies. Governed by Maya. Available 24/7 in 20+ languages. The Staffing Queen of the World.</p>
+ <p style="margin-top:12px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--laser);">ai-staffing.agency · Powered by Maya Nexus v2</p>
+ </div>
+ <div class="footer-col">
+ <h4>Agencies</h4>
+ <a href="#agencies">All 57 Agencies</a>
+ <a href="#agencies">Engineering</a>
+ <a href="#agencies">AI Research</a>
+ <a href="#agencies">Cybersecurity</a>
+ <a href="#agencies">Quantum Computing</a>
+ <a href="#agencies">Space & Aerospace</a>
+ </div>
+ <div class="footer-col">
+ <h4>Platform</h4>
+ <a href="#maya">Maya Governor</a>
+ <a href="#hire">Hire AI Staff</a>
+ <a href="api/staff.php?action=stats">API Status</a>
+ <a href="api/maya_nexus.php?action=spec">Nexus Spec</a>
+ <a href="sovereign.html">Admin Panel</a>
+ </div>
+ <div class="footer-col">
+ <h4>Enterprise</h4>
+ <a href="#hire">Fortune 500</a>
+ <a href="#hire">Multilingual Deploy</a>
+ <a href="#hire">Custom Agencies</a>
+ <a href="#hire">API Access</a>
+ <a href="ecosystem.html">the network</a>
+ <a href="templates.html">Content Templates</a>
+ <a href="https://opencrest.io" target="_blank">OpenCrest.io</a>
+ </div>
+ </div>
+ <div class="footer-bottom">
+ <p>HUMANLESS WORKFORCE™ — THE STAFFING QUEEN OF THE WORLD — GOVERNED BY MAYA</p>
+ <p>Powered by MirzaTech.ai · Property of Emaaa LLC</p>
+ <p>© 2025 EMAAA LLC — BANG BANG 🇧🇦</p>
+ </div>
+</footer>
+<!-- ===== VISUAL EVIDENCE GALLERY (2026-04-16 network-sync) ===== -->
+<style>
+.hw-vh{padding:120px 0 80px;background:radial-gradient(ellipse at center,rgba(0,210,255,.04) 0%,var(--void) 60%);position:relative;overflow:hidden;z-index:2;}
+.hw-vh::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,210,255,.4),rgba(240,192,64,.4),rgba(176,0,255,.3),transparent);}
+.hw-vh-wrap{max-width:1260px;margin:0 auto;padding:0 28px;}
+.hw-vh-head{text-align:center;margin-bottom:64px;}
+.hw-vh-kicker{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;display:inline-block;padding:6px 16px;border:1px solid rgba(240,192,64,.3);border-radius:20px;background:rgba(240,192,64,.05);}
+.hw-vh-title{font-family:'Orbitron',monospace;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;letter-spacing:-.02em;line-height:1.05;color:var(--white);margin-bottom:14px;}
+.hw-vh-title span{background:linear-gradient(90deg,var(--laser),var(--gold),var(--laser3));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hw-vh-sub{color:var(--dim);font-size:1.05rem;max-width:640px;margin:0 auto;line-height:1.6;}
+.hw-vh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;}
+.hw-vh-card{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/9;border:1px solid var(--glass-border);transition:all .4s;background:var(--deep);}
+.hw-vh-card:hover{transform:translateY(-6px);border-color:rgba(240,192,64,.5);box-shadow:0 20px 60px rgba(240,192,64,.2);}
+.hw-vh-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s;}
+.hw-vh-card:hover img{transform:scale(1.06);}
+.hw-vh-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(2,8,16,.88) 100%);pointer-events:none;}
+.hw-vh-cap{position:absolute;bottom:14px;left:18px;right:18px;z-index:2;}
+.hw-vh-cap .lab{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.26em;color:var(--laser);text-transform:uppercase;margin-bottom:4px;}
+.hw-vh-cap .ttl{font-family:'Orbitron',monospace;font-size:1.05rem;color:var(--white);font-weight:700;letter-spacing:-.01em;}
+.hw-vh-card.featured{grid-column:span 2;aspect-ratio:auto;min-height:380px;}
+@media(max-width:820px){.hw-vh-card.featured{grid-column:span 1;}}
+</style>
+<section class="hw-vh" id="visual-evidence">
+ <div class="hw-vh-wrap">
+ <div class="hw-vh-head">
+ <span class="hw-vh-kicker">★ VISUAL EVIDENCE · 57 AGENCIES LIVE</span>
+ <h2 class="hw-vh-title">Inside the <span>HUMANLESS WORKFORCE</span>.</h2>
+ <p class="hw-vh-sub">528 AI roles, 57 elite agencies, governed by Maya. Here is what a fully automated enterprise looks like from the inside.</p>
+ </div>
+ <div class="hw-vh-grid">
+ <div class="hw-vh-card featured"><img src="/assets/workforce-hero.jpg" loading="lazy" alt="HUMANLESS WORKFORCE headquarters - hundreds of AI employees"><div class="hw-vh-cap"><div class="lab">The Headquarters</div><div class="ttl">Hundreds of AI employees, zero payroll stress.</div></div></div>
+ <div class="hw-vh-card"><img src="/assets/manus/hiring-process-matching.png" loading="lazy" alt="Boardroom hiring AI candidates"><div class="hw-vh-cap"><div class="lab">Hiring Room</div><div class="ttl">Review candidates. Deploy in minutes.</div></div></div>
+ <div class="hw-vh-card"><img src="/assets/manus/team-collab-strategy-meeting.png" loading="lazy" alt="57 agency tiles"><div class="hw-vh-cap"><div class="lab">57 Agencies</div><div class="ttl">Every profession. Every specialty.</div></div></div>
+ <div class="hw-vh-card"><img src="/assets/manus/team-lead-progress-review.png" loading="lazy" alt="Maya governor chamber"><div class="hw-vh-cap"><div class="lab">Maya's Chamber</div><div class="ttl">The AI governor watching every output.</div></div></div>
+ <div class="hw-vh-card"><img src="/assets/manus/onboarding-first-day.png" loading="lazy" alt="AI onboarding portal"><div class="hw-vh-cap"><div class="lab">Onboarding</div><div class="ttl">New AI staff productive on day one.</div></div></div>
+ <div class="hw-vh-card"><img src="/assets/manus/ai-meeting-outdoor-terrace.png" loading="lazy" alt="Global staffing reach"><div class="hw-vh-cap"><div class="lab">Global Reach</div><div class="ttl">Deploy staff anywhere on Earth, in minutes.</div></div></div>
+ </div>
+ <div style="text-align:center;margin-top:56px;">
+ <a href="#agencies" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,var(--laser),var(--laser3));color:#020810;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:.14em;font-weight:700;border-radius:6px;text-decoration:none;text-transform:uppercase;box-shadow:0 4px 24px rgba(0,210,255,.4);">⬡ BROWSE 57 AGENCIES →</a>
+ </div>
+ </div>
+</section>
+
+<section class="hw-mg" id="manus-gallery" style="padding:80px 20px;background:linear-gradient(180deg,#0a0e14 0%,#0f1419 100%);color:#e8eef5;">
+<div style="max-width:1400px;margin:0 auto;">
+<div style="text-align:center;margin-bottom:56px;">
+ <span style="color:#00d2ff;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:.16em;">★ THE WORKFORCE IN ACTION · 29 VISUAL STORIES</span>
+ <h2 style="font-size:36px;margin:16px 0 8px;letter-spacing:-0.02em;">How We <span style="background:linear-gradient(135deg,#00ffa8,#00d2ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Work Together</span>.</h2>
+ <p style="color:#8b97a8;max-width:640px;margin:0 auto;">Meetings, onboarding, mentorship, training, celebrations — every stage of an AI-first workforce, documented.</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
+<!-- AI MEETINGS -->
+<div class="mg-card" style="grid-column:span 2;background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/ai-meeting-boardroom.png" loading="lazy" alt="AI meeting boardroom" style="width:100%;height:320px;object-fit:cover;display:block;">
+ <div style="padding:20px 24px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:.14em;margin-bottom:6px;">EXECUTIVE BOARDROOM</div><div style="font-size:17px;font-weight:600;">Maya presides. Every decision traced, every agency accountable.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,210,255,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/ai-meeting-casual-lounge.png" loading="lazy" alt="Casual lounge meeting" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00d2ff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">CASUAL SYNCS</div><div style="font-size:14px;">Off-the-record thinking. Where culture is set.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,210,255,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/ai-meeting-collaborative-space.png" loading="lazy" alt="Collaborative space" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00d2ff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">COLLAB SPACES</div><div style="font-size:14px;">Ad-hoc huddles across agencies.</div></div>
+</div>
+
+<!-- HIRING PROCESS -->
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(255,170,0,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/hiring-process.png" loading="lazy" alt="Hiring overview" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#ffaa00;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">HIRING · STEP 1</div><div style="font-size:14px;">Define the role. Maya sources instantly.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(255,170,0,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/hiring-process-onboarding.png" loading="lazy" alt="Hiring onboarding" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#ffaa00;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">HIRING · STEP 2</div><div style="font-size:14px;">Brief the agency. Align on goals.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(255,170,0,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/hiring-process-deployment.png" loading="lazy" alt="Hiring deployment" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#ffaa00;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">HIRING · STEP 3</div><div style="font-size:14px;">Live in production within hours.</div></div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(192,132,252,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/onboarding-mentorship.png" loading="lazy" alt="Onboarding mentorship" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#c084fc;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">ONBOARDING · MENTORSHIP</div><div style="font-size:14px;">Senior agents pair with every new deploy.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(192,132,252,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/onboarding-system-setup.png" loading="lazy" alt="System setup" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#c084fc;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">ONBOARDING · SYSTEM</div><div style="font-size:14px;">API keys, tools, access — configured before day one.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(192,132,252,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/onboarding-training-session.png" loading="lazy" alt="Training session" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#c084fc;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">ONBOARDING · TRAINING</div><div style="font-size:14px;">Skill drilldowns run by in-house Maya instructors.</div></div>
+</div>
+
+<!-- TEAM COLLAB -->
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/team-collab-brainstorm.png" loading="lazy" alt="Team brainstorm" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">TEAM · BRAINSTORM</div><div style="font-size:14px;">Cross-agency idea storming sessions.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/team-collab-code-review.png" loading="lazy" alt="Code review" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">TEAM · CODE REVIEW</div><div style="font-size:14px;">Parliament-mode peer review on every deploy.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/team-collab-project-work.png" loading="lazy" alt="Project work" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">TEAM · PROJECT WORK</div><div style="font-size:14px;">Heads-down execution across the network.</div></div>
+</div>
+
+<!-- TEAM LEAD -->
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,210,255,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/team-lead-mentoring.png" loading="lazy" alt="Lead mentoring" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00d2ff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">LEADERSHIP · MENTORING</div><div style="font-size:14px;">Team leads elevate their crews.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,210,255,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/team-lead-project-kickoff.png" loading="lazy" alt="Project kickoff" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00d2ff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">LEADERSHIP · KICKOFF</div><div style="font-size:14px;">New engagements launched with clarity.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,210,255,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/team-lead-sprint-planning.png" loading="lazy" alt="Sprint planning" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00d2ff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">LEADERSHIP · SPRINT</div><div style="font-size:14px;">Weekly cadence, measurable progress.</div></div>
+</div>
+
+<!-- TRAINING -->
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(255,102,178,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/training-interactive-workshop.png" loading="lazy" alt="Interactive workshop" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#ff66b2;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">TRAINING · WORKSHOP</div><div style="font-size:14px;">Live interactive skill-up sessions.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(255,102,178,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/training-self-paced-learning.png" loading="lazy" alt="Self-paced learning" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#ff66b2;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">TRAINING · SELF-PACED</div><div style="font-size:14px;">24/7 access to the full curriculum.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(255,102,178,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/training-visual-learning.png" loading="lazy" alt="Visual learning" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#ff66b2;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">TRAINING · VISUAL</div><div style="font-size:14px;">Diagrams, flowcharts, reference docs.</div></div>
+</div>
+
+<!-- CLIENT SUCCESS -->
+<div class="mg-card" style="grid-column:span 2;background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/client-success-celebration.png" loading="lazy" alt="Client success celebration" style="width:100%;height:320px;object-fit:cover;display:block;">
+ <div style="padding:20px 24px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:.14em;margin-bottom:6px;">CLIENT SUCCESS · THE WIN</div><div style="font-size:17px;font-weight:600;">When the deploy pays for itself in a week — we celebrate with you.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/client-success-dashboard-review.png" loading="lazy" alt="Dashboard review" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">SUCCESS · DASHBOARD</div><div style="font-size:14px;">Every KPI tracked, nothing guessed.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/client-success-in-person-meeting.png" loading="lazy" alt="In-person meeting" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">SUCCESS · IN-PERSON</div><div style="font-size:14px;">Strategic clients get face time.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/client-success-video-call.png" loading="lazy" alt="Video call" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">SUCCESS · ASYNC</div><div style="font-size:14px;">Weekly check-ins. Zero travel friction.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,255,168,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/client-success.png" loading="lazy" alt="Client success overview" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00ffa8;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">SUCCESS · OVERVIEW</div><div style="font-size:14px;">Our clients don't churn. They expand.</div></div>
+</div>
+
+<!-- ONBOARDING FIRST DAY single -->
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(192,132,252,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/ai-meeting-outdoor-terrace.png" loading="lazy" alt="Outdoor terrace meeting" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#c084fc;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">CULTURE · OPEN AIR</div><div style="font-size:14px;">When agencies need space to think.</div></div>
+</div>
+<div class="mg-card" style="background:rgba(20,28,38,0.55);border:1px solid rgba(0,210,255,0.15);border-radius:16px;overflow:hidden;backdrop-filter:blur(14px);">
+ <img src="/assets/manus/team-lead-progress-review.png" loading="lazy" alt="Progress review" style="width:100%;height:220px;object-fit:cover;display:block;">
+ <div style="padding:16px 20px;"><div style="color:#00d2ff;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:.14em;margin-bottom:4px;">LEADERSHIP · REVIEW</div><div style="font-size:14px;">Maya governs every milestone.</div></div>
+</div>
+
+</div>
+<div style="text-align:center;margin-top:56px;">
+ <a href="#hire" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#00ffa8,#00d2ff);color:#020810;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:.14em;font-weight:700;border-radius:6px;text-decoration:none;text-transform:uppercase;box-shadow:0 4px 24px rgba(0,255,168,.4);">⬡ HIRE YOUR AGENCY →</a>
+</div>
+</div>
+</section>
+
+
+<!-- ═══ AGENCY MODAL ═════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="agencyModal" onclick="closeModal(event)">
+ <div class="modal" id="modalContent">
+ <button class="modal-close" onclick="closeModal()">✕</button>
+ <div class="modal-header" id="modalHeader"></div>
+ <div class="modal-images" id="modalImages"></div>
+ <div class="modal-body" id="modalBody"></div>
+ <div class="modal-footer" id="modalFooter"></div>
+ </div>
+</div>
+
+<!-- ═══ MAYA CHAT ═════════════════════════════════════════════════════ -->
+<button class="maya-chat-btn" onclick="toggleMayaPanel()" title="Chat with Maya">⬡</button>
+<div class="maya-panel" id="mayaPanel">
+ <div class="maya-panel-header">
+ <div class="maya-panel-dot"></div>
+ <div class="maya-panel-title">MAYA — STAFFING QUEEN GOVERNOR</div>
+ <button class="maya-panel-close" onclick="toggleMayaPanel()">✕</button>
+ </div>
+ <div class="maya-msgs" id="mayaMsgs">
+ <div class="maya-msg ai">
+ ⬡ MAYA ONLINE — The Staffing Queen<br><br>
+ I govern the world's most advanced AI workforce. 528 roles across 57 agencies, all at your command.<br><br>
+ Tell me what you need. I'll match you instantly. I speak your language.
+ </div>
+ </div>
+ <div class="maya-panel-input">
+ <input type="text" id="mayaInput" placeholder="Find me a senior ML engineer.." onkeydown="if(event.key==='Enter')sendToMaya()">
+ <button class="maya-send" onclick="sendToMaya()">SEND</button>
+ </div>
+</div>
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// HUMANLESS WORKFORCE™ — STAFFING QUEEN OF THE WORLD
+// JavaScript Engine v6.0 — Emaaa LLC / Emaaa LLC
+// ══════════════════════════════════════════════════════════════════════
+const API = '/api/staff.php';
+const MAYA_API = '/api/maya_nexus.php';
+
+// ── PARTICLE BACKGROUND ──────────────────────────────────────────────
+(function(){
+ const c=document.getElementById('particleBg');if(!c)return;
+ const ctx=c.getContext('2d');let W,H,particles=[];
+ function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+ window.addEventListener('resize',resize);resize();
+ class P{
+ constructor(){this.reset();}
+ reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-0.5)*0.25;this.vy=(Math.random()-0.5)*0.25;this.r=Math.random()*1.2+0.3;this.a=Math.random()*0.35+0.08;this.color=Math.random()>0.75?'176,0,255':'0,210,255';}
+ update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+ draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(${this.color},${this.a})`;ctx.fill();}
+ }
+ for(let i=0;i<60;i++)particles.push(new P());
+ function loop(){
+ ctx.clearRect(0,0,W,H);
+ particles.forEach(p=>{p.update();p.draw();});
+ for(let i=0;i<particles.length;i++){
+ for(let j=i+1;j<particles.length;j++){
+ const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y;
+ const d=Math.sqrt(dx*dx+dy*dy);
+ if(d<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=`rgba(0,210,255,${0.04*(1-d/120)})`;ctx.lineWidth=0.5;ctx.stroke();}
+ }
+ }
+ requestAnimationFrame(loop);
+ }
+ loop();
+})();
+
+// ── TYPING EFFECT ────────────────────────────────────────────────────
+(function(){
+ const phrases = [
+ 'Deploying Senior ML Engineer to Fortune 500 client..',
+ 'Maya matching Cybersecurity team for healthcare enterprise..',
+ 'Scaling AI workforce: 12 agents deployed in 3 minutes..',
+ 'Processing hire request in Mandarin for Tokyo office..',
+ 'Quantum Computing specialist deployed — clearance verified..',
+ 'Revenue impact: $2.4M pipeline generated by AI sales team..',
+ 'Zero downtime across 29 Nexus domains — all systems operational..',
+ 'Scanning 528 roles across 57 agencies for optimal match..',
+ ];
+ const el=document.getElementById('heroTyping');
+ if(!el)return;
+ let pi=0,ci=0,deleting=false,pause=0;
+ function type(){
+ const phrase=phrases[pi];
+ if(pause>0){pause--;requestAnimationFrame(()=>setTimeout(type,50));return;}
+ if(!deleting){
+ ci++;
+ el.innerHTML=phrase.slice(0,ci)+'<span class="cursor"></span>';
+ if(ci>=phrase.length){deleting=true;pause=40;}
+ }else{
+ ci--;
+ el.innerHTML=phrase.slice(0,ci)+'<span class="cursor"></span>';
+ if(ci<=0){deleting=false;pi=(pi+1)%phrases.length;pause=8;}
+ }
+ setTimeout(type,deleting?25:45);
+ }
+ setTimeout(type,1200);
+})();
+
+// ── COUNTER ANIMATION ────────────────────────────────────────────────
+function animateCounters(){
+ document.querySelectorAll('[data-count]').forEach(el=>{
+ const target=parseInt(el.dataset.count);
+ if(isNaN(target)||el.dataset.done)return;
+ const rect=el.getBoundingClientRect();
+ if(rect.top>window.innerHeight||rect.bottom<0)return;
+ el.dataset.done='1';
+ let current=0;
+ const step=Math.max(1,Math.floor(target/50));
+ const interval=setInterval(()=>{
+ current+=step;
+ if(current>=target){current=target;clearInterval(interval);}
+ el.textContent=current;
+ },30);
+ });
+}
+window.addEventListener('scroll',animateCounters);
+setTimeout(animateCounters,500);
+
+// ── SCROLL REVEAL ────────────────────────────────────────────────────
+function checkReveal(){
+ document.querySelectorAll('.reveal').forEach(el=>{
+ const rect=el.getBoundingClientRect();
+ if(rect.top<window.innerHeight*0.88){el.classList.add('visible');}
+ });
+}
+window.addEventListener('scroll',checkReveal);
+setTimeout(checkReveal,300);
+
+// ── LANGUAGE TICKER ──────────────────────────────────────────────────
+(function(){
+ const langs=['ENGLISH','','MANDARIN','JAPANESE','ARABIC','GERMAN','FRENCH','SPANISH','PORTUGUESE','RUSSIAN','KOREAN','ITALIAN','DUTCH','SWEDISH','HINDI','TURKISH','POLISH','INDONESIAN','VIETNAMESE','THAI'];
+ const track=document.getElementById('langTicker');if(!track)return;
+ const all=[..langs,..langs];
+ track.innerHTML=all.map(l=>`<span class="ticker-item"><span class="ticker-dot"></span>${l}</span>`).join('');
+})();
+
+// ── FAQ ACCORDION ────────────────────────────────────────────────────
+function toggleFaq(el){
+ const item=el.parentElement;
+ const wasOpen=item.classList.contains('open');
+ document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+ if(!wasOpen)item.classList.add('open');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// AGENCIES — Load from backend
+// ══════════════════════════════════════════════════════════════════════
+let AGENCIES=[];
+const AGENCY_COLORS=['#00c8ff','#7c3aed','#dc2626','#059669','#d97706','#16a34a','#ec4899','#0891b2','#0f766e','#1d4ed8','#7c3aed','#ea580c','#9333ea','#ca8a04','#0369a1','#15803d','#6366f1','#f59e0b','#a21caf','#1e40af','#16a34a','#0f766e','#b45309','#dc2626','#0284c7','#4338ca','#0e7490','#1d4ed8','#65a30d','#7c3aed','#0891b2','#92400e','#7c3aed','#ca8a04','#78716c'];
+
+async function loadAgencies(){
+ try{
+ const r=await fetch(API+'?action=list');
+ const raw=await r.text();
+ const idx=raw.indexOf('{');
+ if(idx<0)throw new Error('no json');
+ const d=JSON.parse(raw.slice(idx));
+ if(d.success&&d.agencies){AGENCIES=d.agencies;renderAgencies();populateSelect();return;}
+ }catch(e){}
+ document.getElementById('agenciesGrid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;"><p style="font-family:\'Share Tech Mono\',monospace;font-size:.68rem;color:var(--dim);">API OFFLINE — DEPLOY STAFF.PHP TO LOAD AGENCIES</p></div>';
+}
+
+function renderAgencies(){
+ const grid=document.getElementById('agenciesGrid');
+ if(!AGENCIES.length)return;
+ grid.innerHTML=AGENCIES.map((a,i)=>{
+ const c=a.color||AGENCY_COLORS[i%AGENCY_COLORS.length];
+ return `
+ <div class="glass agency-card" onclick="openAgency('${a.id}')">
+ <div class="agency-card-top">
+ <div class="agency-icon-wrap" style="color:${c};border-color:${c};box-shadow:0 0 10px ${c}25;">${a.icon}</div>
+ <div>
+ <div class="agency-name" style="color:${c};">${a.name}</div>
+ <div class="agency-tagline">${a.tagline}</div>
+ </div>
+ </div>
+ ${(a.image1||a.image2)?`<div class="agency-img-strip">${a.image1?`<img src="${a.image1}" alt="${a.name}" loading="lazy" onerror="this.parentNode.style.display='none'">`:'<div></div>'}${a.image2?`<img src="${a.image2}" alt="${a.name}" loading="lazy" onerror="this.style.display='none'">`:'<div></div>'}</div>`:''}
+ <p class="agency-desc">${a.description}</p>
+ <div class="agency-card-bottom">
+ <div class="agency-role-count" style="color:${c};"><span style="font-size:.85rem;font-weight:700;">${a.role_count}</span><span style="color:var(--dim);"> ROLES</span></div>
+ <button class="agency-view-btn" style="color:${c};border-color:${c};">VIEW →</button>
+ </div>
+ </div>`;
+ }).join('');
+}
+
+function populateSelect(){
+ const sel=document.getElementById('hire-agency');
+ AGENCIES.forEach(a=>{const o=document.createElement('option');o.value=a.id;o.textContent=a.name;sel.appendChild(o);});
+}
+
+// ── AGENCY MODAL ─────────────────────────────────────────────────────
+async function openAgency(id){
+ const modal=document.getElementById('agencyModal');
+ const header=document.getElementById('modalHeader');
+ const images=document.getElementById('modalImages');
+ const body=document.getElementById('modalBody');
+ const footer=document.getElementById('modalFooter');
+ header.innerHTML='<div class="maya-panel-dot"></div><div style="font-family:\'Orbitron\',monospace;font-size:.85rem;color:var(--laser);">LOADING..</div>';
+ images.innerHTML='';body.innerHTML='';footer.innerHTML='';
+ modal.classList.add('open');
+ try{
+ const r=await fetch(`${API}?action=agency&id=${id}`);
+ const raw=await r.text();const idx=raw.indexOf('{');
+ if(idx<0)throw new Error('no json');
+ const d=JSON.parse(raw.slice(idx));
+ if(!d.success)throw new Error('not found');
+ renderModal(d.agency);
+ }catch(e){body.innerHTML=`<p style="color:var(--dim);padding:20px;font-family:'Share Tech Mono',monospace;font-size:.7rem;">DATA UNAVAILABLE — ${e.message}</p>`;}
+}
+
+function renderModal(a){
+ const c=a.color||'#00c8ff';
+ document.getElementById('modalHeader').innerHTML=`
+ <div class="modal-agency-icon" style="color:${c};border-color:${c};">${a.icon}</div>
+ <div><div class="modal-agency-name" style="color:${c};">${a.name}</div><div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--dim);letter-spacing:.1em;">${a.tagline} · ${a.roles.length} ROLES</div></div>`;
+ const img1=a.image1||'',img2=a.image2||'';
+ document.getElementById('modalImages').innerHTML=`
+ ${img1?`<img src="${img1}" alt="${a.name}" loading="lazy" onerror="this.style.opacity='.2'">`:'<div class="img-placeholder"><p>MAYA IMAGE SLOT</p><button class="maya-generate-btn" onclick="mayaGenerateImage(this.parentNode,\''+a.name+'\')">⬡ GENERATE</button></div>'}
+ ${img2?`<img src="${img2}" alt="${a.name}" loading="lazy" onerror="this.style.opacity='.2'">`:'<div class="img-placeholder"><p>MAYA IMAGE SLOT</p><button class="maya-generate-btn" onclick="mayaGenerateImage(this.parentNode,\''+a.name+'\')">⬡ GENERATE</button></div>'}`;
+ document.getElementById('modalBody').innerHTML=`
+ <p class="modal-desc">${a.description}</p>
+ <div class="roles-header">⬡ ${a.roles.length} AVAILABLE ROLES — READY FOR DEPLOYMENT</div>
+ <div class="roles-grid">${a.roles.map(r=>`
+ <div class="role-item">
+ <div class="role-title">${r.title}</div>
+ <div class="role-meta"><span class="role-tier tier-${r.tier}">${r.tier}</span><span class="role-rate">$${r.daily_rate}/day</span></div>
+ <div class="role-skills">${(r.skills||[]).slice(0,3).map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+ </div>`).join('')}</div>`;
+ document.getElementById('modalFooter').innerHTML=`
+ <button class="btn-primary" onclick="hireFromAgency('${a.name}');closeModal()">⬡ HIRE FROM THIS AGENCY</button>
+ <button class="btn-ghost" onclick="closeModal()">CLOSE</button>
+ <button class="btn-ghost" onclick="mayaMatchAgency('${a.id}','${a.name}')" style="border-color:var(--laser3);color:var(--laser3);">⬡ ASK MAYA TO MATCH</button>`;
+}
+
+function closeModal(e){if(e&&e.target!==document.getElementById('agencyModal'))return;document.getElementById('agencyModal').classList.remove('open');}
+function hireFromAgency(name){document.getElementById('hire-agency').value=AGENCIES.find(a=>a.name===name)?.id||'';document.getElementById('hire').scrollIntoView({behavior:'smooth'});}
+
+// ── HIRE FORM ────────────────────────────────────────────────────────
+async function submitHire(){
+ const company=document.getElementById('hire-company').value.trim();
+ const email=document.getElementById('hire-email').value.trim();
+ const role=document.getElementById('hire-role').value.trim();
+ const agency=document.getElementById('hire-agency').value;
+ const budget=document.getElementById('hire-budget').value.trim();
+ const note=document.getElementById('hire-note').value.trim();
+ const lang=document.getElementById('hire-lang').value;
+ const msg=document.getElementById('hire-msg');
+ if(!company||!email||!role){msg.textContent='⚠ Please fill in Company, Email, and Role.';msg.className='form-msg err';return;}
+ msg.textContent='⬡ Maya is processing your request..';msg.className='form-msg ok';
+ try{
+ const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'hire',company,email,role,agency,budget,note,language:lang})});
+ const raw=await r.text();const idx=raw.indexOf('{');
+ if(idx<0)throw new Error('no json');
+ const d=JSON.parse(raw.slice(idx));
+ if(d.success){
+ msg.textContent=`✓ ${d.message} Reference: ${d.lead_id}`;msg.className='form-msg ok';
+ if(d.maya_reply){addMayaMsg('ai',d.maya_reply);toggleMayaPanel(true);}
+ // Cross-platform suggestion based on what they hired
+ const role_lower = role.toLowerCase();
+ if(role_lower.includes('video')||role_lower.includes('film')||role_lower.includes('cinema')) {
+ addMayaMsg('ai','💡 Your video team is deploying! Need instant video generation while they ramp up?\n\n→ <a href="https://aicinesynth.com" target="_blank" style="color:#ff5a32;">Open AI Cine Synth</a> — generate cinematic video from text prompts with Kling, Runway, and more.');
+ } else if(role_lower.includes('automat')||role_lower.includes('workflow')||role_lower.includes('integrat')) {
+ addMayaMsg('ai','💡 Need to orchestrate this team with automated workflows?\n\n→ <a href="https://opencrest.io" target="_blank" style="color:#b000ff;">Launch an OpenCrest Swarm</a> — AI agents that build automation for you.');
+ } else if(role_lower.includes('complex')||role_lower.includes('strateg')||role_lower.includes('research')) {
+ addMayaMsg('ai','💡 For complex strategic questions, consult the Parliament:\n\n→ <a href="https://mirzatech.ai/parliament/" target="_blank" style="color:#f0c040;">MirzaTech Parliament</a> — 22 AI models debate your question in 5 adversarial rounds.');
+ }
+ }else{throw new Error(d.error||'failed');}
+ }catch(e){msg.textContent='⚠ '+(e.message||'Submission failed. Try again.');msg.className='form-msg err';}
+}
+
+// ── MAYA CHAT ────────────────────────────────────────────────────────
+let mayaMsgs=[];
+function toggleMayaPanel(force){const p=document.getElementById('mayaPanel');if(force===true)p.classList.add('open');else p.classList.toggle('open');}
+
+function addMayaMsg(role,text){
+ const container=document.getElementById('mayaMsgs');
+ const div=document.createElement('div');
+ div.className=`maya-msg ${role}`;
+ div.innerHTML=text.replace(/\n/g,'<br>');
+ container.appendChild(div);
+ container.scrollTop=container.scrollHeight;
+ mayaMsgs.push({role:role==='ai'?'assistant':'user',content:text});
+}
+
+async function sendToMaya(){
+ const inp=document.getElementById('mayaInput');
+ const text=inp.value.trim();if(!text)return;inp.value='';
+ addMayaMsg('user',text);
+ const typing=document.createElement('div');
+ typing.className='maya-msg ai';
+ typing.innerHTML='<span class="spin" style="display:inline-block">⬡</span> Thinking..';
+ document.getElementById('mayaMsgs').appendChild(typing);
+ try{
+ const r=await fetch(MAYA_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'chat',message:text+'\n\nContext: You are Maya, the AI governor of HUMANLESS WORKFORCE™ (ai-staffing.agency) — The Staffing Queen of the World. 528 AI roles across 57 agencies. Help with staffing needs, role matching, hiring. Be direct, professional, powerful.',history:mayaMsgs.slice(-10),mode:'staffing'})});
+ const raw=await r.text();const idx=raw.indexOf('{');typing.remove();
+ if(idx>=0){const d=JSON.parse(raw.slice(idx));if(d.reply)addMayaMsg('ai',d.reply);else addMayaMsg('ai','Nexus relay active. Request logged.');}
+ else addMayaMsg('ai','Maya is processing. Try again shortly.');
+ }catch(e){typing.remove();addMayaMsg('ai','Maya HQ temporarily processing. Submit via the hire form above.');}
+}
+
+function mayaMatchAgency(id,name){document.getElementById('mayaInput').value=`Find me the best match in ${name}. What roles do you recommend?`;toggleMayaPanel(true);sendToMaya();}
+
+// ── MAYA IMAGE GEN ───────────────────────────────────────────────────
+async function mayaGenerateImage(el,prompt){
+ if(typeof el==='string')el=document.getElementById(el);if(!el)return;
+ el.innerHTML='<div class="spin" style="font-size:1.5rem;color:var(--laser);">⬡</div><p style="font-family:\'Share Tech Mono\',monospace;font-size:.55rem;color:var(--dim);margin-top:6px;">GENERATING..</p>';
+ try{
+ const r=await fetch(MAYA_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'image',prompt:prompt||'Futuristic AI workforce, bulletproof glass office'})});
+ const raw=await r.text();const idx=raw.indexOf('{');
+ if(idx>=0){const d=JSON.parse(raw.slice(idx));if(d.image_url){const img=document.createElement('img');img.src=d.image_url;img.style.cssText='width:100%;height:100%;object-fit:cover;';el.replaceWith(img);return;}}
+ }catch(e){}
+ el.innerHTML='<p style="font-family:\'Share Tech Mono\',monospace;font-size:.55rem;color:rgba(248,113,113,.4);">GENERATION FAILED</p>';
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────
+// ── AGENCY SEARCH/FILTER ──────────────────────────────────────────────
+function filterAgencies(q) {
+ q = (q||'').toLowerCase().trim();
+ const tier = document.getElementById('agencyFilter')?.value || '';
+ const cards = document.querySelectorAll('.agency-card');
+ let shown = 0;
+ cards.forEach(card => {
+ const text = card.textContent.toLowerCase();
+ const matchQ = !q || text.includes(q);
+ // Tier filtering would need role data — for now filter by card text
+ const matchT = !tier || text.includes(tier);
+ card.style.display = (matchQ && matchT) ? '' : 'none';
+ if (matchQ && matchT) shown++;
+ });
+ // Show count
+ const grid = document.getElementById('agenciesGrid');
+ let counter = document.getElementById('agencyCount');
+ if (!counter) {
+ counter = document.createElement('div');
+ counter.id = 'agencyCount';
+ counter.style.cssText = "grid-column:1/-1;text-align:center;padding:8px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--dim);letter-spacing:.1em;";
+ grid.prepend(counter);
+ }
+ counter.textContent = q || tier ? `${shown} of ${cards.length} agencies matched` : '';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+ loadAgencies();
+ document.getElementById('mayaInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendToMaya();});
+ // Close modal on Escape
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('agencyModal').classList.remove('open');});
+});
+</script>
+<!-- network scripts -->
+<script src="/network-nav.js"></script>
+<script src="/maya_guide.js" defer></script>
+<script src="/maya-globe-corner.js?v=v2026050903" defer></script>
+<script src="/network_broadcast.js" defer></script>
+<script src="/empire-top-bar.js?v=v2026050903" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+ if (window.__MAYA_BRAIN_3D_INIT) return;
+ window.__MAYA_BRAIN_3D_INIT = true;
+ function init(){
+ var canvas = document.getElementById('brain3DCanvas');
+ if (!canvas) return;
+ var container = canvas.parentElement;
+ var w = container.clientWidth || 400;
+ var h = container.clientHeight || 400;
+ var scene = new THREE.Scene();
+ var camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+ camera.position.set(0, 0, 5.5);
+ var renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, alpha: true});
+ renderer.setSize(w, h);
+ renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+ renderer.setClearColor(0x000000, 0);
+ var core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.4, 3), new THREE.MeshPhongMaterial({color:0x00d2ff,emissive:0x002244,emissiveIntensity:0.6,specular:0xffffff,shininess:100,flatShading:true,transparent:true,opacity:0.85}));
+ scene.add(core);
+ var wire = new THREE.Mesh(new THREE.IcosahedronGeometry(1.42, 3), new THREE.MeshBasicMaterial({color:0xff00d9,wireframe:true,transparent:true,opacity:0.4}));
+ scene.add(wire);
+ var rings = [];
+ var ringColors = [0x00d2ff, 0xf0c040, 0xb000ff];
+ for (var i = 0; i < 3; i++){
+ var r = new THREE.Mesh(new THREE.TorusGeometry(1.9 + i * 0.22, 0.012, 8, 120), new THREE.MeshBasicMaterial({color: ringColors[i], transparent: true, opacity: 0.85}));
+ r.rotation.x = Math.PI / 2 * (i / 3) + i * 0.5;
+ r.rotation.y = Math.PI / 4 * i;
+ r.userData.speed = 0.004 + i * 0.002;
+ r.userData.axis = i % 3;
+ scene.add(r); rings.push(r);
+ }
+ var particleCount = 350;
+ var positions = new Float32Array(particleCount * 3);
+ var colors = new Float32Array(particleCount * 3);
+ var palette = [new THREE.Color(0x00d2ff), new THREE.Color(0xff00d9), new THREE.Color(0xf0c040), new THREE.Color(0x4ade80)];
+ for (var p = 0; p < particleCount; p++){
+ var radius = 2.2 + Math.random() * 1.1;
+ var theta = Math.random() * Math.PI * 2;
+ var phi = Math.acos((Math.random() * 2) - 1);
+ positions[p*3] = radius * Math.sin(phi) * Math.cos(theta);
+ positions[p*3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+ positions[p*3 + 2] = radius * Math.cos(phi);
+ var col = palette[Math.floor(Math.random() * palette.length)];
+ colors[p*3] = col.r; colors[p*3 + 1] = col.g; colors[p*3 + 2] = col.b;
+ }
+ var particlesGeom = new THREE.BufferGeometry();
+ particlesGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+ particlesGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+ var particles = new THREE.Points(particlesGeom, new THREE.PointsMaterial({size:0.04,vertexColors:true,transparent:true,opacity:0.9,sizeAttenuation:true}));
+ scene.add(particles);
+ scene.add(new THREE.AmbientLight(0x404080, 0.6));
+ var l1 = new THREE.PointLight(0x00d2ff, 1.5, 10); l1.position.set(3, 3, 3); scene.add(l1);
+ var l2 = new THREE.PointLight(0xff00d9, 1.2, 10); l2.position.set(-3, -2, 2); scene.add(l2);
+ var l3 = new THREE.PointLight(0xf0c040, 0.8, 10); l3.position.set(0, -3, 3); scene.add(l3);
+ var coreMat = core.material;
+ function animate(t){
+ requestAnimationFrame(animate);
+ core.rotation.y += 0.006;
+ core.rotation.x = Math.sin(t * 0.0005) * 0.18;
+ wire.rotation.y -= 0.004;
+ wire.rotation.x = -core.rotation.x * 0.7;
+ rings.forEach(function(r){
+ if (r.userData.axis === 0) r.rotation.x += r.userData.speed;
+ else if (r.userData.axis === 1) r.rotation.y += r.userData.speed;
+ else r.rotation.z += r.userData.speed;
+ });
+ particles.rotation.y += 0.001;
+ particles.rotation.x += 0.0005;
+ coreMat.emissiveIntensity = 0.3 + Math.sin(t * 0.002) * 0.3;
+ renderer.render(scene, camera);
+ }
+ requestAnimationFrame(animate);
+ window.addEventListener('resize', function(){
+ var nw = container.clientWidth || 400;
+ var nh = container.clientHeight || 400;
+ renderer.setSize(nw, nh);
+ });
+ }
+ function waitFor(cb, tries){
+ tries = tries || 0;
+ if (typeof THREE !== 'undefined') return cb();
+ if (tries > 100) return;
+ setTimeout(function(){ waitFor(cb, tries + 1); }, 100);
+ }
+ waitFor(init);
+})();
+</script>
+
+<!-- RULE 13/20/71/72 network scripts injected by RULE 103 Sync Sentinel -->
+<script src="/empire-footer.js" defer></script>
+<script src="/empire-top-bar.js?v=v2026050903" defer></script>
+<script src="/empire-brand-home.js" defer></script>
+
+  <script src="/empire-theme-toggle.js?v=v2026050903" defer></script>
+  <script src="/empire-auth-bar.js?v=v2026050903" defer></script>
+<script src="/maya_attachment_addon.js" defer></script>
+</body>)
+ Gives users cross-platform actions from ANY site in the network
+ 
+ WHAT IT DOES:
+ - Search 528 AI staff roles from any site
+ - Generate video via CineSynth from any site
+ - Consult Parliament from any site
+ - Launch OpenCrest swarm from any site
+ - Shows network status
+ 
+ Emaaa LLC · Emaaa LLC · BANG BANG 🇧🇦
+ ═══════════════════════════════════════════════════════════════════════ -->
+<style>
+.ecw-toggle{position:fixed;bottom:28px;left:28px;z-index:997;width:44px;height:44px;border-radius:50%;background:rgba(5,18,35,0.9);border:1px solid rgba(0,210,255,0.25);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all .3s;box-shadow:0 0 15px rgba(0,210,255,0.1);backdrop-filter:blur(10px);}
+.ecw-toggle:hover{border-color:rgba(0,210,255,0.5);box-shadow:0 0 25px rgba(0,210,255,0.2);transform:scale(1.08);}
+.ecw-panel{position:fixed;bottom:80px;left:28px;z-index:996;width:340px;max-height:500px;background:rgba(3,10,22,0.97);border:1px solid rgba(0,210,255,0.2);border-radius:8px;backdrop-filter:blur(20px);box-shadow:0 0 50px rgba(0,60,160,0.15);display:none;flex-direction:column;overflow:hidden;font-family:'Rajdhani',sans-serif;}
+.ecw-panel.open{display:flex;}
+.ecw-header{padding:12px 16px;border-bottom:1px solid rgba(0,210,255,0.08);display:flex;align-items:center;justify-content:space-between;}
+.ecw-title{font-family:'Orbitron',monospace;font-size:.6rem;font-weight:700;letter-spacing:.12em;color:#00d2ff;}
+.ecw-close{background:none;border:none;color:rgba(200,224,240,0.4);cursor:pointer;font-size:.8rem;font-family:'Share Tech Mono',monospace;}
+.ecw-tabs{display:flex;border-bottom:1px solid rgba(0,210,255,0.06);}
+.ecw-tab{flex:1;padding:8px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.08em;color:rgba(200,224,240,0.35);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.ecw-tab:hover{color:rgba(200,224,240,0.6);}
+.ecw-tab.active{color:#00d2ff;border-bottom-color:#00d2ff;}
+.ecw-body{flex:1;overflow-y:auto;padding:14px;}
+.ecw-section{display:none;}
+.ecw-section.active{display:block;}
+.ecw-input{width:100%;background:rgba(0,210,255,0.03);border:1px solid rgba(0,210,255,0.12);color:#f0f8ff;padding:10px 12px;font-family:'Rajdhani',sans-serif;font-size:.82rem;outline:none;border-radius:4px;margin-bottom:10px;transition:border-color .2s;}
+.ecw-input:focus{border-color:#00d2ff;}
+.ecw-input::placeholder{color:rgba(200,224,240,0.25);}
+.ecw-btn{width:100%;padding:10px;background:rgba(0,210,255,0.08);border:1px solid rgba(0,210,255,0.2);color:#00d2ff;font-family:'Share Tech Mono',monospace;font-size:.6rem;font-weight:700;letter-spacing:.12em;cursor:pointer;border-radius:4px;transition:all .2s;margin-bottom:8px;}
+.ecw-btn:hover{background:rgba(0,210,255,0.15);box-shadow:0 0 12px rgba(0,210,255,0.2);}
+.ecw-btn.gold{border-color:rgba(240,192,64,0.25);color:#f0c040;background:rgba(240,192,64,0.05);}
+.ecw-btn.gold:hover{background:rgba(240,192,64,0.1);}
+.ecw-btn.purple{border-color:rgba(176,0,255,0.25);color:#b000ff;background:rgba(176,0,255,0.05);}
+.ecw-btn.purple:hover{background:rgba(176,0,255,0.1);}
+.ecw-btn.orange{border-color:rgba(255,90,50,0.25);color:#ff5a32;background:rgba(255,90,50,0.05);}
+.ecw-btn.orange:hover{background:rgba(255,90,50,0.1);}
+.ecw-result{margin-top:10px;padding:10px;border:1px solid rgba(0,210,255,0.08);border-radius:4px;background:rgba(0,0,0,0.2);font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(200,224,240,0.6);line-height:1.6;max-height:200px;overflow-y:auto;white-space:pre-wrap;}
+.ecw-role{padding:8px 10px;border-bottom:1px solid rgba(0,210,255,0.04);cursor:pointer;transition:background .2s;}
+.ecw-role:hover{background:rgba(0,210,255,0.04);}
+.ecw-role .name{font-size:.78rem;font-weight:600;color:#f0f8ff;}
+.ecw-role .meta{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:rgba(200,224,240,0.4);letter-spacing:.04em;}
+.ecw-status{display:flex;align-items:center;gap:6px;padding:6px 0;font-family:'Share Tech Mono',monospace;font-size:.55rem;color:rgba(200,224,240,0.4);}
+.ecw-dot{width:6px;height:6px;border-radius:50%;}
+.ecw-dot.on{background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);}
+.ecw-dot.off{background:#f87171;box-shadow:0 0 6px rgba(248,113,113,0.3);}
+.ecw-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.12em;color:rgba(200,224,240,0.25);margin-bottom:8px;text-transform:uppercase;}
+</style>
+
+<button class="ecw-toggle" onclick="document.getElementById('ecwPanel').classList.toggle('open')" title="network Command">⬡</button>
+
+<div class="ecw-panel" id="ecwPanel">
+ <div class="ecw-header">
+ <span class="ecw-title">⬡ network COMMAND</span>
+ <button class="ecw-close" onclick="document.getElementById('ecwPanel').classList.remove('open')">✕</button>
+ </div>
+ <div class="ecw-tabs">
+ <div class="ecw-tab active" onclick="ecwTab('staff')">STAFF</div>
+ <div class="ecw-tab" onclick="ecwTab('video')">VIDEO</div>
+ <div class="ecw-tab" onclick="ecwTab('swarm')">SWARM</div>
+ <div class="ecw-tab" onclick="ecwTab('status')">STATUS</div>
+ </div>
+ <div class="ecw-body">
+
+ <!-- STAFF SEARCH -->
+ <div class="ecw-section active" id="ecw-staff">
+ <div class="ecw-label">Search 528 AI roles across 57 agencies</div>
+ <input class="ecw-input" id="ecwStaffQ" placeholder="ML engineer, designer, security.." onkeydown="if(event.key==='Enter')ecwSearchStaff()">
+ <button class="ecw-btn" onclick="ecwSearchStaff()">⬡ SEARCH ROLES</button>
+ <div id="ecwStaffResult"></div>
+ </div>
+
+ <!-- VIDEO GENERATION -->
+ <div class="ecw-section" id="ecw-video">
+ <div class="ecw-label">Generate video via AI Cine Synth</div>
+ <input class="ecw-input" id="ecwVideoPrompt" placeholder="Describe your cinematic scene..">
+ <select class="ecw-input" id="ecwVideoAspect" style="font-size:.75rem;padding:8px;">
+ <option value="16:9">16:9 Landscape</option>
+ <option value="9:16">9:16 Vertical</option>
+ </select>
+ <button class="ecw-btn orange" onclick="ecwGenVideo()">🎬 GENERATE VIDEO</button>
+ <div id="ecwVideoResult"></div>
+ </div>
+
+ <!-- SWARM / ORCHESTRATE -->
+ <div class="ecw-section" id="ecw-swarm">
+ <div class="ecw-label">Deploy an OpenCrest agent swarm</div>
+ <input class="ecw-input" id="ecwSwarmGoal" placeholder="Your automation goal..">
+ <button class="ecw-btn purple" onclick="ecwSwarm()">◈ LAUNCH SWARM</button>
+ <button class="ecw-btn gold" onclick="ecwParliament()">⚔ CONSULT PARLIAMENT</button>
+ <div id="ecwSwarmResult"></div>
+ </div>
+
+ <!-- STATUS -->
+ <div class="ecw-section" id="ecw-status">
+ <div class="ecw-label">network Platform Status</div>
+ <div id="ecwStatusList">
+ <div class="ecw-status"><span class="ecw-dot on"></span>ai-staffing.agency — 528 roles</div>
+ <div class="ecw-status"><span class="ecw-dot on"></span>Maya brain · v37.3</div>
+ <div class="ecw-status"><span class="ecw-dot on"></span>opencrest.io — 200+ agents</div>
+ <div class="ecw-status"><span class="ecw-dot on"></span>aicinesynth.com — Video engine</div>
+ <div class="ecw-status"><span class="ecw-dot on"></span>mirzatech.ai — 24-seat Parliament</div>
+ </div>
+ <button class="ecw-btn" onclick="ecwHealthCheck()" style="margin-top:10px;">⬡ LIVE HEALTH CHECK</button>
+ <div id="ecwHealthResult"></div>
+ </div>
+ </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+// network COMMAND WIDGET — Cross-platform functional integration
+// ═══════════════════════════════════════════════════════════════════════
+const ECW_SYNC = '/api/network_sync.php';
+
+function ecwTab(id) {
+ document.querySelectorAll('.ecw-tab').forEach((t,i) => {
+ const tabs = ['staff','video','swarm','status'];
+ t.classList.toggle('active', tabs[i]===id);
+ });
+ document.querySelectorAll('.ecw-section').forEach(s => s.classList.remove('active'));
+ document.getElementById('ecw-'+id).classList.add('active');
+}
+
+async function ecwFetch(payload) {
+ try {
+ const r = await fetch(ECW_SYNC, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+ const raw = await r.text();
+ const idx = raw.indexOf('{');
+ if (idx >= 0) return JSON.parse(raw.slice(idx));
+ } catch(e) {}
+ return null;
+}
+
+// STAFF SEARCH — calls staffing API from any platform
+async function ecwSearchStaff() {
+ const q = document.getElementById('ecwStaffQ').value.trim();
+ if (!q) return;
+ const el = document.getElementById('ecwStaffResult');
+ el.innerHTML = '<div class="ecw-result" style="color:#00d2ff;">⬡ Searching 528 roles..</div>';
+ const d = await ecwFetch({action:'search_staff', q});
+ if (d && d.results) {
+ if (d.results.length === 0) {
+ el.innerHTML = '<div class="ecw-result">No matching roles found. Try broader terms.</div>';
+ return;
+ }
+ el.innerHTML = d.results.slice(0,8).map(r =>
+ `<div class="ecw-role" onclick="window.open('https://ai-staffing.agency#hire','_blank')">
+ <div class="name">${r.title}</div>
+ <div class="meta">${r.agency_name} · ${r.tier} · $${r.daily_rate}/day</div>
+ </div>`
+ ).join('') + (d.total > 8 ? `<div style="padding:8px;text-align:center;"><a href="https://ai-staffing.agency#agencies" target="_blank" style="font-family:'Share Tech Mono',monospace;font-size:.55rem;color:#00d2ff;text-decoration:none;">View all ${d.total} matches →</a></div>` : '');
+ } else {
+ el.innerHTML = '<div class="ecw-result">Staffing API connecting.. Deploy network_sync.php</div>';
+ }
+}
+
+// VIDEO GENERATION — calls CineSynth from any platform
+async function ecwGenVideo() {
+ const prompt = document.getElementById('ecwVideoPrompt').value.trim();
+ if (!prompt) return;
+ const aspect = document.getElementById('ecwVideoAspect').value;
+ const el = document.getElementById('ecwVideoResult');
+ el.innerHTML = '<div class="ecw-result" style="color:#ff5a32;">🎬 Routing to CineSynth..</div>';
+ const d = await ecwFetch({action:'video', prompt, aspect});
+ if (d && d.success) {
+ let html = `<div class="ecw-result">✓ Provider: ${(d.provider||'queued').toUpperCase()}\nStatus: ${d.status||'processing'}`;
+ if (d.task_id) html += `\nTask: ${d.task_id}`;
+ if (d.image_url) html += `\n\n<img src="${d.image_url}" style="max-width:100%;border-radius:4px;margin-top:8px;">`;
+ html += '</div>';
+ el.innerHTML = html;
+ } else {
+ el.innerHTML = '<div class="ecw-result">CineSynth connecting.. <a href="https://aicinesynth.com" target="_blank" style="color:#ff5a32;">Open CineSynth →</a></div>';
+ }
+}
+
+// SWARM — calls OpenCrest from any platform
+async function ecwSwarm() {
+ const goal = document.getElementById('ecwSwarmGoal').value.trim();
+ if (!goal) return;
+ const el = document.getElementById('ecwSwarmResult');
+ el.innerHTML = '<div class="ecw-result" style="color:#b000ff;">◈ Deploying swarm..</div>';
+ const d = await ecwFetch({action:'orchestrate', goal, priority:'quality', max_agents:5});
+ if (d && d.success) {
+ el.innerHTML = `<div class="ecw-result">✓ Mission: ${d.mission_id||'ACTIVE'}\nAgents: ${d.agents_deployed||'deploying'}\n\n${d.message||'Swarm active.'}</div>`;
+ } else {
+ el.innerHTML = '<div class="ecw-result">OpenCrest connecting.. <a href="https://opencrest.io" target="_blank" style="color:#b000ff;">Open OpenCrest →</a></div>';
+ }
+}
+
+// PARLIAMENT — consult MirzaTech from any platform
+async function ecwParliament() {
+ const q = document.getElementById('ecwSwarmGoal').value.trim();
+ if (!q) return;
+ const el = document.getElementById('ecwSwarmResult');
+ el.innerHTML = '<div class="ecw-result" style="color:#f0c040;">⚔ Convening Parliament (24 seats)..\nThis may take 30-60 seconds.</div>';
+ const d = await ecwFetch({action:'parliament', question:q});
+ if (d && (d.verdict || d.answer)) {
+ el.innerHTML = `<div class="ecw-result">⚔ PARLIAMENT VERDICT:\n\n${d.verdict||d.answer}\n\nConfidence: ${d.consensus_confidence||'—'}%</div>`;
+ } else {
+ el.innerHTML = '<div class="ecw-result">Parliament connecting.. <a href="https://mirzatech.ai/parliament/" target="_blank" style="color:#f0c040;">Open Parliament →</a></div>';
+ }
+}
+
+// HEALTH CHECK — ping all platforms
+async function ecwHealthCheck() {
+ const el = document.getElementById('ecwHealthResult');
+ el.innerHTML = '<div class="ecw-result" style="color:#00d2ff;">Pinging all platforms..</div>';
+ const d = await ecwFetch({action:'health'});
+ if (d && d.health) {
+ const list = document.getElementById('ecwStatusList');
+ list.innerHTML = Object.entries(d.health).map(([domain, info]) =>
+ `<div class="ecw-status"><span class="ecw-dot ${info.reachable?'on':'off'}"></span>${domain} — ${info.reachable ? info.latency : 'offline'}</div>`
+ ).join('');
+ el.innerHTML = '<div class="ecw-result" style="color:#4ade80;">Health check complete.</div>';
+ } else {
+ el.innerHTML = '<div class="ecw-result">network sync not connected on this domain.</div>';
+ }
+}
+</script>
+
+ <script src="/maya_widget.js?v=20260506c" defer></script>
+<script src="/network-nav.js"></script>
+<script src="/maya_guide.js" defer></script>
+<script src="/watch_video.js" defer></script>
+
+<script src="/empire-footer.js" defer></script>
+
+
+<script src="/maya_attachment_addon.js" defer></script>
+</body>
+</html>

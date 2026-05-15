@@ -1,0 +1,257 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="MirzaTech.ai pricing — cost-pass-through + 20% margin. Pay what your inference costs the underlying providers, plus a flat 20% for the orchestration. Transparent token economics." />
+<meta name="keywords" content="LLM API pricing, transparent pricing, multi-LLM cost, agentic LLM, MirzaTech pricing, cost-pass-through" />
+<meta property="og:title" content="MirzaTech Pricing — Cost-Pass-Through + 20% · Transparent Token Economics" />
+<meta property="og:description" content="No black-box per-turn fees. Pay your provider costs + 20% orchestration margin. Built for developers who think in tokens-per-dollar." />
+<meta property="og:url" content="https://mirzatech.ai/pricing/" />
+<meta property="og:image" content="/og/mirzatech.jpg" />
+<title>Pricing · Cost-Pass-Through + 20% | MirzaTech.ai</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/assets/kin-icons.css" />
+<style>
+:root{--bg:#05070d;--surface:rgba(17,24,40,.7);--border:rgba(0,212,255,.18);--text:#e8edf5;--text-muted:#8a94ab;--text-dim:#5a6579;--accent:#00d4ff;--accent-2:#00ffa3;--gold:#fbbf24;--violet:#b347ff;--hot:#ff3355}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:radial-gradient(ellipse at top,#0a1428 0%,#05070d 60%);color:var(--text);font-family:'SF Mono','JetBrains Mono','Cascadia Code',Menlo,Monaco,Consolas,monospace;font-size:14px;line-height:1.55;min-height:100vh}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-2)}
+main{max-width:1240px;margin:0 auto;padding:60px 24px}
+.network-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,7,13,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.network-brand{color:var(--accent);font-weight:700;letter-spacing:1.5px}
+.network-nav ul{display:flex;gap:18px;list-style:none}
+.network-nav a{color:var(--text-muted)}
+.hero{text-align:center;margin-bottom:40px;padding:50px 0 30px}
+.hero h1{font-size:clamp(38px,5vw,56px);font-weight:900;letter-spacing:-1.5px;font-family:Inter,system-ui,sans-serif;background:linear-gradient(135deg,#10b981 0%,#5eead4 50%,#fbbf24 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:16px}
+.hero .sub{font-size:18px;color:var(--text);max-width:720px;margin:0 auto 24px;font-family:Inter,system-ui,sans-serif}
+.hero .gloss{font-size:13px;color:var(--text-muted);max-width:640px;margin:0 auto;line-height:1.7}
+.hero .gloss b{color:var(--accent-2)}
+
+.formula-band{background:linear-gradient(135deg,rgba(0,255,163,.08) 0%,rgba(0,212,255,.04) 100%);border:1px solid rgba(0,255,163,.3);border-radius:16px;padding:34px;text-align:center;margin-bottom:40px}
+.formula{font-size:clamp(22px,3vw,30px);font-weight:700;font-family:'SF Mono',monospace;color:var(--text);letter-spacing:-.5px;margin-bottom:8px}
+.formula .a{color:var(--accent-2)}
+.formula .b{color:var(--gold)}
+.formula .c{color:var(--violet)}
+.formula-note{font-size:13px;color:var(--text-muted);margin-top:6px}
+
+.calc{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:30px;margin-bottom:40px}
+.calc h2{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:18px;letter-spacing:1.5px;text-transform:uppercase}
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:18px}
+.calc-input{background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:8px;padding:12px}
+.calc-input label{display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px}
+.calc-input input,.calc-input select{width:100%;background:transparent;border:none;color:var(--text);font-size:18px;font-weight:700;font-family:'SF Mono',monospace}
+.calc-input input:focus,.calc-input select:focus{outline:none}
+.calc-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding-top:18px;border-top:1px solid var(--border)}
+.calc-out .row{background:rgba(0,0,0,.3);border-radius:8px;padding:14px}
+.calc-out .lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px}
+.calc-out .val{font-size:24px;font-weight:800;color:var(--text);font-family:'SF Mono',monospace}
+.calc-out .row.you-pay .val{color:var(--accent-2)}
+.calc-out .row.we-keep .val{color:var(--gold)}
+
+.tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px;margin-bottom:40px}
+.tier{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px;display:flex;flex-direction:column}
+.tier.featured{border-color:var(--accent-2);box-shadow:0 0 30px rgba(0,255,163,.15)}
+.tier h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px}
+.tier .tag{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.tier.featured .tag{color:var(--accent-2)}
+.tier .price{font-size:32px;font-weight:900;font-family:'SF Mono',monospace;color:var(--text);margin-bottom:6px;line-height:1}
+.tier .price-sub{font-size:11px;color:var(--text-muted);margin-bottom:18px}
+.tier ul{list-style:none;flex:1;margin-bottom:20px}
+.tier li{font-size:13px;color:var(--text-muted);margin-bottom:8px;padding-left:18px;position:relative;line-height:1.6}
+.tier li:before{content:'⬢';color:var(--accent-2);position:absolute;left:0;font-size:11px;top:3px}
+.tier .cta{display:block;text-align:center;background:linear-gradient(90deg,var(--accent),var(--violet));color:#000;padding:11px 16px;border-radius:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:12px}
+.tier.featured .cta{background:linear-gradient(90deg,var(--accent-2),var(--gold))}
+.tier .cta.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+
+.transparency-band{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:30px;margin-bottom:40px}
+.transparency-band h2{font-size:14px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px}
+.transparency-band p{color:var(--text-muted);font-size:13px;line-height:1.8;margin-bottom:14px}
+.transparency-band p b{color:var(--text)}
+
+.faq{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:30px}
+.faq h2{font-size:14px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+.q{margin-bottom:18px}
+.q .q-text{font-weight:700;color:var(--text);font-size:14px;margin-bottom:6px;font-family:Inter,sans-serif}
+.q .a-text{color:var(--text-muted);font-size:13px;line-height:1.7}
+
+footer{margin-top:60px;padding:24px 0;border-top:1px solid var(--border);text-align:center;color:var(--text-muted);font-size:11px}
+</style>
+</head>
+<body>
+<nav class="network-nav">
+  <div class="network-brand">⬢ MIRZATECH · PRICING</div>
+  <ul>
+    <li><a href="/parliament/">Parliament</a></li>
+    <li><a href="/council/">Council</a></li>
+    <li><a href="/consulting/">Consulting</a></li>
+    <li><a href="/provider/">Provider</a></li>
+  </ul>
+</nav>
+
+<main style="padding-top:80px;">
+  <div class="hero">
+    <h1>Pay what inference costs.<br>Plus 20%.</h1>
+    <div class="sub">No black-box per-turn fees. No tier gymnastics. We pass through your underlying provider costs at-cost and keep a flat 20% for the orchestration.</div>
+    <div class="gloss">Built for developers who think in <b>tokens-per-dollar</b>, not "turns." If your run cost us $0.40 in upstream API calls, you pay $0.48. The $0.08 is what we keep for routing across 22 frontier seats + tool dispatch + trace capture + receipt.</div>
+  </div>
+
+  <div class="formula-band">
+    <div class="formula"><span class="a">your_cost</span> = <span class="b">underlying_inference</span> × <span class="c">1.20</span></div>
+    <div class="formula-note">No subscription required for usage. Pay only for what you run.</div>
+  </div>
+
+  <div class="calc">
+    <h2>⬢ Live cost estimator</h2>
+    <div class="calc-grid">
+      <div class="calc-input">
+        <label>Workload type</label>
+        <select id="workload">
+          <option value="0.04">Single Council seat · short answer</option>
+          <option value="0.18" selected>12-seat Council · single round</option>
+          <option value="0.85">24-seat Parliament · 5 rounds (no tools)</option>
+          <option value="1.40">24-seat Parliament · 5 rounds (with tools)</option>
+          <option value="2.10">24-seat Parliament · with full Council annotation</option>
+        </select>
+      </div>
+      <div class="calc-input">
+        <label>Runs per day</label>
+        <input id="rpd" type="number" min="1" max="10000" value="20" />
+      </div>
+      <div class="calc-input">
+        <label>Days per month</label>
+        <input id="dpm" type="number" min="1" max="31" value="22" />
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="row"><div class="lbl">Underlying inference cost</div><div class="val" id="kCost">$—</div></div>
+      <div class="row you-pay"><div class="lbl">Your cost (cost + 20%)</div><div class="val" id="kPay">$—</div></div>
+      <div class="row we-keep"><div class="lbl">MirzaTech keeps</div><div class="val" id="kKeep">$—</div></div>
+      <div class="row"><div class="lbl">Per-run cost to you</div><div class="val" id="kPerRun">$—</div></div>
+    </div>
+  </div>
+
+  <div class="tier-grid">
+    <div class="tier">
+      <div class="tag">FREE TIER</div>
+      <h3>Sandbox</h3>
+      <div class="price">$0</div>
+      <div class="price-sub">No credit card. No commitment.</div>
+      <ul>
+        <li>Watch the live 24-seat scripted Parliament demo</li>
+        <li>Read public Council deliberation transcripts</li>
+        <li>API endpoint for the scripted simulation (zero LLM cost · zero throttle)</li>
+        <li>Persona vocabulary: Proponents · Skeptics · Polygeists · Chancellor</li>
+      </ul>
+      <a href="/parliament/" class="cta ghost">Try the demo →</a>
+    </div>
+
+    <div class="tier featured">
+      <div class="tag">USAGE</div>
+      <h3>Pay-As-You-Go</h3>
+      <div class="price">cost + 20%</div>
+      <div class="price-sub">No floor. No ceiling. No surprise charges.</div>
+      <ul>
+        <li>Real Parliament runs (24 seats · 5 rounds · agentic tools)</li>
+        <li>Real Council annotations (vetted experts · per-step critique)</li>
+        <li>Tool layer included: web_search · file_io · python_sandbox</li>
+        <li>Per-run cost receipts with full token + provider breakdown</li>
+        <li>Receipt-style billing · pay only what you run · no minimum</li>
+      </ul>
+      <a href="mailto:billing@emaaa.io?subject=PAYG%20Billing%20Setup&body=My%20expected%20monthly%20usage:%20%24___%20%2F%20month%0AMy%20stack:%20%0AMy%20use%20case:%20" class="cta">⬡ Activate Pay-As-You-Go →</a>
+    </div>
+
+    <div class="tier">
+      <div class="tag">DASHBOARD</div>
+      <h3>Workspace</h3>
+      <div class="price">$9 /mo</div>
+      <div class="price-sub">Per workspace · unlimited seats included</div>
+      <ul>
+        <li>Persistent workspace dashboard for your team</li>
+        <li>Saved sessions · search history · receipt archive</li>
+        <li>Shared Council expert pool for your team's annotations</li>
+        <li>Per-workspace API key (rotation + audit log)</li>
+        <li>Usage cost on top per the cost+20% model above</li>
+      </ul>
+      <a href="https://buy.stripe.com/dRm00j4K2drmc9MfDr7Zu0P" class="cta">⬡ Activate Workspace · $9/mo →</a>
+    </div>
+
+    <div class="tier">
+      <div class="tag">PARTNER</div>
+      <h3>Provider Allocation</h3>
+      <div class="price">credit swap</div>
+      <div class="price-sub">For LLM provider partnership teams only</div>
+      <ul>
+        <li>You allocate API credits to MirzaTech's cost-base</li>
+        <li>We provide structured agentic-trace + Council annotation bundles</li>
+        <li>Per-provider isolated dashboard (raw JSONL export · signed URL)</li>
+        <li>Quarterly performance reports for your DevRel + enterprise teams</li>
+        <li>Outlier-failure analysis (where N-1 frontier models pass and yours fails)</li>
+      </ul>
+      <a href="mailto:partnerships@emaaa.io?subject=Provider%20Partnership%20Inquiry" class="cta ghost">partnerships@emaaa.io</a>
+    </div>
+  </div>
+
+  <div class="transparency-band">
+    <h2>⬢ Why cost-pass-through?</h2>
+    <p>Frontier model providers charge you per token. So do we — at the actual underlying provider rate, with a flat 20% added for orchestration. This means: <b>if upstream provider prices drop, your bill drops automatically.</b> If a model gets faster + cheaper through caching or speculative decoding, you keep the savings. If we rotate your workload to a cheaper provider that performs equally well, your bill drops, our margin stays at 20%.</p>
+    <p>The 20% covers: (a) routing across 22 frontier seats, (b) tool dispatch (web_search · file_io · python_sandbox), (c) trace capture + receipt + audit log, (d) Council annotation surface for vetted experts, (e) a sustainable orchestration business so we're around in 12 months when you renew.</p>
+    <p>Every receipt shows the full token + provider + cost breakdown. No hidden margin. No black-box "turns." If you're priced out, we are too — that's the alignment.</p>
+  </div>
+
+  <div class="faq">
+    <h2>⬢ Pricing FAQ</h2>
+    <div class="q">
+      <div class="q-text">What about the old $2/turn $4/turn pricing?</div>
+      <div class="a-text">Retired 2026-05-11. The "turn" was an opaque cognitive frame that didn't match how developers think about LLM cost. The new model is transparent token economics. Existing $99 PARLIAMENT_REPORT and $5–$199/seat subscriptions remain available for customers who prefer fixed-fee · contact us if you're on the legacy plan.</div>
+    </div>
+    <div class="q">
+      <div class="q-text">How do you calculate the underlying provider cost?</div>
+      <div class="a-text">Each provider (NVIDIA NIM · Groq · OpenRouter · Novita · etc.) publishes per-token rates. We compute exact cost per call using the provider's published rate × actual tokens consumed. The receipt shows per-seat: model_id · input_tokens · output_tokens · provider · unit_rate · total. You can audit every cent.</div>
+    </div>
+    <div class="q">
+      <div class="q-text">What if my run uses tools (web_search · python_sandbox)?</div>
+      <div class="a-text">web_search uses Gemini grounding which is free (Mo's existing key allocation). file_io is server-side (no upstream cost). python_sandbox runs on Modal — usage is included in our 20% margin. Tools never add a per-call line item to your bill.</div>
+    </div>
+    <div class="q">
+      <div class="q-text">Can I see the cost before I run?</div>
+      <div class="a-text">Yes. Every endpoint returns an estimated cost band (low / median / high) before execution. You can set a per-run cost cap; if the run would exceed it, we abort and charge nothing.</div>
+    </div>
+    <div class="q">
+      <div class="q-text">What happens to model names? I see "Frontier Tier 1 · 235B-class" instead of model IDs.</div>
+      <div class="a-text">Public surfaces show only persona-class labels — we don't expose the seat-to-vendor mapping to anonymous traffic. Once you authenticate, your receipt and dashboard show the full model_id for every seat that answered you. Transparency for paying customers · opacity for the public.</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Pricing · Cost-Pass-Through + 20% · Powered by MirzaTech.ai · Property of EMAAA.io
+</footer>
+
+<script>
+function fmt(n){return '$' + n.toFixed(2)}
+function calc(){
+  const cost = parseFloat(document.getElementById('workload').value);
+  const rpd = parseFloat(document.getElementById('rpd').value) || 0;
+  const dpm = parseFloat(document.getElementById('dpm').value) || 0;
+  const runs = rpd * dpm;
+  const totalCost = cost * runs;
+  const totalPay = totalCost * 1.20;
+  const totalKeep = totalPay - totalCost;
+  document.getElementById('kCost').textContent = fmt(totalCost);
+  document.getElementById('kPay').textContent = fmt(totalPay);
+  document.getElementById('kKeep').textContent = fmt(totalKeep);
+  document.getElementById('kPerRun').textContent = fmt(cost * 1.20);
+}
+['workload','rpd','dpm'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calc);
+  document.getElementById(id).addEventListener('change', calc);
+});
+calc();
+</script>
+</body>
+</html>

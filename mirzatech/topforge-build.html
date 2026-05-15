@@ -1,0 +1,465 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>TopForge Build · MirzaTech.ai</title>
+<meta name="description" content="Idea in. App-store-ready zip out. Council and Parliament deliberation behind every build.">
+<style id="kin-mobile-overrides">
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#fafafa;color:#16181d;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#1f6feb;text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px 80px}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px}
+  .brand{font-weight:700;font-size:20px;letter-spacing:-.01em}
+  .brand b{color:#0e7490}
+  nav a{margin-left:18px;color:#475569;font-size:14px}
+  h1{font-size:36px;line-height:1.15;letter-spacing:-.02em;margin:8px 0 6px}
+  h1 span{color:#0e7490}
+  .lede{color:#475569;max-width:720px;margin:0 0 24px;font-size:17px}
+  .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .card h2{margin:0 0 14px;font-size:20px;letter-spacing:-.01em}
+  label{display:block;font-weight:600;color:#16181d;margin:14px 0 6px;font-size:14px}
+  textarea,input[type=text],input[type=file]{width:100%;font:inherit;border:1px solid #cbd5e1;border-radius:10px;padding:12px 14px;background:#fff;color:#16181d;min-height:44px}
+  textarea{min-height:120px;resize:vertical}
+  textarea:focus,input:focus{outline:0;border-color:#0e7490;box-shadow:0 0 0 3px rgba(14,116,144,.18)}
+  .options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+  .opt{display:block;cursor:pointer;border:2px solid #cbd5e1;border-radius:12px;padding:14px;background:#fff;transition:all .15s}
+  .opt:hover{border-color:#0e7490}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt.sel{border-color:#0e7490;background:#ecfeff}
+  .opt .price{font-weight:700;font-size:22px;color:#0e7490;letter-spacing:-.01em}
+  .opt .name{font-weight:600;margin:4px 0}
+  .opt .desc{font-size:13px;color:#475569}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .btn{appearance:none;border:0;border-radius:10px;font:600 15px/1 inherit;padding:13px 22px;cursor:pointer;min-height:44px;letter-spacing:.01em}
+  .btn-primary{background:#0e7490;color:#fff}
+  .btn-primary:hover{background:#155e75}
+  .btn-primary:disabled{background:#94a3b8;cursor:not-allowed}
+  .btn-ghost{background:#fff;color:#475569;border:1px solid #cbd5e1}
+  .btn-danger{background:#fff;color:#b91c1c;border:1px solid #fecaca}
+  .ico{width:18px;height:18px;vertical-align:-3px;fill:currentColor}
+  .seats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
+  .seat{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fafafa;font-size:13px}
+  .seat.live{border-color:#0e7490;background:#ecfeff}
+  .seat.done{border-color:#16a34a;background:#f0fdf4}
+  .seat.fail{border-color:#cbd5e1;background:#f8fafc;color:#94a3b8}
+  .seat .role{font-weight:600;font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+  .seat .vote{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;background:#e2e8f0;color:#475569}
+  .seat.done .vote.APPROVE{background:#bbf7d0;color:#166534}
+  .seat.done .vote.REVISE{background:#fef3c7;color:#92400e}
+  .seat.done .vote.REJECT{background:#fecaca;color:#991b1b}
+  .seat .toggle{cursor:pointer;color:#0e7490;font-weight:600;margin-top:6px;display:inline-block;font-size:12px}
+  .specbox{display:none;background:#0f172a;color:#cbd5e1;border-radius:8px;padding:10px;margin-top:8px;font:11px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;max-height:240px;overflow:auto;white-space:pre}
+  .specbox.show{display:block}
+  pre.prose{white-space:pre-wrap;background:#fafafa;border:1px solid #e2e8f0;border-radius:8px;padding:14px;font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;margin-top:12px;max-height:280px;overflow:auto}
+  .filetree{background:#0f172a;color:#cbd5e1;border-radius:8px;padding:14px;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin-top:12px;max-height:280px;overflow:auto}
+  .filetree .f{color:#7dd3fc}.filetree .d{color:#fcd34d}
+  .stage{display:flex;align-items:center;gap:8px;font-size:13px;color:#64748b;margin-bottom:6px}
+  .stage .dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;display:inline-block}
+  .stage.live .dot{background:#0e7490;box-shadow:0 0 0 3px rgba(14,116,144,.25);animation:pulse 1.4s infinite}
+  .stage.done .dot{background:#16a34a}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .countdown{margin-left:8px;color:#0e7490;font-weight:600;font-feature-settings:"tnum"}
+  .greenlight{display:none;border:2px solid #0e7490;border-radius:14px;padding:18px;background:#ecfeff;margin-top:12px}
+  .greenlight.show{display:block}
+  .footer{margin-top:60px;padding-top:24px;border-top:1px solid #e2e8f0;color:#64748b;font-size:13px;text-align:center}
+  .footer a{color:#0e7490;font-weight:600}
+  .pill{display:inline-block;background:#ecfeff;color:#0e7490;border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
+  .err{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:12px;border-radius:10px;margin-top:12px;font-size:14px}
+  .ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:12px;border-radius:10px;margin-top:12px;font-size:14px}
+  @media (max-width:880px){.options{grid-template-columns:1fr}h1{font-size:30px}.wrap{padding:18px 14px 60px}}
+  @media (max-width:380px){h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/kin-icons.svg#forge"/></svg>
+      <b>TopForge</b> · build engine
+    </div>
+    <nav>
+      <a href="/">MirzaTech.ai</a>
+      <a href="/parliament-theater.html">Parliament</a>
+      <a href="/council/">Council</a>
+    </nav>
+  </header>
+
+  <span class="pill">v2 · Option-C deliberation</span>
+  <h1>Idea in. <span>App-store-ready zip out.</span></h1>
+  <p class="lede">A 12-seat Council or 24-seat Parliament deliberates over your idea, emits a structured blueprint, then a code-specialist executor pool builds it. You review the blueprint before code is written. Your zip arrives signed and ready to publish.</p>
+
+  <!-- Step 1 · Idea form -->
+  <section class="card" id="form-card">
+    <h2>1 · Describe what you want built</h2>
+    <label for="task">What's the build?</label>
+    <textarea id="task" placeholder="e.g. A habit-tracking SaaS · streaks · daily log · push notifications · dark mode · free + paid tiers · mobile-first">A SaaS dashboard for solo founders to track customer-success metrics in one screen. Email digest. Free tier · paid $19 tier.</textarea>
+
+    <label for="zip">Optional · attach existing project (.zip · max 50MB)</label>
+    <input type="file" id="zip" accept=".zip">
+    <div id="upload-status" style="font-size:13px;color:#64748b;margin-top:6px"></div>
+
+    <label>Build option</label>
+    <div class="options" id="options">
+      <label class="opt sel" data-option="no_council">
+        <input type="radio" name="build_option" value="no_council" checked>
+        <div class="price">$5</div>
+        <div class="name">No-Council</div>
+        <div class="desc">Direct codegen · fastest · for users who already know what they want</div>
+      </label>
+      <label class="opt" data-option="with_council">
+        <input type="radio" name="build_option" value="with_council">
+        <div class="price">$9</div>
+        <div class="name">With-Council</div>
+        <div class="desc">12 seats deliberate · structured spec · 1 round-run for gaps · 100% functionality</div>
+      </label>
+      <label class="opt" data-option="with_parliament">
+        <input type="radio" name="build_option" value="with_parliament">
+        <div class="price">$19</div>
+        <div class="name">With-Parliament</div>
+        <div class="desc">24 seats / 5 rounds · audit-grade · production quality · maximum dissent</div>
+      </label>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="submit-btn">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/kin-icons.svg#arrow-right"/></svg>
+        Send to deliberation
+      </button>
+      <button class="btn btn-ghost" id="reset-btn">Reset</button>
+    </div>
+    <div id="form-msg"></div>
+  </section>
+
+  <!-- Step 2 · Engine + per-seat -->
+  <section class="card" id="engine-card" style="display:none">
+    <h2>2 · Council deliberation</h2>
+    <div class="stage" id="stage-deliberate"><span class="dot"></span><span id="stage-deliberate-text">Convening seats…</span></div>
+    <div class="seats" id="seats"></div>
+    <pre class="prose" id="chancellor-prose" style="display:none"></pre>
+  </section>
+
+  <!-- Step 3 · Greenlight -->
+  <section class="card greenlight" id="greenlight-card">
+    <h2>3 · Approve the blueprint?</h2>
+    <p style="color:#475569;margin-top:0">The Council has merged the structured spec. The codegen will fire next. Auto-fires in <span class="countdown" id="countdown">30s</span>.</p>
+    <div class="actions">
+      <button class="btn btn-primary" id="approve-btn">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/kin-icons.svg#check"/></svg>
+        Approve · build now
+      </button>
+      <button class="btn btn-ghost" id="revise-btn">Revise</button>
+      <button class="btn btn-danger" id="cancel-btn">Cancel · 80% refund</button>
+    </div>
+  </section>
+
+  <!-- Step 4 · Build + download -->
+  <section class="card" id="build-card" style="display:none">
+    <h2>4 · Build &amp; package</h2>
+    <div class="stage" id="stage-build"><span class="dot"></span><span id="stage-build-text">Codegen executor pool…</span></div>
+    <div class="filetree" id="filetree" style="display:none"></div>
+    <pre class="prose" id="first-file-preview" style="display:none"></pre>
+    <div id="download-row" class="ok" style="display:none">
+      Build complete. <a id="download-link" href="#" target="_blank" rel="noopener">Download zip</a> · expires in 24h.
+    </div>
+  </section>
+
+  <div class="footer">
+    Powered by <a href="/">MirzaTech.ai</a> · Property of <a href="https://emaaa.io">EMAAA.io</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var state = {
+    build_id: null,
+    upload_hash: '',
+    build_option: 'no_council',
+    countdown_timer: null,
+  };
+
+  // Pre-fill build_id from query if returning from Stripe
+  var qs = new URLSearchParams(window.location.search);
+  var returningBuildId = qs.get('build_id');
+  var returningSession = qs.get('session_id');
+  var canceled = qs.get('canceled');
+
+  // ── Option picker ──────────────────────────────────────────────────
+  document.querySelectorAll('.opt').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('sel'); });
+      el.classList.add('sel');
+      el.querySelector('input').checked = true;
+      state.build_option = el.dataset.option;
+    });
+  });
+
+  // ── Reset ──────────────────────────────────────────────────────────
+  document.getElementById('reset-btn').addEventListener('click', function(){
+    location.href = '/topforge/build';
+  });
+
+  // ── Zip upload ─────────────────────────────────────────────────────
+  document.getElementById('zip').addEventListener('change', function(e){
+    var f = e.target.files[0];
+    if (!f) return;
+    var status = document.getElementById('upload-status');
+    if (f.size > 50 * 1024 * 1024) { status.textContent = 'File too large (max 50MB).'; return; }
+    status.textContent = 'Uploading ' + f.name + '…';
+    var fd = new FormData();
+    fd.append('zip', f);
+    fetch('/api/build/upload', { method: 'POST', body: fd })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d && d.upload_hash) {
+          state.upload_hash = d.upload_hash;
+          status.textContent = 'Attached: ' + f.name + ' · hash ' + d.upload_hash;
+        } else {
+          status.textContent = 'Upload failed: ' + (d && d.error ? d.error : 'unknown');
+        }
+      })
+      .catch(function(err){ status.textContent = 'Upload error: ' + err.message; });
+  });
+
+  // ── Submit ─────────────────────────────────────────────────────────
+  document.getElementById('submit-btn').addEventListener('click', function(){
+    var task = document.getElementById('task').value.trim();
+    if (task.length < 12) {
+      showFormMsg('Describe the build (min 12 characters).', true);
+      return;
+    }
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Routing…';
+    showFormMsg('');
+
+    var headers = { 'Content-Type': 'application/json' };
+    var jwt = localStorage.getItem('mt_jwt');
+    if (jwt) headers['Authorization'] = 'Bearer ' + jwt;
+
+    fetch('/api/topforge/build', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        task: task,
+        build_option: state.build_option,
+        upload_hash: state.upload_hash,
+      })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      btn.disabled = false; btn.innerHTML = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/kin-icons.svg#arrow-right"/></svg> Send to deliberation';
+      if (d && d.checkout_url) {
+        location.href = d.checkout_url;
+        return;
+      }
+      if (d && d.ok && d.build_id) {
+        state.build_id = d.build_id;
+        runEngine(d.build_id);
+        return;
+      }
+      showFormMsg('Error: ' + (d && d.error ? d.error : 'unknown response'), true);
+    })
+    .catch(function(err){
+      btn.disabled = false;
+      showFormMsg('Network error: ' + err.message, true);
+    });
+  });
+
+  // ── Run engine ─────────────────────────────────────────────────────
+  function runEngine(build_id) {
+    document.getElementById('engine-card').style.display = 'block';
+    setStage('stage-deliberate', 'live', 'Council deliberating…');
+    renderSeats(['ceo','cto','coo','cfo','analyst','devil','closer'], 'pending');
+
+    var headers = { 'Content-Type': 'application/json' };
+    var jwt = localStorage.getItem('mt_jwt');
+    if (jwt) headers['Authorization'] = 'Bearer ' + jwt;
+
+    var body = { build_id: build_id };
+    if (returningSession) body.stripe_session_id = returningSession;
+
+    fetch('/api/topforge/build?action=run', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(body)
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.ok) {
+        setStage('stage-deliberate', 'fail', 'Engine failed: ' + (d && d.error ? d.error : 'unknown'));
+        return;
+      }
+      setStage('stage-deliberate', 'done', 'Deliberation complete · ' + (d.meta && d.meta.quorum ? d.meta.quorum + ' quorum' : ''));
+      if (d.per_seat) renderSeatResults(d.per_seat);
+      if (d.chancellor_prose) {
+        var pp = document.getElementById('chancellor-prose');
+        pp.textContent = d.chancellor_prose;
+        pp.style.display = 'block';
+      }
+      // Show greenlight gate · auto-fire in 30s
+      document.getElementById('greenlight-card').classList.add('show');
+      startCountdown(30, function(){ approve(build_id); });
+    })
+    .catch(function(err){
+      setStage('stage-deliberate', 'fail', 'Network error: ' + err.message);
+    });
+  }
+
+  function renderSeats(ids, statusClass) {
+    var labels = {
+      ceo:'CEO · framing', cto:'CTO · scaffold', coo:'COO · runtime',
+      cfo:'CFO · pricing', analyst:'Analyst · flows', devil:'Devil · failure modes',
+      closer:'Closer · monetization', parliament_24_seats: '24-seat Parliament'
+    };
+    var html = '';
+    ids.forEach(function(id){
+      html += '<div class="seat ' + statusClass + '" id="seat-' + id + '">'
+            + '<div class="role">' + (labels[id] || id) + '</div>'
+            + '<div class="status">deliberating…</div>'
+            + '</div>';
+    });
+    document.getElementById('seats').innerHTML = html;
+  }
+
+  function renderSeatResults(per_seat) {
+    var ids = Object.keys(per_seat);
+    if (ids.length === 1 && ids[0] === 'parliament_24_seats') {
+      renderSeats(ids, 'pending');
+    } else {
+      renderSeats(['ceo','cto','coo','cfo','analyst','devil','closer'], 'pending');
+    }
+    Object.keys(per_seat).forEach(function(id){
+      var row = per_seat[id]; if (!row) return;
+      var el = document.getElementById('seat-' + id); if (!el) return;
+      el.classList.remove('pending');
+      el.classList.add(row.vote === 'ABSTAIN' ? 'fail' : 'done');
+      var voteLabel = row.vote || 'APPROVE';
+      var conf = row.confidence ? (' · ' + row.confidence + '/10') : '';
+      var safeProse = (row.verdict_prose || '').replace(/</g,'&lt;');
+      var safeSpec = JSON.stringify(row.structured_spec || {}, null, 2).replace(/</g,'&lt;');
+      el.innerHTML = '<div class="role">' + (el.querySelector('.role') ? el.querySelector('.role').textContent : id) + '</div>'
+                  + '<span class="vote ' + voteLabel + '">' + voteLabel + conf + '</span>'
+                  + '<div style="font-size:12px;color:#64748b;margin-top:4px">' + (row.model_used || '') + '</div>'
+                  + '<span class="toggle" data-target="spec-' + id + '">View spec ▼</span>'
+                  + '<div class="specbox" id="spec-' + id + '">' + safeSpec + '\n\n--- prose ---\n' + safeProse.substring(0, 800) + '</div>';
+    });
+    document.querySelectorAll('.seat .toggle').forEach(function(t){
+      t.addEventListener('click', function(){
+        var box = document.getElementById(t.dataset.target);
+        if (box) box.classList.toggle('show');
+      });
+    });
+  }
+
+  function setStage(id, cls, text) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('live','done','fail');
+    if (cls) el.classList.add(cls);
+    var ts = document.getElementById(id + '-text');
+    if (ts && text) ts.textContent = text;
+  }
+
+  function startCountdown(seconds, onZero) {
+    var el = document.getElementById('countdown');
+    var n = seconds;
+    el.textContent = n + 's';
+    if (state.countdown_timer) clearInterval(state.countdown_timer);
+    state.countdown_timer = setInterval(function(){
+      n--;
+      if (n <= 0) {
+        clearInterval(state.countdown_timer);
+        el.textContent = 'firing…';
+        onZero();
+        return;
+      }
+      el.textContent = n + 's';
+    }, 1000);
+  }
+
+  // ── Greenlight buttons ─────────────────────────────────────────────
+  document.getElementById('approve-btn').addEventListener('click', function(){
+    if (state.countdown_timer) clearInterval(state.countdown_timer);
+    approve(state.build_id);
+  });
+  document.getElementById('revise-btn').addEventListener('click', function(){
+    if (state.countdown_timer) clearInterval(state.countdown_timer);
+    location.href = '/topforge/build';
+  });
+  document.getElementById('cancel-btn').addEventListener('click', function(){
+    if (state.countdown_timer) clearInterval(state.countdown_timer);
+    if (!confirm('Cancel build? You will be refunded 80% of the council compute cost.')) return;
+    document.getElementById('greenlight-card').classList.remove('show');
+    showFormMsg('Build canceled. Refund will be processed within 5 business days.', false);
+  });
+
+  function approve(build_id) {
+    if (!build_id) return;
+    document.getElementById('greenlight-card').classList.remove('show');
+    document.getElementById('build-card').style.display = 'block';
+    setStage('stage-build', 'live', 'Codegen executor pool building…');
+
+    fetch('/api/topforge/build?action=continue', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ build_id: build_id })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.ok) {
+        setStage('stage-build', 'fail', 'Build failed: ' + (d && d.error ? d.error : 'unknown'));
+        return;
+      }
+      setStage('stage-build', 'done', 'Build complete · ' + (d.files ? d.files.length : 0) + ' files · ' + (d.zip_bytes ? Math.round(d.zip_bytes/1024) + 'KB' : ''));
+      renderFiletree(d.files || []);
+      if (d.download_url) {
+        var dl = document.getElementById('download-link');
+        dl.href = d.download_url;
+        document.getElementById('download-row').style.display = 'block';
+      }
+    })
+    .catch(function(err){
+      setStage('stage-build', 'fail', 'Network error: ' + err.message);
+    });
+  }
+
+  function renderFiletree(files) {
+    if (!files || !files.length) return;
+    var lines = files.map(function(f){
+      var icon = '<span class="f">▸</span>';
+      var bytes = f.bytes ? ' (' + f.bytes + 'B)' : '';
+      return icon + ' ' + (f.path || '') + bytes;
+    });
+    var ft = document.getElementById('filetree');
+    ft.innerHTML = lines.join('<br>');
+    ft.style.display = 'block';
+  }
+
+  function showFormMsg(text, isErr) {
+    var el = document.getElementById('form-msg');
+    if (!text) { el.innerHTML = ''; return; }
+    el.innerHTML = '<div class="' + (isErr ? 'err' : 'ok') + '">' + text + '</div>';
+  }
+
+  // ── If returning from Stripe ───────────────────────────────────────
+  if (returningBuildId) {
+    state.build_id = returningBuildId;
+    if (canceled) {
+      showFormMsg('Stripe checkout was canceled. Try again or pick a different build option.', true);
+    } else if (returningSession) {
+      // Auto-fire engine after Stripe payment
+      runEngine(returningBuildId);
+    }
+  }
+})();
+</script>
+<script src="/maya-globe-corner.js" defer></script>
+</body>
+</html>

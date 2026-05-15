@@ -1,0 +1,292 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Parliament Pro — 10 Frontier AIs Deliberate | MirzaTech.ai Investor Pitch</title>
+<meta name="description" content="Parliament Pro at mirzatech.ai: the only network with 12 frontier SOTA AIs deliberating in a single SSE-streamed session. Enterprise decisions, VC due-diligence, code review, content safety. Emaaa LLC investor showcase by Emaaa LLC.">
+<meta name="author" content="Emaaa LLC, Emaaa LLC">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://mirzatech.ai/parliament-pitch">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MirzaTech.ai — Emaaa LLC">
+<meta property="og:title" content="Parliament Pro — 10 Frontier AIs Deliberate">
+<meta property="og:description" content="Nemotron-Ultra, Qwen-Coder-480B, Kimi-K2-Thinking, DeepSeek V3.2, GLM-5.1 and more — streaming deliberation in one session.">
+<meta property="og:url" content="https://mirzatech.ai/parliament-pitch">
+<meta property="og:image" content="https://mirzatech.ai/android-chrome-512.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Parliament Pro — 10 Frontier AIs Deliberate">
+<meta name="twitter:description" content="Only network running 10 SOTA models in one SSE-streamed session. Live demo at mirzatech.ai/parliament-theater.">
+<meta name="twitter:image" content="https://mirzatech.ai/android-chrome-512.png">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<style>
+:root {
+ --bg: #0a0e27;
+ --bg2: #0f1437;
+ --neon: #00d4ff;
+ --neon2: #7c3aed;
+ --accent: #00ffa8;
+ --text: #e6eeff;
+ --text2: #9fb3d1;
+ --card: rgba(20, 28, 64, 0.72);
+ --border: rgba(0, 212, 255, 0.22);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; overflow-x: hidden; }
+body::before {
+ content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+ background-image:
+ linear-gradient(rgba(0,212,255,0.06) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(0,212,255,0.06) 1px, transparent 1px);
+ background-size: 48px 48px;
+ animation: grid-drift 90s linear infinite;
+}
+@keyframes grid-drift { from { background-position: 0 0; } to { background-position: 48px 48px; } }
+a { color: var(--neon); text-decoration: none; }
+a:hover { color: var(--accent); }
+
+header.top {
+ position: sticky; top: 0; z-index: 10;
+ background: rgba(10, 14, 39, 0.88);
+ backdrop-filter: blur(16px) saturate(140%);
+ border-bottom: 1px solid var(--border);
+ padding: 14px 24px;
+ display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.brand { font-weight: 700; font-size: 17px; letter-spacing: 0.5px; }
+.brand .logo-dot { color: var(--neon); }
+.backlink {
+ font-size: 13px; color: var(--text2); padding: 8px 14px; border: 1px solid var(--border); border-radius: 6px;
+ min-height: 36px; display: inline-flex; align-items: center;
+}
+.backlink:hover { border-color: var(--neon); color: var(--text); }
+
+main { max-width: 1180px; margin: 0 auto; padding: 60px 24px 80px; }
+
+.hero { text-align: center; padding: 70px 0 60px; }
+.hero h1 {
+ font-size: clamp(32px, 6vw, 64px); font-weight: 800; line-height: 1.08; margin-bottom: 18px;
+ background: linear-gradient(135deg, #fff 0%, var(--neon) 55%, var(--neon2) 100%);
+ -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero .tag { font-size: clamp(16px, 2.2vw, 22px); color: var(--text2); max-width: 780px; margin: 0 auto 12px; }
+.hero .sub { font-size: 13px; color: var(--accent); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 28px; }
+.hero .ctas { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+.btn {
+ display: inline-flex; align-items: center; justify-content: center;
+ padding: 14px 24px; min-height: 48px; font-weight: 600; font-size: 15px;
+ border-radius: 8px; border: 1px solid var(--border);
+ transition: all 0.2s; cursor: pointer; letter-spacing: 0.3px;
+}
+.btn.primary { background: linear-gradient(135deg, var(--neon) 0%, var(--neon2) 100%); color: #0a0e27; border: none; box-shadow: 0 4px 24px rgba(0,212,255,0.4); }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 32px rgba(0,212,255,0.55); }
+.btn.ghost { background: transparent; color: var(--text); }
+.btn.ghost:hover { border-color: var(--neon); color: var(--neon); }
+.btn.demo { background: rgba(0, 255, 168, 0.12); color: var(--accent); border-color: rgba(0, 255, 168, 0.5); }
+.btn.demo:hover { background: rgba(0, 255, 168, 0.22); }
+
+section { margin: 56px 0; }
+section h2 { font-size: clamp(24px, 3.4vw, 36px); margin-bottom: 8px; font-weight: 700; }
+section .lede { color: var(--text2); font-size: 15px; margin-bottom: 28px; max-width: 720px; }
+
+.card {
+ background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+ padding: 22px; backdrop-filter: blur(10px); transition: all 0.22s;
+}
+.card:hover { border-color: var(--neon); transform: translateY(-3px); }
+
+.grid { display: grid; gap: 16px; }
+.grid.flow { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.grid.members { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.grid.usecases { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.grid.pricing { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+.flow-card { text-align: center; }
+.flow-card .num {
+ display: inline-flex; align-items: center; justify-content: center;
+ width: 40px; height: 40px; border-radius: 50%;
+ background: linear-gradient(135deg, var(--neon), var(--neon2)); color: #0a0e27;
+ font-weight: 800; margin-bottom: 10px;
+}
+.flow-card h4 { font-size: 15px; margin-bottom: 4px; }
+.flow-card p { font-size: 13px; color: var(--text2); }
+
+.member h4 { font-size: 16px; color: var(--neon); margin-bottom: 2px; font-weight: 700; }
+.member .role { font-size: 11px; color: var(--accent); letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 6px; }
+.member .model { font-size: 12px; color: var(--text2); font-family: 'Consolas', monospace; }
+
+.uc h4 { font-size: 16px; color: var(--neon); margin-bottom: 6px; }
+.uc p { font-size: 13px; color: var(--text2); }
+
+.tier { text-align: center; }
+.tier h3 { font-size: 20px; margin-bottom: 6px; color: var(--neon); }
+.tier .price { font-size: 30px; font-weight: 800; margin: 10px 0; }
+.tier .price small { font-size: 14px; color: var(--text2); font-weight: 400; }
+.tier ul { list-style: none; text-align: left; margin: 14px 0; }
+.tier li { padding: 6px 0; font-size: 13px; color: var(--text2); }
+.tier li::before { content: '▸ '; color: var(--accent); }
+.tier.featured { border-color: var(--accent); background: linear-gradient(180deg, rgba(0,255,168,0.06), rgba(20,28,64,0.72)); }
+
+.demo-callout {
+ background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08));
+ border: 1px solid var(--border); border-radius: 14px; padding: 32px; text-align: center;
+}
+.demo-callout h3 { font-size: 22px; margin-bottom: 10px; }
+.demo-callout p { color: var(--text2); margin-bottom: 18px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+.cta-band {
+ text-align: center; padding: 48px 24px; margin-top: 60px;
+ background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08));
+ border: 1px solid var(--border); border-radius: 14px;
+}
+.cta-band h2 { margin-bottom: 16px; }
+.cta-band p { color: var(--text2); margin-bottom: 22px; }
+
+@media (max-width: 640px) {
+ main { padding: 40px 16px 60px; }
+ .hero { padding: 40px 0 36px; }
+ section { margin: 40px 0; }
+ header.top { padding: 12px 16px; }
+}
+</style>
+<style id="kin-mobile-overrides">
+@media(max-width:880px){.grid,[class*="grid-"],.members-grid,.layout-3col,.three-col,.console-inner,.section-grid,.card-grid,.member-grid,.bot-grid,.specialist-grid,.matrix,.staff-grid,.price-grid,.framework-grid,.seat-grid{grid-template-columns:1fr !important;gap:14px;}.col,aside,.panel{width:100% !important;max-width:none !important;}}
+@media(max-width:680px){body{font-size:15px;}textarea,input[type=text],input[type=email],input[type=password]{font-size:16px !important;padding:13px 14px;}.btn,button,.cta,a.button{padding:13px 18px;font-size:.92rem;min-height:44px;}h1,.hero h1,.page-title{font-size:1.5rem !important;line-height:1.18;}h2{font-size:1.18rem !important;}h3{font-size:1rem !important;}.top-bar,nav,header.empire,.empire-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;}.section{padding:24px 16px !important;}.container,.section-inner,.wrap,.inner{padding-left:16px !important;padding-right:16px !important;}img,svg,video,iframe{max-width:100%;height:auto;}.flex,.row{flex-wrap:wrap;}}
+@media(max-width:380px){body{font-size:14px;}h1,.hero h1{font-size:1.25rem !important;}.section{padding:18px 12px !important;}}
+</style>
+  <link rel="stylesheet" href="/assets/kin-icons.css">
+</head>
+<body>
+
+<header class="top">
+ <a href="/" class="brand" title="Back to home"><span class="logo-dot">▲</span> MIRZATECH.AI</a>
+ <a href="https://emaaa.io/investors" class="backlink">← Emaaa LLC Investor Hub</a>
+</header>
+
+<main>
+
+<section class="hero">
+ <div class="sub">Emaaa LLC · Investor Showcase</div>
+ <h1>10 Frontier AIs Deliberate. You Decide.</h1>
+ <p class="tag">Parliament Pro streams 10 SOTA frontier models debating your prompt in real-time SSE, with a Guardian model synthesizing the final verdict. No other platform runs a 10-model deliberation in a single session.</p>
+ <div class="ctas">
+ <a href="https://mirzatech.ai/parliament-theater" class="btn demo">▶ Try the live demo</a>
+ <a href="https://ai-staffing.agency/book" class="btn primary">Book 30-min call</a>
+ <a href="mailto:the team@emaaa.io?subject=Investor%20inquiry%20%E2%80%94%20Parliament%20Pro" class="btn ghost">Email the team directly</a>
+ </div>
+</section>
+
+<section>
+ <h2>How It Works</h2>
+ <p class="lede">A single prompt fans out to 12 frontier members. Each responds token-by-token over Server-Sent Events. Guardian synthesizes consensus, flags disagreement, produces the final verdict. Entire session is replayable.</p>
+ <div class="grid flow">
+ <div class="card flow-card"><div class="num">1</div><h4>Prompt fan-out</h4><p>One question, 10 parallel member calls</p></div>
+ <div class="card flow-card"><div class="num">2</div><h4>Live SSE stream</h4><p>Watch all 10 think in real-time</p></div>
+ <div class="card flow-card"><div class="num">3</div><h4>Guardian verdict</h4><p>Consensus score + flagged conflicts</p></div>
+ <div class="card flow-card"><div class="num">4</div><h4>Replayable hash</h4><p>Share the session; rerun anytime</p></div>
+ </div>
+</section>
+
+<section>
+ <h2>The 10-Member Parliament (V11)</h2>
+ <p class="lede">Every role is filled by a SOTA frontier model. the network pools 500+ free-tier keys across 11 providers to orchestrate this at near-zero marginal cost per session.</p>
+ <div class="grid members">
+ <div class="card member"><h4>Architect</h4><div class="role">System Design</div><div class="model">Nemotron-Ultra 253B</div></div>
+ <div class="card member"><h4>Builder</h4><div class="role">Implementation</div><div class="model">Qwen-Coder-480B</div></div>
+ <div class="card member"><h4>Critic</h4><div class="role">Bug Hunting</div><div class="model">Kimi-K2-Thinking</div></div>
+ <div class="card member"><h4>Designer</h4><div class="role">UX / Creative</div><div class="model">Palmyra-Creative</div></div>
+ <div class="card member"><h4>Strategist</h4><div class="role">Long-Term Trade-offs</div><div class="model">DeepSeek V3.2</div></div>
+ <div class="card member"><h4>Researcher</h4><div class="role">Evidence Gathering</div><div class="model">Qwen3-Next-Thinking</div></div>
+ <div class="card member"><h4>Coder</h4><div class="role">Code Emission</div><div class="model">DeepSeek V3.1 Terminus</div></div>
+ <div class="card member"><h4>Behemoth</h4><div class="role">Deep Reasoning</div><div class="model">Nemotron-4 340B</div></div>
+ <div class="card member"><h4>Polyglot</h4><div class="role">Multilingual Nuance</div><div class="model">Mistral Large 3 675B</div></div>
+ <div class="card member"><h4>Guardian</h4><div class="role">Final Verdict</div><div class="model">GLM-5.1</div></div>
+ </div>
+</section>
+
+<section>
+ <div class="demo-callout">
+ <h3>Live demo available now</h3>
+ <p>Parliament Pro V11 is deployed and streaming today. Watch all 10 members debate a real question in your browser.</p>
+ <a href="https://mirzatech.ai/parliament-theater" class="btn demo">▶ Open Parliament Theater</a>
+ </div>
+</section>
+
+<section>
+ <h2>Use Cases</h2>
+ <p class="lede">Every decision where single-model bias is a risk. Parliament Pro surfaces dissent on purpose — that's the product.</p>
+ <div class="grid usecases">
+ <div class="card uc"><h4>Enterprise decisions</h4><p>Multi-model review on strategic bets before execution. 10 opinions, one log.</p></div>
+ <div class="card uc"><h4>VC due-diligence</h4><p>Stress-test investment theses. Parliament disagrees on purpose; unanimity is rare and revealing.</p></div>
+ <div class="card uc"><h4>Code review</h4><p>10 coder personas spot different bug classes. Builder writes, Critic tears down, Coder refactors.</p></div>
+ <div class="card uc"><h4>Legal opinion</h4><p>Multi-jurisdictional nuance without retaining 10 firms. Polyglot handles cross-border.</p></div>
+ <div class="card uc"><h4>Content safety</h4><p>Guardian + Critic run a 2-pass adversarial check on every piece of user-generated content.</p></div>
+ <div class="card uc"><h4>Research synthesis</h4><p>Researcher + Strategist + Behemoth triangulate on complex literature review.</p></div>
+ </div>
+</section>
+
+<section>
+ <h2>Pricing (thesis)</h2>
+ <p class="lede">Target pricing pre-launch. Free tier exists to drive adoption; enterprise tier is where MRR compounds.</p>
+ <div class="grid pricing">
+ <div class="card tier">
+ <h3>Free Demo</h3>
+ <div class="price">$0</div>
+ <ul>
+ <li>5 sessions / day rate-limited</li>
+ <li>All 10 members active</li>
+ <li>Public session hash (shareable)</li>
+ <li>No SLA</li>
+ </ul>
+ </div>
+ <div class="card tier featured">
+ <h3>Pro</h3>
+ <div class="price">$99<small>/session</small></div>
+ <ul>
+ <li>Per-session pricing (no cap)</li>
+ <li>Private session (no public hash)</li>
+ <li>Downloadable transcript</li>
+ <li>Priority queue</li>
+ </ul>
+ </div>
+ <div class="card tier">
+ <h3>Enterprise</h3>
+ <div class="price">$2,000<small>/the team</small></div>
+ <ul>
+ <li>Unlimited sessions</li>
+ <li>API access + webhooks</li>
+ <li>Dedicated Guardian tuning</li>
+ <li>SLA + white-glove onboarding</li>
+ <li>On-prem deployment option</li>
+ </ul>
+ </div>
+ </div>
+</section>
+
+<section class="cta-band">
+ <h2>Fund the only 10-model parliament on the market</h2>
+ <p>Parliament Pro is live today. Emaaa LLC seeks seed capital to scale API tier, enterprise sales, and on-prem deployments.</p>
+ <div class="ctas">
+ <a href="https://ai-staffing.agency/book" class="btn primary">Book 30-min call</a>
+ <a href="mailto:the team@emaaa.io?subject=Investor%20inquiry%20%E2%80%94%20Parliament%20Pro" class="btn ghost">Email the team directly</a>
+ </div>
+</section>
+
+</main>
+
+<script src="/maya_widget.js?v=20260506c" defer></script>
+<script src="/network-top-bar.js" defer></script>
+<script src="/network-footer.js" defer></script>
+<script src="/empire-top-bar.js" defer></script>
+<script src="/maya-globe-corner.js" defer></script>
+</body>
+</html>

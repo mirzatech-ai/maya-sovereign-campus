@@ -1,0 +1,820 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Council · MirzaTech.ai · 12 frontier seats · structured AI dissent</title>
+<meta name="description" content="The Council — 12 frontier LLMs answer your strategic question simultaneously. No hedging, no echo chamber. Real disagreement. Verdict in 60 seconds. From $2 per turn · $4 Parliament · subscriptions from $5/seat/mo.">
+<meta name="theme-color" content="#020810">
+<meta property="og:title" content="The Council · 12 frontier seats · structured dissent · from $2/turn">
+<meta property="og:description" content="Type your decision. 12 frontier LLMs answer for $2. Parliament (24 LLMs) for $4. Or subscribe from $5/user/mo for unlimited.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mirzatech.ai/council/">
+<link rel="canonical" href="https://mirzatech.ai/council/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Syne:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+--void:#020810;--deep:#050f1a;--surface:rgba(5,18,35,0.78);--glass-bg:rgba(5,18,35,0.65);--glass-border:rgba(0,210,255,0.22);
+--laser:#00d2ff;--laser2:#0080ff;--laser3:#b000ff;--gold:#f0c040;--green:#4ade80;--red:#f87171;
+--chrome:#f0f8ff;--white:#ffffff;--dim:rgba(232,243,255,0.78);--tertiary:rgba(180,205,225,0.62);
+--grid-line:rgba(0,210,255,0.025);--scan-line:rgba(0,0,0,0.02);
+--hero-overlay:radial-gradient(ellipse 90% 80% at 30% 50%,transparent 0%,rgba(2,8,16,.18) 60%,var(--void) 100%),linear-gradient(180deg,rgba(2,8,16,.08) 0%,rgba(2,8,16,.45) 100%);
+--video-opacity:.92;--video-filter:saturate(1.45) contrast(1.18) brightness(1.08);
+--nav-bg:rgba(2,8,15,0.92);--foot-bg:rgba(0,0,0,.4);
+--input-bg:rgba(0,0,0,.4);--input-border:rgba(0,210,255,.25);
+--shadow-card:0 4px 40px rgba(0,120,200,0.1);
+--glow:0 0 10px rgba(0,210,255,0.6);--glow-lg:0 0 30px rgba(0,210,255,0.3),0 0 60px rgba(0,210,255,0.1);
+--glow-gold:0 0 15px rgba(240,192,64,0.5);--glow-purple:0 0 20px rgba(176,0,255,0.3);
+--tile-border:1px solid rgba(0,210,255,0.18);--radius:4px;
+}
+[data-theme="light"]{
+--void:#f5f7fb;--deep:#eef2f8;--surface:rgba(255,255,255,0.92);--glass-bg:rgba(255,255,255,0.82);--glass-border:rgba(0,80,140,0.22);
+--laser:#0086c4;--laser2:#0066b8;--laser3:#7c3aed;--gold:#b8860b;--green:#15803d;--red:#dc2626;
+--chrome:#000000;--white:#000000;--dim:rgba(0,0,0,0.92);--tertiary:rgba(0,0,0,0.62);
+--grid-line:rgba(0,90,150,0.04);--scan-line:rgba(0,0,0,0.015);
+--hero-overlay:radial-gradient(ellipse 90% 80% at 30% 50%,transparent 0%,rgba(245,247,251,.25) 60%,var(--void) 100%),linear-gradient(180deg,rgba(245,247,251,.18) 0%,rgba(245,247,251,.62) 100%);
+--video-opacity:.78;--video-filter:saturate(1.25) contrast(1.12) brightness(1.05);
+--nav-bg:rgba(255,255,255,0.92);--foot-bg:rgba(238,242,248,.7);
+--input-bg:rgba(255,255,255,.85);--input-border:rgba(0,90,150,.25);
+--shadow-card:0 6px 32px rgba(0,40,90,0.08);
+--glow:0 0 10px rgba(0,134,196,0.35);--glow-lg:0 0 24px rgba(0,134,196,0.18);
+--glow-gold:0 0 14px rgba(184,134,11,0.4);--glow-purple:0 0 18px rgba(124,58,237,0.22);
+--tile-border:1px solid rgba(0,90,150,0.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--chrome);font-family:'Rajdhani',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;min-height:100vh;transition:background-color .35s ease,color .35s ease}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan-line) 2px,var(--scan-line) 4px);pointer-events:none;z-index:0;opacity:.3}
+a{color:var(--laser);text-decoration:none;transition:color .2s}
+a:hover{color:var(--gold)}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.glass{background:var(--glass-bg);border:var(--tile-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:var(--radius);position:relative;overflow:hidden;box-shadow:var(--shadow-card);transition:background .35s ease,border-color .35s ease}
+.glass-thick{background:var(--surface);border:1px solid var(--glass-border);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);box-shadow:var(--shadow-card),inset 0 1px 0 rgba(255,255,255,0.04);border-radius:var(--radius);position:relative;overflow:hidden}
+.holo{background:linear-gradient(135deg,var(--laser) 0%,var(--laser2) 25%,var(--laser3) 50%,var(--laser2) 75%,var(--laser) 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:holoshift 6s ease infinite}
+@keyframes holoshift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+[data-theme="light"] .holo{background:linear-gradient(135deg,#0066b8 0%,#0086c4 25%,#7c3aed 50%,#0086c4 75%,#0066b8 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:var(--nav-bg);border-bottom:1px solid var(--glass-border);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);transition:background .35s ease,border-color .35s ease}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-hex{font-size:1.4rem;color:var(--laser);text-shadow:var(--glow);animation:hexspin 8s linear infinite;display:inline-block}
+@keyframes hexspin{to{transform:rotate(360deg)}}
+.nav-brand{font-family:'Orbitron',monospace;font-size:.95rem;font-weight:900;letter-spacing:.1em;color:var(--white)}
+.nav-brand span{background:linear-gradient(135deg,var(--laser),var(--laser3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:24px;align-items:center;list-style:none}
+.nav-links a{font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+.nav-links a:hover{color:var(--laser)}
+[data-theme="light"] .nav-links a{color:var(--dim);font-weight:700}
+.nav-cta{padding:8px 22px;border:1px solid var(--laser);color:var(--laser);border-radius:var(--radius);transition:all .2s}
+.nav-cta:hover{background:rgba(0,210,255,0.1);box-shadow:var(--glow);color:var(--white) !important}
+.theme-toggle{display:inline-flex;align-items:center;padding:0;background:transparent;border:1px solid var(--glass-border);border-radius:999px;cursor:pointer;position:relative;width:62px;height:30px;margin:0 8px}
+.theme-toggle .thumb{position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--laser),var(--laser3));transition:transform .35s cubic-bezier(.5,1.5,.6,1),background .25s;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+[data-theme="light"] .theme-toggle .thumb{transform:translateX(32px);background:linear-gradient(135deg,var(--gold),var(--laser))}
+.theme-toggle .ico-sun,.theme-toggle .ico-moon{position:absolute;top:50%;transform:translateY(-50%);font-size:.7rem;line-height:1;font-family:'Share Tech Mono',monospace}
+.theme-toggle .ico-moon{left:8px;color:var(--laser);text-shadow:var(--glow)}
+.theme-toggle .ico-sun{right:8px;color:var(--dim)}
+[data-theme="light"] .theme-toggle .ico-sun{color:var(--gold);text-shadow:var(--glow-gold)}
+[data-theme="light"] .theme-toggle .ico-moon{color:var(--dim);text-shadow:none}
+
+/* HERO */
+.hero{min-height:88vh;position:relative;display:flex;align-items:center;padding:96px 40px 60px;z-index:1;overflow:hidden}
+.hero-video-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-video-bg video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;width:auto;height:auto;transform:translate(-50%,-50%);opacity:var(--video-opacity);filter:var(--video-filter)}
+.hero-video-bg::after{content:'';position:absolute;inset:0;background:var(--hero-overlay);z-index:1}
+.hero-inner{position:relative;z-index:2;max-width:1180px;width:100%;margin:0 auto}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:7px 22px;border:1px solid rgba(0,210,255,0.3);border-radius:40px;background:rgba(0,210,255,0.06);margin-bottom:24px;font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.22em;color:var(--laser);text-transform:uppercase}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 1.4s ease infinite}
+@keyframes blink{50%{opacity:.3}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5.4vw,4.6rem);font-weight:800;line-height:1.05;letter-spacing:-0.025em;color:var(--white);margin-bottom:18px;max-width:1000px}
+.hero h1 .accent{display:block;margin-top:6px;font-weight:700}
+.hero-sub{font-size:1.15rem;font-weight:400;color:var(--chrome);max-width:780px;margin-bottom:30px;line-height:1.65}
+.hero-sub strong{color:var(--white);font-weight:600}
+.hero-stats{display:flex;gap:0;margin:0 0 36px;flex-wrap:wrap}
+.hero-stat{padding:14px 32px 14px 0;margin-right:32px;border-right:1px solid rgba(0,210,255,0.12)}
+.hero-stat:last-child{border-right:none;margin-right:0}
+.hero-stat-n{font-family:'Orbitron',monospace;font-size:1.7rem;font-weight:700;display:block;line-height:1;margin-bottom:5px;color:var(--laser);text-shadow:var(--glow)}
+.hero-stat-l{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{padding:15px 36px;background:linear-gradient(135deg,rgba(0,210,255,0.18),rgba(176,0,255,0.14));border:1px solid var(--laser);color:var(--laser);font-family:'Rajdhani',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .25s;border-radius:var(--radius)}
+.btn-primary:hover{background:rgba(0,210,255,0.28);box-shadow:var(--glow-lg);transform:translateY(-2px);color:var(--white)}
+[data-theme="light"] .btn-primary{color:var(--laser2)}[data-theme="light"] .btn-primary:hover{color:var(--white)}
+.btn-secondary{padding:15px 36px;background:transparent;border:1px solid rgba(230,200,74,0.4);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .25s;border-radius:var(--radius)}
+.btn-secondary:hover{background:rgba(230,200,74,0.08);box-shadow:var(--glow-gold);transform:translateY(-2px)}
+.btn-ghost{padding:14px 28px;background:transparent;border:1px solid rgba(0,210,255,0.2);color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:.84rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;border-radius:var(--radius)}
+.btn-ghost:hover{border-color:var(--laser);color:var(--laser)}
+
+/* SECTIONS */
+section{position:relative;z-index:1}
+.section-inner{max-width:1180px;margin:0 auto;padding:80px 40px}
+.section-label{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.3em;color:var(--laser);text-transform:uppercase;display:block;margin-bottom:14px}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3vw,2.5rem);font-weight:700;color:var(--white);letter-spacing:-0.01em;line-height:1.15;margin-bottom:14px}
+.section-desc{font-size:.96rem;color:var(--dim);max-width:680px;line-height:1.7}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header .section-desc{margin:14px auto 0}
+
+/* SEAT GRID · 7 council members visualized */
+.seat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:980px){.seat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.seat-grid{grid-template-columns:1fr}}
+.seat{padding:18px 18px;text-align:center;transition:all .25s}
+.seat:hover{transform:translateY(-3px);border-color:rgba(0,210,255,.5)}
+.seat .ico{display:flex;align-items:center;justify-content:center;width:58px;height:58px;margin:0 auto 12px;border-radius:14px;background:radial-gradient(ellipse 100% 80% at 30% 30%,rgba(0,210,255,.22),rgba(140,80,255,.18) 60%,rgba(7,10,16,.9) 100%);border:1px solid rgba(0,210,255,.3);box-shadow:0 14px 32px -14px rgba(0,210,255,.55),0 0 0 1px rgba(255,255,255,.04) inset,0 -8px 16px -8px rgba(140,80,255,.4) inset;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:.04em;color:var(--white);position:relative;overflow:hidden}
+.seat .ico::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 35%,transparent 65%,rgba(140,80,255,.18) 100%);pointer-events:none}
+.seat .ico::after{content:'';position:absolute;left:8%;right:8%;top:6%;height:30%;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent);border-radius:50%;filter:blur(2px);pointer-events:none}
+.seat .ico span{position:relative;z-index:2;background:linear-gradient(135deg,#fff,var(--laser));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 12px rgba(0,210,255,.4)}
+.seat:hover .ico{border-color:rgba(0,210,255,.6);transform:translateY(-2px) rotate(-1deg)}
+.seat:hover .ico::after{height:35%;background:linear-gradient(180deg,rgba(255,255,255,.32),transparent)}
+.seat h4{font-family:'Syne',sans-serif;font-size:.92rem;color:var(--white);font-weight:700;margin-bottom:3px}
+.seat .role{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.14em;color:var(--laser);text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.seat .model{font-size:.74rem;color:var(--tertiary);line-height:1.4}
+
+/* EXAMPLE COUNCIL OUTPUT (preview from real Round 7) */
+.example{margin-top:32px}
+.example-frame{padding:0;overflow:hidden}
+.example-head{padding:18px 22px;border-bottom:1px solid var(--glass-border);background:linear-gradient(90deg,rgba(0,210,255,.05),rgba(176,0,255,.03))}
+.example-head .label{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--laser);text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700}
+.example-head h3{font-family:'Syne',sans-serif;font-size:1.05rem;color:var(--white);font-weight:600}
+.example-body{padding:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:780px){.example-body{grid-template-columns:1fr}}
+.verdict{padding:14px 16px;background:rgba(0,210,255,.04);border:1px solid var(--glass-border);border-radius:var(--radius)}
+.verdict .seat-tag{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.verdict .answer{font-size:.84rem;color:var(--chrome);line-height:1.55}
+.verdict .answer b{color:var(--white)}
+.synthesis{padding:18px 22px;background:linear-gradient(135deg,rgba(74,222,128,.06),rgba(0,210,255,.04));border-top:2px solid var(--green);border-radius:0 0 var(--radius) var(--radius);font-size:.92rem;color:var(--chrome);line-height:1.6}
+.synthesis b{color:var(--green);font-weight:700}
+
+/* FRAMEWORK */
+.framework-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+@media(max-width:980px){.framework-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.framework-grid{grid-template-columns:1fr}}
+.fw-step{padding:24px 22px;text-align:left;position:relative}
+.fw-step .num{font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:900;line-height:1;color:var(--laser);opacity:.16;margin-bottom:14px}
+.fw-step h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:6px}
+.fw-step p{font-size:.82rem;color:var(--dim);line-height:1.55}
+
+/* TRY-IT FORM */
+.try-section{padding:80px 40px;background:radial-gradient(ellipse at 50% 50%,rgba(176,0,255,.05) 0%,transparent 60%),var(--void);border-top:1px solid rgba(0,210,255,.1);border-bottom:1px solid rgba(0,210,255,.1)}
+.try-inner{max-width:920px;margin:0 auto}
+.try-form{padding:32px}
+.try-form label{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.18em;color:var(--laser);text-transform:uppercase;display:block;margin-bottom:6px;margin-top:18px;font-weight:700}
+.try-form label:first-of-type{margin-top:0}
+.try-form input,.try-form textarea,.try-form select{width:100%;padding:12px 14px;background:var(--input-bg);border:1px solid var(--input-border);color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.92rem;border-radius:var(--radius);outline:none}
+.try-form input:focus,.try-form textarea:focus,.try-form select:focus{border-color:var(--laser);box-shadow:0 0 0 1px var(--laser)}
+.try-form textarea{min-height:90px;resize:vertical;line-height:1.5}
+.try-form .hint{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--tertiary);text-transform:uppercase;margin-top:5px}
+.try-form .submit-row{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.try-form .price-tag{font-family:'Orbitron',monospace;font-size:1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+.try-form .price-tag .from{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--tertiary);letter-spacing:.16em;text-transform:uppercase;font-weight:400;display:block;margin-bottom:2px}
+
+/* PRICING */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:880px){.price-grid{grid-template-columns:1fr}}
+.price-card{padding:30px 28px;text-align:left}
+.price-card h3{font-family:'Orbitron',monospace;font-size:.78rem;letter-spacing:.22em;color:var(--laser);text-transform:uppercase;margin-bottom:8px}
+.price-card .amount{font-family:'Orbitron',monospace;font-size:1.9rem;font-weight:700;color:var(--white);margin-bottom:4px;line-height:1}
+.price-card .amount .unit{font-size:.7rem;color:var(--dim);font-weight:400;margin-left:6px}
+.price-card .amount.custom{color:var(--gold)}
+.price-card .audience{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.16em;color:var(--tertiary);text-transform:uppercase;margin-bottom:18px}
+.price-card ul{list-style:none;margin-bottom:24px}
+.price-card li{padding:7px 0;color:var(--chrome);font-size:.86rem;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.price-card li::before{content:'⬡';color:var(--laser);flex-shrink:0;font-size:.7rem;line-height:1.6}
+.price-card.featured{border-color:var(--gold);box-shadow:0 0 32px rgba(240,192,64,.15)}
+.price-card.featured h3{color:var(--gold)}
+.price-card .btn-primary,.price-card .btn-secondary{width:100%;justify-content:center}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:880px){.faq-grid{grid-template-columns:1fr}}
+.faq-item{padding:20px 22px;cursor:pointer;transition:all .2s}
+.faq-item:hover{border-color:rgba(0,210,255,.35)}
+.faq-item summary{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:600;color:var(--white);list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'+';color:var(--laser);font-size:1.4rem;line-height:1;transition:transform .2s;flex-shrink:0;font-weight:300}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item .answer{margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,210,255,.08);font-size:.86rem;color:var(--dim);line-height:1.6}
+
+/* FOOTER */
+footer{padding:40px 40px 24px;border-top:1px solid var(--glass-border);background:var(--foot-bg);position:relative;z-index:1;text-align:center}
+footer p{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.16em;color:var(--tertiary);text-transform:uppercase}
+footer p.gold{color:var(--gold);margin-top:6px}
+footer .nav-pills{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase}
+footer .nav-pills a{color:var(--dim)}
+footer .nav-pills a:hover{color:var(--laser)}
+
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--laser),var(--laser3));border-radius:5px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+<script>
+(function(){try{var s=localStorage.getItem('theme');if(s==='light')document.documentElement.setAttribute('data-theme','light');else if(!s&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)document.documentElement.setAttribute('data-theme','light');}catch(e){}})();
+</script>
+  <link rel="stylesheet" href="/assets/kin-icons.css">
+</head>
+<body>
+
+
+<nav>
+  <a href="https://mirzatech.ai/" class="nav-logo"><span class="nav-hex">⬡</span><span class="nav-brand">MIRZATECH · <span>THE COUNCIL</span></span></a>
+  <ul class="nav-links">
+    <li><a href="https://mirzatech.ai/">Parliament</a></li>
+    <li><a href="/council/" style="color:var(--laser)">Council</a></li>
+    <li><a href="https://ai-staffing.agency/match/">Match</a></li>
+    <li><a href="https://iamsuperio.com/">Marketplace</a></li>
+    <li><a href="#try" class="nav-cta">Run a Round</a></li>
+    <li><button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme"><span class="ico-moon">☾</span><span class="ico-sun">☀</span><span class="thumb"></span></button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video-bg">
+    <video autoplay muted loop playsinline poster="https://ai-staffing.agency/assets/video/brain-hero-poster.jpg" preload="metadata">
+      <source src="https://ai-staffing.agency/assets/video/brain-hero.webm" type="video/webm">
+      <source src="https://ai-staffing.agency/assets/video/brain-hero.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-inner">
+    <span class="hero-tag"><span class="dot"></span>7 FRONTIER LLMs · STRUCTURED AI DISSENT · 60-SECOND VERDICT</span>
+    <h1>The Council.<br><span class="accent holo">Get the answer one model can't give you.</span></h1>
+    <p class="hero-sub">12 frontier reasoning models from 12 distinct AI labs answer simultaneously — names disclosed under partnership. We force them to disagree. We surface what one model alone misses. <strong>$2 per Council turn · $4 Parliament · or unlimited from $5/seat/mo.</strong></p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-n">7</span><span class="hero-stat-l">Frontier LLMs</span></div>
+      <div class="hero-stat"><span class="hero-stat-n">60s</span><span class="hero-stat-l">To verdict</span></div>
+      <div class="hero-stat"><span class="hero-stat-n">3-tier</span><span class="hero-stat-l">Quorum guarantee</span></div>
+      <div class="hero-stat"><span class="hero-stat-n">$2</span><span class="hero-stat-l">Per Council turn</span></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#try" class="btn-primary">⬡ Run a Council Round →</a>
+      <a href="#example" class="btn-secondary">📋 See real example</a>
+      <a href="/parliament/" class="btn-ghost">← Parliament (16-mind debate)</a>
+    </div>
+  </div>
+</section>
+
+<!-- THE 7 SEATS -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-label">▶ The 12 seats</span>
+      <h2 class="section-title">Frontier model diversity. <span class="holo">Forced disagreement.</span></h2>
+      <p class="section-desc">A council of one model echoes itself. Our 12 seats are intentionally drawn from different model families · trained by different labs · biased differently. Each gets a 3-tier fallback chain — if a primary model fails, backup #1 takes the seat. Quorum is mandatory.</p>
+    </div>
+    <div class="seat-grid">
+      <div class="glass seat"><span class="ico"><span>01</span></span><h4>Reasoning Lead</h4><span class="role">▶ SEAT 01</span><span class="model">~1T params · 256K context · frontier Asian-lab reasoning</span></div>
+      <div class="glass seat"><span class="ico"><span>02</span></span><h4>Strategic Systems</h4><span class="role">▶ SEAT 02</span><span class="model">multi-step strategic systems · long-horizon framing</span></div>
+      <div class="glass seat"><span class="ico"><span>03</span></span><h4>Architecture</h4><span class="role">▶ SEAT 03</span><span class="model">~480B params · architecture + refactor specialist</span></div>
+      <div class="glass seat"><span class="ico"><span>04</span></span><h4>Agentic</h4><span class="role">▶ SEAT 04</span><span class="model">~120B params · agentic orchestration · enterprise-stack</span></div>
+      <div class="glass seat"><span class="ico"><span>05</span></span><h4>Practical</h4><span class="role">▶ SEAT 05</span><span class="model">mixture-of-experts · practical execution lane</span></div>
+      <div class="glass seat"><span class="ico"><span>06</span></span><h4>Conversion</h4><span class="role">▶ SEAT 06</span><span class="model">120B params · open-weight conversion specialist</span></div>
+      <div class="glass seat"><span class="ico"><span>07</span></span><h4>Web-aware</h4><span class="role">▶ SEAT 07</span><span class="model">search-aware · web-grounded retrieval voice</span></div>
+            <div class="glass seat"><span class="ico"><span>08</span></span><h4>Agentic Orchestration</h4><span class="role">▶ SEAT 08</span><span class="model">358B params · agentic + tool-use orchestration</span></div>
+      <div class="glass seat"><span class="ico"><span>09</span></span><h4>Multilingual Reasoning</h4><span class="role">▶ SEAT 09</span><span class="model">675B params · multilingual + structured EU-frontier</span></div>
+      <div class="glass seat"><span class="ico"><span>10</span></span><h4>Independent Voice</h4><span class="role">▶ SEAT 10</span><span class="model">independent / contrarian framing · adversarial dissent</span></div>
+      <div class="glass seat"><span class="ico"><span>11</span></span><h4>Multimodal Vision</h4><span class="role">▶ SEAT 11</span><span class="model">~70B params · image + video reasoning · scene + chart understanding</span></div>
+      <div class="glass seat"><span class="ico"><span>12</span></span><h4>Math + Code Specialist</h4><span class="role">▶ SEAT 12</span><span class="model">~22B params · competitive math · symbolic reasoning · code synth</span></div>
+      <div class="glass seat" style="border-color:rgba(240,192,64,.4)"><span class="ico" style="background:radial-gradient(ellipse 100% 80% at 30% 30%,rgba(240,192,64,.32),rgba(255,140,40,.22) 60%,rgba(7,10,16,.9) 100%);border-color:rgba(240,192,64,.5);box-shadow:0 14px 32px -14px rgba(240,192,64,.55),0 0 0 1px rgba(255,255,255,.04) inset"><span style="background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent">SLA</span></span><h4>Quorum SLA</h4><span class="role" style="color:var(--gold)">▶ GUARANTEE</span><span class="model">N seats in → N usable verdicts out · refund or auto-retry on shortfall</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Parliament · Habitat View (replaces former live-grid simulation · per Mo 2026-05-15) -->
+<section id="live-parliament">
+  <div class="section-inner">
+    <!-- ============ HABITAT EMBED · v1 · injected 2026-05-15 · replaces the live-grid VISUAL · feed unchanged ============ -->
+<style>
+.habitat-embed{position:relative;height:520px;border-radius:18px;border:1px solid rgba(0,210,255,.22);background:linear-gradient(180deg,rgba(6,10,22,.6),rgba(3,5,12,.85));overflow:hidden;margin:24px 0 18px;font-family:'Syne','Space Grotesk',sans-serif}
+.habitat-embed .grid-floor{position:absolute;inset:0;background-image:linear-gradient(rgba(0,210,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.06) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);pointer-events:none}
+.habitat-embed svg.flows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.habitat-embed svg.flows path{fill:none;stroke-width:1.5;stroke-linecap:round;filter:drop-shadow(0 0 6px currentColor)}
+.habitat-embed svg.flows .stream{stroke-dasharray:6 14;animation:hbflow 1.8s linear infinite}
+@keyframes hbflow{to{stroke-dashoffset:-200}}
+.habitat-embed .orb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:170px;height:170px;border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(255,242,192,.95) 0%,rgba(240,192,64,.55) 18%,rgba(184,138,24,.3) 42%,rgba(8,14,28,.85) 72%,rgba(3,6,12,.95) 100%);box-shadow:0 0 80px rgba(240,192,64,.45),inset 0 0 60px rgba(240,192,64,.18);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:3;animation:hbbreathe 6s ease-in-out infinite}
+.habitat-embed .orb::before{content:"";position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(240,192,64,.18);animation:hbhalo 4s linear infinite}
+.habitat-embed .orb::after{content:"";position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(240,192,64,.10);animation:hbhalo 8s linear infinite reverse}
+@keyframes hbbreathe{0%,100%{box-shadow:0 0 80px rgba(240,192,64,.45),inset 0 0 60px rgba(240,192,64,.18)}50%{box-shadow:0 0 120px rgba(240,192,64,.6),inset 0 0 80px rgba(240,192,64,.28)}}
+@keyframes hbhalo{to{transform:rotate(360deg)}}
+.habitat-embed .orb b{color:#fff2c0;font-size:14px;letter-spacing:.26em;text-shadow:0 0 24px rgba(240,192,64,.9);font-weight:700}
+.habitat-embed .orb small{color:#f0c040;font-size:9px;letter-spacing:.36em;margin-top:6px;display:block}
+.habitat-embed .seat{position:absolute;width:200px;min-height:96px;padding:12px;border-radius:14px;background:linear-gradient(135deg,rgba(18,28,52,.36),rgba(8,12,24,.28));border:1px solid rgba(110,170,255,.32);backdrop-filter:blur(3px);z-index:4;left:50%;top:50%;transform:translate(-50%,-50%) scale(.92);opacity:0;transition:opacity .25s ease,transform .25s ease,border-color .3s,box-shadow .3s}
+.habitat-embed .seat.placed{opacity:1;transform:none}
+.habitat-embed .seat.online{border-color:rgba(38,215,130,.55);box-shadow:0 0 22px rgba(38,215,130,.22) inset,0 0 12px rgba(38,215,130,.18)}
+.habitat-embed .seat.slow{border-color:rgba(240,192,64,.55);box-shadow:0 0 22px rgba(240,192,64,.22) inset,0 0 12px rgba(240,192,64,.18)}
+.habitat-embed .seat.error,.habitat-embed .seat.offline{border-color:rgba(255,84,105,.65);box-shadow:0 0 22px rgba(255,84,105,.22) inset,0 0 12px rgba(255,84,105,.20);animation:hbpulse 1.4s infinite}
+.habitat-embed .seat.configuring{border-color:rgba(92,196,255,.5)}
+@keyframes hbpulse{0%,100%{opacity:1}50%{opacity:.7}}
+.habitat-embed .seat .num{position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;color:#00d2ff;background:rgba(0,210,255,.10)}
+.habitat-embed .seat.online .num{color:#26d782;background:rgba(38,215,130,.10)}
+.habitat-embed .seat.slow .num{color:#f0c040;background:rgba(240,192,64,.10)}
+.habitat-embed .seat.error .num,.habitat-embed .seat.offline .num{color:#ff5469;background:rgba(255,84,105,.10)}
+.habitat-embed .seat .nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:#fff;margin:0 0 4px 30px;line-height:1.15}
+.habitat-embed .seat .role{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.16em;color:#00d2ff;text-transform:uppercase;margin-bottom:4px}
+.habitat-embed .seat .meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.1em;color:#7e8bb0;display:flex;justify-content:space-between;margin-top:6px}
+.habitat-embed .seat .meta .status{font-weight:700;text-transform:uppercase}
+.habitat-embed .seat.online .meta .status{color:#26d782}
+.habitat-embed .seat.slow .meta .status{color:#f0c040}
+.habitat-embed .seat.error .meta .status,.habitat-embed .seat.offline .meta .status{color:#ff5469}
+.habitat-embed .seat.configuring .meta .status{color:#5cc4ff}
+.habitat-embed .stateled{position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#444}
+.habitat-embed .seat.online .stateled{background:#26d782;box-shadow:0 0 10px #26d782;animation:hbpulse 1.6s infinite}
+.habitat-embed .seat.slow .stateled{background:#f0c040;box-shadow:0 0 10px #f0c040}
+.habitat-embed .seat.error .stateled,.habitat-embed .seat.offline .stateled{background:#ff5469;box-shadow:0 0 10px #ff5469}
+.habitat-embed .toggle-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 2px}
+.habitat-embed-section{margin:24px 0}
+.habitat-embed-section .label-pulse{color:#f0c040;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase}
+
+</style>
+<div class="habitat-embed-section" id="habitat-embed-section">
+  <div class="toggle-row">
+    <span class="label-pulse">◉ Live Council · Habitat View</span>
+    
+  </div>
+  <div class="habitat-embed" id="habitat-embed">
+    <div class="grid-floor"></div>
+    <svg class="flows" id="habitat-flows" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="hbg_cy" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00d2ff" stop-opacity="0"/><stop offset="50%" stop-color="#00d2ff" stop-opacity=".85"/><stop offset="100%" stop-color="#00d2ff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="hbg_au" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f0c040" stop-opacity="0"/><stop offset="50%" stop-color="#f0c040" stop-opacity=".95"/><stop offset="100%" stop-color="#f0c040" stop-opacity="0"/></linearGradient>
+        <linearGradient id="hbg_gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#26d782" stop-opacity="0"/><stop offset="50%" stop-color="#26d782" stop-opacity=".9"/><stop offset="100%" stop-color="#26d782" stop-opacity="0"/></linearGradient>
+        <linearGradient id="hbg_rd" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff5469" stop-opacity="0"/><stop offset="50%" stop-color="#ff5469" stop-opacity=".9"/><stop offset="100%" stop-color="#ff5469" stop-opacity="0"/></linearGradient>
+      </defs>
+    </svg>
+    <div class="orb"><b>CONSENSUS</b><small>ORB</small></div>
+    <div id="habitat-seats"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var EP = 'https://ai-staffing.agency/api/council/parliament_status.php';
+  var seatsHost = document.getElementById('habitat-seats');
+  var flows = document.getElementById('habitat-flows');
+  var lastData = null;
+
+  function placeSeats(seats){
+    seatsHost.innerHTML = seats.map(function(s,i){
+      var st = (s.status||'idle').toLowerCase();
+      var role = (s.role||s.seat||'').replace(/^SEAT\s*\d+\s*/i,'') || 'Seat '+(i+1);
+      return '<div class="seat '+st+'" data-i="'+i+'">'+
+             '<span class="num">'+String(i+1).padStart(2,'0')+'</span>'+
+             '<span class="stateled"></span>'+
+             '<div class="nm">'+(s.seat||role)+'</div>'+
+             '<div class="role">▶ SEAT '+String(i+1).padStart(2,'0')+'</div>'+
+             '<div class="meta"><span class="status">'+st+'</span><span>'+(s.latency_ms||0)+' ms</span></div>'+
+             '</div>';
+    }).join('');
+    // Multi-trigger layout: rAF + setTimeout + onload guarantee fire under any DOM-ready state
+    requestAnimationFrame(function(){ requestAnimationFrame(layoutRing); });
+    setTimeout(layoutRing, 80);
+    setTimeout(layoutRing, 320);
+    setTimeout(layoutRing, 900);
+  }
+
+  function layoutRing(){
+    var host = document.getElementById('habitat-embed');
+    if(!host) return;
+    var W = host.clientWidth, H = host.clientHeight;
+    var tiles = seatsHost.querySelectorAll('.seat');
+    var N = tiles.length; if(N === 0) return;
+    var m = tiles[0].getBoundingClientRect();
+    var tileW = Math.max(180, m.width || 200), tileH = Math.max(90, m.height || 96);
+    var orbHalf = 95, edge = 14, gap = 18;
+    var maxRx = (W/2) - tileW/2 - edge;
+    var maxRy = (H/2) - tileH/2 - edge;
+    var minR  = orbHalf + Math.max(tileW, tileH)/2 + gap;
+    var rx = Math.max(minR, maxRx), ry = Math.max(minR, maxRy);
+    tiles.forEach(function(el, i){
+      var a = (i / N) * Math.PI * 2 - Math.PI/2;
+      var x = W/2 + rx * Math.cos(a) - tileW/2;
+      var y = H/2 + ry * Math.sin(a) - tileH/2;
+      el.style.left = Math.round(Math.max(edge, Math.min(W - tileW - edge, x))) + 'px';
+      el.style.top  = Math.round(Math.max(edge, Math.min(H - tileH - edge, y))) + 'px';
+      el.style.transform = 'none';
+      el.classList.add('placed');
+    });
+    buildFlows();
+  }
+
+  function buildFlows(){
+    var host = document.getElementById('habitat-embed');
+    if(!host) return;
+    var W = host.clientWidth, H = host.clientHeight;
+    flows.setAttribute('viewBox','0 0 '+Math.round(W)+' '+Math.round(H));
+    var cx = W/2, cy = H/2;
+    var tiles = seatsHost.querySelectorAll('.seat');
+    var paths = [], packets = [];
+    tiles.forEach(function(el, i){
+      var r = el.getBoundingClientRect();
+      var hr = host.getBoundingClientRect();
+      var zx = r.left + r.width/2 - hr.left;
+      var zy = r.top + r.height/2 - hr.top;
+      var mx = (cx+zx)/2 + (i%2===0?-30:30);
+      var my = (cy+zy)/2 + (i%2===0?-40:40);
+      var grad = el.classList.contains('online') ? 'hbg_gr'
+                : el.classList.contains('slow') ? 'hbg_au'
+                : (el.classList.contains('error')||el.classList.contains('offline')) ? 'hbg_rd'
+                : 'hbg_cy';
+      var pid = 'hbp'+i;
+      paths.push('<path id="'+pid+'" class="stream" stroke="url(#'+grad+')" d="M'+cx+','+cy+' Q'+mx+','+my+' '+zx+','+zy+'"/>');
+      packets.push('<circle r="3" fill="currentColor" style="color:#00d2ff"><animateMotion dur="'+(2.4+Math.random()*1.4)+'s" repeatCount="indefinite" rotate="auto"><mpath href="#'+pid+'"/></animateMotion></circle>');
+    });
+    flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
+  }
+
+  function poll(){
+    fetch(EP,{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      if(!d || !d.seats) return;
+      lastData = d;
+      placeSeats(d.seats);
+    }).catch(function(){});
+  }
+  // initial render with placeholder seats so layout is ready before data arrives
+  var placeholder = Array.from({length:12}).map(function(_,i){return {seat:'Loading',role:'…',status:'configuring',latency_ms:0};});
+  placeSeats(placeholder);
+  poll();
+  setInterval(poll, 25000);
+
+  var resizeT = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function(){ layoutRing(); }, 100);
+  });
+})();
+</script>
+<!-- ============ END HABITAT EMBED ============ -->
+  </div>
+</section>
+
+
+
+<!-- LIVE EXAMPLE · pulled from real Round 7 -->
+<section id="example">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-label">▶ A real council round · Round 7 · 2026-05-06</span>
+      <h2 class="section-title">"Where does <span class="holo">ASTRA NEXUS</span> slot in our network?"</h2>
+      <p class="section-desc">Mo asked the council where to integrate a Three.js dashboard he'd been saving. The synthesis below was the actual output. This page · the marketplace · the staffing site · all built on outputs like this one.</p>
+    </div>
+
+    <div class="glass-thick example-frame">
+      <div class="example-head">
+        <span class="label">▶ Council Round 7 · Q1</span>
+        <h3>"Where does ASTRA NEXUS slot in our network?"</h3>
+      </div>
+      <div class="example-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px">
+        <div class="verdict"><div class="seat-tag">▶ SEAT 01</div><div class="answer">1st: <b>post-purchase dashboard</b></div></div>
+        <div class="verdict"><div class="seat-tag">▶ SEAT 04</div><div class="answer">1st: <b>opencrest operational runtime</b></div></div>
+        <div class="verdict"><div class="seat-tag">▶ SEAT 06</div><div class="answer">1st: <b>iamsuperio showpiece</b></div></div>
+      </div>
+      <details style="margin-top:14px"><summary style="cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.1em;color:var(--tertiary);text-transform:uppercase">▶ show 3 more verdicts</summary>
+        <div class="example-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:10px">
+          <div class="verdict"><div class="seat-tag">▶ SEAT 03</div><div class="answer">1st: <b>iamsuperio showpiece</b></div></div>
+          <div class="verdict"><div class="seat-tag">▶ SEAT 05</div><div class="answer">1st: <b>opencrest runtime</b></div></div>
+          <div class="verdict"><div class="seat-tag">▶ SEAT 03</div><div class="answer">1st: <b>opencrest runtime</b></div></div>
+        </div>
+      </details>
+      <div class="synthesis" style="margin-top:14px"><b>SYNTHESIS:</b> 4 of 6 → opencrest operational runtime. <b>Ship to <a href="https://opencrest.io/console/" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">opencrest.io/console</a></b> · branded "Maya.ai Console" · live 6h after the round.</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE FRAMEWORK -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-label">▶ The 5 sections of every great brief</span>
+      <h2 class="section-title">A council is only as sharp as <span class="holo">the brief.</span></h2>
+      <p class="section-desc">We've run 7 rounds since 2026-05-05. The pattern that consistently produced 9–10/10 verdicts has 5 sections. Every round on this page uses them. Every paid round on mirzatech.ai/council enforces them at intake.</p>
+    </div>
+    <div class="framework-grid">
+      <div class="glass fw-step">
+        <div class="num">01</div>
+        <h3>Locked Premises</h3>
+        <p>Decisions you've already made. Council never challenges these — only builds on them.</p>
+      </div>
+      <div class="glass fw-step">
+        <div class="num">02</div>
+        <h3>Constraints</h3>
+        <p>What's off the table — domains you don't own, budget caps, regulatory limits, brand purity.</p>
+      </div>
+      <div class="glass fw-step">
+        <div class="num">03</div>
+        <h3>Heart-of-Founder</h3>
+        <p>The emotional/brand reasoning. Without this section, models default to theory and contradict you.</p>
+      </div>
+      <div class="glass fw-step">
+        <div class="num">04</div>
+        <h3>Specific Questions</h3>
+        <p>3–7 questions, each answerable in the form "pick option X for reason Y."</p>
+      </div>
+      <div class="glass fw-step">
+        <div class="num">05</div>
+        <h3>Format Demand</h3>
+        <p>"NO HEDGING. NO 'depends'. Pick a lane." This phrase alone raises decision quality.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRY IT -->
+<section id="try" class="try-section">
+  <div class="try-inner">
+    <div class="section-header" style="margin-bottom:32px">
+      <span class="section-label">▶ Run your first round</span>
+      <h2 class="section-title">Type your decision. <span class="holo">12 LLMs answer.</span></h2>
+      <p class="section-desc">$2 per Council turn · $4 per Parliament turn. 100% functionality on every paid turn — full 12-seat Council or full 24-seat Parliament. No model downgrades, no rate caps. Or subscribe from $5/seat/mo for unlimited.</p>
+    </div>
+    <div class="glass-thick try-form">
+      <label>Your strategic question (1 sentence)</label>
+      <input type="text" id="qMain" placeholder="Should I price my AI staffing platform monthly or per-task?">
+
+      <label>Locked premises (what's already decided · 3-5 lines)</label>
+      <textarea id="qLocked" placeholder="My target customer is broke creators in low-income markets&#10;Stripe is the payment processor&#10;The platform already has 100 verticals · 974 specialists"></textarea>
+
+      <label>Constraints (off-the-table options · 1-3 lines)</label>
+      <textarea id="qConstraints" placeholder="Cannot lose Fortune 500 prospects with cheap pricing&#10;Cannot subsidize below $4/mo cost"></textarea>
+
+      <label>Heart of the matter (your gut tells you what?)</label>
+      <textarea id="qHeart" placeholder="My gut says creators want a flat fee not per-task because per-task feels like a meter running"></textarea>
+
+      <label>Specific question (pick from)</label>
+      <select id="qFormat">
+        <option>Pick a price model and justify in 2 sentences</option>
+        <option>Choose between two option strings (A vs B)</option>
+        <option>Rank three options 1-3 with reasoning</option>
+        <option>Score the plan 1-10 and name the missing 10/10 thing</option>
+      </select>
+
+      <div class="submit-row">
+        <div class="price-tag"><span class="from">Per Council turn</span>$2</div>
+        <a href="#" id="runBtn" class="btn-primary">⬡ Sign in & run turn →</a>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:.66rem;color:var(--tertiary);letter-spacing:.16em;text-transform:uppercase">Turn time: ~60 seconds · Quorum guaranteed · 100% functionality</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTION PRICING (HEADLINE) -->
+<section id="pricing-sub">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-label">▶ Subscription · per user / month</span>
+      <h2 class="section-title">From $5 per user / month. <span class="holo">Unlimited turns. Beat Anthropic by miles.</span></h2>
+      <p class="section-desc">Unlimited Council and Parliament turns. Bring your whole team — six tiers, lowest is $5, top is $199. Built for traffic and volume, not scarcity.</p>
+    </div>
+
+    <div class="glass-thick" style="padding:32px 28px;border-radius:18px;max-width:920px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px">
+        <div style="padding:18px 14px;border-radius:12px;background:rgba(0,210,255,.06);border:1px solid rgba(0,210,255,.2);text-align:center">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;color:var(--tertiary);text-transform:uppercase;margin-bottom:6px">Lite · 1-2</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff">$5</div>
+          <div style="font-size:.72rem;color:var(--tertiary)">/user/month</div>
+        </div>
+        <div style="padding:18px 14px;border-radius:12px;background:rgba(0,210,255,.06);border:1px solid rgba(0,210,255,.2);text-align:center">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;color:var(--tertiary);text-transform:uppercase;margin-bottom:6px">Pro · 3-9</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff">$9</div>
+          <div style="font-size:.72rem;color:var(--tertiary)">/user/month</div>
+        </div>
+        <div style="padding:18px 14px;border-radius:12px;background:linear-gradient(180deg,rgba(0,210,255,.14),rgba(140,80,255,.10));border:1px solid rgba(0,210,255,.45);text-align:center;box-shadow:0 12px 30px -10px rgba(0,210,255,.4)">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;color:var(--laser);text-transform:uppercase;margin-bottom:6px">Team · 10-24 ★</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff">$19</div>
+          <div style="font-size:.72rem;color:var(--tertiary)">/user/month <span style="color:var(--green)">most popular</span></div>
+        </div>
+        <div style="padding:18px 14px;border-radius:12px;background:rgba(0,210,255,.06);border:1px solid rgba(0,210,255,.2);text-align:center">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;color:var(--tertiary);text-transform:uppercase;margin-bottom:6px">Scale · 25-49</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff">$49</div>
+          <div style="font-size:.72rem;color:var(--tertiary)">/user/month</div>
+        </div>
+        <div style="padding:18px 14px;border-radius:12px;background:rgba(0,210,255,.06);border:1px solid rgba(0,210,255,.2);text-align:center">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;color:var(--tertiary);text-transform:uppercase;margin-bottom:6px">Org · 50-99</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff">$99</div>
+          <div style="font-size:.72rem;color:var(--tertiary)">/user/month</div>
+        </div>
+        <div style="padding:18px 14px;border-radius:12px;background:rgba(240,192,64,.06);border:1px solid rgba(240,192,64,.3);text-align:center">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:6px">Enterprise · 100+</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff">$199</div>
+          <div style="font-size:.72rem;color:var(--tertiary)">/user/month <span style="color:var(--gold)">SLA · SOC 2 · white-label</span></div>
+        </div>
+      </div>
+
+      <ul style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 22px;margin-bottom:24px;padding-left:18px;color:var(--tertiary);font-size:.92rem">
+        <li>Unlimited Council turns (12 LLMs) · unlimited Parliament turns (24 LLMs · 5 rounds)</li>
+        <li>Per-seat dashboard · turn history · markdown + JSON export</li>
+        <li>Team workspace · shared verdicts · role-based access</li>
+        <li>3-tier model fallback chain · transparent error log · 100% functionality every turn</li>
+        <li>Project-build deliverable · download the entire built project as a .zip <span style="color:var(--gold)">(activating soon)</span></li>
+        <li>Cancel anytime · prorated · own your verdicts</li>
+      </ul>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
+        <a href="https://buy.stripe.com/dRm8wPb8q3QMgq2aj77Zu0i" class="btn-primary" style="min-width:240px;text-align:center">⬡ Start Subscription · pick seats at checkout</a>
+        <a href="mailto:hello@mirzatech.ai?subject=Council%20Enterprise%20(100%2B%20seats)" class="btn-secondary">📞 Talk to sales (100+)</a>
+      </div>
+      <div style="text-align:center;margin-top:14px;font-size:.72rem;color:var(--tertiary);font-family:'Share Tech Mono',monospace;letter-spacing:.1em">▶ volume bracket applied automatically at checkout · enter your seat count there</div>
+    </div>
+  </div>
+</section>
+
+<!-- PER-TURN PRICING (TRY-BEFORE-YOU-SUBSCRIBE) -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-label">▶ Pay per turn · no commitment</span>
+      <h2 class="section-title">One decision? <span class="holo">Pay $2 a turn. Or $4 for the Parliament.</span></h2>
+      <p class="section-desc">100% functionality on every paid turn. Council = full 12-seat dissent. Parliament = full 24-seat / 5-round debate. No model downgrades · no rate caps · same engine subscribers get.</p>
+    </div>
+    <div class="price-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));max-width:780px;margin:0 auto">
+      <div class="glass-thick price-card featured">
+        <h3>Council · per turn</h3>
+        <div class="amount">$2<span class="unit">per turn</span></div>
+        <div class="audience">Full 12-seat dissent · ~60 seconds</div>
+        <ul>
+          <li>12 frontier LLMs · forced disagreement</li>
+          <li>3-tier model fallback chain · quorum guaranteed</li>
+          <li>Per-seat scoring · markdown + JSON export</li>
+          <li>Project-build .zip <span style="color:var(--gold)">(soon)</span></li>
+        </ul>
+        <a id="buy-council-turn" href="#try" class="btn-primary">⬡ Run a Council Turn · $2</a>
+      </div>
+      <div class="glass price-card" style="border-color:rgba(240,192,64,.35)">
+        <h3>Parliament · per turn</h3>
+        <div class="amount">$4<span class="unit">per turn</span></div>
+        <div class="audience">24 LLMs · 5 rounds · chancellor synthesis</div>
+        <ul>
+          <li>24-seat Grand Parliament · proposers + critics + specialists + guards</li>
+          <li>5 rounds of structured debate · ~3-5 minutes</li>
+          <li>Chancellor verdict · audit-grade transcript</li>
+          <li>Project-build .zip <span style="color:var(--gold)">(soon)</span></li>
+        </ul>
+        <a id="buy-parliament-turn" href="/parliament/" class="btn-primary">⬡ Run a Parliament Turn · $4</a>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;font-size:13px;color:#888;">
+      Per-turn billing: same engine, no caps, no compromises · <a href="#pricing-sub" style="color:var(--laser)">subscribe from $5/seat/mo</a> for unlimited
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-label">▶ Q&A</span>
+      <h2 class="section-title">Buyer's <span class="holo">questions.</span></h2>
+    </div>
+    <div class="faq-grid">
+      <details class="glass faq-item">
+        <summary>Why 12 LLMs and not just one?</summary>
+        <div class="answer">A single model echoes its own training. The Council exists to surface BLIND SPOTS · disagreements that single-model chat will never produce. The signal is in the dissent, not the consensus.</div>
+      </details>
+      <details class="glass faq-item">
+        <summary>What if a model fails or returns garbage?</summary>
+        <div class="answer">Every seat has a 3-tier fallback chain. Primary fails → backup #1 fires → backup #2 fires. If all 3 fail (rare), customer sees a [QUORUM FAILURE] flag and gets refunded. Anything less than full quorum is unacceptable.</div>
+      </details>
+      <details class="glass faq-item">
+        <summary>How is this different from ChatGPT or Claude?</summary>
+        <div class="answer">ChatGPT is one model · same family · same biases. The Council is 12 frontier models from 12 different labs answering simultaneously, then synthesized for you. The disagreement is the product.</div>
+      </details>
+      <details class="glass faq-item">
+        <summary>How long does a round take?</summary>
+        <div class="answer">~60 seconds for a typical round. Some thinking models take longer (thinking-class seats can hit 90-120s). All seats run in parallel — total time is bounded by the slowest seat, not the sum.</div>
+      </details>
+      <details class="glass faq-item">
+        <summary>Can I customize the seat lineup?</summary>
+        <div class="answer">Standard: locked 12 seats above. Enterprise: yes — add Claude Opus, GPT-5, custom fine-tuned models, your own provider keys. Talk to Sales for setup.</div>
+      </details>
+      <details class="glass faq-item">
+        <summary>What's the difference between Council and Parliament?</summary>
+        <div class="answer">Council = 12 seats · 1 round · 60 sec · strategic decisions. Parliament = <a href="https://mirzatech.ai/" target="_blank" rel="noopener" style="color:var(--laser)">live on mirzatech.ai</a> · 22 minds · 5 rounds · structured debate · for grand questions where dissent needs to play out over multiple turns.</div>
+      </details>
+      <details class="glass faq-item">
+        <summary>Where does my data go?</summary>
+        <div class="answer">Your question + transcript stored in your encrypted account. We don't train on customer data without written consent. EU/US/UK data residency on Enterprise.</div>
+      </details>
+      <details class="glass faq-item">
+        <summary>Who built this?</summary>
+        <div class="answer">Mo Osmanovic (Emaaa LLC). The Council was the methodology Mo used to build his Superio Network · ai-staffing.agency · iamsuperio.com · opencrest.io · osman.is. Now packaged for you.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="nav-pills">
+    <a href="https://mirzatech.ai/">Parliament</a>
+    <a href="/council/">Council</a>
+    <a href="https://ai-staffing.agency/">AI-Staffing</a>
+    <a href="https://iamsuperio.com/">Marketplace</a>
+    <a href="https://opencrest.io/">OpenCrest</a>
+    <a href="https://osman.is/">osman.is</a>
+  </div>
+  <p>© <span id="year">2026</span> MIRZATECH.AI · The Council · Maya.ai backed</p>
+  <p class="gold">⬡ POWERED BY <a href="https://mirzatech.ai" style="color:inherit">MIRZATECH.AI</a> · PROPERTY OF <a href="https://emaaa.io" style="color:inherit">EMAAA.IO</a></p>
+</footer>
+
+<script>
+const AUTH_BASE = 'https://ai-staffing.agency/api/auth';
+document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    const next = cur === 'light' ? 'dark' : 'light';
+    if (next === 'light') document.documentElement.setAttribute('data-theme','light');
+    else document.documentElement.removeAttribute('data-theme');
+    try { localStorage.setItem('theme', next); } catch(e) {}
+  });
+  document.getElementById('runBtn').addEventListener('click', e => {
+    e.preventDefault();
+    const token = localStorage.getItem('superio_jwt');
+    if (!token) {
+      window.location.href = 'https://iamsuperio.com/?return=' + encodeURIComponent(window.location.href);
+    } else {
+      alert('Council backend goes live in next deploy wave. Your free round is reserved · we will email when ready.');
+    }
+  });
+});
+</script>
+<script src="/maya_widget.js?v=20260506c" defer></script>
+<script src="/empire-top-bar.js" defer></script>
+<script src="/maya-globe-corner.js" defer></script>
+<!-- ============ VENDOR PARTICIPATION PANEL · injected 2026-05-15 · GLOBAL-93 compliant ============ -->
+<style>
+.vendor-panel-mirzatech{max-width:1100px;margin:60px auto;padding:32px;border:1px solid rgba(245,197,66,.35);border-radius:18px;background:linear-gradient(135deg,rgba(20,14,4,.6),rgba(8,12,24,.55));backdrop-filter:blur(8px);font-family:'Inter',system-ui,sans-serif;color:#dbe6ff}
+.vendor-panel-mirzatech .vp-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.vendor-panel-mirzatech .vp-title{font-family:'Syne','Space Grotesk',sans-serif;font-size:22px;letter-spacing:.04em;color:#fff2c0;margin:0}
+.vendor-panel-mirzatech .vp-badge{background:rgba(245,197,66,.18);color:#f5c542;padding:4px 12px;border-radius:99px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-family:'Share Tech Mono','JetBrains Mono',monospace}
+.vendor-panel-mirzatech .vp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin:18px 0}
+@media (max-width:880px){.vendor-panel-mirzatech .vp-grid{grid-template-columns:1fr}}
+.vendor-panel-mirzatech .vp-card{padding:18px;border:1px solid rgba(110,170,255,.18);border-radius:12px;background:rgba(8,12,24,.4)}
+.vendor-panel-mirzatech .vp-card h4{margin:0 0 10px;font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.22em;color:#00e4ff;text-transform:uppercase}
+.vendor-panel-mirzatech .vp-card.gold h4{color:#f5c542}
+.vendor-panel-mirzatech .vp-card ul,.vendor-panel-mirzatech .vp-card ol{margin:0;padding-left:18px;line-height:1.7;font-size:13px;color:#dbe6ff}
+.vendor-panel-mirzatech .vp-card li{margin-bottom:4px}
+.vendor-panel-mirzatech .vp-card b{color:#fff}
+.vendor-panel-mirzatech .vp-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:18px;padding:14px;border:1px solid #f5c542;border-radius:10px;background:rgba(245,197,66,.08)}
+.vendor-panel-mirzatech .vp-cta a{color:#f5c542;text-decoration:none;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:11px;padding:8px 14px;border:1px solid #f5c542;border-radius:99px;transition:all .15s}
+.vendor-panel-mirzatech .vp-cta a:hover{background:rgba(245,197,66,.18)}
+.vendor-panel-mirzatech .vp-cta .label{color:#dbe6ff;font-size:12px;flex:1;min-width:200px}
+.vendor-panel-mirzatech .vp-pitch{font-size:14px;line-height:1.6;color:#dbe6ff;margin:0 0 18px}
+.vendor-panel-mirzatech .vp-pitch i{color:#f5c542;font-style:normal;font-weight:600}
+.vendor-panel-mirzatech .vp-privacy{margin-top:18px;padding:12px;border-radius:8px;background:rgba(0,228,255,.06);border:1px solid rgba(0,228,255,.2);font-size:12px;color:#dbe6ff;line-height:1.6}
+.vendor-panel-mirzatech .vp-privacy b{color:#00e4ff}
+</style>
+<section class="vendor-panel-mirzatech" id="vendor-participation">
+  <div class="vp-head">
+    <h2 class="vp-title">🤝 LLM Vendor Participation</h2>
+    <span class="vp-badge">Open · 30-sec onboard</span>
+  </div>
+  <p class="vp-pitch">
+    MirzaTech runs a <b>12-seat Council</b> and a <b>24-seat / 5-round Parliament</b> on every paid run.
+    Every turn captures step-by-step tool-use traces and expert-vetted annotations across multiple models on the same problem —
+    <i>the data LLM providers trade API credits for.</i>
+  </p>
+  <div class="vp-grid">
+    <div class="vp-card">
+      <h4>What you get (vendor)</h4>
+      <ul>
+        <li><b>Agentic traces</b> — full tool-call sequences from your seat</li>
+        <li><b>Adversarial robustness data</b> — your model debated by peer seats across 5 rounds</li>
+        <li><b>Expert RLHF annotations</b> — Chancellor synthesis + per-round verdicts</li>
+        <li><b>Comparative win-rate</b> — quiet positioning vs. peers · anonymous to the public</li>
+        <li><b>Tuning-cycle-ready bundles</b> — JSONL drops gated by your seat ID</li>
+      </ul>
+    </div>
+    <div class="vp-card gold">
+      <h4>What we ask</h4>
+      <ul>
+        <li><b>API credits</b> — sponsored token volume to seat your model on a capability lane</li>
+        <li><b>OR free-tier endpoint</b> — chat-completions-compatible URL + bearer key</li>
+        <li><b>Lane preference</b> — Reasoning · Strategic · Architecture · Agentic · Practical · Conversion · Web-aware · Multilingual · Independent</li>
+        <li><b>Rate budget</b> — rpm / tpm comfortable for your tier</li>
+        <li><b>Round role</b> — Council seat · Parliament senator · both</li>
+      </ul>
+    </div>
+    <div class="vp-card">
+      <h4>How to participate</h4>
+      <ol>
+        <li>Email <a href="mailto:mo@emaaa.io" style="color:#f5c542">mo@emaaa.io</a> · subject <b>SEAT REQUEST</b></li>
+        <li>Drop endpoint + key + lane in <code>VENDOR_INTEGRATION.json</code> in our <a href="https://github.com/mirzatech-ai/maya-sovereign-campus" style="color:#00e4ff">handoff repo</a></li>
+        <li>Maya wires you in within 24h</li>
+        <li>Your seat goes live <b>anonymously</b> · you receive data drop schedule</li>
+      </ol>
+    </div>
+  </div>
+  <div class="vp-privacy">
+    <b>Privacy + Anonymity (per GLOBAL-93):</b> your brand is never publicly displayed until you formally claim the seat. Seats labeled by capability lane and param size only. This protects both sides — no vendor is publicly attached to uncompensated usage.
+  </div>
+  <div class="vp-cta">
+    <div class="label">Ready to seat your model? Direct line:</div>
+    <a href="mailto:mo@emaaa.io">✉ mo@emaaa.io</a>
+    <a href="tel:+17432151423">📞 +1 (743) 215-1423</a>
+    <a href="https://github.com/mirzatech-ai/maya-sovereign-campus" target="_blank">⌥ GitHub handoff</a>
+  </div>
+</section>
+<!-- ============ END VENDOR PARTICIPATION PANEL ============ -->
+</body>
+</html>
