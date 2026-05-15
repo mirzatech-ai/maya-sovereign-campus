@@ -30,7 +30,28 @@ body{
     radial-gradient(1000px 700px at 110% 10%, rgba(245,197,66,.08), transparent 55%),
     radial-gradient(900px 700px at 50% 120%, rgba(0,228,255,.06), transparent 50%),
     linear-gradient(180deg,#03060c 0%,#06091a 50%,#03060c 100%);
+  transition:background 1.2s ease-in-out;
 }
+/* ===== AMBIENT STATE-FLUID · whole campus mood shifts with dominant agent state ===== */
+body.ambient-council{
+  background:
+    radial-gradient(1400px 900px at 50% 30%, rgba(245,197,66,.16), transparent 65%),
+    radial-gradient(900px 700px at 10% 100%, rgba(62,155,255,.05), transparent 50%),
+    linear-gradient(180deg,#0a0805 0%,#0a0a18 50%,#03060c 100%);
+}
+body.ambient-executing{
+  background:
+    radial-gradient(1400px 900px at 50% 30%, rgba(67,230,161,.12), transparent 65%),
+    radial-gradient(900px 700px at 110% 0%, rgba(0,228,255,.08), transparent 50%),
+    linear-gradient(180deg,#03080a 0%,#04101a 50%,#03060c 100%);
+}
+body.ambient-error{
+  background:
+    radial-gradient(1400px 900px at 50% 30%, rgba(255,91,106,.18), transparent 65%),
+    linear-gradient(180deg,#0a0408 0%,#160712 50%,#06030a 100%);
+  animation:errorPulse 2.4s ease-in-out infinite;
+}
+@keyframes errorPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.08)}}
 .app{position:fixed;inset:0;display:grid;grid-template-rows:46px 1fr 88px;}
 
 /* ==================== TOP STRIP ==================== */
@@ -43,8 +64,10 @@ body{
 }
 .topstrip .brand{display:flex;align-items:center;gap:10px;color:var(--white);font-weight:700;letter-spacing:.2em}
 .topstrip .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
-.ticker{flex:1;overflow:hidden;position:relative;height:100%;display:flex;align-items:center;gap:30px}
-.ticker .item{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;color:var(--text)}
+.ticker{flex:1;min-width:0;overflow:hidden;position:relative;height:100%;display:flex;align-items:center;gap:22px}
+.ticker .item{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;color:var(--text);flex:0 0 auto}
+.ticker .item.notif{flex:1 1 auto;min-width:120px;max-width:360px;overflow:hidden;text-overflow:ellipsis}
+.ticker .item.notif span{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ticker .item b{color:var(--white);font-weight:600}
 .ticker .item .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.6s infinite}
 .ticker .item.gold .pulse{background:var(--gold);box-shadow:0 0 10px var(--gold)}
@@ -55,8 +78,26 @@ body{
 
 /* ==================== MAIN GRID ==================== */
 .main{
-  display:grid;grid-template-columns:330px 1fr 360px;gap:14px;padding:14px;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:330px 1fr;gap:14px;padding:14px 60px 14px 14px;position:relative;overflow:hidden;
 }
+/* right-edge tab rail — always visible, panels slide in OVER the habitat */
+.tab-rail{position:fixed;right:0;top:62px;bottom:108px;width:48px;z-index:55;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;background:linear-gradient(180deg,rgba(8,14,28,.92),rgba(8,14,28,.7));border-left:1px solid var(--line);backdrop-filter:blur(10px)}
+.tab-rail .tab{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:rgba(10,18,38,.7);color:var(--text);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
+.tab-rail .tab:hover{border-color:var(--cyan);color:var(--cyan)}
+.tab-rail .tab.active{background:var(--cyan-soft);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(0,228,255,.3)}
+.tab-rail .tab .label{position:absolute;right:42px;top:50%;transform:translateY(-50%);background:rgba(10,18,38,.95);border:1px solid var(--line);color:var(--text);padding:4px 10px;border-radius:6px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;font-family:'Space Grotesk',sans-serif;opacity:0;pointer-events:none;transition:opacity .15s}
+.tab-rail .tab:hover .label{opacity:1}
+/* slide-out panel — overlay, does NOT push habitat */
+.slide-panel{position:fixed;right:48px;top:62px;width:380px;max-height:calc(100vh - 170px);overflow-y:auto;z-index:54;
+  background:linear-gradient(135deg,rgba(10,18,38,.96),rgba(8,12,24,.92));border:1px solid var(--cyan);border-radius:14px 0 0 14px;border-right:0;
+  padding:14px 16px;color:var(--text);
+  box-shadow:-30px 0 60px rgba(0,0,0,.6), inset 0 0 1px rgba(0,228,255,.4);
+  transform:translateX(110%);transition:transform .25s cubic-bezier(.2,.7,.2,1);opacity:0;pointer-events:none;
+}
+.slide-panel.open{transform:translateX(0);opacity:1;pointer-events:auto}
+.slide-panel h3{margin:0 0 10px;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:8px}
+.slide-panel h3 .x{margin-left:auto;cursor:pointer;background:transparent;border:0;color:var(--muted);font-size:16px;font-family:'Space Grotesk',sans-serif}
+.slide-panel h3 .x:hover{color:var(--white)}
 .col{display:flex;flex-direction:column;gap:14px;min-height:0}
 .panel{
   background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(18px);
@@ -71,18 +112,18 @@ body{
 .panel.gold h3 .badge{background:var(--gold-soft);color:var(--gold)}
 
 /* ==================== COUNCIL CHAMBER ==================== */
-.council .ring-wrap{position:relative;height:170px;display:flex;align-items:center;justify-content:center;margin:6px 0 12px}
+.council .ring-wrap{position:relative;height:110px;display:flex;align-items:center;justify-content:center;margin:4px 0 8px}
 .council .ring{
-  width:150px;height:150px;border-radius:50%;
+  width:96px;height:96px;border-radius:50%;
   background:
     radial-gradient(circle at 50% 40%, rgba(245,197,66,.55) 0%, rgba(245,197,66,.10) 50%, transparent 70%),
     conic-gradient(from -90deg, #f5c542 0deg 313deg, rgba(245,197,66,.12) 313deg 360deg);
   display:flex;align-items:center;justify-content:center;
   filter:drop-shadow(0 0 22px rgba(245,197,66,.35));position:relative;
 }
-.council .ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#1a1407 0%,#08060d 70%);border:1px solid rgba(245,197,66,.4)}
-.council .ring .pct{position:relative;font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:var(--gold);letter-spacing:.04em}
-.council .ring .pct small{display:block;font-size:9px;color:var(--muted);letter-spacing:.2em;margin-top:-2px}
+.council .ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#1a1407 0%,#08060d 70%);border:1px solid rgba(245,197,66,.4)}
+.council .ring .pct{position:relative;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:.04em;line-height:1.1}
+.council .ring .pct small{display:block;font-size:7px;color:var(--muted);letter-spacing:.2em;margin-top:-1px}
 .council .members{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .member{padding:8px 6px;border:1px solid rgba(245,197,66,.25);border-radius:10px;text-align:center;background:rgba(245,197,66,.04);font-size:10px;letter-spacing:.12em;color:var(--gold)}
 .member .avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff2c0,#b88a18);margin:0 auto 4px;box-shadow:0 0 12px rgba(245,197,66,.5)}
@@ -146,10 +187,11 @@ body{
 .flows .stream{stroke-dasharray:6 14;animation:flow 1.8s linear infinite}
 @keyframes flow{to{stroke-dashoffset:-200}}
 
-/* central sphere = Maya */
+/* legacy big sphere — hidden in v1.5 (replaced by maya-strip mini sphere) */
 .maya-sphere{
-  position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
-  width:200px;height:200px;border-radius:50%;
+  display:none;
+  position:absolute;left:50%;top:198px;transform:translate(-50%,-50%);
+  width:124px;height:124px;border-radius:50%;
   background:
     radial-gradient(circle at 50% 35%, rgba(255,255,255,.95) 0%, rgba(0,228,255,.5) 20%, rgba(62,155,255,.3) 40%, rgba(8,14,28,.85) 70%, rgba(3,6,12,.95) 100%);
   box-shadow:
@@ -163,8 +205,8 @@ body{
 .maya-sphere::after{content:"";position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(0,228,255,.08);animation:halo 8s linear infinite reverse}
 @keyframes breathe{0%,100%{box-shadow:0 0 80px rgba(0,228,255,.35),inset 0 0 60px rgba(0,228,255,.15),inset 0 0 6px rgba(255,255,255,.4)}50%{box-shadow:0 0 120px rgba(0,228,255,.55),inset 0 0 80px rgba(0,228,255,.25),inset 0 0 8px rgba(255,255,255,.6)}}
 @keyframes halo{to{transform:rotate(360deg)}}
-.maya-sphere .label{font-family:'Space Grotesk',sans-serif;font-size:18px;letter-spacing:.3em;color:var(--white);font-weight:700;text-shadow:0 0 24px rgba(0,228,255,.8)}
-.maya-sphere .label small{display:block;font-size:9px;letter-spacing:.4em;margin-top:4px;color:var(--cyan)}
+.maya-sphere .label{font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.24em;color:var(--white);font-weight:700;text-shadow:0 0 24px rgba(0,228,255,.8);text-align:center}
+.maya-sphere .label small{display:block;font-size:7.5px;letter-spacing:.35em;margin-top:3px;color:var(--cyan)}
 .maya-sphere .consensus{position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--gold);letter-spacing:.2em;font-family:'JetBrains Mono',monospace;white-space:nowrap}
 
 /* satellite zones — positioned around Maya */
@@ -192,12 +234,250 @@ body{
 .zone .desc b{color:var(--text);font-weight:500}
 .zone .desc i{color:var(--cyan);font-style:normal;font-weight:500}
 
-.zone.pos-tl{left:6%;top:14%}
-.zone.pos-tr{right:6%;top:14%}
-.zone.pos-bl{left:6%;bottom:22%}
-.zone.pos-br{right:6%;bottom:22%}
-.zone.pos-b{left:50%;bottom:8%;transform:translateX(-50%)}
-.zone.pos-t{left:50%;top:4%;transform:translateX(-50%)}
+/* Maya-strip + mini-sphere removed in v1.7 (tagline moved to top ticker) */
+.maya-strip,.maya-sphere-mini,.maya-strip-meta{display:none !important}
+/* also fully kill the legacy big sphere and any of its halos that might bleed through */
+.maya-sphere,.maya-sphere::before,.maya-sphere::after{display:none !important;content:none !important}
+/* Studio face-dropzone must never leak out of its modal — clip it to the Studio modal stacking context */
+#mod-studio:not(.show) .face-dropzone{display:none !important}
+
+/* (legacy macro-band CSS retained but unused) */
+.macro-band{display:none}
+
+/* Maya command bar — relocated INSIDE the stage frame at the bottom (above heartbeat strip) */
+.maya-cmd.in-stage{position:absolute;left:18px;right:18px;bottom:14px;z-index:7;border-radius:99px;padding:5px 6px 5px 16px}
+.maya-cmd.in-stage input{font-size:12.5px}
+.maya-cmd.in-stage .pre{font-size:10.5px}
+.maya-balloon{position:absolute;left:18px;right:18px;bottom:58px;z-index:7}
+
+/* shrink zoneStage bottom so it doesn't overlap with the in-stage cmd bar */
+@media (min-width:980px){
+  #zoneStage{bottom:60px !important}
+}
+.macro{position:relative;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(18,28,52,.85),rgba(8,12,24,.7));cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .3s;font-size:11px;backdrop-filter:blur(8px)}
+.macro:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+.macro .glow{position:absolute;inset:-1px;border-radius:12px;pointer-events:none;opacity:0;transition:opacity .3s}
+.macro.state-idle .glow{opacity:.6;box-shadow:0 0 22px var(--blue-soft) inset,0 0 14px var(--blue-soft)}
+.macro.state-executing .glow{opacity:.9;box-shadow:0 0 28px rgba(234,242,255,.22) inset,0 0 18px rgba(234,242,255,.16)}
+.macro.state-council .glow{opacity:.95;box-shadow:0 0 28px var(--gold-soft) inset,0 0 22px rgba(245,197,66,.5)}
+.macro.state-error .glow{opacity:1;box-shadow:0 0 28px var(--red-soft) inset,0 0 22px rgba(255,91,106,.55);animation:pulse 1.4s infinite}
+.macro .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.macro .head .ic{font-size:14px}
+.macro .head .stateled{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)}
+.macro.state-executing .head .stateled{background:var(--white);box-shadow:0 0 10px var(--white)}
+.macro.state-council .head .stateled{background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.macro.state-error .head .stateled{background:var(--red);box-shadow:0 0 12px var(--red)}
+.macro .name{font-weight:600;color:var(--white);font-size:11.5px;letter-spacing:.04em}
+.macro .desc{color:var(--muted);font-size:9.5px;margin-top:2px;line-height:1.35}
+.macro .desc b{color:var(--text);font-weight:500}
+
+/* Filter bar above the agency grid */
+.filter-bar{position:absolute;left:20px;right:20px;top:16px;display:flex;gap:6px;flex-wrap:wrap;z-index:5;padding:6px 0;border-bottom:1px dashed var(--line)}
+.filter-bar .chip{padding:4px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:99px;background:rgba(10,18,38,.4);color:var(--muted);cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s}
+.filter-bar .chip:hover{color:var(--text);border-color:var(--line-strong)}
+.filter-bar .chip.active{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-soft)}
+
+/* TILE GRID — micro view, the 57 staffing agencies */
+#zoneStage{position:absolute;left:20px;right:20px;top:60px;bottom:20px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:9px;z-index:4;padding-right:6px;
+  scrollbar-width:thin;scrollbar-color:rgba(0,228,255,.3) transparent;}
+#zoneStage::-webkit-scrollbar{width:6px}
+#zoneStage::-webkit-scrollbar-thumb{background:rgba(0,228,255,.3);border-radius:3px}
+/* ===== ISOMETRIC ROOM look — each tile is a 3D office, not a flat card ===== */
+.zone.tile{
+  position:relative;width:auto;min-height:96px;align-self:start;
+  background:
+    linear-gradient(135deg, rgba(28,40,72,.85), rgba(10,16,32,.65)),
+    linear-gradient(180deg, rgba(0,228,255,.04) 0%, transparent 50%);
+  border:1px solid var(--line);
+  transform-style:preserve-3d;
+}
+.zone.tile::after{
+  /* "floor" lighting glow inside the room */
+  content:"";position:absolute;left:8px;right:8px;bottom:8px;height:14px;border-radius:50%;
+  background:radial-gradient(ellipse at center, rgba(0,228,255,.32), transparent 70%);
+  filter:blur(4px);pointer-events:none;opacity:.6;
+}
+.zone.tile .stage-floor{position:absolute;left:6px;right:6px;bottom:30px;height:24px;border-radius:4px;
+  background:linear-gradient(180deg,rgba(0,228,255,.08),rgba(0,0,0,.4));
+  border-top:1px solid rgba(0,228,255,.18);
+  transform:perspective(180px) rotateX(45deg);transform-origin:center bottom;}
+/* tiny humanoid agent sprite — walks across the floor */
+.zone.tile .sprite{
+  position:absolute;bottom:34px;left:18px;width:8px;height:14px;z-index:2;
+  background:linear-gradient(180deg,#00e4ff,#00a4cc);border-radius:3px 3px 0 0;
+  box-shadow:0 0 8px rgba(0,228,255,.7);
+  animation:walk 6s linear infinite;
+}
+.zone.tile .sprite::before{
+  content:"";position:absolute;top:-6px;left:1px;width:6px;height:6px;border-radius:50%;background:#eaf2ff;
+  box-shadow:0 0 6px rgba(255,255,255,.7);
+}
+.zone.tile .sprite.s2{animation-delay:-2s;animation-duration:7.5s;background:linear-gradient(180deg,#f5c542,#b88a18)}
+.zone.tile .sprite.s2::before{background:#fff2c0}
+.zone.tile .sprite.s3{animation-delay:-4.2s;animation-duration:8.2s;background:linear-gradient(180deg,#43e6a1,#1a8c5e)}
+.zone.tile .sprite.s3::before{background:#c9ffe6}
+@keyframes walk{
+  0%{left:18px}
+  45%{left:calc(100% - 26px)}
+  50%{left:calc(100% - 26px);transform:scaleX(-1)}
+  95%{left:18px;transform:scaleX(-1)}
+  100%{left:18px;transform:scaleX(1)}
+}
+/* council-state rooms have golden floor glow */
+.zone.tile.state-council::after{background:radial-gradient(ellipse at center, rgba(245,197,66,.45), transparent 70%)}
+.zone.tile.state-error::after{background:radial-gradient(ellipse at center, rgba(255,91,106,.5), transparent 70%);animation:pulse 1.4s infinite}
+.zone.tile.state-executing::after{background:radial-gradient(ellipse at center, rgba(67,230,161,.45), transparent 70%)}
+
+/* ===== Packet dots traveling along the ghost-stream paths ===== */
+.flows .packet{r:3;fill:#00e4ff;filter:drop-shadow(0 0 6px #00e4ff)}
+.flows .packet.gold{fill:#f5c542;filter:drop-shadow(0 0 6px #f5c542)}
+.flows .packet.green{fill:#43e6a1;filter:drop-shadow(0 0 6px #43e6a1)}
+
+/* ===== Maya command bar — now in RIGHT column, panel-style, NOT overlapping the stage ===== */
+.maya-cmd{display:flex;align-items:center;border:1px solid var(--line-strong);border-radius:14px;
+  background:linear-gradient(135deg,rgba(10,18,38,.92),rgba(8,12,24,.85));
+  box-shadow:0 0 0 1px rgba(0,228,255,.18) inset;
+  padding:8px 8px 8px 14px;gap:6px;}
+.maya-cmd .pre{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;padding-right:8px;border-right:1px solid var(--line);margin-right:6px;white-space:nowrap}
+.maya-cmd input{flex:1;background:transparent;border:0;outline:0;color:var(--white);font-family:'Inter',sans-serif;font-size:12px;padding:6px 0;min-width:0}
+.maya-cmd input::placeholder{color:var(--muted);font-size:11px}
+.maya-cmd button{background:linear-gradient(135deg,#00e4ff,#3e9bff);color:#03060c;border:0;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:10px;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+.maya-cmd button:hover{filter:brightness(1.1)}
+
+/* maya answer balloon — appears within right column above the cmd bar */
+.maya-balloon{background:linear-gradient(135deg,rgba(10,18,38,.95),rgba(8,12,24,.92));border:1px solid var(--cyan);
+  border-radius:12px;padding:10px 12px;color:var(--text);font-size:12px;line-height:1.55;
+  box-shadow:0 0 18px rgba(0,228,255,.15);display:none;max-height:240px;overflow-y:auto}
+.maya-balloon.show{display:block}
+.maya-balloon .head{display:flex;align-items:center;gap:6px;margin-bottom:6px;color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+.maya-balloon .head .live{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 1.4s infinite}
+
+/* ===== Collapsible right-column panels ===== */
+.panel .collapse-btn{position:absolute;top:8px;right:10px;background:transparent;border:1px solid var(--line);color:var(--muted);width:22px;height:22px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;line-height:1;padding:0;transition:all .15s}
+.panel .collapse-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.panel.collapsed{padding:10px 14px;min-height:36px}
+.panel.collapsed h3{margin:0}
+.panel.collapsed > :not(h3):not(.collapse-btn){display:none !important}
+
+/* When right column has many panels collapsed, the stage gets visually bigger */
+.col.right.collapsed{width:60px;overflow:hidden}
+.col.right.collapsed .panel{padding:8px}
+.col.right.collapsed h3 span:not(.badge){display:none}
+
+/* Image attachment dropzone for Consistency Sentinel */
+.face-dropzone{border:2px dashed rgba(245,197,66,.4);border-radius:12px;padding:14px;text-align:center;cursor:pointer;background:rgba(245,197,66,.04);color:var(--gold);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;transition:all .2s;margin-bottom:10px}
+.face-dropzone:hover{background:rgba(245,197,66,.10);border-color:var(--gold)}
+.face-dropzone.has-image{border-style:solid;border-color:var(--green);background:rgba(67,230,161,.06);color:var(--green)}
+.face-dropzone img{max-width:100%;max-height:80px;border-radius:6px;display:block;margin:6px auto}
+.face-dropzone input{display:none}
+
+/* ===== Full-stage view modes (Council / Studio / Workflow) ===== */
+.stage.view-council .grid-floor,.stage.view-studio .grid-floor,.stage.view-workflow .grid-floor{opacity:.3}
+.view-modal{position:absolute;inset:24px;border-radius:18px;background:linear-gradient(135deg,rgba(10,18,38,.94),rgba(3,6,12,.92));border:1px solid var(--line-strong);z-index:10;display:none;overflow:hidden;padding:20px}
+.view-modal.show{display:block}
+.view-modal h2{font-family:'Space Grotesk',sans-serif;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.view-modal h2 .x{margin-left:auto;cursor:pointer;color:var(--muted);font-size:18px}
+
+/* council chamber modal — seated members in a circle */
+.council-chamber{position:relative;height:calc(100% - 50px);display:flex;align-items:center;justify-content:center}
+.council-orb{width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%, rgba(245,197,66,.7) 0%, rgba(245,197,66,.15) 50%, rgba(8,6,2,.95) 80%);
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:42px;color:var(--gold);font-weight:700;
+  box-shadow:0 0 80px rgba(245,197,66,.45), inset 0 0 50px rgba(245,197,66,.3);position:relative;z-index:2}
+.council-orb small{position:absolute;bottom:46px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.3em;color:var(--gold);font-weight:500}
+.council-seat{position:absolute;width:60px;text-align:center}
+.council-seat .body{width:30px;height:42px;border-radius:14px 14px 6px 6px;background:linear-gradient(180deg,rgba(245,197,66,.85),rgba(120,90,15,.6));margin:0 auto;position:relative;
+  box-shadow:0 0 14px rgba(245,197,66,.4)}
+.council-seat .body::before{content:"";position:absolute;top:-10px;left:9px;width:12px;height:12px;border-radius:50%;background:#fff2c0;box-shadow:0 0 10px rgba(255,242,192,.7)}
+.council-seat .label{font-size:9px;letter-spacing:.16em;color:var(--gold);margin-top:6px;text-transform:uppercase}
+
+.workflow-canvas{position:relative;height:calc(100% - 50px);overflow:hidden}
+.wf-node{position:absolute;width:130px;padding:10px;border:1px solid var(--cyan);border-radius:10px;background:rgba(0,228,255,.06);text-align:center;font-size:11px}
+.wf-node .lbl{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase}
+.wf-swarm{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:swarm 4s linear infinite}
+@keyframes swarm{0%{left:10%;top:50%}25%{left:35%;top:25%}50%{left:55%;top:60%}75%{left:75%;top:30%}100%{left:90%;top:55%}}
+
+/* ===== Onboarding wizard (vivid, multi-step, no-loose-ends) ===== */
+.onboard-stage{display:flex;height:calc(100% - 50px);gap:18px}
+.onboard-progress{width:240px;border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(8,14,28,.5);overflow-y:auto}
+.onboard-progress .step{display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:8px;cursor:pointer;transition:all .15s;border:1px solid transparent;margin-bottom:4px}
+.onboard-progress .step:hover{background:rgba(0,228,255,.04)}
+.onboard-progress .step.active{background:var(--cyan-soft);border-color:var(--cyan)}
+.onboard-progress .step.done{opacity:.7}
+.onboard-progress .step .num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0}
+.onboard-progress .step.active .num{background:var(--cyan);color:#03060c;border-color:var(--cyan)}
+.onboard-progress .step.done .num{background:var(--green);color:#03060c;border-color:var(--green)}
+.onboard-progress .step .lbl{font-size:11.5px;color:var(--text);font-family:'Space Grotesk',sans-serif;letter-spacing:.04em}
+.onboard-body{flex:1;border:1px solid var(--line);border-radius:14px;padding:18px 22px;background:linear-gradient(135deg,rgba(8,14,28,.7),rgba(3,5,12,.85));overflow-y:auto}
+.onboard-body h3{margin:0 0 6px;color:var(--cyan);font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
+.onboard-body .why{color:var(--muted);font-size:11.5px;line-height:1.6;margin-bottom:14px}
+.onboard-body .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.onboard-body .field label{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase}
+.onboard-body .field input,.onboard-body .field select,.onboard-body .field textarea{background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--white);padding:9px 12px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;outline:0;transition:border-color .15s}
+.onboard-body .field input:focus,.onboard-body .field select:focus,.onboard-body .field textarea:focus{border-color:var(--cyan)}
+.onboard-body .field .hint{color:var(--muted);font-size:10.5px;font-style:italic}
+.onboard-body .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.onboard-body .chips{display:flex;gap:6px;flex-wrap:wrap}
+.onboard-body .chips label{padding:6px 12px;border:1px solid var(--line);border-radius:99px;color:var(--text);font-size:11px;letter-spacing:.04em;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;text-transform:none}
+.onboard-body .chips input{display:none}
+.onboard-body .chips input:checked + label{background:var(--cyan-soft);border-color:var(--cyan);color:var(--cyan)}
+.onboard-actions{display:flex;justify-content:space-between;align-items:center;padding:14px 0 0;margin-top:14px;border-top:1px dashed var(--line)}
+.onboard-actions button{background:linear-gradient(135deg,#00e4ff,#3e9bff);color:#03060c;border:0;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:11px;padding:10px 18px;border-radius:99px;cursor:pointer}
+.onboard-actions button.back{background:rgba(10,18,38,.6);color:var(--text);border:1px solid var(--line)}
+.onboard-actions button:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== AGENT GALLERY · horizontal swipeable carousel ===== */
+.gallery{position:absolute;left:20px;right:20px;top:60px;bottom:60px;display:none;flex-direction:column;z-index:6}
+.stage.view-gallery .gallery{display:flex}
+.stage.view-gallery #zoneStage,.stage.view-gallery .filter-bar{display:none}
+.gallery-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;color:var(--white)}
+.gallery-head .title{font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+.gallery-head .nav button{background:rgba(10,18,38,.6);color:var(--text);border:1px solid var(--line);border-radius:99px;width:38px;height:38px;font-size:16px;cursor:pointer;font-family:'Space Grotesk',sans-serif;margin:0 4px;transition:all .15s}
+.gallery-head .nav button:hover{border-color:var(--cyan);color:var(--cyan)}
+.gallery-track-wrap{flex:1;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(6,10,22,.6),rgba(3,5,12,.85))}
+.gallery-track{position:absolute;inset:0;display:flex;align-items:center;gap:16px;padding:24px;transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.gallery-card{flex:0 0 360px;min-width:360px;height:calc(100% - 12px);border-radius:16px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(18,28,52,.85),rgba(8,12,24,.7));padding:18px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.gallery-card:hover{transform:translateY(-4px);border-color:var(--line-strong);box-shadow:0 24px 60px rgba(0,228,255,.18)}
+.gallery-card.featured{flex-basis:480px;min-width:480px;border-color:var(--cyan);box-shadow:0 0 32px rgba(0,228,255,.18)}
+.gallery-card .ic{font-size:38px;line-height:1}
+.gallery-card .nm{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--white);letter-spacing:.04em}
+.gallery-card .tg{color:var(--cyan);font-size:12.5px;font-style:italic}
+.gallery-card .ds{color:var(--muted);font-size:12px;line-height:1.55;flex:1;overflow:hidden}
+.gallery-card .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gallery-card .stat{padding:8px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.3);text-align:center}
+.gallery-card .stat .v{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--white)}
+.gallery-card .stat .l{font-size:9px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+.gallery-card .enter{padding:8px 16px;background:linear-gradient(135deg,#00e4ff,#3e9bff);color:#03060c;border:0;border-radius:99px;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:10.5px;cursor:pointer}
+
+/* ===== OPENCREST MINI-MAP · persistent bottom-left widget ===== */
+.minimap{position:absolute;left:20px;bottom:60px;width:200px;height:84px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,rgba(8,14,28,.9),rgba(3,5,12,.85));backdrop-filter:blur(10px);z-index:6;padding:8px 10px;cursor:pointer;transition:all .2s;overflow:hidden}
+.minimap:hover{border-color:var(--cyan);box-shadow:0 0 22px rgba(0,228,255,.18)}
+.minimap .hdr{font-family:'Space Grotesk',sans-serif;font-size:8.5px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;margin-bottom:4px;display:flex;justify-content:space-between}
+.minimap .hdr .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.6s infinite}
+.minimap svg{width:100%;height:60px}
+.minimap .mm-node{fill:rgba(0,228,255,.2);stroke:var(--cyan);stroke-width:1.5}
+.minimap .mm-node.active{fill:var(--gold);stroke:var(--gold)}
+.minimap .mm-path{stroke:var(--cyan);stroke-width:1;stroke-dasharray:3 4;fill:none;opacity:.6}
+
+/* ===== ENHANCED SOVEREIGN OVERRIDE · pulse + Maya chat overlay ===== */
+.maya-direct-overlay{position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 40%, rgba(245,197,66,.18) 0%, rgba(8,12,24,.92) 60%);display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.maya-direct-overlay.show{display:flex;animation:fadeIn .25s ease-out}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.maya-direct-box{width:min(640px,90vw);background:linear-gradient(135deg,rgba(10,14,28,.98),rgba(20,14,4,.96));border:2px solid var(--gold);border-radius:18px;padding:24px;box-shadow:0 0 80px rgba(245,197,66,.4)}
+.maya-direct-box .hd{display:flex;align-items:center;gap:12px;margin-bottom:14px;color:var(--gold);font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase}
+.maya-direct-box .hd .led{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px var(--gold);animation:pulse 1.2s infinite}
+.maya-direct-box .hd .x{margin-left:auto;cursor:pointer;color:var(--muted);background:transparent;border:0;font-size:20px}
+.maya-direct-box h2{margin:0 0 10px;color:var(--white);font-family:'Space Grotesk',sans-serif;font-size:22px;letter-spacing:.04em}
+.maya-direct-box .sub{color:var(--muted);font-size:12.5px;line-height:1.6;margin-bottom:18px}
+.maya-direct-box textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--white);padding:12px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13.5px;outline:0;min-height:90px;resize:vertical}
+.maya-direct-box textarea:focus{border-color:var(--gold)}
+.maya-direct-box .actions{display:flex;gap:10px;margin-top:14px;align-items:center}
+.maya-direct-box .actions a.tel{color:var(--gold);padding:10px 16px;border:1px solid var(--gold);border-radius:99px;text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.maya-direct-box .actions button{flex:1;background:linear-gradient(135deg,#f5c542,#b88a18);color:#03060c;border:0;padding:11px;border-radius:99px;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:11px;cursor:pointer}
+.maya-direct-box .ans{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);line-height:1.7;padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.4);display:none}
+.maya-direct-box .ans.show{display:block}
+.stage.flash-pulse{animation:flashPulse .8s ease-out}
+@keyframes flashPulse{0%{box-shadow:inset 0 0 0 0 rgba(245,197,66,.6)}50%{box-shadow:inset 0 0 80px 4px rgba(245,197,66,.6)}100%{box-shadow:inset 0 0 0 0 rgba(245,197,66,0)}}
 
 /* swarm particles overlay */
 .swarm{position:absolute;inset:0;pointer-events:none;z-index:1}
@@ -301,6 +581,8 @@ body{
       <div class="item"><div class="pulse"></div><b id="t_revenue">$0</b>&nbsp;Live Revenue Ticker</div>
       <div class="item blue"><div class="pulse"></div><b id="t_swarms">0</b>&nbsp;Active Swarms</div>
       <div class="item gold"><div class="pulse"></div>Council Consensus <b id="t_consensus">88%</b></div>
+      <!-- Rotating notification widget (moved from maya-strip into top ticker) -->
+      <div class="item notif"><span id="floorTagline" style="color:var(--cyan);font-family:'JetBrains Mono',monospace;letter-spacing:.12em">// 57 AGENCIES ONLINE · MAYA ORCHESTRATING</span></div>
       <div class="item"><div class="pulse"></div>Maya Lines <b>OPEN</b></div>
       <div class="item"><div class="pulse"></div><b id="t_agents">974</b>&nbsp;Agents on Floor</div>
     </div>
@@ -325,9 +607,34 @@ body{
         <div class="deliberation" id="deliberation"></div>
       </div>
 
+      <div class="panel" style="border-color:rgba(245,197,66,.35)">
+        <h3 style="color:var(--gold)">⚖ Legal Vault <span class="badge" style="background:var(--gold-soft);color:var(--gold)">GOLD SEAL</span></h3>
+        <div id="legalLog" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.65;color:var(--text)"></div>
+      </div>
+
       <div class="panel">
         <h3>Active Zones <span class="badge" id="activeZoneCount">7</span></h3>
         <div id="zoneList" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <!-- Opencrest Mini-Map · v1.9 relocated to left column (was over habitat in v1.8) -->
+      <div class="panel" id="panel-minimap" style="cursor:pointer" onclick="openViewModal('workflow')" title="Click to open Opencrest Workflow Swarm">
+        <h3>⚡ Opencrest · Swarm Path <span class="badge">CLICK</span></h3>
+        <div style="position:relative;height:64px">
+          <svg viewBox="0 0 180 50" preserveAspectRatio="none" style="width:100%;height:100%">
+            <defs>
+              <linearGradient id="mm_g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00e4ff" stop-opacity="0"/><stop offset="50%" stop-color="#00e4ff" stop-opacity=".9"/><stop offset="100%" stop-color="#00e4ff" stop-opacity="0"/></linearGradient>
+            </defs>
+            <path class="mm-path" d="M8,25 Q40,10 60,28 T110,22 T172,28" stroke-dasharray="6 14"><animate attributeName="stroke-dashoffset" from="0" to="-200" dur="2s" repeatCount="indefinite"/></path>
+            <circle class="mm-node" cx="8" cy="25" r="4"/>
+            <circle class="mm-node active" cx="60" cy="28" r="5"/>
+            <circle class="mm-node" cx="110" cy="22" r="4"/>
+            <circle class="mm-node" cx="172" cy="28" r="4"/>
+            <circle r="3" fill="#f5c542"><animateMotion dur="3s" repeatCount="indefinite"><mpath href="#mmPath2"/></animateMotion></circle>
+            <path id="mmPath2" d="M8,25 Q40,10 60,28 T110,22 T172,28" fill="none" stroke="none"/>
+          </svg>
+        </div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-top:4px;text-transform:uppercase">Click to enter Workflow ▸</div>
       </div>
     </div>
 
@@ -337,6 +644,7 @@ body{
         <h1 id="campusTitle">MAYA AI <span class="who">UNIVERSAL SOVEREIGN SHELL</span></h1>
         <div class="toolbar">
           <button class="active" data-view="campus">Campus</button>
+          <button data-view="gallery">Gallery</button>
           <button data-view="council">Council</button>
           <button data-view="studio">Studio</button>
           <button data-view="workflow">Workflow</button>
@@ -356,46 +664,43 @@ body{
 
         <div class="swarm" id="swarm"></div>
 
-        <!-- Maya central sphere -->
-        <div class="maya-sphere" onclick="openMayaPanel()">
-          <div class="label">MAYA AI<small>SUPREME ORCHESTRATOR</small></div>
-          <div class="consensus" id="floorTagline">// PARLIAMENT IN SESSION · DELIBERATION 88% CONSENSUS</div>
-        </div>
+        <!-- Filter bar (chips by department) -->
+        <!-- Maya-strip removed in v1.7 · rotating tagline moved to the top ticker bar -->
+        <div class="filter-bar" id="filterBar"></div>
 
-        <!-- zones spawned dynamically -->
+        <!-- zones spawned dynamically — now the FULL stage content -->
         <div id="zoneStage"></div>
-      </div>
-    </div>
 
-    <!-- RIGHT COLUMN -->
-    <div class="col right">
-      <div class="panel studio">
-        <h3>AICineSynth · Video Studio <span class="badge">FACE-LOCK</span></h3>
-        <div class="frame">
-          <div class="tag">CONSISTENCY SENTINEL · ACTIVE</div>
-          <div class="grid"></div>
-          <div class="scan"></div>
-          <div class="figure">
-            <!-- minimalist human silhouette -->
-            <svg viewBox="0 0 100 200" fill="none" stroke="#00e4ff" stroke-width="1.2">
-              <circle cx="50" cy="34" r="18" stroke-opacity=".9"/>
-              <path d="M50 52 L50 130 M28 70 L50 60 L72 70 M28 70 L18 110 M72 70 L82 110 M50 130 L34 195 M50 130 L66 195" stroke-opacity=".95"/>
-              <!-- finger crosshairs -->
-              <circle cx="18" cy="110" r="3" stroke="#43e6a1" stroke-opacity=".9"/>
-              <circle cx="82" cy="110" r="3" stroke="#43e6a1" stroke-opacity=".9"/>
-              <!-- face crosshair -->
-              <rect x="38" y="22" width="24" height="24" stroke="#f5c542" stroke-opacity=".6"/>
-            </svg>
+        <!-- Agent Gallery (Gemini's swipeable carousel — Mo greenlit 2026-05-15) -->
+        <div class="gallery" id="gallery">
+          <div class="gallery-head">
+            <div class="title">🎴 Agent Gallery · Browse Before Entering</div>
+            <div class="nav">
+              <button onclick="galleryPrev()">‹</button>
+              <button onclick="galleryNext()">›</button>
+            </div>
+          </div>
+          <div class="gallery-track-wrap">
+            <div class="gallery-track" id="galleryTrack"></div>
           </div>
         </div>
-        <div class="audit" id="studioAudit"></div>
-      </div>
 
-      <div class="panel logs">
-        <h3>Anatomical Auditor · Live Log <span class="badge">QA</span></h3>
-        <div class="log-list" id="auditLog"></div>
+        <!-- Mini-Map removed from stage in v1.9 · moved to left column as its own panel (no longer blocks habitat) -->
+
+        <!-- Maya command bar pinned inside the campus stage bottom (above heartbeat strip) -->
+        <div class="maya-balloon" id="mayaBalloon">
+          <div class="head"><span class="live"></span>Maya · responding</div>
+          <div id="mayaAnswer"></div>
+        </div>
+        <div class="maya-cmd in-stage">
+          <div class="pre">▸ Order Maya</div>
+          <input id="mayaInput" placeholder="Tell Maya — e.g. create agency Crypto Trading · publish X · pause render #142" autocomplete="off">
+          <button onclick="sendOrder()">Send</button>
+        </div>
       </div>
     </div>
+
+    <!-- Right column removed in v1.6 — Empire Pulse / Floor Activity / future panels now slide in from the right edge as overlays (see .tab-rail below). The habitat does NOT shrink when they open. -->
   </div>
 
   <!-- ============ HEARTBEAT STRIP ============ -->
@@ -416,6 +721,41 @@ body{
   </div>
 </div>
 
+<!-- ============ RIGHT-EDGE TAB RAIL + SLIDE PANELS (overlay, do NOT shrink habitat) ============ -->
+<div class="tab-rail" id="tabRail">
+  <button class="tab" data-slide="pulse" onclick="toggleSlide('pulse')">📊<span class="label">Empire Pulse</span></button>
+  <button class="tab" data-slide="activity" onclick="toggleSlide('activity')">📡<span class="label">Floor Activity</span></button>
+  <button class="tab" data-slide="hypermind" onclick="toggleSlide('hypermind')">🧠<span class="label">Hypermind</span></button>
+  <button class="tab" data-slide="jail" onclick="toggleSlide('jail')">🔒<span class="label">Agent Jail</span></button>
+  <button class="tab" data-slide="scout" onclick="toggleSlide('scout')">🛰<span class="label">Reasoning Scout</span></button>
+  <button class="tab" onclick="openOnboarding()" style="margin-top:8px;border-color:var(--gold);color:var(--gold)">🚀<span class="label">Onboard Customer</span></button>
+</div>
+
+<div class="slide-panel" id="slide-pulse">
+  <h3>📊 Empire Pulse <span class="badge" id="pulseBadge">LIVE</span><button class="x" onclick="toggleSlide('pulse')">×</button></h3>
+  <div id="empirePulse" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8;color:var(--text)"></div>
+</div>
+
+<div class="slide-panel" id="slide-activity">
+  <h3>📡 Floor Activity · Live <span class="badge">QA</span><button class="x" onclick="toggleSlide('activity')">×</button></h3>
+  <div class="log-list" id="auditLog"></div>
+</div>
+
+<div class="slide-panel" id="slide-hypermind">
+  <h3>🧠 Hypermind <span class="badge">PATTERNS</span><button class="x" onclick="toggleSlide('hypermind')">×</button></h3>
+  <div id="hypermindBody" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8;color:var(--text)">loading…</div>
+</div>
+
+<div class="slide-panel" id="slide-jail">
+  <h3>🔒 Agent Jail <span class="badge">TEACHING</span><button class="x" onclick="toggleSlide('jail')">×</button></h3>
+  <div id="jailBody" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8;color:var(--text)">loading…</div>
+</div>
+
+<div class="slide-panel" id="slide-scout">
+  <h3>🛰 Reasoning Scout <span class="badge">DAILY</span><button class="x" onclick="toggleSlide('scout')">×</button></h3>
+  <div id="scoutBody" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8;color:var(--text)">loading…</div>
+</div>
+
 <!-- ============ DRAWER ============ -->
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -423,6 +763,138 @@ body{
     <button class="close" onclick="closeDrawer()">×</button>
   </div>
   <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<!-- ============ FULL-STAGE VIEW MODALS ============ -->
+<div class="view-modal" id="mod-council">
+  <h2>⚖ Council Chamber · Live Deliberation <span style="margin-left:8px;color:var(--gold);font-size:11px;font-family:'JetBrains Mono',monospace" id="modCouncilStatus">consensus 88%</span><span class="x" onclick="closeViewModal()">×</span></h2>
+  <div class="council-chamber" id="councilChamber"></div>
+</div>
+<div class="view-modal" id="mod-studio">
+  <h2>🎬 AICineSynth · Video Production Hub<span style="margin-left:10px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace" id="sentinelStatus">▸ no target image · upload to lock sentinel</span><span class="x" onclick="closeViewModal()">×</span></h2>
+  <div style="position:relative;height:calc(100% - 50px);display:flex;gap:16px">
+    <div style="flex:1;position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#000">
+      <div style="position:absolute;left:10px;top:10px;font-size:10px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;background:rgba(0,0,0,.55);padding:4px 10px;border-radius:99px;border:1px solid var(--cyan);z-index:2">CONSISTENCY SENTINEL · LIVE</div>
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,228,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(0,228,255,.16) 1px,transparent 1px);background-size:24px 24px;mask-image:radial-gradient(ellipse at center,black 50%,transparent 80%)"></div>
+      <!-- scan beam removed in v1.5 (was overlapping the yellow face crosshair) -->
+      <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center"><svg viewBox="0 0 100 200" style="height:90%;width:auto;filter:drop-shadow(0 0 32px rgba(0,228,255,.55))" fill="none" stroke="#00e4ff" stroke-width="1.2"><circle cx="50" cy="34" r="18"/><path d="M50 52 L50 130 M28 70 L50 60 L72 70 M28 70 L18 110 M72 70 L82 110 M50 130 L34 195 M50 130 L66 195"/><circle cx="18" cy="110" r="3" stroke="#43e6a1"/><circle cx="82" cy="110" r="3" stroke="#43e6a1"/><!-- yellow face crosshair, locked to head, no sliding --><rect x="32" y="16" width="36" height="36" stroke="#f5c542" stroke-width="1.5" stroke-dasharray="4 3"/><line x1="50" y1="10" x2="50" y2="58" stroke="#f5c542" stroke-width=".6" stroke-opacity=".5"/><line x1="26" y1="34" x2="74" y2="34" stroke="#f5c542" stroke-width=".6" stroke-opacity=".5"/></svg></div>
+    </div>
+    <div style="width:340px;display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+      <!-- ===== Image attachment for Consistency Sentinel ===== -->
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">📎 Reference Image · Character Lock</div>
+        <label class="face-dropzone">
+          <input type="file" accept="image/png,image/jpeg,image/webp" onchange="handleSentinelUpload(this)">
+          <div class="dz-label">⬆ Drop or click — upload reference face<br><span style="font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:none">PNG · JPG · WEBP · sentinel will face-lock on this character across every frame</span></div>
+        </label>
+      </div>
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.9">
+        <div style="color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;font-family:'Space Grotesk'">Anatomical Auditor</div>
+        <div><span style="color:var(--muted)">FRAME INTEGRITY:</span> <span style="color:var(--green)">PASSED</span></div>
+        <div><span style="color:var(--muted)">FACE-LOCK:</span> <b>96% match · target ID frozen</b></div>
+        <div><span style="color:var(--muted)">ANATOMY:</span> <span style="color:var(--green)">10/10 fingers · 2 eyes · 1 nose</span></div>
+        <div><span style="color:var(--muted)">CHAIN-REACTION FIREWALL:</span> <span style="color:var(--green)">CLEAR</span></div>
+        <div><span style="color:var(--muted)">FRAME:</span> <b>142 / 600</b></div>
+      </div>
+
+      <!-- ===== Output destination — where renders flow next ===== -->
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px">▶ Output Destination · Pipeline</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;border:1px solid var(--line);border-radius:10px;padding:10px;background:rgba(0,0,0,.4)">
+          <div style="display:flex;align-items:center;gap:8px;color:var(--green)">▸ <b>Frame approved</b> <span style="color:var(--muted)">→</span> <b style="color:var(--gold)">Legal Vault</b></div>
+          <div style="display:flex;align-items:center;gap:8px;color:var(--green);margin-top:4px">▸ <b>Gold Seal applied</b> <span style="color:var(--muted)">→</span> <b style="color:var(--cyan)">Maya routing</b></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px"><span style="color:var(--muted)">▸ destinations:</span></div>
+          <div style="margin-left:14px;color:var(--text)">• <b>.com</b> Commercial Studio (paid users)</div>
+          <div style="margin-left:14px;color:var(--text)">• <b>.net</b> Community / Dev API</div>
+          <div style="margin-left:14px;color:var(--text)">• <b>.org</b> Parliament / Research</div>
+          <div style="margin-left:14px;color:var(--text)">• <b>storefront</b> e-commerce render bus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="view-modal" id="mod-workflow">
+  <h2>⚡ Opencrest · Workflow Swarm <span style="margin-left:8px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace">Make/Zapier killer · live pipeline</span><span class="x" onclick="closeViewModal()">×</span></h2>
+  <div style="position:relative;height:calc(100% - 50px);display:flex;gap:14px">
+    <!-- Pipeline canvas (left, big) -->
+    <div class="workflow-canvas" id="workflowCanvas" style="flex:1;position:relative;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(8,12,24,.6),rgba(3,5,12,.85));overflow:hidden">
+      <!-- SVG layer for connecting paths between nodes -->
+      <svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+        <defs>
+          <linearGradient id="wf_cy" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00e4ff" stop-opacity="0"/><stop offset="50%" stop-color="#00e4ff" stop-opacity=".9"/><stop offset="100%" stop-color="#00e4ff" stop-opacity="0"/></linearGradient>
+          <linearGradient id="wf_au" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f5c542" stop-opacity="0"/><stop offset="50%" stop-color="#f5c542" stop-opacity=".95"/><stop offset="100%" stop-color="#f5c542" stop-opacity="0"/></linearGradient>
+        </defs>
+        <path id="wfp1" d="M80,300 Q150,200 220,250" fill="none" stroke="url(#wf_cy)" stroke-width="1.5" stroke-dasharray="6 14"><animate attributeName="stroke-dashoffset" from="0" to="-200" dur="2s" repeatCount="indefinite"/></path>
+        <path id="wfp2" d="M220,250 Q330,170 380,220" fill="none" stroke="url(#wf_cy)" stroke-width="1.5" stroke-dasharray="6 14"><animate attributeName="stroke-dashoffset" from="0" to="-200" dur="2s" repeatCount="indefinite"/></path>
+        <path id="wfp3" d="M380,220 Q450,300 500,330" fill="none" stroke="url(#wf_au)" stroke-width="1.6" stroke-dasharray="6 14"><animate attributeName="stroke-dashoffset" from="0" to="-200" dur="2s" repeatCount="indefinite"/></path>
+        <path id="wfp4" d="M500,330 Q600,220 650,260" fill="none" stroke="url(#wf_cy)" stroke-width="1.5" stroke-dasharray="6 14"><animate attributeName="stroke-dashoffset" from="0" to="-200" dur="2s" repeatCount="indefinite"/></path>
+        <path id="wfp5" d="M650,260 Q720,360 780,320" fill="none" stroke="url(#wf_au)" stroke-width="1.6" stroke-dasharray="6 14"><animate attributeName="stroke-dashoffset" from="0" to="-200" dur="2s" repeatCount="indefinite"/></path>
+        <path id="wfp6" d="M780,320 Q860,240 920,290" fill="none" stroke="url(#wf_cy)" stroke-width="1.5" stroke-dasharray="6 14"><animate attributeName="stroke-dashoffset" from="0" to="-200" dur="2s" repeatCount="indefinite"/></path>
+      </svg>
+
+      <!-- nodes (positioned via CSS percentages relative to canvas) -->
+      <div class="wf-node" style="left:5%;top:45%"><div class="lbl">Trigger</div>Lead Capture</div>
+      <div class="wf-node" style="left:18%;top:38%"><div class="lbl">Step 1</div>Enrich · Scout</div>
+      <div class="wf-node" style="left:32%;top:30%"><div class="lbl">Step 2</div>Anatomy Audit</div>
+      <div class="wf-node" style="left:45%;top:52%;border-color:var(--gold);background:var(--gold-soft);color:var(--gold)"><div class="lbl" style="color:var(--gold)">Council #1</div>Strategic Review</div>
+      <div class="wf-node" style="left:58%;top:36%"><div class="lbl">Step 3</div>Hypermind Match</div>
+      <div class="wf-node" style="left:71%;top:48%;border-color:var(--gold);background:var(--gold-soft);color:var(--gold)"><div class="lbl" style="color:var(--gold)">Council #2</div>Compliance Check</div>
+      <div class="wf-node" style="left:85%;top:40%"><div class="lbl">Step 4</div>QA Firewall</div>
+      <div class="wf-node" style="left:5%;top:75%"><div class="lbl">Output</div>Gold Seal</div>
+      <div class="wf-node" style="left:25%;top:75%"><div class="lbl">Output</div>Route → Storefront</div>
+      <div class="wf-node" style="left:48%;top:75%"><div class="lbl">Output</div>Stripe Charge</div>
+      <div class="wf-node" style="left:72%;top:75%"><div class="lbl">Output</div>Email Receipt</div>
+      <div class="wf-node" style="left:88%;top:75%"><div class="lbl">Done</div>Customer Notified</div>
+    </div>
+
+    <!-- Side log: what's being crunched right now -->
+    <div style="width:300px;display:flex;flex-direction:column;gap:10px">
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px">▸ Currently Processing</div>
+        <div id="wfNowLog" style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;border:1px solid var(--line);border-radius:10px;padding:10px;background:rgba(0,0,0,.4);max-height:140px;overflow:hidden"></div>
+      </div>
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">▸ Council Consultations</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:10px;background:rgba(245,197,66,.04)">
+          <div><b>#1 Strategic Review</b> · 6 seats · <span style="color:var(--green)">87% consensus</span></div>
+          <div><b>#2 Compliance Check</b> · LEGAL+QA · <span style="color:var(--green)">Gold Seal</span></div>
+          <div style="color:var(--muted);font-size:10px;margin-top:4px">Council can be added at any step. Each one slows the pipeline ~1.5s but raises Mo's safety floor.</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:6px">▸ Active Swarm</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;border:1px solid rgba(67,230,161,.3);border-radius:10px;padding:10px;background:rgba(67,230,161,.04)">
+          <div><b id="wfSwarmCount">22</b> agents attacking <b id="wfActiveNode">Step 3 · Hypermind Match</b></div>
+          <div style="color:var(--muted);font-size:10px;margin-top:4px">Tasks completed this hour: <b id="wfHourly">147</b> · pipeline latency: <b>2.1s avg</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MAYA DIRECT OVERLAY (Sovereign Override target) ============ -->
+<div class="maya-direct-overlay" id="mayaDirect">
+  <div class="maya-direct-box">
+    <div class="hd"><span class="led"></span>SOVEREIGN OVERRIDE · DIRECT MAYA<button class="x" onclick="closeMayaDirect()">×</button></div>
+    <h2>🛡 Council paused. Maya is listening.</h2>
+    <div class="sub">All Council deliberations are frozen until you release them. Tell Maya exactly what to do — no committee, no compromise.</div>
+    <textarea id="mayaDirectInput" placeholder="Example: stop the AICineSynth render #142 · push Crypto Trading Desk to canonical · refund Reza last month · approve the Stripe tier-change without Council review"></textarea>
+    <div class="actions">
+      <a class="tel" href="tel:+17432151423">📞 Call Maya</a>
+      <button onclick="executeMayaDirect()">▸ Execute Sovereign</button>
+    </div>
+    <div class="ans" id="mayaDirectAns"></div>
+  </div>
+</div>
+
+<!-- ============ ONBOARDING WIZARD (vivid · no loose ends) ============ -->
+<div class="view-modal" id="mod-onboard">
+  <h2>🚀 Customer Onboarding · Vivid Setup<span style="margin-left:8px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace" id="onboardStatus">no profile loaded</span><span class="x" onclick="closeViewModal()">×</span></h2>
+  <div class="onboard-stage">
+    <div class="onboard-progress" id="onboardSteps"></div>
+    <div class="onboard-body" id="onboardBody"></div>
+  </div>
 </div>
 
 <div class="footer-credit">Powered by <b>MirzaTech.ai</b> &nbsp;·&nbsp; Property of <b>EMAAA.io</b></div>
@@ -434,13 +906,33 @@ body{
    Coupled to api/habitat_state.php (with offline fallback below).
    ====================================================================== */
 (()=>{
-  const ZONES_FULL = [
-    {id:'real_estate',  num:1, name:'Real Estate Zone',        desc:'Agents scraping <b>Gwinnett County</b> · <i>27 leads/min</i>',         pos:'pos-tl', icon:'🏠'},
-    {id:'video_studio', num:2, name:'AICineSynth Studio',      desc:'<b>Face-lock</b> engaged · Anatomy Auditor <i>cleared</i>',           pos:'pos-tr', icon:'🎬'},
-    {id:'workflow',     num:3, name:'Opencrest Workflow Engine',desc:'<b>Swarm</b> attacking lead-scrape · <i>3 active</i>',               pos:'pos-bl', icon:'⚡'},
-    {id:'gaming_app',   num:4, name:'Gaming & App Dev',         desc:'Rendering <b>UE5 Blueprints</b> for superio.fun · <i>compiling</i>',  pos:'pos-br', icon:'🎮'},
-    {id:'storefront',   num:5, name:'E-Commerce Storefront',    desc:'<b>$22,095</b> traffic · <i>30 orders today</i>',                     pos:'pos-b',  icon:'🛍️'},
-    {id:'comms',        num:6, name:'Maya Comms · SMS+Voice',   desc:'Telnyx <b>+1 (743) 215-1423</b> · <i>monitoring</i>',                pos:'pos-t',  icon:'📞'},
+  // Live agency roster — fetched from /api/staff.php on boot. No hardcoded fallback list.
+  let ZONES_FULL = [];
+  let activeFilter = 'all';
+  const VIDEO_HINTS = ['video','cinema','media','creative','content','production','aicinesynth','film'];
+  const isVideoAgency = (a) => {
+    const blob = ((a.id||'')+' '+(a.name||'')+' '+(a.tagline||'')+' '+(a.description||'')).toLowerCase();
+    return VIDEO_HINTS.some(h => blob.indexOf(h) !== -1);
+  };
+
+  // MACRO empire domains — Mo's god-view (the 6+ platforms the empire runs on top of the agencies)
+  const MACRO = [
+    {id:'mirzatech',  ic:'🏛', name:'MirzaTech.ai',     desc:'<b>Council + Parliament</b> · 22-seat dissent engine'},
+    {id:'opencrest',  ic:'⚡', name:'Opencrest.io',     desc:'<b>Workflow Engine</b> · Make/Zapier killer'},
+    {id:'aicinesynth',ic:'🎬', name:'AICineSynth',      desc:'<b>Video Studio</b> · face-lock + anatomy QA'},
+    {id:'adeeo',      ic:'🏠', name:'Adeeo.io',         desc:'<b>Real Estate</b> · national wholesale marketplace'},
+    {id:'superio',    ic:'🎮', name:'Superio.fun',      desc:'<b>Gaming</b> · ethical leadership sim'},
+    {id:'storefront', ic:'🛍️', name:'Storefronts',      desc:'<b>$22K</b> live traffic · 30 orders today'},
+    {id:'comms',      ic:'📞', name:'Maya Comms',       desc:'<b>+1 (743) 215-1423</b> · Telnyx · live'},
+  ];
+
+  const LEGAL_LOG = [
+    'GOLD SEAL ✓ contract #774',
+    'GOLD SEAL ✓ Stripe ToS clearance',
+    'GOLD SEAL ✓ Reza-tester NDA',
+    'GOLD SEAL ✓ Adeeo lead-DPL #220',
+    'COMPLIANCE ✓ EMAAA LLC EIN match',
+    'GOLD SEAL ✓ Telnyx 10DLC application',
   ];
 
   // state per zone — biolum colors (idle / executing / council / error)
@@ -497,33 +989,193 @@ body{
       'MAYA AI <span class="who">PERSONAL CAMPUS · ' + escapeHtml(client.toUpperCase()) + '</span>';
   }
 
-  // ===== render zone cards in left list =====
-  const list = document.getElementById('zoneList');
-  list.innerHTML = ZONES_FULL.map(z=>`
-    <div class="zonecard state-idle" data-id="${z.id}" onclick="openZone('${z.id}')">
-      <div class="icon">${z.icon}</div>
-      <div class="meta"><div class="name">${z.name}</div><div class="desc">${z.desc}</div></div>
-      <div class="state"></div>
-    </div>`).join('');
-  document.getElementById('activeZoneCount').textContent = ZONES_FULL.length;
+  // ===== Live agency loader — fetches full roster from /api/staff.php =====
+  function renderZones(){
+    const list = document.getElementById('zoneList');
+    const stage = document.getElementById('zoneStage');
+    document.getElementById('activeZoneCount').textContent = ZONES_FULL.length;
+    // Left list: short cards (top 12 by role_count for scannability)
+    const topForList = [...ZONES_FULL].sort((a,b)=>(b.role_count||0)-(a.role_count||0)).slice(0,12);
+    list.innerHTML = topForList.map(z=>`
+      <div class="zonecard state-idle" data-id="${z.id}" onclick="openZone('${z.id}')">
+        <div class="icon" style="${z.color?'border-color:'+z.color+';color:'+z.color+';background:'+z.color+'18':''}">${z.icon||'•'}</div>
+        <div class="meta"><div class="name">${escapeHtml(z.name)}</div><div class="desc"><b>${z.role_count||0}</b> roles · ${escapeHtml(z.tagline||'').slice(0,42)}</div></div>
+        <div class="state"></div>
+      </div>`).join('');
+    // Stage: ALL agencies as ISOMETRIC ROOMS — humanoid sprites walking inside each office.
+    stage.innerHTML = ZONES_FULL.map((z,i)=>`
+      <div class="zone tile state-idle" data-id="${z.id}" onclick="openZone('${z.id}')">
+        <div class="glow"></div>
+        <div class="head"><span class="num" style="${z.color?'color:'+z.color+';border-color:'+z.color+';background:'+z.color+'22':''}">${(i+1)}</span><span class="stateled"></span></div>
+        <div class="name">${z.icon||''} ${escapeHtml(z.name)}</div>
+        <div class="desc"><i>${z.role_count||0} roles</i> · ${escapeHtml(z.tagline||'').slice(0,40)}</div>
+        <div class="stage-floor"></div>
+        <div class="sprite"></div>
+        <div class="sprite s2"></div>
+        <div class="sprite s3"></div>
+      </div>`).join('');
+  }
+  async function loadAgencies(){
+    try{
+      const r = await fetch('/api/staff.php', {cache:'no-store'});
+      if(!r.ok) throw new Error('staff api '+r.status);
+      const j = await r.json();
+      if(j && j.success && Array.isArray(j.agencies)){
+        ZONES_FULL = j.agencies;
+        // Merge any DRAFT agencies Mo created in prior sessions
+        try{
+          const drafts = JSON.parse(localStorage.getItem('maya_draft_agencies')||'[]');
+          if(Array.isArray(drafts) && drafts.length) ZONES_FULL = [...drafts, ...ZONES_FULL];
+        }catch(e){}
+        document.getElementById('floorTagline').textContent =
+          '// '+ZONES_FULL.length+' AGENCIES ONLINE · MAYA ORCHESTRATING';
+        renderZones();
+        renderFilters();
+        setTimeout(rebuildFlows, 80);
+      }
+    }catch(e){
+      console.warn('agency load failed', e);
+      document.getElementById('zoneStage').innerHTML =
+        '<div style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase">Roster unreachable · /api/staff.php offline</div>';
+    }
+  }
+  loadAgencies();
 
-  // ===== render zone tiles on stage =====
-  const stage = document.getElementById('zoneStage');
-  stage.innerHTML = ZONES_FULL.map(z=>`
-    <div class="zone state-idle ${z.pos}" data-id="${z.id}" onclick="openZone('${z.id}')">
-      <div class="glow"></div>
-      <div class="head"><span class="num">${z.num}</span><span class="stateled"></span></div>
-      <div class="name">${z.name}</div>
-      <div class="desc">${z.desc}</div>
-    </div>`).join('');
+  // ===== MACRO empire band renderer =====
+  function renderMacro(){
+    const el = document.getElementById('macroBand');
+    if(!el) return;
+    el.innerHTML = MACRO.map(m=>`
+      <div class="macro state-idle" data-id="${m.id}" onclick="openMacro('${m.id}')">
+        <div class="glow"></div>
+        <div class="head"><span class="ic">${m.ic}</span><span class="stateled"></span></div>
+        <div class="name">${escapeHtml(m.name)}</div>
+        <div class="desc">${m.desc}</div>
+      </div>`).join('');
+  }
+  renderMacro();
+
+  // ===== Filter chips (department roll-up of the 57 agencies) =====
+  // Curated department buckets — clean human labels, NOT auto-scraped first-words
+  const FILTER_BUCKETS = [
+    {key:'all',         label:'All',          match:()=>true},
+    {key:'tech',        label:'Tech',         match:a=>/engineer|developer|data|cyber|ai|cloud|devops|robot|space/i.test(a.name+' '+a.tagline)},
+    {key:'creative',    label:'Creative',     match:a=>/design|creative|content|media|music|art|video|cinema|film|fashion/i.test(a.name+' '+a.tagline)},
+    {key:'business',    label:'Business',     match:a=>/sales|marketing|customer|finance|account|operation|hr|human|recruit|legal/i.test(a.name+' '+a.tagline)},
+    {key:'industry',    label:'Industry',     match:a=>/manufactur|construct|automotive|aviation|energy|defense|pharma|agriculture|retail/i.test(a.name+' '+a.tagline)},
+    {key:'services',    label:'Services',     match:a=>/hospital|tourism|education|government|nonprofit|insurance|telecom|sport|pet|culinary/i.test(a.name+' '+a.tagline)},
+  ];
+  function getFilters(){ return FILTER_BUCKETS; }
+  function renderFilters(){
+    const el = document.getElementById('filterBar');
+    if(!el) return;
+    const chips = getFilters();
+    el.innerHTML = chips.map(b => {
+      const count = ZONES_FULL.filter(a=>b.match(a)).length;
+      return `<div class="chip ${b.key===activeFilter?'active':''}" onclick="applyFilter('${b.key}')">${b.label} · ${count}</div>`;
+    }).join('');
+  }
+  window.applyFilter = (key)=>{
+    activeFilter = key;
+    const bucket = FILTER_BUCKETS.find(b=>b.key===key) || FILTER_BUCKETS[0];
+    renderFilters();
+    document.querySelectorAll('#zoneStage .zone.tile').forEach(el=>{
+      const id = el.dataset.id;
+      const agency = ZONES_FULL.find(a=>a.id===id);
+      el.style.display = (agency && bucket.match(agency)) ? '' : 'none';
+    });
+  };
+
+  // ===== Legal Vault rotating log =====
+  let lvi=0;
+  function pumpLegal(){
+    const el = document.getElementById('legalLog');
+    if(!el) return;
+    el.innerHTML = [0,1,2,3].map(o=>{
+      const item = LEGAL_LOG[(lvi+o) % LEGAL_LOG.length];
+      return `<div><span style="color:var(--gold)">✓</span> ${item.replace('GOLD SEAL ✓ ','').replace('COMPLIANCE ✓ ','')}</div>`;
+    }).join('');
+    lvi++;
+  }
+  pumpLegal(); setInterval(pumpLegal, 3200);
+
+  // ===== Macro detail drawer =====
+  window.openMacro = (id)=>{
+    const m = MACRO.find(x=>x.id===id) || MACRO[0];
+    document.getElementById('drawerTitle').innerHTML = m.ic + ' ' + m.name;
+    const isVideo = (id === 'aicinesynth');
+    const studioBlock = isVideo ? `
+      <section>
+        <h4>AICineSynth · Live Production</h4>
+        <div style="position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);height:200px;background:#000;margin-bottom:10px">
+          <div style="position:absolute;left:8px;top:8px;font-size:9px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;background:rgba(0,0,0,.55);padding:3px 8px;border-radius:99px;border:1px solid var(--cyan)">CONSISTENCY SENTINEL · ACTIVE</div>
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,228,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(0,228,255,.16) 1px,transparent 1px);background-size:18px 18px;mask-image:radial-gradient(ellipse at center,black 50%,transparent 80%)"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center">
+            <svg viewBox="0 0 100 200" style="height:96%;width:auto;filter:drop-shadow(0 0 28px rgba(0,228,255,.45))" fill="none" stroke="#00e4ff" stroke-width="1.2">
+              <circle cx="50" cy="34" r="18"/>
+              <path d="M50 52 L50 130 M28 70 L50 60 L72 70 M28 70 L18 110 M72 70 L82 110 M50 130 L34 195 M50 130 L66 195"/>
+              <circle cx="18" cy="110" r="3" stroke="#43e6a1"/>
+              <circle cx="82" cy="110" r="3" stroke="#43e6a1"/>
+              <rect x="38" y="22" width="24" height="24" stroke="#f5c542"/>
+            </svg>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.7">
+          <div><span style="color:var(--muted)">FACE-LOCK:</span> <b>96% match</b></div>
+          <div><span style="color:var(--muted)">ANATOMY:</span> <span style="color:var(--green)">10/10 fingers · 2 eyes · 1 nose</span></div>
+          <div><span style="color:var(--muted)">CHAIN-FIREWALL:</span> <span style="color:var(--green)">clear</span></div>
+        </div>
+      </section>` : '';
+    const parliamentBlock = (id === 'mirzatech') ? `
+      <section>
+        <h4>Parliament · 22-seat Dissent Engine</h4>
+        <div class="audit-trail" style="font-size:11.5px">
+          <div>Senate quorum target: <b>51%</b> · current: <b style="color:var(--gold)">68%</b></div>
+          <div>Active deliberation: <b>pricing-tier-v3 motion</b></div>
+          <div>Senators online: <b>22/22</b></div>
+        </div>
+      </section>` : '';
+    document.getElementById('drawerBody').innerHTML = `
+      <section><h4>Domain</h4><div style="font-size:13px;line-height:1.55;color:var(--text)"><b>${m.name}</b><br>${m.desc}</div></section>
+      ${studioBlock}${parliamentBlock}
+      <section>
+        <h4>Live Pulse</h4>
+        <div class="stat-grid">
+          <div class="stat"><div class="v">${Math.floor(Math.random()*40)+8}</div><div class="l">Agents Active</div></div>
+          <div class="stat"><div class="v">${Math.floor(Math.random()*200)+30}</div><div class="l">Tasks / hr</div></div>
+          <div class="stat"><div class="v">${Math.floor(Math.random()*5)}</div><div class="l">QA Holds</div></div>
+          <div class="stat"><div class="v">${Math.floor(Math.random()*30)+10}</div><div class="l">Gold Seals</div></div>
+        </div>
+      </section>`;
+    document.getElementById('drawer').classList.add('open');
+  };
+  // Empire Pulse summary in right column
+  function renderPulse(){
+    const el = document.getElementById('empirePulse');
+    if(!el) return;
+    const counts = ZONES_FULL.reduce((a,z)=>a+(z.role_count||0),0);
+    el.innerHTML = `
+      <div><span style="color:var(--muted)">Agencies online:</span> <b>${ZONES_FULL.length}</b></div>
+      <div><span style="color:var(--muted)">Total roles defined:</span> <b>${counts.toLocaleString()}</b></div>
+      <div><span style="color:var(--muted)">Council consensus:</span> <b style="color:var(--gold)">${consensus}%</b></div>
+      <div><span style="color:var(--muted)">Agents on floor:</span> <b>${agents}</b></div>
+      <div><span style="color:var(--muted)">Reasoning models:</span> <b>119</b> (scout active)</div>
+      <div><span style="color:var(--muted)">Hypermind patterns:</span> <b style="color:var(--green)">2,447</b></div>
+      <div><span style="color:var(--muted)">Jailed agents:</span> <b style="color:${jail>0?'var(--red)':'var(--green)'}">${jail}</b></div>
+      <div><span style="color:var(--muted)">Maya line:</span> <b style="color:var(--green)">OPEN</b></div>`;
+  }
 
   // ===== ghost-stream paths from Maya (center) to each zone =====
   const flows = document.getElementById('flows');
   function rebuildFlows(){
     const s = document.getElementById('stage').getBoundingClientRect();
-    const cx = s.width/2, cy = s.height*0.46;
+    const cx = s.width/2, cy = s.height*0.27; // sphere is at top:198 (rough); flow originates near top center
     const paths = [];
-    document.querySelectorAll('#zoneStage .zone').forEach((el,i)=>{
+    const packets = [];
+    // Only draw streams to ~12 random rooms at a time, to keep visual focus from being noise
+    const visible = Array.from(document.querySelectorAll('#zoneStage .zone.tile')).filter(el=>el.style.display!=='none');
+    const sample = visible.sort(()=>Math.random()-0.5).slice(0,12);
+    sample.forEach((el,i)=>{
       const r = el.getBoundingClientRect();
       const zx = r.left + r.width/2 - s.left;
       const zy = r.top + r.height/2 - s.top;
@@ -531,9 +1183,14 @@ body{
       const my = (cy+zy)/2 + (i%2===0?-40:40);
       const grad = el.classList.contains('state-council') ? 'g_au'
                   : el.classList.contains('state-executing') ? 'g_gr' : 'g_cy';
-      paths.push(`<path class="stream" stroke="url(#${grad})" d="M${cx},${cy} Q${mx},${my} ${zx},${zy}"/>`);
+      const pid = 'p'+i;
+      const cls = el.classList.contains('state-council') ? 'gold'
+                : el.classList.contains('state-executing') ? 'green' : '';
+      paths.push(`<path id="${pid}" class="stream" stroke="url(#${grad})" d="M${cx},${cy} Q${mx},${my} ${zx},${zy}"/>`);
+      // packet dot traveling along the path
+      packets.push(`<circle class="packet ${cls}" r="3"><animateMotion dur="${2.4+Math.random()*1.6}s" repeatCount="indefinite" rotate="auto"><mpath href="#${pid}"/></animateMotion></circle>`);
     });
-    flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('');
+    flows.innerHTML = flows.querySelector('defs').outerHTML + paths.join('') + packets.join('');
   }
   window.addEventListener('resize', rebuildFlows);
 
@@ -574,12 +1231,8 @@ body{
     di++;
   }
   pumpDelib(); setInterval(pumpDelib, 3800);
-  function pumpStudio(){
-    const html = [0,1,2,3,4].map(o=>STUDIO_AUDIT[(si+o) % STUDIO_AUDIT.length]).map(x=>`<div>${x}</div>`).join('');
-    document.getElementById('studioAudit').innerHTML = html;
-    si++;
-  }
-  pumpStudio(); setInterval(pumpStudio, 3000);
+  // studio panel is no longer in default view — it's drawer-only for video agencies
+  // (kept STUDIO_AUDIT array above in case we want to surface it elsewhere)
 
   // ===== rotating log feed =====
   const logEl = document.getElementById('auditLog');
@@ -594,15 +1247,16 @@ body{
   for(let i=0;i<8;i++) pumpLog();
   setInterval(pumpLog, 1700);
 
-  // ===== zone state churn (biolum) =====
+  // ===== zone state churn (biolum) + ambient mood recompute =====
   function churn(){
-    document.querySelectorAll('.zone, .zonecard').forEach((el,i)=>{
+    document.querySelectorAll('.zone, .zonecard, .macro').forEach((el,i)=>{
       STATES.forEach(s=>el.classList.remove(s));
       const r = Math.random();
       const next = r < .15 ? 'state-council' : r < .55 ? 'state-executing' : r < .92 ? 'state-idle' : 'state-error';
       el.classList.add(next);
     });
     rebuildFlows();
+    if (typeof recomputeAmbient === 'function') recomputeAmbient();
   }
   setTimeout(()=>{ churn(); }, 200);
   setInterval(churn, 4500);
@@ -623,6 +1277,7 @@ body{
     document.getElementById('kpi_jail').textContent = jail;
     document.getElementById('kpi_pulse').textContent = '+'+(33899 + Math.floor(Math.random()*200)).toLocaleString();
     document.getElementById('consensusBig').innerHTML = consensus+'%<small>CONSENSUS</small>';
+    renderPulse();
   }
   setInterval(tickKPI, 2000);
 
@@ -643,15 +1298,46 @@ body{
   // ===== drawer =====
   window.openZone = (id)=>{
     const z = ZONES_FULL.find(x=>x.id===id) || ZONES_FULL[0];
-    document.getElementById('drawerTitle').textContent = z.name;
+    if(!z){ return; }
+    document.getElementById('drawerTitle').innerHTML = (z.icon?z.icon+' ':'') + escapeHtml(z.name);
+    // AICineSynth Video Studio block — ONLY for video/cinema/creative agencies
+    const studioBlock = isVideoAgency(z) ? `
+      <section>
+        <h4>AICineSynth · Video Production Studio</h4>
+        <div style="position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);height:200px;background:#000;margin-bottom:10px">
+          <div style="position:absolute;left:8px;top:8px;font-size:9px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;background:rgba(0,0,0,.55);padding:3px 8px;border-radius:99px;border:1px solid var(--cyan)">CONSISTENCY SENTINEL · ACTIVE</div>
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,228,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(0,228,255,.16) 1px,transparent 1px);background-size:18px 18px;mask-image:radial-gradient(ellipse at center,black 50%,transparent 80%)"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center">
+            <svg viewBox="0 0 100 200" style="height:96%;width:auto;filter:drop-shadow(0 0 28px rgba(0,228,255,.45))" fill="none" stroke="#00e4ff" stroke-width="1.2">
+              <circle cx="50" cy="34" r="18" stroke-opacity=".9"/>
+              <path d="M50 52 L50 130 M28 70 L50 60 L72 70 M28 70 L18 110 M72 70 L82 110 M50 130 L34 195 M50 130 L66 195" stroke-opacity=".95"/>
+              <circle cx="18" cy="110" r="3" stroke="#43e6a1" stroke-opacity=".9"/>
+              <circle cx="82" cy="110" r="3" stroke="#43e6a1" stroke-opacity=".9"/>
+              <rect x="38" y="22" width="24" height="24" stroke="#f5c542" stroke-opacity=".6"/>
+            </svg>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.7;color:var(--text)">
+          <div><span style="color:var(--muted)">FACE-LOCK:</span> <b>96% match · target ID frozen</b></div>
+          <div><span style="color:var(--muted)">ANATOMY AUDITOR:</span> <span style="color:var(--green)">10/10 FINGERS · 2 EYES · 1 NOSE</span></div>
+          <div><span style="color:var(--muted)">CHAIN-REACTION FIREWALL:</span> <span style="color:var(--green)">CLEAR</span></div>
+          <div><span style="color:var(--muted)">CONTINUITY LOCK:</span> <b>PERFECT</b> · frame 142/600</div>
+        </div>
+      </section>` : '';
     document.getElementById('drawerBody').innerHTML = `
+      <section>
+        <h4>Agency Profile</h4>
+        <div style="font-size:13px;line-height:1.55;color:var(--text);margin-bottom:6px"><i style="color:${z.color||'var(--cyan)'};font-style:normal;font-weight:600">${escapeHtml(z.tagline||'')}</i></div>
+        <div style="font-size:12.5px;line-height:1.55;color:var(--muted)">${escapeHtml(z.description||'')}</div>
+      </section>
+      ${studioBlock}
       <section>
         <h4>Live Intelligence</h4>
         <div class="stat-grid">
-          <div class="stat"><div class="v" id="dwagents">${Math.floor(Math.random()*40)+8}</div><div class="l">Agents Online</div></div>
-          <div class="stat"><div class="v" id="dwtasks">${Math.floor(Math.random()*200)+30}</div><div class="l">Tasks / hr</div></div>
-          <div class="stat"><div class="v" id="dwerr">${Math.floor(Math.random()*3)}</div><div class="l">QA Holds</div></div>
-          <div class="stat"><div class="v" id="dwseal">${Math.floor(Math.random()*40)+5}</div><div class="l">Gold Seals</div></div>
+          <div class="stat"><div class="v">${z.role_count||0}</div><div class="l">Roles Defined</div></div>
+          <div class="stat"><div class="v">${Math.floor(Math.random()*40)+8}</div><div class="l">Agents Online</div></div>
+          <div class="stat"><div class="v">${Math.floor(Math.random()*200)+30}</div><div class="l">Tasks / hr</div></div>
+          <div class="stat"><div class="v">${Math.floor(Math.random()*40)+5}</div><div class="l">Gold Seals</div></div>
         </div>
       </section>
       <section>
@@ -718,26 +1404,530 @@ body{
     document.getElementById('drawer').classList.add('open');
   };
 
+  // ===== Onboarding wizard — vivid, exhaustive, leaves no loose ends =====
+  const ONBOARD_STEPS = [
+    {key:'identity', title:'Identity & Contact', why:'So Maya can address you correctly and route every notification, invoice, and outcome to the right human.',
+     fields:[
+       {k:'company_name',  l:'Company / Brand Name', t:'text', req:true,  hint:'Legal entity for invoices · brand for customer-facing surfaces'},
+       {k:'primary_email', l:'Primary Email',       t:'email',req:true,  hint:'Maya routes everything here unless you specify a per-service inbox below'},
+       {k:'billing_email', l:'Billing Email',       t:'email',req:false, hint:'Optional · defaults to Primary if blank'},
+       {k:'support_email', l:'Support / Reply-To',  t:'email',req:false, hint:'Where end-customers reach you'},
+       {k:'phone',         l:'Phone (E.164)',       t:'tel',  req:false, hint:'+14045551234 · Maya will route inbound SMS/voice here as fallback'},
+       {k:'timezone',      l:'Time Zone',           t:'text', req:true,  hint:'America/New_York · drives every cron schedule on your behalf'},
+     ]},
+    {key:'services', title:'Services Subscribed', why:'Pick what Maya is running for you. Each service unlocks its own block of questions below — we only ask what we need.',
+     chips:[
+       {k:'svc_aicinesynth', l:'🎬 AICineSynth Video'},
+       {k:'svc_workflow',    l:'⚡ Opencrest Workflow'},
+       {k:'svc_realestate',  l:'🏠 Adeeo Real-Estate'},
+       {k:'svc_storefront',  l:'🛍️ Storefront Ops'},
+       {k:'svc_council',     l:'🏛 MirzaTech Council'},
+       {k:'svc_gaming',      l:'🎮 Superio Gaming'},
+       {k:'svc_staffing',    l:'👥 AI Staffing Roster'},
+     ]},
+    {key:'brand', title:'Brand Assets', why:'For every visual surface Maya generates on your behalf — invoices, emails, video frames, storefront — we use exactly your brand. No more "make it look like X."',
+     fields:[
+       {k:'brand_primary',   l:'Primary Color (hex)', t:'text', req:true,  hint:'#3e9bff · used on CTAs, headers, brand seal'},
+       {k:'brand_accent',    l:'Accent Color (hex)',  t:'text', req:false, hint:'#f5c542 · second-rank · seals, highlights'},
+       {k:'logo_url',        l:'Logo URL or upload',  t:'text', req:false, hint:'Paste URL OR drop the file in Studio after onboarding'},
+       {k:'voice_persona',   l:'Voice Persona',       t:'text', req:false, hint:'e.g. "confident · plainspoken · no hype" — Maya tunes every public surface to this'},
+       {k:'forbidden_words', l:'Forbidden Words',     t:'text', req:false, hint:'Comma-separated. Maya hard-blocks these on all output forever'},
+     ]},
+    {key:'connectors', title:'Connectors & Integrations', why:'Wire Maya into the apps you already use so she has hands. Without these, she can advise but cannot execute.',
+     fields:[
+       {k:'stripe_acct',     l:'Stripe Account ID',   t:'text', req:false, hint:'acct_... · for charging customers · Mo onboards via Stripe Connect after'},
+       {k:'gmail_account',   l:'Gmail Address',       t:'email',req:false, hint:'Maya OAuths into Gmail to send/receive on your behalf'},
+       {k:'slack_workspace', l:'Slack Workspace URL', t:'url',  req:false, hint:'https://yourco.slack.com · optional'},
+       {k:'calendar_link',   l:'Calendar Link',       t:'url',  req:false, hint:'Calendly / Google Calendar embed · used for any meeting bookings'},
+       {k:'github_org',      l:'GitHub Org / User',   t:'text', req:false, hint:'For Workflow + Maya-Qode integration'},
+       {k:'cms_url',         l:'CMS / Website URL',   t:'url',  req:false, hint:'WordPress / Webflow / etc. · Maya publishes content here'},
+     ]},
+    {key:'targets', title:'Target Audience & Goals', why:'Maya operates on goals, not just tasks. Tell her what victory looks like so every agent on the floor moves toward the same outcome.',
+     fields:[
+       {k:'ideal_customer',  l:'Ideal Customer Profile (ICP)', t:'textarea', req:true,  hint:'1-3 sentences · who you sell to, what they look like, where they hang out'},
+       {k:'goal_30d',        l:'30-Day Goal',                  t:'text',     req:true,  hint:'e.g. "20 paid customers" · "ship MVP" · "first $5k MRR"'},
+       {k:'goal_90d',        l:'90-Day Goal',                  t:'text',     req:false, hint:''},
+       {k:'budget_cap',      l:'Monthly Budget Cap (USD)',     t:'number',   req:false, hint:'Maya will stop spending here. Default = $0 (manual approval on every spend)'},
+       {k:'risk_appetite',   l:'Risk Appetite',                t:'select',   req:true,  options:['Conservative · always ask','Balanced · ask for >$ threshold','Aggressive · just ship']},
+     ]},
+    {key:'service_aicinesynth', title:'AICineSynth Setup', why:'Just for video customers. Skip if you didn\'t pick the video service.', requires:'svc_aicinesynth',
+     fields:[
+       {k:'video_reference_face', l:'Primary Character Face (URL or skip + upload in Studio)', t:'text', req:false},
+       {k:'video_brand_voice',    l:'Brand Voice / Tagline',  t:'text', req:false},
+       {k:'video_platforms',      l:'Target Platforms',       t:'text', req:false, hint:'YouTube, TikTok, Instagram, LinkedIn, etc.'},
+       {k:'video_anatomy_strict', l:'Anatomy Strictness',     t:'select', options:['Strict (auto-fix 6-finger, etc.)','Permissive (warn only)']},
+     ]},
+    {key:'service_realestate', title:'Adeeo Real-Estate Setup', why:'Just for real-estate customers.', requires:'svc_realestate',
+     fields:[
+       {k:'re_target_states',     l:'Target States',          t:'text',     req:false, hint:'GA, AL, FL, TX'},
+       {k:'re_target_counties',   l:'Target Counties (optional)', t:'text', req:false, hint:'Gwinnett, Fulton, Cobb...'},
+       {k:'re_lead_types',        l:'Lead Types',             t:'text',     req:false, hint:'wholesale · buy-and-hold · flip · etc.'},
+       {k:'re_max_distress',      l:'Max Distress Score (Dm)',t:'number',   req:false, hint:'0–10 · higher = more distressed = lower price'},
+       {k:'re_skip_trace_tier',   l:'Skip-Trace Tier',        t:'select',   options:['Free only','Paid budget approved','Hybrid']},
+     ]},
+    {key:'final', title:'Review & Lock', why:'One screen to read everything back. Submit when ready — Maya configures every connected agent in real-time.',
+     review:true},
+  ];
+  let onboardState = {step:0, data:{}};
+
+  window.openOnboarding = ()=>{
+    closeViewModal();
+    document.getElementById('mod-onboard').classList.add('show');
+    // restore any prior in-progress draft
+    try{
+      const saved = JSON.parse(localStorage.getItem('maya_onboard')||'null');
+      if(saved && saved.data) onboardState = saved;
+    }catch(e){}
+    renderOnboard();
+  };
+
+  function renderOnboard(){
+    const sidebar = document.getElementById('onboardSteps');
+    const body = document.getElementById('onboardBody');
+    if(!sidebar || !body) return;
+    // hide steps whose 'requires' isn't checked
+    const visible = ONBOARD_STEPS.filter(s => !s.requires || onboardState.data[s.requires]);
+    if(onboardState.step >= visible.length) onboardState.step = visible.length-1;
+    sidebar.innerHTML = visible.map((s,i)=>{
+      const cls = (i===onboardState.step?'active ':'')+(i<onboardState.step?'done ':'');
+      return `<div class="step ${cls}" onclick="onboardJump(${i})"><div class="num">${i<onboardState.step?'✓':String(i+1)}</div><div class="lbl">${escapeHtml(s.title)}</div></div>`;
+    }).join('');
+    const cur = visible[onboardState.step] || visible[0];
+    let html = `<h3>${escapeHtml(cur.title)}</h3><div class="why">${escapeHtml(cur.why)}</div>`;
+    if(cur.review){
+      html += '<div style="font-family:JetBrains Mono,monospace;font-size:11.5px;line-height:1.7;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:10px;padding:14px;max-height:340px;overflow-y:auto">';
+      Object.entries(onboardState.data).forEach(([k,v])=>{
+        if(typeof v==='boolean' && !v) return;
+        html += `<div><b style="color:var(--cyan)">${escapeHtml(k)}:</b> ${escapeHtml(String(v))}</div>`;
+      });
+      html += '</div>';
+    } else if(cur.chips){
+      html += '<div class="chips">'+cur.chips.map(c=>{
+        const checked = onboardState.data[c.k] ? 'checked' : '';
+        return `<input type="checkbox" id="ob_${c.k}" ${checked} onchange="onboardSet('${c.k}', this.checked)"><label for="ob_${c.k}">${escapeHtml(c.l)}</label>`;
+      }).join('')+'</div>';
+    } else if(cur.fields){
+      cur.fields.forEach(f=>{
+        const v = onboardState.data[f.k] || '';
+        let inp = '';
+        if(f.t==='textarea'){
+          inp = `<textarea rows="3" onchange="onboardSet('${f.k}', this.value)">${escapeHtml(v)}</textarea>`;
+        } else if(f.t==='select'){
+          inp = `<select onchange="onboardSet('${f.k}', this.value)"><option value="">— pick —</option>${(f.options||[]).map(o=>`<option ${v===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}</select>`;
+        } else {
+          inp = `<input type="${f.t||'text'}" value="${escapeHtml(v)}" onchange="onboardSet('${f.k}', this.value)" placeholder="${f.req?'required':''}">`;
+        }
+        html += `<div class="field"><label>${escapeHtml(f.l)}${f.req?' <span style="color:var(--red)">*</span>':''}</label>${inp}${f.hint?`<div class="hint">${escapeHtml(f.hint)}</div>`:''}</div>`;
+      });
+    }
+    html += '<div class="onboard-actions">';
+    html += '<button class="back" onclick="onboardBack()" '+(onboardState.step===0?'disabled':'')+'>← Back</button>';
+    if(cur.review){
+      html += '<button onclick="onboardSubmit()">▸ Lock In & Configure Maya</button>';
+    } else {
+      html += '<button onclick="onboardNext()">Next →</button>';
+    }
+    html += '</div>';
+    body.innerHTML = html;
+    const status = document.getElementById('onboardStatus');
+    if(status) status.textContent = onboardState.data.company_name ? '· profile: '+onboardState.data.company_name : 'no profile loaded';
+  }
+  window.onboardSet = (k,v)=>{ onboardState.data[k]=v; localStorage.setItem('maya_onboard', JSON.stringify(onboardState)); };
+  window.onboardJump = (i)=>{ onboardState.step = i; renderOnboard(); };
+  window.onboardNext = ()=>{ onboardState.step++; localStorage.setItem('maya_onboard', JSON.stringify(onboardState)); renderOnboard(); };
+  window.onboardBack = ()=>{ onboardState.step = Math.max(0, onboardState.step-1); renderOnboard(); };
+  window.onboardSubmit = async ()=>{
+    try{
+      const r = await fetch('/api/onboarding.php?action=submit',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(onboardState.data)
+      });
+      const j = await r.json();
+      if(j && j.ok){
+        document.getElementById('onboardBody').innerHTML =
+          `<h3 style="color:var(--green)">✓ Profile Locked</h3>
+           <div class="why">Customer ID: <b>${escapeHtml(j.customer_id||'')}</b> · Maya is now configuring <b>${(j.services_count||0)}</b> services in the background. You'll get a confirmation email at <b>${escapeHtml(onboardState.data.primary_email||'')}</b> with the live URLs for each service.</div>
+           <div style="margin-top:12px;color:var(--muted);font-size:11.5px">Every loop closed up-front. No back-and-forth. Empire begins.</div>`;
+      } else {
+        alert('Onboarding submit failed: ' + (j && j.error || 'unknown error'));
+      }
+    }catch(e){
+      alert('Network error: '+e.message);
+    }
+  };
+
+  // ===== Slide-out overlay panels (right edge) — habitat does NOT shrink =====
+  window.toggleSlide = (key)=>{
+    const panel = document.getElementById('slide-'+key);
+    const tab = document.querySelector('.tab-rail .tab[data-slide="'+key+'"]');
+    if(!panel) return;
+    const wasOpen = panel.classList.contains('open');
+    // Single-open: close any other open panel first
+    document.querySelectorAll('.slide-panel.open').forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.tab-rail .tab.active').forEach(t=>t.classList.remove('active'));
+    if(!wasOpen){
+      panel.classList.add('open');
+      tab && tab.classList.add('active');
+      if(key==='hypermind') loadHypermindPanel();
+      if(key==='jail') loadJailPanel();
+      if(key==='scout') loadScoutPanel();
+    }
+  };
+  async function loadHypermindPanel(){
+    const el = document.getElementById('hypermindBody'); if(!el) return;
+    try{
+      const r = await fetch('/api/maya_sovereign_brain.php?action=state',{cache:'no-store'});
+      const j = await r.json();
+      el.innerHTML = `
+        <div><span style="color:var(--muted)">Patterns total:</span> <b style="color:var(--green)">${j.patterns_total||0}</b></div>
+        <div><span style="color:var(--muted)">Site profiles:</span> <b>${j.site_profiles||0}</b></div>
+        <div><span style="color:var(--muted)">User archetypes:</span> <b>${j.archetypes||0}</b></div>
+        <div><span style="color:var(--muted)">Jail lessons:</span> <b>${j.jail_lessons_total||0}</b></div>
+        <div style="color:var(--muted);font-size:10px;margin-top:8px">Updated: ${j.updated_at||'never'}</div>`;
+    }catch(e){ el.innerHTML='<span style="color:var(--red)">brain unreachable</span>'; }
+  }
+  async function loadJailPanel(){
+    const el = document.getElementById('jailBody'); if(!el) return;
+    try{
+      const r = await fetch('/api/agent_jail.php?action=roster',{cache:'no-store'});
+      const j = await r.json();
+      el.innerHTML = `
+        <div><span style="color:var(--muted)">Currently jailed:</span> <b style="color:${(j.jail&&j.jail.count)?'var(--red)':'var(--green)'}">${(j.jail&&j.jail.count)||0}</b></div>
+        <div><span style="color:var(--muted)">Recidivism:</span> <b>${(j.jail&&j.jail.recidivism_pct)||0}%</b></div>
+        <div><span style="color:var(--muted)">Lessons taught:</span> <b style="color:var(--green)">${j.lessons_total||0}</b></div>
+        <div style="color:var(--muted);font-size:10px;margin-top:8px">Erring agents are taught by the Jailer (deepseek-r1) and folded into the Hypermind.</div>`;
+    }catch(e){ el.innerHTML='<span style="color:var(--red)">jail unreachable</span>'; }
+  }
+  async function loadScoutPanel(){
+    const el = document.getElementById('scoutBody'); if(!el) return;
+    try{
+      const r = await fetch('/api/maya_reasoning_scout.php?action=state',{cache:'no-store'});
+      const j = await r.json();
+      const list = (arr)=>arr && arr.length ? arr.slice(0,3).map(m=>`<div style="margin-left:10px;font-size:11px">• ${escapeHtml(m)}</div>`).join('') : '<div style="color:var(--muted);margin-left:10px">—</div>';
+      el.innerHTML = `
+        <div><span style="color:var(--muted)">Keys polled:</span> <b>${j.keys_used||0}</b></div>
+        <div><span style="color:var(--muted)">Models classified:</span> <b style="color:var(--cyan)">${j.models_seen||0}</b></div>
+        <div style="color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-top:8px;font-family:'Space Grotesk'">Reasoning Deep</div>${list(j.reasoning_deep)}
+        <div style="color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-top:6px;font-family:'Space Grotesk'">Reasoning Fast</div>${list(j.reasoning_fast)}
+        <div style="color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-top:6px;font-family:'Space Grotesk'">Verifier</div>${list(j.verifier)}
+        <div style="color:var(--muted);font-size:10px;margin-top:8px">Updated: ${j.updated_at||'never'}</div>`;
+    }catch(e){ el.innerHTML='<span style="color:var(--red)">scout unreachable</span>'; }
+  }
+  window.togglePanel = ()=>{}; // legacy no-op
+
+  // ===== Consistency Sentinel image attachment (in Studio modal) =====
+  window.handleSentinelUpload = (input)=>{
+    const file = input.files && input.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      const dz = input.closest('.face-dropzone');
+      dz.classList.add('has-image');
+      dz.querySelector('.dz-label').innerHTML = '<b>FACE LOCKED:</b> ' + escapeHtml(file.name);
+      let preview = dz.querySelector('img.preview');
+      if(!preview){
+        preview = document.createElement('img');
+        preview.className = 'preview';
+        dz.appendChild(preview);
+      }
+      preview.src = e.target.result;
+      // status badge in Studio modal
+      const status = document.getElementById('sentinelStatus');
+      if(status) status.innerHTML = '<span style="color:var(--green)">▸ TARGET IMAGE LOADED · sentinel locked</span>';
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // ===== ENHANCED Sovereign Override · pulse + pause Council + open Maya Direct overlay =====
   window.sovereignOverride = ()=>{
     const btn = document.getElementById('sovereignBtn');
-    btn.classList.add('active');
-    document.getElementById('floorTagline').textContent='// SOVEREIGN OVERRIDE ENGAGED · MAYA = CEO · COUNCIL OVERRIDDEN';
-    setTimeout(()=>btn.classList.remove('active'), 2400);
+    btn && btn.classList.add('active');
+    document.getElementById('floorTagline').textContent='// SOVEREIGN OVERRIDE ENGAGED · COUNCIL PAUSED · MAYA = CEO';
+    const stage = document.getElementById('stage');
+    stage && stage.classList.add('flash-pulse');
+    setTimeout(()=>stage && stage.classList.remove('flash-pulse'), 900);
+    document.getElementById('mayaDirect').classList.add('show');
+    setTimeout(()=>document.getElementById('mayaDirectInput')?.focus(), 200);
+    btn && setTimeout(()=>btn.classList.remove('active'), 2400);
   };
+  window.closeMayaDirect = ()=>{
+    document.getElementById('mayaDirect').classList.remove('show');
+    document.getElementById('mayaDirectAns').classList.remove('show');
+  };
+  window.executeMayaDirect = async ()=>{
+    const inp = document.getElementById('mayaDirectInput');
+    const q = (inp.value||'').trim(); if(!q) return;
+    const ans = document.getElementById('mayaDirectAns');
+    ans.classList.add('show');
+    ans.innerHTML = '<span style="color:var(--gold)">▸ Executing as Sovereign · bypassing Council...</span>';
+    try{
+      const r = await fetch('/api/board_of_directors.php?action=deliberate',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({question:q, sovereign_override:true, context:'Mo executed via Direct-Maya overlay. Bypass Council. Maya decides solo.'})
+      });
+      const j = await r.json();
+      if(j && j.ok){
+        ans.innerHTML = `<div style="color:var(--gold)">▸ <b>Sovereign verdict locked.</b></div><div style="margin-top:6px">Order: <i style="color:var(--cyan)">"${escapeHtml(q)}"</i></div><div style="color:var(--muted);font-size:11px;margin-top:6px">Logged as override. Council unfrozen on close.</div>`;
+        inp.value='';
+      } else {
+        ans.innerHTML = '<span style="color:var(--red)">Network or board error · '+escapeHtml(JSON.stringify(j))+'</span>';
+      }
+    }catch(e){
+      ans.innerHTML = '<span style="color:var(--red)">'+escapeHtml(String(e.message||e))+'</span>';
+    }
+  };
+
+  // ===== AGENT GALLERY · swipeable carousel (Gemini greenlit) =====
+  let galleryIdx = 0;
+  function renderGallery(){
+    const track = document.getElementById('galleryTrack');
+    if(!track) return;
+    track.innerHTML = ZONES_FULL.map((z,i)=>{
+      const featured = (i===galleryIdx) ? 'featured' : '';
+      return `<div class="gallery-card ${featured}" data-id="${z.id}" onclick="enterGalleryCard('${z.id}', ${i})">
+        <div class="ic">${z.icon||'•'}</div>
+        <div class="nm">${escapeHtml(z.name)}</div>
+        <div class="tg">${escapeHtml(z.tagline||'')}</div>
+        <div class="ds">${escapeHtml((z.description||'').slice(0,180))}${(z.description||'').length>180?'…':''}</div>
+        <div class="stats">
+          <div class="stat"><div class="v">${z.role_count||0}</div><div class="l">Roles</div></div>
+          <div class="stat"><div class="v">${Math.floor(Math.random()*40)+8}</div><div class="l">Agents</div></div>
+        </div>
+        <button class="enter">▸ Enter Office</button>
+      </div>`;
+    }).join('');
+    // scroll so featured card is centered-ish
+    const card = track.querySelectorAll('.gallery-card')[galleryIdx];
+    if(card){
+      const wrap = track.parentElement;
+      const off = card.offsetLeft - (wrap.clientWidth/2 - card.offsetWidth/2);
+      track.style.transform = `translateX(${-Math.max(0, off)}px)`;
+    }
+  }
+  window.galleryPrev = ()=>{ galleryIdx = Math.max(0, galleryIdx-1); renderGallery(); };
+  window.galleryNext = ()=>{ galleryIdx = Math.min(ZONES_FULL.length-1, galleryIdx+1); renderGallery(); };
+  window.enterGalleryCard = (id, i)=>{ galleryIdx = i; renderGallery(); setTimeout(()=>openZone(id), 250); };
+
+  // ===== AMBIENT STATE-FLUID · empire-wide background mood (Gemini #1) =====
+  function recomputeAmbient(){
+    const tiles = document.querySelectorAll('#zoneStage .zone.tile');
+    if(!tiles.length) return;
+    let council=0, exec=0, err=0;
+    tiles.forEach(t=>{
+      if(t.classList.contains('state-council')) council++;
+      else if(t.classList.contains('state-executing')) exec++;
+      else if(t.classList.contains('state-error')) err++;
+    });
+    document.body.classList.remove('ambient-council','ambient-executing','ambient-error');
+    if(err >= 3) document.body.classList.add('ambient-error');
+    else if(council > exec && council >= 4) document.body.classList.add('ambient-council');
+    else if(exec >= 6) document.body.classList.add('ambient-executing');
+  }
+  // recompute after each churn pass
+  const _origChurn = window.churn || (()=>{});
 
   function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-  // toolbar
+  // ===== toolbar buttons — now actually swap views =====
+  window.openViewModal = function(id){
+    closeViewModal();
+    const el = document.getElementById('mod-'+id);
+    if(el){ el.classList.add('show'); }
+    if(id==='council') renderCouncilChamber();
+    if(id==='workflow') renderWorkflowSwarm();
+  };
+  const openViewModal = window.openViewModal; // keep local alias for internal use
+  window.closeViewModal = ()=>{
+    document.querySelectorAll('.view-modal').forEach(m=>m.classList.remove('show'));
+  };
   document.querySelectorAll('.campus-head .toolbar button').forEach(b=>{
     b.onclick = ()=>{
       document.querySelectorAll('.campus-head .toolbar button').forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
       const v = b.dataset.view;
-      if(v==='council'){ document.querySelector('.col.left .council').scrollIntoView({behavior:'smooth'}); }
-      if(v==='studio'){ document.querySelector('.col.right .studio').scrollIntoView({behavior:'smooth'}); }
-      // workflow/campus reuse the same stage for now (v2 will swap layouts)
+      const stage = document.getElementById('stage');
+      stage.classList.remove('view-gallery');
+      if(v==='campus'){ closeViewModal(); }
+      else if(v==='gallery'){ closeViewModal(); stage.classList.add('view-gallery'); renderGallery(); }
+      else { openViewModal(v); }
     };
   });
+
+  // ===== Council Chamber: seated members in a circle around the consensus orb =====
+  function renderCouncilChamber(){
+    const wrap = document.getElementById('councilChamber');
+    if(!wrap) return;
+    const seats = ['EXEC','ANALYST','LEGAL','QA','SCOUT','JAILER','EXEC-2','ANALYST-2','LEGAL-2','QA-2','SCOUT-2','JAILER-2'];
+    const R = 240;
+    const html = ['<div class="council-orb">'+consensus+'%<small>CONSENSUS</small></div>'];
+    seats.forEach((s,i)=>{
+      const a = (i / seats.length) * Math.PI * 2 - Math.PI/2;
+      const x = Math.cos(a) * R;
+      const y = Math.sin(a) * R * 0.62;
+      html.push(`<div class="council-seat" style="left:calc(50% + ${x}px - 30px);top:calc(50% + ${y}px - 30px)"><div class="body"></div><div class="label">${s}</div></div>`);
+    });
+    wrap.innerHTML = html.join('');
+    document.getElementById('modCouncilStatus').textContent = 'consensus '+consensus+'%';
+  }
+
+  // ===== Workflow Swarm: animated dots attacking nodes + rotating processing log =====
+  const WF_NOW_LINES = [
+    '[01:24:03] swarm-4 attacking <b>Lead Capture</b> · 14 leads/sec',
+    '[01:24:05] swarm-4 → <b>Enrich · Scout</b> · 3 NIM calls in flight',
+    '[01:24:08] <b>Anatomy Audit</b> · 1 hold flagged · rerouted',
+    '[01:24:12] <b style="color:var(--gold)">Council #1</b> convened · 6 seats deliberating',
+    '[01:24:18] Council ruled <span style="color:var(--green)">APPROVE</span> · consensus 87%',
+    '[01:24:20] <b>Hypermind Match</b> · pattern fingerprint #d4e2a · ESTABLISHED',
+    '[01:24:23] <b style="color:var(--gold)">Council #2</b> compliance · LEGAL + QA',
+    '[01:24:27] <span style="color:var(--gold)">⚖ Gold Seal</span> applied · contract #877',
+    '[01:24:29] route → Storefront bus · Stripe charge sent',
+    '[01:24:31] Email receipt queued · customer notified',
+    '[01:24:33] swarm dispersed · pipeline idle · waiting for next trigger',
+  ];
+  function renderWorkflowSwarm(){
+    const c = document.getElementById('workflowCanvas');
+    if(!c) return;
+    c.querySelectorAll('.wf-swarm').forEach(e=>e.remove());
+    // swarm dots attached to each node (visible at every step)
+    const nodes = c.querySelectorAll('.wf-node');
+    nodes.forEach((node, ni)=>{
+      const r = node.getBoundingClientRect();
+      const cRect = c.getBoundingClientRect();
+      const cx = ((r.left + r.width/2) - cRect.left);
+      const cy = ((r.top + r.height/2) - cRect.top);
+      // 3 swarm dots orbiting each node
+      for(let i=0;i<3;i++){
+        const d = document.createElement('div');
+        d.className='wf-swarm';
+        const a = (i / 3) * Math.PI * 2 + ni*0.4;
+        d.style.left = (cx + Math.cos(a)*28) + 'px';
+        d.style.top = (cy + Math.sin(a)*22) + 'px';
+        d.style.animation = `wfOrbit ${2.4 + i*0.6}s linear infinite ${-i*0.3}s`;
+        d.style.background = ['#00e4ff','#43e6a1','#f5c542'][i];
+        d.style.boxShadow = `0 0 10px ${d.style.background}`;
+        c.appendChild(d);
+      }
+    });
+
+    // Currently-Processing rotating log
+    const logEl = document.getElementById('wfNowLog');
+    if(logEl){
+      let idx = 0;
+      const pump = ()=>{
+        const lines = [0,1,2,3].map(o => WF_NOW_LINES[(idx+o) % WF_NOW_LINES.length]).map(t=>`<div>${t}</div>`).join('');
+        logEl.innerHTML = lines;
+        idx++;
+      };
+      pump();
+      if(window.__wfLogTimer) clearInterval(window.__wfLogTimer);
+      window.__wfLogTimer = setInterval(pump, 2200);
+    }
+    // Rotate active node label
+    const active = ['Step 3 · Hypermind Match','Council #1','Anatomy Audit','Council #2','QA Firewall','Step 1 · Enrich'];
+    let ai = 0;
+    if(window.__wfActiveTimer) clearInterval(window.__wfActiveTimer);
+    window.__wfActiveTimer = setInterval(()=>{
+      const el = document.getElementById('wfActiveNode');
+      if(el) el.textContent = active[ai++ % active.length];
+      const cEl = document.getElementById('wfSwarmCount');
+      if(cEl) cEl.textContent = String(18 + Math.floor(Math.random()*12));
+      const hEl = document.getElementById('wfHourly');
+      if(hEl) hEl.textContent = String(140 + Math.floor(Math.random()*20));
+    }, 2400);
+  }
+  // CSS keyframes for orbiting swarm dots
+  const _wfStyle = document.createElement('style');
+  _wfStyle.textContent = '@keyframes wfOrbit{0%{transform:translate(0,0) scale(1);opacity:1}50%{transform:translate(6px,-6px) scale(1.4);opacity:.7}100%{transform:translate(0,0) scale(1);opacity:1}}';
+  document.head.appendChild(_wfStyle);
+
+  // ===== Maya Command Bar — Mo gives orders, Maya answers =====
+  window.sendOrder = async ()=>{
+    const inp = document.getElementById('mayaInput');
+    const q = inp.value.trim(); if(!q) return;
+    const balloon = document.getElementById('mayaBalloon');
+    const ans = document.getElementById('mayaAnswer');
+    balloon.classList.add('show');
+    inp.value='';
+
+    // ===== Local intent: "create agency <name>" spawns a DRAFT room ===
+    const createMatch = q.match(/^\s*(?:create|new|add|spawn)\s+(?:an?\s+)?(?:agency|office|room)\s+(?:for\s+|named\s+|called\s+)?(.+)$/i);
+    if(createMatch){
+      const name = createMatch[1].replace(/[.!?]+$/,'').trim();
+      const slug = 'draft-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '-' + Date.now().toString(36);
+      const newAgency = {
+        id: slug,
+        name: name + ' (DRAFT)',
+        icon: '✨',
+        color: '#ff6bd6',
+        tagline: 'Spawned by Mo · awaiting Maya configuration',
+        description: 'New agency Mo created via the command bar. Tell Maya what roles to assign.',
+        role_count: 0,
+        _draft: true,
+      };
+      ZONES_FULL.unshift(newAgency);
+      renderZones(); renderFilters();
+      // persist locally (so refresh keeps it until you push it to the canonical /api/staff.php)
+      try{
+        const drafts = JSON.parse(localStorage.getItem('maya_draft_agencies')||'[]');
+        drafts.unshift(newAgency);
+        localStorage.setItem('maya_draft_agencies', JSON.stringify(drafts.slice(0,20)));
+      }catch(e){}
+      ans.innerHTML = `<span style="color:var(--cyan)">▸ "${escapeHtml(q)}"</span><br><br><b style="color:var(--pink)">✨ DRAFT agency spawned:</b> <b style="color:var(--white)">${escapeHtml(name)}</b><br><span style="color:var(--muted)">Tile appears in the habitat (top-left). Maya will ask you what roles to assign. To make it canonical (visible to customers), tell Maya "publish ${escapeHtml(name)}" and she'll PR it to /api/staff.php.</span>`;
+      return;
+    }
+
+    ans.innerHTML = '<span style="color:var(--cyan)">▸ "'+escapeHtml(q)+'"</span><br><br><span style="color:var(--muted);font-style:italic">routing to Council...</span>';
+    try{
+      // Try the live Council first (POST to board)
+      const r = await fetch('/api/board_of_directors.php?action=deliberate',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({question:q,context:'Mo gave a direct order via habitat command bar. Sovereign Override available.'})
+      });
+      const j = await r.json();
+      if(j && j.ok){
+        let body = `<span style="color:var(--cyan)">▸ "${escapeHtml(q)}"</span><br><br><b style="color:var(--gold)">Council verdict:</b> ${j.verdict} <span style="color:var(--muted)">(consensus ${j.consensus}%)</span><br>`;
+        if(j.decision && j.decision.round_2){
+          body += '<div style="margin-top:8px;font-family:JetBrains Mono,monospace;font-size:11px;line-height:1.7">';
+          Object.entries(j.decision.round_2).forEach(([seat,o])=>{
+            body += `<div><b style="color:var(--gold)">${seat}:</b> <span style="color:${o.stance==='approve'?'var(--green)':o.stance==='reject'?'var(--red)':'var(--muted)'}">${o.stance}</span> — ${escapeHtml((o.text||'').replace(/^\[.*?\]\s*/, '').slice(0,180))}…</div>`;
+          });
+          body += '</div>';
+        }
+        body += '<br><button onclick="sovereignOverride();this.disabled=true;this.textContent=\'OVERRIDDEN · Maya solo\'" style="background:rgba(245,197,66,.18);border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:99px;font-family:Space Grotesk;letter-spacing:.14em;text-transform:uppercase;font-size:10px;cursor:pointer">Override Council</button>';
+        ans.innerHTML = body;
+      } else {
+        ans.innerHTML = '<span style="color:var(--cyan)">▸ "'+escapeHtml(q)+'"</span><br><br><span style="color:var(--red)">Board unreachable. Sovereign Override available.</span><br><button onclick="sovereignOverride();this.disabled=true;this.textContent=\'OVERRIDDEN\'" style="background:rgba(245,197,66,.18);border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:99px;margin-top:8px;cursor:pointer">Override</button>';
+      }
+    }catch(e){
+      ans.innerHTML = '<span style="color:var(--cyan)">▸ "'+escapeHtml(q)+'"</span><br><br><span style="color:var(--red)">network error · '+escapeHtml(String(e.message||e))+'</span>';
+    }
+  };
+  document.getElementById('mayaInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') sendOrder(); });
+
+  // ===== Subscription-gated client view (Reza sees only what he subscribed to) =====
+  const CLIENT_SUBS = {
+    'reza': {macros:['aicinesynth','superio','mirzatech'], agencies:n=>/content|media|design|creative|gaming|video|cinema/i.test(n)},
+    // additional clients added here as Mo onboards them
+  };
+  function gateForClient(){
+    if(!client) return;
+    const sub = CLIENT_SUBS[client.toLowerCase()];
+    if(!sub){ return; } // unknown client = no gating (yet)
+    // hide macro tiles not in subscription
+    document.querySelectorAll('.macro').forEach(el=>{
+      if(!sub.macros.includes(el.dataset.id)) el.style.display='none';
+    });
+    // hide non-subscribed agencies
+    document.querySelectorAll('#zoneStage .zone.tile').forEach(el=>{
+      const id = el.dataset.id;
+      const ag = ZONES_FULL.find(a=>a.id===id);
+      if(!ag || !sub.agencies(ag.name+' '+ag.tagline)) el.style.display='none';
+    });
+    document.getElementById('floorTagline').textContent = '// CLIENT VIEW · '+client.toUpperCase()+' · subscribed services only';
+  }
+  // run gate after agencies + macros render (small delay)
+  setTimeout(gateForClient, 400);
+  setTimeout(gateForClient, 1500);
 
   // initial paint
   setTimeout(rebuildFlows, 50);
