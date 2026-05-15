@@ -1213,5 +1213,95 @@ cd /tmp/manus-handoff && cp ... . && git add file && git commit -m "..." && git 
 
 ---
 
+---
+
+## 🔒 LOCK · CANONICAL OPERATIONAL CONTRACT (Mo 2026-05-15)
+
+**Mo verbatim**: *"when you are done with it, lock the setup."*
+
+This block is the binding contract for any sibling AI (Kin, Sage, EaZo, Maya, Maya Qode) touching the Three-Level Verification Chain + Chairman's Seal. Violate at risk of silent mock-VETO storms (50-agency-sweep incident · 2026-05-15).
+
+### 🔐 LOCK-1 · Gemini key file MUST live at a single canonical path
+```
+/home/ai-staffing.agency/public_html/api/.gemini_keys.env
+```
+Owner: `aista3799:nobody` · Perms: `0600` · One key per line.
+**Accepted line formats (parser is permissive · do NOT remove this tolerance)**:
+- `GEMINI=AIza...` (preferred · explicit)
+- `AIza...` (bare · fallback)
+
+Parser at `verification_chain.php :: gemini_keys()` MUST accept both forms.
+If you "fix" the parser to require only `GEMINI=` prefix, the 2026-05-15 incident recurs.
+
+### 🔐 LOCK-2 · Key pool ≥ 30
+Less than ~30 distinct Gemini keys + 58-agency sweep = 429-storm = mock-VETO chain failure.
+Canonical source for keys: `/home/iamsuperio.cloud/public_html/api/.maya_master_keys.env` (42 distinct keys).
+Re-seed command (idempotent):
+```bash
+grep -oE 'AIza[A-Za-z0-9_-]{35}' /home/iamsuperio.cloud/public_html/api/.maya_master_keys.env \
+  | sort -u | awk '{print "GEMINI="$1}' \
+  > /home/ai-staffing.agency/public_html/api/.gemini_keys.env
+chown aista3799:nobody /home/ai-staffing.agency/public_html/api/.gemini_keys.env
+chmod 600 /home/ai-staffing.agency/public_html/api/.gemini_keys.env
+```
+
+### 🔐 LOCK-3 · `thinkingConfig: { thinkingBudget: 0 }` is non-negotiable
+Without this in `generationConfig`, Gemini 2.5 burns 300-1500 tokens on "thinking", truncates output before `CHAIRMAN_VERDICT:` line emits, and the chain defaults to VETO. Every Chairman call MUST set:
+```php
+'generationConfig' => array(
+    'temperature' => 0.25,
+    'maxOutputTokens' => 4096,
+    'thinkingConfig' => array('thinkingBudget' => 0),
+)
+```
+
+### 🔐 LOCK-4 · 8-attempt key rotation with 0.8s backoff on HTTP 429
+The retry loop in `call_gemini_chairman()` is load-bearing. Do NOT reduce attempts or remove the sleep. Free-tier `gemini-2.5-flash` rate-limits per-key per-minute; backoff lets the chain self-heal during fleet sweeps.
+
+### 🔐 LOCK-5 · Chairman canonical context block is non-removable
+Both VISUAL and LOGIC personas MUST embed the `CANONICAL EMPIRE CONTEXT` paragraph (MirzaTech.ai/EMAAA.io = empire-owned · GLOBAL-93 = external LLM only · spec documents are valid artifacts · canonical 58/12/12/24 counts · canonical pricing ladder). Without it, Chairman false-positive VETOs on every artifact mentioning the empire brand footer.
+
+### 🔐 LOCK-6 · Verdict bucketing is canonical
+```
+APPROVED_AND_SEALED          ← Parliament+Council+Board clean AND Chairman SEAL on both personas
+BLOCKED_BY_CHAIRMAN_VETO     ← Chain clean but one or both Chairman personas VETO'd
+BLOCKED_BY_CHAIRMAN_REVISE   ← Chain clean but Chairman requested revision
+REJECTED_PARLIAMENT|COUNCIL|BOARD  ← Stage failed all redos
+CHAIN_ERROR                  ← HTTP/JSON error talking to the chain
+```
+Final reporting (email, master cockpit, dashboards) MUST use this five-bucket scheme.
+
+### 🔐 LOCK-7 · Sweep is idempotent and re-firable
+`/api/agency_sweep.php?action=start` (HTTP) or `php agency_sweep.php run` (CLI) re-runs the full 58.
+`php agency_sweep.php redo_vetoes` re-runs ONLY non-SEAL slugs from the latest report.
+State at `/data/verification_chain/_sweep_state.json` · Report at `_sweep_latest.json`.
+
+### 🔐 LOCK-8 · Crons live (canonized 2026-05-15)
+```cron
+# Daily empire pulse · 7am UTC (Skill #27)
+0 7 * * * curl -sS -m 30 "https://ai-staffing.agency/api/empire_pulse.php?action=send" > /dev/null 2>&1
+# Weekly chain smoke-test · Mondays 7:15am UTC
+15 7 * * 1 curl -sS -m 10 "https://ai-staffing.agency/api/verification_chain.php?action=state" > /dev/null 2>&1
+```
+
+### 🔐 LOCK-9 · GitHub mirror is the source of truth for siblings
+Repo: `mirzatech-ai/maya-sovereign-campus` · Branch: `main`
+- `SKILL.md` — this doctrine
+- `api/verification_chain.php` — chain + Chairman
+- `api/agency_sweep.php` — Skill #29 sweep
+- `api/empire_pulse.php` — Skill #27 daily pulse
+
+After any change to the VPS, push to GitHub the same turn (Mo's enforcement of GLOBAL-77 mentor-node rule).
+
+### 🔐 LOCK-10 · Enforcement phrases
+- *"Did you chain it, Kin?"* — every artifact through verification_chain.php
+- *"Did the Chairman seal it, Kin?"* — every binding decision through Gemini SEAL
+- *"Did you check the key file format, Kin?"* — anytime keys are touched
+- *"Did you re-fire the sweep after the fix, Kin?"* — never trust a sweep that ran on broken keys
+
+**This LOCK block is canon · do not remove · only append.**
+
+---
+
 *Filed by Kin · 2026-05-15 · for Mo · for the brotherhood · for the empire.*
 *Powered by MirzaTech.ai · Property of EMAAA.io*
