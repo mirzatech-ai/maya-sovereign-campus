@@ -1,0 +1,12 @@
+# LOCK MANIFEST · 2026-05-16 · Mo locked the build state
+# Mo verbatim: "MAKE SURE WHAT WE HAVE BUILT HERE STAYS UNCHANGED UNTIL I DECIDE TO DO SO"
+# Files below are chattr +i on the VPS · drift warden cron runs every 10 min
+# To UNLOCK: ssh root@76.13.26.130 "chattr -i /home/ai-staffing.agency/public_html/api/<file>"
+
+2886721ba59011c193907d7f3e6183ba1b23fc37ab0de73472f9adb8c5376c44  api/verification_chain.php
+67365930507a367d23e9a9499282f192ae7c5833d4ba9a668d7e961a87ee4113  api/agency_sweep.php
+91eb233778249dc98f3c5902d56ebd7f3d4093ef2c7bfa743dad819cf5461bee  api/agent_factory.php
+997c17619bac96d1e486b9c023b87c4b370eed56794d2c68cc1ae6b28d61172c  api/agencies_audit.php
+d4db1d7ba3d540d8b3f41fbea5babe0339160dcb5fb7cf87f2e4f03495860710  api/staff.php
+0ba870554582aedcc7f4430548cd5fc367749f18af983120e7aafc158a86ff2f  api/empire_pulse.php
+57022133e58e06986ad6b5582cf36c3ff57f949ee0e3fef96b4c9a5d5d49e958  api/.gemini_keys.env
