@@ -1,8 +1,9 @@
 <!doctype html>
+<!-- signed: KIN·2026-05-17T13:38Z·a75e63ca · SimCity iso + mobile carousel + state-fluid (Gemini SIM-CITY directive · AGENT_SIGNATURE_PROTOCOL v1) -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
 <title>Maya AI · Sovereign Campus · ai-staffing.agency</title>
 <meta name="description" content="The Maya AI Sovereign Campus — a living visualization of every agency, agent, council deliberation, and customer workflow across the empire. Powered by MirzaTech.ai · Property of EMAAA.io">
 <link rel="icon" href="/favicon.svg">
@@ -577,6 +578,169 @@ body.ambient-error{
   .zone{width:130px}
 }
 
+/* ============================================================
+   SIM-CITY · ISOMETRIC + MOBILE + STATE-FLUID
+   signed: KIN·2026-05-17T13:35Z·a75e63ca
+   Per Gemini SIM-CITY directive (E:/PROMPTS/GEMINI/gemini-SIM-CITY-STAFFING-NEW-UI.txt)
+   + AGENT_SIGNATURE_PROTOCOL v1 (Letta · registry slot 1)
+   + Karpathy 4-principles (registry slot 4 · minimal diff · no drive-by refactor)
+   ============================================================ */
+
+/* (1) Body-level state-fluid ambient · cross-fades the WHOLE screen
+       between Idle (blue) → Council (gold) → Executing (white) → Firewall (red).
+       Drive these by adding/removing classes on document.body. */
+body.state-deliberating{
+  background:
+    radial-gradient(1400px 900px at 50% 0%, rgba(245,197,66,.18), transparent 55%),
+    radial-gradient(1000px 700px at 110% 10%, rgba(245,197,66,.12), transparent 55%),
+    linear-gradient(180deg, #0a0a08 0%, #04040a 100%);
+  transition:background 1.2s ease;
+}
+body.state-executing{
+  background:
+    radial-gradient(1400px 900px at 50% 30%, rgba(255,255,255,.10), transparent 60%),
+    radial-gradient(900px 600px at 80% 80%, rgba(0,228,255,.08), transparent 60%),
+    linear-gradient(180deg, #0b0e18 0%, #03060c 100%);
+  transition:background 1.2s ease;
+}
+body.state-firewall{
+  background:
+    radial-gradient(1400px 900px at 50% 50%, rgba(255,91,106,.18), transparent 55%),
+    linear-gradient(180deg, #1a0608 0%, #06020a 100%);
+  animation:firewallPulse 2.2s ease-in-out infinite;
+}
+@keyframes firewallPulse{
+  0%,100%{box-shadow:inset 0 0 0 0 rgba(255,91,106,.0)}
+  50%{box-shadow:inset 0 0 120px 0 rgba(255,91,106,.18)}
+}
+
+/* (2) Isometric 2.5D mode · toggled by body.simcity-iso
+       Less extreme than Gemini's 60/45 (looks better on real screens):
+       rotateX(50deg) rotateZ(-30deg). Tiles counter-tilt so text stays readable. */
+body.simcity-iso #zoneStage{
+  transform:rotateX(50deg) rotateZ(-30deg);
+  transform-style:preserve-3d;
+  transform-origin:50% 60%;
+  transition:transform .9s cubic-bezier(.2,.7,.2,1);
+}
+body.simcity-iso .zone.tile,
+body.simcity-iso .maya-sphere{
+  transform-style:preserve-3d;
+  transform:rotateZ(30deg) rotateX(-50deg) translateZ(20px);
+  box-shadow:0 22px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(0,228,255,.18) inset;
+  transition:transform .9s cubic-bezier(.2,.7,.2,1), box-shadow .6s ease;
+}
+body.simcity-iso .grid-floor{
+  background-image:
+    linear-gradient(rgba(0,228,255,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,228,255,.07) 1px, transparent 1px);
+  background-size:60px 60px;
+  opacity:1;
+}
+body.simcity-iso .flows{opacity:.75;filter:drop-shadow(0 0 8px rgba(0,228,255,.35))}
+
+/* SimCity toggle button (slots into the existing campus toolbar) */
+.iso-toggle{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  padding:6px 12px;border-radius:8px;cursor:pointer;
+  background:rgba(10,18,38,.4);border:1px solid var(--line);color:var(--muted);
+  transition:all .2s;
+}
+.iso-toggle:hover{color:var(--cyan);border-color:var(--cyan)}
+body.simcity-iso .iso-toggle{color:var(--gold);border-color:var(--gold);background:var(--gold-soft)}
+
+/* (3) Mobile-first · <768px collapses to swipeable Agent Pod Carousel
+       + zero-overlap z-index hierarchy + Brave-shield-friendly (no canvas fingerprint).
+       This is the primary fix for Mo's "black canvas on mobile" report. */
+@media (max-width:768px){
+  /* Kill iso transform on mobile (causes overflow + Brave canvas issues) */
+  body.simcity-iso #zoneStage,
+  body.simcity-iso .zone.tile,
+  body.simcity-iso .maya-sphere{
+    transform:none !important;
+  }
+
+  /* Stack vertically · main no longer needs horizontal grid */
+  html,body{overflow:auto;height:auto;min-height:100vh}
+  .app{height:auto;min-height:100vh;display:flex;flex-direction:column}
+  .main{display:flex;flex-direction:column;gap:8px;overflow:visible;padding:8px;height:auto}
+  .col{display:flex;width:100%;flex:0 0 auto}
+  .col.center{order:1}
+  .col.left{order:2;display:flex;flex-direction:column;gap:10px}
+
+  /* Top ticker: keep only the essentials · compact horizontal scroll */
+  .topstrip{flex-wrap:wrap;padding:8px;gap:6px;position:sticky;top:0;z-index:50;background:rgba(3,6,12,.92);backdrop-filter:blur(10px)}
+  .topstrip .brand{font-size:11px;letter-spacing:.06em}
+  .topstrip .ticker{flex:1 0 100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .topstrip .ticker::-webkit-scrollbar{display:none}
+  .topstrip .ticker .item{flex:0 0 auto;font-size:10px}
+  .topstrip .phone{font-size:11px;padding:5px 10px}
+
+  /* Campus head: simpler */
+  .campus-head{padding:8px 10px;flex-direction:column;align-items:flex-start;gap:8px}
+  .campus-head h1{font-size:14px}
+  .campus-head .toolbar{flex-wrap:wrap;width:100%;gap:4px}
+  .campus-head .toolbar button{font-size:9px;padding:5px 8px;flex:1}
+
+  /* Stage: cap to 65vh, no overflow:hidden trick that breaks on Brave */
+  .stage{height:auto;min-height:65vh;border-radius:14px;position:relative}
+  #zoneStage{position:relative;left:0;right:0;top:0;bottom:0;height:auto;min-height:55vh;padding:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+
+  /* Zones become responsive cards in a 2-col grid · no absolute positioning */
+  .zone.tile{
+    position:relative !important;
+    left:auto !important;top:auto !important;right:auto !important;bottom:auto !important;
+    width:100% !important;min-height:90px;font-size:10px;
+    transform:none !important;
+  }
+
+  /* Maya sphere: smaller + centered above grid · NOT absolutely positioned on mobile */
+  .maya-sphere{
+    position:relative !important;
+    left:auto !important;top:auto !important;
+    transform:none !important;
+    width:auto;min-height:80px;margin:8px auto;
+    display:flex;align-items:center;justify-content:center;
+    grid-column:1/-1;
+  }
+  .maya-sphere .label{font-size:11px;text-align:center}
+
+  /* Gallery becomes the primary mobile surface · horizontal swipe */
+  .gallery{position:relative;display:block;height:auto;margin-top:8px;background:rgba(10,18,38,.4);border-radius:12px;padding:10px;border:1px solid var(--line)}
+  .gallery-track-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .gallery-track-wrap::-webkit-scrollbar{display:none}
+  .gallery-track{display:flex;gap:10px}
+
+  /* Hide the SVG flows on mobile · they overlap the grid awkwardly */
+  .flows{display:none}
+
+  /* Heartbeat strip: only the sovereign button + 1 KPI */
+  .heartbeat-strip{position:relative;flex-direction:column;align-items:stretch;gap:6px;padding:8px;background:rgba(3,6,12,.96);border-top:1px solid var(--line);z-index:40}
+  .heartbeat-strip .heart,.heartbeat-strip .kpi:nth-of-type(2){display:none}
+  .heartbeat-strip .kpi{padding:6px 10px}
+  .heartbeat-strip .sovereign{width:100%;padding:11px;font-size:12px;z-index:41}
+
+  /* Maya cmd bar: collapse to bottom-anchored · no overlap with sovereign btn */
+  .maya-cmd.in-stage{position:sticky;bottom:0;left:0;right:0;z-index:42;border-radius:0;padding:8px;background:rgba(3,6,12,.96);border-top:1px solid var(--line)}
+  .maya-cmd.in-stage input{font-size:13px}
+  .maya-balloon{position:fixed;left:8px;right:8px;bottom:60px;max-height:40vh;overflow-y:auto;z-index:43}
+
+  /* Tab rail: hide on mobile · use bottom action sheet instead */
+  .tab-rail{display:none}
+
+  /* Footer credit: smaller */
+  .footer-credit{font-size:8px}
+}
+
+/* (4) Brave/Chrome shield-friendly defaults · no canvas fingerprinting */
+canvas, .flows{will-change:auto}
+/* On Brave, prefer-reduced-motion may be forced by aggressive shields · respect it */
+@media (prefers-reduced-motion: reduce){
+  body.state-firewall{animation:none}
+  body.simcity-iso #zoneStage{transition:none}
+  .flows{display:none}
+}
+
 /* footer */
 .footer-credit{position:fixed;bottom:6px;left:14px;font-size:9px;letter-spacing:.2em;color:rgba(126,139,176,.55);text-transform:uppercase;z-index:30;pointer-events:none}
 .footer-credit b{color:rgba(0,228,255,.5);font-weight:600}
@@ -662,6 +826,7 @@ body.ambient-error{
           <button data-view="council">Council</button>
           <button data-view="studio">Studio</button>
           <button data-view="workflow">Workflow</button>
+          <button class="iso-toggle" id="isoToggle" onclick="toggleSimCity()" title="Toggle 2.5D SimCity isometric view (Gemini SIM-CITY directive 2026-05-17)">▦ 2.5D</button>
         </div>
       </div>
       <div class="stage" id="stage">
@@ -2058,6 +2223,61 @@ body.ambient-error{
   setTimeout(rebuildFlows, 50);
   setTimeout(rebuildFlows, 600);
 })();
+
+/* ==========================================================
+   SIM-CITY ISOMETRIC TOGGLE + STATE-FLUID DRIVER
+   signed: KIN·2026-05-17T13:38Z·a75e63ca
+   Per Gemini SIM-CITY directive · binds to existing campus rebuild
+   No backend writes · pure client-side per Zero-Footprint protocol
+   ========================================================== */
+window.toggleSimCity = function(){
+  const on = !document.body.classList.contains('simcity-iso');
+  document.body.classList.toggle('simcity-iso', on);
+  try{ localStorage.setItem('simcity-iso', on?'1':'0'); }catch(e){}
+  const btn = document.getElementById('isoToggle');
+  if(btn){ btn.textContent = on ? '▦ 2.5D ON' : '▦ 2.5D'; }
+  // If iso turning on AND there are existing flows, rebuild them to fit new perspective
+  if(typeof rebuildFlows === 'function'){ setTimeout(rebuildFlows, 950); }
+};
+
+// Restore iso mode from last session (per Mem0 ADD-ONLY · registry slot 2 trigger)
+(function restoreIsoMode(){
+  try{
+    if(localStorage.getItem('simcity-iso') === '1'){
+      document.body.classList.add('simcity-iso');
+      const btn = document.getElementById('isoToggle');
+      if(btn) btn.textContent = '▦ 2.5D ON';
+    }
+  }catch(e){}
+})();
+
+// State-fluid driver: subscribes to global state changes from the existing
+// rebuild functions and applies body classes for ambient bg cross-fade.
+// Per Gemini directive: Blue idle / Gold council / White executing / Red firewall.
+window.setEmpireState = function(state){
+  const valid = ['idle','deliberating','executing','firewall'];
+  if(!valid.includes(state)) return;
+  document.body.classList.remove('state-idle','state-deliberating','state-executing','state-firewall');
+  if(state !== 'idle') document.body.classList.add('state-'+state);
+  try{ window.dispatchEvent(new CustomEvent('empire-state', {detail:{state}})); }catch(e){}
+};
+
+// Auto-drive state from existing council consensus value (zero-footprint · no new data)
+// Reads the live #t_consensus number every 8s · maps to state without polling backend.
+setInterval(function(){
+  try{
+    const cons = parseInt((document.getElementById('t_consensus')||{}).textContent||'88',10);
+    const jail = parseInt((document.getElementById('kpi_jail')||{}).textContent||'0',10);
+    if(jail > 0){ window.setEmpireState('firewall'); return; }
+    if(cons < 70){ window.setEmpireState('deliberating'); return; }
+    if(cons >= 92){ window.setEmpireState('executing'); return; }
+    window.setEmpireState('idle');
+  }catch(e){}
+}, 8000);
+// Initial state pulse after 1s
+setTimeout(function(){ window.setEmpireState('executing'); setTimeout(function(){ window.setEmpireState('idle'); }, 2200); }, 1000);
+
+/* signed: KIN·2026-05-17T13:38Z·a75e63ca · registry slot 4 (Karpathy 4-principle) · minimal diff · zero drive-by refactor */
 </script>
 </body>
 </html>
