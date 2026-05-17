@@ -5,8 +5,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
-<title>Maya AI · Sovereign Campus v4 · Real 3D · SANDBOX</title>
-<meta name="description" content="Maya AI 3D Sovereign Campus · 100 staffing agencies as interactive isometric buildings · Powered by MirzaTech.ai · Property of EMAAA.io">
+<title>Maya AI · Sovereign Campus v4.1 · Real 3D Metropolis · SANDBOX</title>
+<meta name="description" content="Maya AI 3D Sovereign Campus · 100 staffing agencies as interactive isometric buildings · Three.js metropolis with glass+steel towers, kinetic data-packet traffic, MirzaTech Council Chamber · Powered by MirzaTech.ai · Property of EMAAA.io">
+
+<!-- Rich link preview for Gemini / social shares -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Maya AI · Sovereign Campus v4.1 · Real 3D Metropolis">
+<meta property="og:description" content="Interactive 3D campus · 100 staffing agencies on an isometric grid · glass+steel towers with window-grid emissive textures · kinetic data-packet traffic flowing to MirzaTech Council Chamber · click any tower to dispatch a Maya agent · Powered by MirzaTech.ai · Property of EMAAA.io">
+<meta property="og:url" content="https://ai-staffing.agency/habitat-v4.html">
+<meta property="og:image" content="https://ai-staffing.agency/assets/sim-city/5.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Maya AI · Sovereign Campus v4.1 · Real 3D Metropolis">
+<meta name="twitter:description" content="Three.js · 100 agencies · isometric · kinetic data-packets · Click any tower to dispatch a Maya agent">
+
+<!-- Source + context links Gemini can fetch for line-level review -->
+<link rel="alternate" type="text/html" href="https://raw.githubusercontent.com/mirzatech-ai/maya-sovereign-campus/main/habitat-v4.html" title="Habitat v4 source · GitHub raw">
+<link rel="alternate" type="text/markdown" href="https://iamsuperio.cloud/data/_shared_ledger_kin.md" title="EMAAA Core Ledger · full session canon">
+<link rel="alternate" type="application/json" href="https://iamsuperio.cloud/data/_skill_registry.json" title="Maya skill registry · 14 skill slots">
+
+<!-- Machine-readable review manifest · Gemini-readable -->
+<script type="application/json" id="kin-review-manifest">
+{
+  "review_target": "https://ai-staffing.agency/habitat-v4.html",
+  "version": "v4.1",
+  "session_signature": "KIN·2026-05-17·a75e63ca",
+  "purpose": "Maya AI Sovereign Campus · 100-agency 3D SimCity · built per Mo's Gemini-relayed directives in 5 iteration rounds (v1 mockup-as-backdrop · v2 100-agency-floor · v3 rolled back · v4 procedural Three.js · v4.1 metropolis overhaul per Gemini's 4-fix directive)",
+  "fetch_for_full_context": {
+    "source_code_raw": "https://raw.githubusercontent.com/mirzatech-ai/maya-sovereign-campus/main/habitat-v4.html",
+    "source_code_browse": "https://github.com/mirzatech-ai/maya-sovereign-campus/blob/main/habitat-v4.html",
+    "ledger_full": "https://iamsuperio.cloud/data/_shared_ledger_kin.md",
+    "ledger_entries_relevant": "Entry 018 (v4 initial Three.js build · internal Maya agent advisory) + Entry 019 (4-fix metropolis overhaul applied)",
+    "skill_registry": "https://iamsuperio.cloud/data/_skill_registry.json",
+    "dispatch_endpoint": "https://ai-staffing.agency/api/hermes_dispatch.php (POST · {district, task} · district personas k-governance · k-staffing · k-video · k-tools · k-chat · k-realestate · k-memorial · k-gaming · k-content · k-token · k-brotherhood · k-reserved)",
+    "staff_roster": "https://ai-staffing.agency/api/staff.php (100 agencies · 724 roles · live source-of-truth)",
+    "agencies_audit": "https://ai-staffing.agency/api/agencies_audit.php?action=summary",
+    "canonical_council": "https://mirzatech.ai/council/ (12 seats · same 12 lanes as Board)",
+    "canonical_parliament": "https://mirzatech.ai/parliament-theater.html (24 seats · 5 rounds · 10+5+5+3+1)",
+    "canonical_board": "https://ai-staffing.agency/api/board_of_directors.php?action=state (12 seats · live JSON)"
+  },
+  "tech_stack": {
+    "renderer": "Three.js 0.158.0 (UMD) from cdnjs",
+    "camera": "OrthographicCamera at isometric angle (camAngle.y=π/4, camAngle.x=π/4, radius=48)",
+    "buildings": "100 BoxGeometry meshes on 10x10 grid · single shared geometry · per-mesh MeshPhysicalMaterial · canvas-generated window-grid emissive textures per category",
+    "particles": "28-packet data-traffic pool (continuous) + 7-particle click-burst (transient)",
+    "interaction": "manual orbit (mouse/touch drag · wheel zoom) + raycaster hover/click + hover-lift animation",
+    "no_framework": "vanilla Three.js · no React/Vue/Angular · no bundler · single 44KB HTML file"
+  },
+  "gemini_directives_executed": [
+    {"directive": "1. Fix floating Council Chamber Z-axis", "status": "DONE", "implementation": "slug==='_council' whitelisted out of raiseBuilding/lowerBuilding · COUNCIL_ANCHOR const pins x/y/z · steel dome cap added"},
+    {"directive": "2. Architectural restyle · glass+steel + window grids + metallic rooftops", "status": "DONE", "implementation": "MeshPhysicalMaterial w/ metalness 0.9 · roughness 0.18 · clearcoat 0.6 · canvas-generated 8x10 window-grid emissive textures per category · separate roof mesh + neon-trim border"},
+    {"directive": "3. Kinetic data-packet traffic", "status": "DONE", "implementation": "28-packet pool flying building↔Council on parabolic arcs · category-colored · sin-wave fade · click-burst fires 7 white particles from clicked tower"},
+    {"directive": "4. Mobile viewport shielding", "status": "DONE", "implementation": "<768px · click building triggers smooth 24-step camera focus pan · isometric angle locked · sidebar HUDs hide"}
+  ],
+  "honest_scope": {
+    "is": "SimCity 4 / Cities: Skylines aesthetic · procedural towers · neon-trim · kinetic data traffic · functional dispatch",
+    "is_not": "Midjourney AAA fidelity (interior offices visible through windows · rigged animated agent figures · photorealistic PBR textures) — those require custom glTF assets + character rigs from a 3D illustrator"
+  },
+  "next_gemini_review_questions_welcome": [
+    "Specific Three.js code-level improvements for the glass+steel material",
+    "Better algorithms for the kinetic data-packet trajectories",
+    "How to add visible interior office geometry without custom glTF",
+    "Whether to use InstancedMesh for the 100 buildings (perf optimization)",
+    "Any Three.js post-processing passes (UnrealBloomPass · SSAO · DepthOfField) that would push the visual closer to AAA",
+    "Layout improvements: are 10x10 grid + Council-Chamber-at-front the right campus shape?"
+  ],
+  "footer": "Powered by MirzaTech.ai · Property of EMAAA.io · +1 (743) 215-1423 · signed KIN·2026-05-17"
+}
+</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 :root{
