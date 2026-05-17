@@ -21,7 +21,9 @@
 <!-- Source + context links Gemini can fetch for line-level review -->
 <link rel="alternate" type="text/html" href="https://raw.githubusercontent.com/mirzatech-ai/maya-sovereign-campus/main/habitat-v4.html" title="Habitat v4 source · GitHub raw">
 <link rel="alternate" type="text/markdown" href="https://iamsuperio.cloud/data/_shared_ledger_kin.md" title="EMAAA Core Ledger · full session canon">
-<link rel="alternate" type="application/json" href="https://iamsuperio.cloud/data/_skill_registry.json" title="Maya skill registry · 14 skill slots">
+<link rel="alternate" type="application/json" href="https://iamsuperio.cloud/data/_skill_registry.json" title="Maya skill registry · 15 skill slots">
+<link rel="alternate" type="text/javascript" href="https://ai-staffing.agency/habitat-v4-source.js" title="Habitat v4 raw runtime JS · auto-extracted from this page · fully crawlable for AI review">
+<link rel="alternate" type="text/html" href="https://raw.githubusercontent.com/mirzatech-ai/maya-sovereign-campus/main/habitat-v4.html" title="Habitat v4 full source on GitHub raw">
 
 <!-- Machine-readable review manifest · Gemini-readable -->
 <script type="application/json" id="kin-review-manifest">
@@ -65,6 +67,16 @@
       "Re-clamp in click handler (Gemini verbatim: 'councilChamber.position.y = 0' inside intersection handler)",
       "THREE.Points refactor for data-packet pool (Gemini verbatim: 'lightweight THREE.Points particle system')"
     ]
+  },
+  "gemini_round4_additions": {
+    "ts": "2026-05-17T17:35:00Z",
+    "trigger": "Gemini round-4 + Mo's report: (a) background data packets were invisible · only PULSE ALL showed them (b) Gemini can't crawl WebGL canvas state · need text-mirror layer",
+    "patches": [
+      "PARTICLE VISIBILITY FIX: PointsMaterial size 0.22→0.65 · depthTest:false · renderOrder 999 · click-burst sphere 0.11→0.22 with depthTest:false · packets now render ON TOP of buildings, always visible regardless of camera angle",
+      "GEMINI CRAWL LAYER: hidden #crawler-text-mirror div lists every building (name, category, role count, state, grid position) · #scene-state-snapshot JSON updates live with working count + active packets + Council position · #scene-narration aria-live region for screen readers · noscript fallback with GitHub raw source pointer · ARIA labels on the canvas",
+      "Auto-refresh: crawler text mirror + scene-state JSON snapshot regenerated every 4 seconds so any crawl-mid-session sees current state"
+    ],
+    "mo_report": "background data packets invisible until clicking PULSE ALL · Gemini blind to WebGL state · fixed both"
   },
   "gemini_round3_additions": {
     "ts": "2026-05-17T17:20:00Z",
@@ -202,8 +214,48 @@ body{background:radial-gradient(1400px 900px at 50% -10%,rgba(245,197,66,.05),tr
   <a class="phone" href="tel:+17432151423">📞 +1 (743) 215-1423</a>
 </div>
 
+<!-- GEMINI CRAWL LAYER (round-4) · description of the WebGL scene in HTML the text-crawler can read.
+     Updates live via JS so the crawled snapshot reflects current state.
+     Per Mo 2026-05-17 directive: "make this link even more crawlable for Gemini." -->
+<noscript>
+  <div role="alert" style="padding:40px;text-align:center">This page requires JavaScript to render the WebGL 3D campus. The full source + scene description is available at <a href="https://raw.githubusercontent.com/mirzatech-ai/maya-sovereign-campus/main/habitat-v4.html">GitHub</a>.</noscript>
+
+<div id="scene-narration" aria-live="polite" role="status" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden">
+  Maya AI Sovereign Campus 3D scene · 100 staffing agencies as isometric buildings on a 10×10 grid · 5 category clusters (Technology, Business, Healthcare, Industry, Creative) · MirzaTech Council Chamber locked at front-center · 28 data packets continuously flowing from random buildings to Council Chamber via parabolic arcs · click any building to dispatch a Maya agent.
+</div>
+
+<!-- Crawlable scene-state JSON · updates on interaction so Gemini's next crawl sees current state -->
+<script type="application/json" id="scene-state-snapshot">
+{"version":"v4.1.2","camera":"orthographic-isometric","grid":"10x10","building_count":100,"council_chamber":"locked at COUNCIL_ANCHOR (x:0, y:1.1, z:-anchor) with per-frame and click-handler clamps · cannot drift","particle_system":"THREE.Points with 28 vertices · sizeAttenuation true · size 0.65 · depthTest false · renderOrder 999 · continuously flowing building→Council on parabolic arcs","click_burst":"7 white particles (0.22 sphere) staggered 60ms launch · speed 2.0-2.8% per frame","material":"MeshPhysicalMaterial · metalness 0.9 · roughness 0.18 · clearcoat 0.6 · canvas-generated 128x128 window-grid emissive texture per category color (8x10 windows · ~82% lit with random opacity)","rooftops":"BoxGeometry 1.24x0.07x1.24 · metalness 0.95 + 1.28-wide neon-trim border in category color","state_pulses":"idle (category color · emissive 0.32) · working (white · sin-wave emissive 0.65-1.0) · council (gold) · error (red)"}
+</script>
+
+<!-- Hidden but crawlable text description of what every visual element shows · for AI text-crawlers (Gemini, GPT etc.) -->
+<div id="crawler-text-mirror" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+  <h2>3D Scene Contents (for AI crawlers)</h2>
+  <p>This page is a Three.js WebGL canvas rendering. The text below describes what is visible on the canvas surface for any crawler that cannot interpret WebGL rendering output.</p>
+  <ul id="crawler-building-list"></ul>
+  <h3>Live animation state</h3>
+  <ul>
+    <li>The Council Chamber is a gold cylinder at the front-center of the campus with a torus ring + steel dome cap · permanently locked at position (0, 1.1, -12.1) · cannot drift</li>
+    <li>28 small glowing orbs continuously fly from random building tops to the Council Chamber along parabolic arcs · they fade in and out with sin-wave opacity · each orb's color matches its source building's category</li>
+    <li>Clicking any building fires 7 additional white burst orbs from that tower toward the Council Chamber in 60ms-staggered succession</li>
+    <li>The PULSE ALL button triggers all 100 buildings to fire bursts in a 22ms-staggered wave across 2.2 seconds (~700 particles total in the sweep)</li>
+    <li>Hover any building (desktop) · the building lifts 0.4 units · a tooltip shows its agency name, role count, and current state · the Council Chamber is whitelisted out of hover-raise so it cannot float</li>
+  </ul>
+  <h3>Interactive controls</h3>
+  <ul>
+    <li>Mouse drag (or single-finger touch) anywhere on the canvas rotates the camera in orbital fashion</li>
+    <li>Mouse wheel scrolls zoom in/out (camera.zoom · ortho · clamped 0.5-3.0)</li>
+    <li>RESET CAM button (bottom-right) resets camera angle to default (π/4, π/4) and zoom to 1.0</li>
+    <li>AUTO-ROTATE button starts continuous rotation at 0.003 rad/frame</li>
+    <li>PULSE ALL button triggers the 2.2-second campus-wide particle wave + state pulse on every building</li>
+    <li>Click any building tile to open the dispatch overlay (agency details + Maya agent dispatch form)</li>
+    <li>Click the Council Chamber to open the canonical 12-seat doctrine overlay</li>
+  </ul>
+</div>
+
 <!-- 3D STAGE · canvas auto-mounted by Three.js -->
-<div id="stage3d"></div>
+<div id="stage3d" role="application" aria-label="Maya AI 3D Sovereign Campus · 100 interactive staffing agency buildings on isometric grid · drag to rotate · scroll to zoom · click any building to dispatch an agent"></div>
 
 <!-- Tooltip · floats with cursor on hover -->
 <div class="tooltip" id="tooltip">
@@ -262,6 +314,29 @@ body{background:radial-gradient(1400px 900px at 50% -10%,rgba(245,197,66,.05),tr
 
 <!-- Click-overlay modal -->
 <div class="overlay" id="overlay"><div class="modal" id="modalContent"><button class="close" onclick="closeOverlay()">×</button></div></div>
+
+<!-- OFFICE INTERIOR · macro-to-micro view (Gemini directive 2026-05-17 · Skill #16 enter-room zoom) -->
+<div id="officeView" style="display:none;position:fixed;inset:0;z-index:300;background:#03060c">
+  <div style="position:absolute;top:14px;left:14px;z-index:5;display:flex;gap:10px;align-items:center">
+    <button onclick="exitOffice()" style="padding:8px 14px;border-radius:9px;background:rgba(10,18,38,.78);backdrop-filter:blur(10px);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer">↑ EXIT ROOM</button>
+    <div id="officeTitle" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--white);font-size:14px;letter-spacing:.06em"></div>
+  </div>
+  <div id="officeStage" style="position:absolute;inset:0"></div>
+  <!-- Data Dropzone (HTML5 drag-drop · POST to /api/agency_file_intake.php) -->
+  <div id="dropzonePanel" style="position:absolute;right:14px;top:62px;width:280px;z-index:5;background:rgba(10,18,38,.85);backdrop-filter:blur(14px);border:1px solid var(--gold);border-radius:14px;padding:14px;box-shadow:0 18px 40px rgba(0,0,0,.6)">
+    <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold);font-size:11px;letter-spacing:.14em;margin-bottom:8px">📦 AGENCY DATA CARRIER</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);margin-bottom:10px">drop zips · pdfs · folders · images · csv · max 25 MB / file</div>
+    <div id="dropzone" style="border:2px dashed rgba(245,197,66,.5);border-radius:10px;padding:18px 12px;text-align:center;cursor:pointer;background:rgba(245,197,66,.05);transition:all .2s">
+      <div style="font-size:22px;line-height:1;color:var(--gold);margin-bottom:6px">⬇</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--white);letter-spacing:.08em">DROP FILES OR CLICK</div>
+    </div>
+    <input type="file" id="dropzoneInput" multiple style="display:none">
+    <textarea id="dropzoneNote" placeholder="Add a note for the agency about these files..." style="width:100%;margin-top:8px;min-height:50px;border-radius:8px;padding:7px 9px;background:rgba(3,6,12,.7);border:1px solid var(--line);color:var(--text);font-family:'Inter',sans-serif;font-size:11px;resize:vertical;box-sizing:border-box"></textarea>
+    <div id="dropzoneList" style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--green);max-height:80px;overflow-y:auto"></div>
+    <button onclick="sendDropzoneFiles()" id="dropzoneSend" disabled style="margin-top:8px;width:100%;padding:8px;border-radius:8px;background:linear-gradient(135deg,#f5c542,#cd9938);border:1px solid var(--gold);color:#1a1a08;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;opacity:.5">SEND TO AGENCY</button>
+    <div id="dropzoneStatus" style="margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)"></div>
+  </div>
+</div>
 
 <!-- Three.js · MIT · verified via cdnjs https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
@@ -530,11 +605,14 @@ function initDataPackets(){
   dataPacketGeo = new THREE.BufferGeometry();
   dataPacketGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   dataPacketGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  // FIX 2026-05-17T17:35Z · packets were invisible at 0.22 world-units (~1px on screen)
+  // Now: chunky 0.65-unit glowing orbs · depthTest off (renders on top of buildings) · additive blending for hot-light feel
   const mat = new THREE.PointsMaterial({
-    size: 0.22, vertexColors: true, transparent: true, opacity: 0.95,
-    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+    size: 0.65, vertexColors: true, transparent: true, opacity: 1.0,
+    blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, sizeAttenuation: true
   });
   dataPacketPoints = new THREE.Points(dataPacketGeo, mat);
+  dataPacketPoints.renderOrder = 999;   // draw last · always on top
   scene.add(dataPacketPoints);
 }
 
@@ -577,15 +655,17 @@ function fireClickBurst(srcMesh){
   const startPos = srcMesh.position.clone();
   startPos.y = srcMesh.userData.baseY + srcMesh.userData.height/2;
   const endPos = new THREE.Vector3(0, 1.4, -SPACING * (GRID_N/2 + 1.4));
-  const sphereGeo = new THREE.SphereGeometry(0.11, 10, 10);
+  // FIX 2026-05-17T17:35Z · was 0.11 sphere · now 0.22 (4x volume · way more visible)
+  const sphereGeo = new THREE.SphereGeometry(0.22, 12, 12);
   for(let i = 0; i < 7; i++){
-    const mat = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:1});
+    const mat = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:1, depthTest:false});
     const mesh = new THREE.Mesh(sphereGeo, mat);
+    mesh.renderOrder = 1000;
     mesh.position.copy(startPos);
     scene.add(mesh);
     burstPool.push({
       mesh, startPos: startPos.clone(), endPos: endPos.clone(),
-      progress: -i * 0.06,   // staggered launch
+      progress: -i * 0.06,
       speed: 0.020 + Math.random()*0.008,
       dead: false
     });
@@ -833,6 +913,7 @@ function openAgency(ud){
     <div class="cat">AGENCY · ${cat.toUpperCase()} · ${roles} ROLES · STATE: ${ud.state.toUpperCase()}</div>
     <h2>${icon} ${escapeHTML(name)}</h2>
     <div style="font-size:12.5px;line-height:1.55;color:var(--text);padding:10px 12px;border-radius:10px;background:rgba(8,12,24,.55);border:1px solid var(--line);margin:8px 0 14px">${escapeHTML(desc)}</div>
+    <button onclick="enterOffice('${escapeAttr(slug)}')" style="margin-bottom:14px;padding:10px 16px;border-radius:9px;background:linear-gradient(135deg,#00e4ff,#3e9bff);border:1px solid var(--cyan);color:#03060c;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;width:100%;box-shadow:0 10px 24px rgba(0,228,255,.32)">🚪 ENTER OFFICE · MICRO VIEW + DATA DROP</button>
     <div style="margin-top:6px;padding:12px;border-radius:11px;background:linear-gradient(135deg,rgba(245,197,66,.08),rgba(8,12,24,.55));border:1px solid rgba(245,197,66,.35)">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold);font-size:12px;letter-spacing:.08em">⚡ SPAWN AGENT</span>
@@ -914,8 +995,393 @@ function toggleCat(cat){
 
 function sovereignOverride(){ window.location.href = 'tel:+17432151423'; }
 
+// ============ OFFICE INTERIOR · MACRO-TO-MICRO ZOOM (Gemini Skill #16) ============
+// Procedural isometric office · desks · monitors · agent data-cores · NO external assets
+let officeScene = null, officeCamera = null, officeRenderer = null, officeAgents = [], officeRAF = null, currentOfficeAgency = null;
+
+function buildOfficeScene(agency){
+  const stage = document.getElementById('officeStage');
+  // Clean previous
+  if(officeRenderer){
+    officeRenderer.dispose(); officeRenderer.domElement.remove();
+    if(officeRAF) cancelAnimationFrame(officeRAF);
+  }
+  officeScene = new THREE.Scene();
+  officeScene.background = new THREE.Color(0x050912);
+  officeScene.fog = new THREE.Fog(0x050912, 18, 38);
+
+  const w = stage.clientWidth, h = stage.clientHeight;
+  const aspect = w/h;
+  const viewSize = 9;
+  officeCamera = new THREE.OrthographicCamera(-viewSize*aspect, viewSize*aspect, viewSize, -viewSize, 0.1, 100);
+  officeCamera.position.set(14, 12, 14);
+  officeCamera.lookAt(0, 0, 0);
+
+  officeRenderer = new THREE.WebGLRenderer({antialias:true});
+  officeRenderer.setSize(w, h);
+  officeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  officeRenderer.shadowMap.enabled = true;
+  stage.appendChild(officeRenderer.domElement);
+
+  // Lighting
+  officeScene.add(new THREE.AmbientLight(0x404560, 0.6));
+  const sun = new THREE.DirectionalLight(0xfff5e0, 0.9);
+  sun.position.set(8, 18, 6); sun.castShadow = true;
+  officeScene.add(sun);
+  const rim = new THREE.PointLight(0x00e4ff, 0.6, 30);
+  rim.position.set(-8, 6, -8);
+  officeScene.add(rim);
+
+  // Get category color for the agency · drives accent lighting
+  const cat = categorize(agency.id || agency.slug);
+  const accent = CAT_COLOR[cat] || 0x00e4ff;
+  const accentRim = new THREE.PointLight(accent, 0.7, 25);
+  accentRim.position.set(0, 4, 8);
+  officeScene.add(accentRim);
+
+  // FLOOR · dark slate
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(20, 20),
+    new THREE.MeshStandardMaterial({color:0x0a1226, metalness:0.4, roughness:0.7})
+  );
+  floor.rotation.x = -Math.PI/2; floor.receiveShadow = true;
+  officeScene.add(floor);
+
+  // FLOOR grid stripe pattern
+  const gridLines = new THREE.GridHelper(20, 10, accent, 0x1a2540);
+  gridLines.material.transparent = true; gridLines.material.opacity = 0.32;
+  gridLines.position.y = 0.01;
+  officeScene.add(gridLines);
+
+  // PARTITION WALLS · low · neon-trim (per Gemini recipe)
+  function makeWall(x, z, w, h, rot){
+    const wall = new THREE.Mesh(
+      new THREE.BoxGeometry(w, h, 0.2),
+      new THREE.MeshPhysicalMaterial({color:0x0d1428, metalness:0.7, roughness:0.4, clearcoat:0.5})
+    );
+    wall.position.set(x, h/2, z); wall.rotation.y = rot;
+    wall.castShadow = wall.receiveShadow = true;
+    officeScene.add(wall);
+    // Neon trim on top of wall
+    const trim = new THREE.Mesh(
+      new THREE.BoxGeometry(w, 0.04, 0.22),
+      new THREE.MeshBasicMaterial({color:accent})
+    );
+    trim.position.set(x, h + 0.02, z); trim.rotation.y = rot;
+    officeScene.add(trim);
+  }
+  makeWall(0, -10, 20, 1.5, 0);    // back
+  makeWall(-10, 0, 20, 1.5, Math.PI/2);  // left
+  makeWall(10, 0, 20, 1.5, Math.PI/2);   // right
+  // (front intentionally open for camera)
+
+  // SERVER RACKS · back wall row
+  for(let i = 0; i < 5; i++){
+    const rack = new THREE.Mesh(
+      new THREE.BoxGeometry(1.2, 2.2, 0.6),
+      new THREE.MeshPhysicalMaterial({color:0x0a0e1a, metalness:0.92, roughness:0.25})
+    );
+    rack.position.set(-7.5 + i*3.75, 1.1, -9);
+    rack.castShadow = true;
+    officeScene.add(rack);
+    // LED status lights
+    for(let j = 0; j < 4; j++){
+      const led = new THREE.Mesh(
+        new THREE.BoxGeometry(0.15, 0.05, 0.04),
+        new THREE.MeshBasicMaterial({color: j%2 ? accent : 0x43e6a1})
+      );
+      led.position.set(-7.5 + i*3.75 - 0.4 + (j%2)*0.4, 0.7 + Math.floor(j/2)*0.6, -8.7);
+      officeScene.add(led);
+    }
+  }
+
+  // DESKS + MONITORS + AGENT DATA-CORES (Gemini recipe)
+  officeAgents = [];
+  const roleCount = Math.min(agency.role_count || 4, 8);
+  const cols = Math.min(roleCount, 4);
+  const rows = Math.ceil(roleCount / cols);
+  const deskSpacing = 3.2;
+  for(let i = 0; i < roleCount; i++){
+    const col = i % cols, row = Math.floor(i / cols);
+    const dx = (col - (cols-1)/2) * deskSpacing;
+    const dz = (row - (rows-1)/2) * 2.2 + 2;
+    // Desktop (flat wide box)
+    const desk = new THREE.Mesh(
+      new THREE.BoxGeometry(2.0, 0.08, 1.1),
+      new THREE.MeshPhysicalMaterial({color:0x141c30, metalness:0.6, roughness:0.35, clearcoat:0.4})
+    );
+    desk.position.set(dx, 0.78, dz);
+    desk.castShadow = desk.receiveShadow = true;
+    officeScene.add(desk);
+    // 4 legs (thin cylinders)
+    [[-0.85,0.4,-0.45],[0.85,0.4,-0.45],[-0.85,0.4,0.45],[0.85,0.4,0.45]].forEach(([lx,ly,lz]) => {
+      const leg = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.05, 0.05, 0.78, 8),
+        new THREE.MeshStandardMaterial({color:0x0a0e18, metalness:0.8})
+      );
+      leg.position.set(dx + lx, ly, dz + lz);
+      leg.castShadow = true;
+      officeScene.add(leg);
+    });
+    // Monitor · emissive · category-colored
+    const monitor = new THREE.Mesh(
+      new THREE.BoxGeometry(0.85, 0.55, 0.05),
+      new THREE.MeshStandardMaterial({color:0x040810, emissive:accent, emissiveIntensity:0.85, metalness:0.7, roughness:0.2})
+    );
+    monitor.position.set(dx, 1.18, dz - 0.4);
+    monitor.castShadow = true;
+    officeScene.add(monitor);
+    // Monitor stand
+    const stand = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.04, 0.06, 0.18, 8),
+      new THREE.MeshStandardMaterial({color:0x0a0e18, metalness:0.7})
+    );
+    stand.position.set(dx, 0.91, dz - 0.4);
+    officeScene.add(stand);
+    // AGENT DATA-CORE · sleek semi-transparent cylinder (Gemini "obsidian glass humanoid" → cleaner: glowing data core)
+    const agentCore = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.22, 0.28, 0.85, 16),
+      new THREE.MeshPhysicalMaterial({
+        color: accent, emissive: accent, emissiveIntensity: 0.6,
+        transparent: true, opacity: 0.65, metalness: 0.3, roughness: 0.15,
+        transmission: 0.55, thickness: 0.6, clearcoat: 0.9
+      })
+    );
+    agentCore.position.set(dx, 0.43, dz + 0.45);
+    agentCore.castShadow = true;
+    officeScene.add(agentCore);
+    // Floating ID ring above the agent core
+    const ringG = new THREE.TorusGeometry(0.3, 0.025, 6, 24);
+    const ring = new THREE.Mesh(ringG, new THREE.MeshBasicMaterial({color:accent, transparent:true, opacity:0.7}));
+    ring.position.set(dx, 1.0, dz + 0.45);
+    ring.rotation.x = -Math.PI/2;
+    officeScene.add(ring);
+    officeAgents.push({core:agentCore, monitor:monitor, ring:ring, dx, dz, phase: Math.random()*Math.PI*2});
+  }
+
+  // DROPZONE PARTICLE POOL (for the file-drop visual effect)
+  officeDropParticles = [];
+
+  // Title
+  document.getElementById('officeTitle').textContent = '🏢 ' + (agency.name || agency.id || agency.slug) + ' · INTERIOR · ' + (agency.role_count||0) + ' STATIONS';
+  currentOfficeAgency = agency;
+
+  // Animate
+  let oT = 0;
+  function officeAnimate(){
+    officeRAF = requestAnimationFrame(officeAnimate);
+    oT += 0.016;
+    // Subtle agent-core pulse (per-agent random phase so they don't pulse in lockstep)
+    officeAgents.forEach(ag => {
+      ag.core.material.emissiveIntensity = 0.5 + 0.3 * Math.sin(oT * 1.8 + ag.phase);
+      ag.ring.rotation.z = oT * 0.6 + ag.phase;
+    });
+    // Drift the camera very slowly (gentle living-scene feel)
+    officeCamera.position.x = 14 + Math.sin(oT * 0.12) * 0.6;
+    officeCamera.position.z = 14 + Math.cos(oT * 0.12) * 0.6;
+    officeCamera.lookAt(0, 0, 0);
+    // File-drop particles
+    if(officeDropParticles.length) animateDropParticles();
+    officeRenderer.render(officeScene, officeCamera);
+  }
+  officeAnimate();
+}
+
+function enterOffice(slug){
+  const a = AGENCIES.find(x => (x.id||x.slug) === slug);
+  if(!a) return;
+  closeOverlay();
+  document.getElementById('officeView').style.display = 'block';
+  // Resize stage now that it's visible
+  setTimeout(() => buildOfficeScene(a), 30);
+}
+
+function exitOffice(){
+  document.getElementById('officeView').style.display = 'none';
+  if(officeRAF) { cancelAnimationFrame(officeRAF); officeRAF = null; }
+  if(officeRenderer){ officeRenderer.dispose(); officeRenderer.domElement.remove(); officeRenderer = null; }
+  currentOfficeAgency = null;
+  pendingDropFiles = [];
+  document.getElementById('dropzoneList').innerHTML = '';
+  document.getElementById('dropzoneNote').value = '';
+  document.getElementById('dropzoneSend').disabled = true;
+  document.getElementById('dropzoneSend').style.opacity = '0.5';
+  document.getElementById('dropzoneStatus').textContent = '';
+}
+
+// ============ DATA DROPZONE · HTML5 drag-drop · POST to /api/agency_file_intake.php ============
+let pendingDropFiles = [];
+let officeDropParticles = [];
+
+function setupDropzone(){
+  const dz = document.getElementById('dropzone');
+  const input = document.getElementById('dropzoneInput');
+  if(!dz || !input) return;
+  dz.addEventListener('click', () => input.click());
+  input.addEventListener('change', e => acceptDropFiles(Array.from(e.target.files || [])));
+  ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
+    e.preventDefault(); e.stopPropagation();
+    dz.style.background = 'rgba(245,197,66,.16)'; dz.style.borderColor = 'rgba(245,197,66,.9)';
+  }));
+  ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => {
+    e.preventDefault(); e.stopPropagation();
+    dz.style.background = 'rgba(245,197,66,.05)'; dz.style.borderColor = 'rgba(245,197,66,.5)';
+  }));
+  dz.addEventListener('drop', e => {
+    const fs = Array.from(e.dataTransfer.files || []);
+    acceptDropFiles(fs);
+  });
+}
+function acceptDropFiles(files){
+  files.forEach(f => {
+    if(f.size > 25 * 1024 * 1024){
+      document.getElementById('dropzoneStatus').textContent = '⚠ ' + f.name + ' exceeds 25 MB';
+      return;
+    }
+    pendingDropFiles.push(f);
+    triggerDropParticles();
+  });
+  refreshDropList();
+}
+function refreshDropList(){
+  const el = document.getElementById('dropzoneList');
+  if(!el) return;
+  el.innerHTML = pendingDropFiles.map((f,i) =>
+    `<div style="display:flex;justify-content:space-between;gap:6px;padding:2px 0">▸ ${escapeHTML(f.name)} · ${(f.size/1024).toFixed(1)}KB</div>`
+  ).join('');
+  const btn = document.getElementById('dropzoneSend');
+  btn.disabled = pendingDropFiles.length === 0;
+  btn.style.opacity = pendingDropFiles.length === 0 ? '0.5' : '1';
+}
+
+function triggerDropParticles(){
+  // Spawn 8 green particles from the dropzone (top-right) toward a random agent monitor
+  if(!officeAgents.length) return;
+  const target = officeAgents[Math.floor(Math.random() * officeAgents.length)].monitor.position;
+  const startWorld = new THREE.Vector3(7, 5, 4); // approx world coord of the dropzone panel projected
+  const sphereGeo = new THREE.SphereGeometry(0.09, 10, 10);
+  for(let i = 0; i < 8; i++){
+    const mat = new THREE.MeshBasicMaterial({color:0x43e6a1, transparent:true, opacity:1, depthTest:false});
+    const m = new THREE.Mesh(sphereGeo, mat);
+    m.renderOrder = 1000;
+    m.position.copy(startWorld);
+    officeScene.add(m);
+    officeDropParticles.push({mesh:m, start: startWorld.clone(), end: target.clone(), progress: -i*0.07, speed: 0.022 + Math.random()*0.008, dead:false});
+  }
+}
+function animateDropParticles(){
+  for(let i = officeDropParticles.length - 1; i >= 0; i--){
+    const p = officeDropParticles[i];
+    if(p.dead){ officeScene.remove(p.mesh); p.mesh.material.dispose(); officeDropParticles.splice(i,1); continue; }
+    p.progress += p.speed;
+    if(p.progress < 0){ p.mesh.material.opacity = 0; continue; }
+    if(p.progress >= 1){ p.dead = true; continue; }
+    const t = p.progress;
+    p.mesh.position.x = p.start.x + (p.end.x - p.start.x) * t;
+    p.mesh.position.z = p.start.z + (p.end.z - p.start.z) * t;
+    const arcY = 4 * t * (1 - t);
+    p.mesh.position.y = (p.start.y + (p.end.y - p.start.y) * t) + arcY * 1.5;
+    p.mesh.material.opacity = (1 - t) * 0.95;
+  }
+}
+
+async function sendDropzoneFiles(){
+  if(!pendingDropFiles.length || !currentOfficeAgency) return;
+  const btn = document.getElementById('dropzoneSend');
+  const status = document.getElementById('dropzoneStatus');
+  btn.disabled = true; btn.textContent = 'TRANSMITTING…';
+  status.textContent = 'reading files…';
+  // Read each file as base64
+  const filePromises = pendingDropFiles.map(f => new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const b64 = (reader.result || '').split(',')[1] || '';
+      resolve({name: f.name, type: f.type || 'application/octet-stream', data_b64: b64});
+    };
+    reader.onerror = () => resolve({name: f.name, type: f.type || '', data_b64: ''});
+    reader.readAsDataURL(f);
+  }));
+  const files = await Promise.all(filePromises);
+  status.textContent = 'uploading to ' + (currentOfficeAgency.name || currentOfficeAgency.id) + '…';
+  try{
+    const r = await fetch('/api/agency_file_intake.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        agency_slug: currentOfficeAgency.id || currentOfficeAgency.slug,
+        task_note: document.getElementById('dropzoneNote').value || '',
+        files: files
+      })
+    });
+    const j = await r.json();
+    if(j.ok){
+      const ok = j.received.filter(x => x.ok).length;
+      status.innerHTML = `<span style="color:var(--green)">✓ ${ok} of ${j.received.length} stored · ${j.storage}</span>`;
+      pendingDropFiles = [];
+      refreshDropList();
+      // Visual flourish: burst green particles
+      for(let i = 0; i < 3; i++) setTimeout(triggerDropParticles, i*200);
+    } else {
+      status.innerHTML = `<span style="color:var(--red)">⚠ ${escapeHTML(j.error || 'upload failed')}</span>`;
+    }
+  }catch(e){
+    status.innerHTML = `<span style="color:var(--red)">⚠ network: ${escapeHTML(e.message || String(e))}</span>`;
+  } finally {
+    btn.disabled = pendingDropFiles.length === 0; btn.textContent = 'SEND TO AGENCY';
+  }
+}
+
+// Init dropzone on first load
+setTimeout(setupDropzone, 100);
+
+// Resize office canvas on window resize
+window.addEventListener('resize', () => {
+  if(!officeRenderer || !officeCamera) return;
+  const stage = document.getElementById('officeStage');
+  const w = stage.clientWidth, h = stage.clientHeight, ar = w/h, vs = 9;
+  officeCamera.left = -vs*ar; officeCamera.right = vs*ar;
+  officeCamera.top = vs; officeCamera.bottom = -vs;
+  officeCamera.updateProjectionMatrix();
+  officeRenderer.setSize(w, h);
+});
+
+// ============ GEMINI CRAWL LAYER · text mirror of the WebGL scene ============
+function updateCrawlerMirror(){
+  const el = document.getElementById('crawler-building-list');
+  if(!el) return;
+  let html = '';
+  buildings.forEach((b, i) => {
+    if(!b.userData || !b.userData.slug || (b.userData.slug+'').startsWith('pad_')) return;
+    if(b.userData.slug === '_council'){
+      html += `<li>Council Chamber · gold cylindrical tower with torus ring + steel dome cap · LOCKED at front-center anchor (0, 1.1, ${(-SPACING*(GRID_N/2+1.4)).toFixed(1)}) · 12 canonical seats: Reasoning Lead · Strategic Systems · Architecture · Agentic · Practical · Conversion · Web-aware · Agentic Orchestration · Multilingual Reasoning · Independent Voice · Multimodal Vision (Seat 11 · Skill #15 Vision-Interpreter) · Math + Code Specialist</li>`;
+      return;
+    }
+    const a = b.userData.agency || {};
+    html += `<li>Building #${i+1} · ${(a.name||b.userData.slug)} · category: ${b.userData.cat} · roles: ${a.role_count||0} · state: ${b.userData.state||'idle'} · grid (${b.position.x.toFixed(1)}, ${b.position.z.toFixed(1)})</li>`;
+  });
+  el.innerHTML = html;
+  // also bump the scene-state JSON snapshot with live counts
+  const snap = document.getElementById('scene-state-snapshot');
+  if(snap){
+    try{
+      const data = JSON.parse(snap.textContent);
+      data.live_state = {
+        ts: new Date().toISOString(),
+        buildings_total: buildings.filter(b => !((b.userData.slug+'').startsWith('pad_')) && b.userData.slug !== '_council').length,
+        buildings_working: buildings.filter(b => b.userData.state === 'working').length,
+        active_data_packets: dataPackets.length,
+        active_burst_particles: burstPool.length,
+        council_position: `(${(buildings.find(b => b.userData.slug==='_council')||{position:{}}).position.x||0}, ${(buildings.find(b => b.userData.slug==='_council')||{position:{}}).position.y||0}, ${(buildings.find(b => b.userData.slug==='_council')||{position:{}}).position.z||0})`
+      };
+      snap.textContent = JSON.stringify(data);
+    }catch(e){}
+  }
+}
+// Refresh the crawler mirror every 4 seconds so any crawl-mid-session sees current state
+setInterval(updateCrawlerMirror, 4000);
+
 // ============ BOOT ============
-loadAndBuild();
+loadAndBuild().then(() => setTimeout(updateCrawlerMirror, 800));
 </script>
 </body>
 </html>
