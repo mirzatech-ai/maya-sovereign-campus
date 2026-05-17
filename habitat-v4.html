@@ -66,6 +66,16 @@
       "THREE.Points refactor for data-packet pool (Gemini verbatim: 'lightweight THREE.Points particle system')"
     ]
   },
+  "gemini_round3_additions": {
+    "ts": "2026-05-17T17:20:00Z",
+    "trigger": "Gemini round-3 directive: (a) verify chamber clamp landed (Kin confirms: 20+ fix markers in deployed file) (b) wire PULSE ALL button to fire VISIBLE particle streams from every building toward Council Chamber",
+    "patches": [
+      "PULSE ALL refactored: now fires 7-particle click-burst per building with 22ms stagger across 100 buildings = ~2.2s sweep wave of data packets streaming from every tower to the Council Chamber",
+      "Chairman of the Board persona added to /api/hermes_dispatch.php (k-chairman) · Seat 11 Vision-Interpreter persona added (k-vision)",
+      "Skill registry slot 15 added: Vision-Interpreter Chairman Seat doctrine · binding rule that any governance body deliberating on an image must run vision interpretation FIRST and share text description with other seats before deliberation"
+    ],
+    "mo_doctrinal_directive": "'within the setup of parliament and the council and the board of members, executives, we need to have Gemini, and we need to have him or another model that is good to visually interpret images and then share the interpretation with them. board members because we need that tool to be able to deliberate.' · canonicalized as Skill #15"
+  },
   "honest_scope": {
     "is": "SimCity 4 / Cities: Skylines aesthetic · procedural towers · neon-trim · kinetic data traffic · functional dispatch",
     "is_not": "Midjourney AAA fidelity (interior offices visible through windows · rigged animated agent figures · photorealistic PBR textures) — those require custom glTF assets + character rigs from a 3D illustrator"
@@ -750,11 +760,16 @@ let autoRotate = false;
 function toggleAutoRotate(){ autoRotate = !autoRotate; document.getElementById('rotBtn').textContent = autoRotate ? '↻ ROTATING' : '↻ AUTO-ROTATE'; }
 function resetCamera(){ camAngle = {y: Math.PI/4, x: Math.PI/4}; camera.zoom = 1; camera.updateProjectionMatrix(); updateCamera(); }
 function pulseAll(){
-  buildings.forEach(b => {
-    if(b.userData.slug && b.userData.slug !== '_council' && !b.userData.slug.startsWith('pad_')){
+  // GEMINI ROUND-3 DIRECTIVE: PULSE ALL must fire VISIBLE particle streams from every building toward Council
+  // Each building goes 'working' AND emits 3 white burst particles flying toward the chamber
+  const live = buildings.filter(b => b.userData.slug && b.userData.slug !== '_council' && !b.userData.slug.startsWith('pad_'));
+  live.forEach((b, idx) => {
+    // Stagger the burst start so it visually waves across the campus (not all at once)
+    setTimeout(() => {
       setBuildingState(b.userData.slug, 'working');
+      fireClickBurst(b);   // 7 white particles arc from this building to Council
       setTimeout(() => setBuildingState(b.userData.slug, 'idle'), 1500 + Math.random()*2000);
-    }
+    }, idx * 22);   // 22ms stagger · 100 buildings = ~2.2s wave across the city
   });
 }
 
