@@ -149,15 +149,19 @@
     },
     {
       "slot": 12,
-      "category": "hermes",
-      "name": "Hermes Agent (Nous Research · Self-Improving Skills)",
+      "category": "harness_runtime",
+      "name": "Hermes Agent (Nous Research · INSTALLABLE FREE RUNTIME · MIT)",
       "repo": "NousResearch/hermes-agent",
       "github": "https://github.com/NousResearch/hermes-agent",
       "local": "D:/PROJECTS/_SHARED/external_skills/hermes-agent/",
-      "purpose": "Dynamic self-improving skill acquisition · ~/.hermes/skills/ persistence · unified terminal manager for sibling instances",
-      "trigger": "Every session boot · mount ~/.hermes/skills/ if exists",
-      "verified_at": "2026-05-17T13:00:00Z",
-      "http_status": 200
+      "license": "MIT · free forever · no API cost",
+      "purpose": "Self-improving AI agent runtime built by Nous Research. INSTALLS ON MO'S VPS. Bring-your-own-model: routes to ANY backend in Mo's existing arsenal (NVIDIA NIM Nemotron · z.ai/GLM · Kimi/Moonshot · OpenRouter · local Ollama · OpenAI · custom endpoint). Switch backends with `hermes model` · zero code changes. Solves the cross-session memory problem: built-in learning loop · agent-curated memory · skill self-creation + self-improvement · FTS5 session search · LLM summarization for cross-session recall · Honcho dialectic user modeling.",
+      "trigger": "Install once on VPS (76.13.26.130) · point at Maya brain `https://iamsuperio.cloud/api/brain` OR direct NIM endpoint · use as the cross-session memory backbone for Kin/Sage/EaZo/Maya/Kimi · runs as a daemon · accessible via Telegram/Discord/Slack/WhatsApp/Signal/CLI gateway per Mo's preference",
+      "install_command": "curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash    (Linux/macOS/WSL2)",
+      "model_compat": ["NVIDIA NIM (Nemotron · already in Mo's vault)", "z.ai/GLM (already in arsenal)", "Kimi/Moonshot (already in arsenal)", "Groq (already in arsenal)", "local Ollama (Maya's brain)", "OpenRouter 200+", "OpenAI", "custom endpoint"],
+      "verified_at": "2026-05-17T14:35:00Z",
+      "http_status": 200,
+      "mo_correction": "2026-05-17 Mo verbatim: 'I thought that Hermes was a free fucking tool. Right? Open source that we can download and then use our APIs from our library that we have to assign agents for Hermes.' · Kin had wrongly downgraded Hermes to reference-only after misreading earlier · README confirms MIT · free · installable · bring-your-own-model · this is the cross-session memory backbone Mo's been needing"
     },
     {
       "slot": 13,
