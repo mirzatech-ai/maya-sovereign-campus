@@ -1611,14 +1611,24 @@ function setAgentState(ag, state, task){
 }
 
 function enterOffice(slug){
-  // FIX 2026-05-17T18:05Z · was using undeclared global AGENCIES · ReferenceError silently swallowed by inline onclick
-  // Source of truth is the buildings[] array which has userData.agency on each mesh
   const b = buildings.find(x => x.userData && x.userData.slug === slug);
   const a = b && b.userData && b.userData.agency;
   if(!a){ console.warn('enterOffice: no agency for slug', slug); return; }
   closeOverlay();
   document.getElementById('officeView').style.display = 'block';
-  setTimeout(() => buildOfficeScene(a), 30);
+  // Use rAF + small timeout to ensure layout has computed (stage.clientWidth was 0 sometimes)
+  setTimeout(() => {
+    try {
+      buildOfficeScene(a);
+    } catch(err) {
+      console.error('buildOfficeScene failed:', err);
+      // Surface the error visibly on the black screen so Mo can read what failed
+      const stage = document.getElementById('officeStage');
+      if(stage){
+        stage.innerHTML = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(40,8,12,.95);color:#ff5b6a;padding:22px;border-radius:14px;font-family:monospace;font-size:13px;max-width:700px;line-height:1.55;border:1px solid #ff5b6a;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,.7)"><b style="color:#ffaaaa;font-size:14px">⚠ OFFICE BUILD FAILED</b><br><br><span style="color:#ffffff">${(err.message || String(err)).replace(/[<>]/g, c => c==='<'?'&lt;':'&gt;')}</span><br><br><small style="color:#7e8bb0;font-size:10px;display:block;max-height:200px;overflow-y:auto">${(err.stack || '').slice(0, 1500).replace(/[<>]/g, c => c==='<'?'&lt;':'&gt;').replace(/\n/g,'<br>')}</small></div>`;
+      }
+    }
+  }, 60);
 }
 
 function exitOffice(){
