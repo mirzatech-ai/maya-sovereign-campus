@@ -1,0 +1,592 @@
+<!doctype html>
+<!-- signed: KIN·2026-05-17T16:18Z·a75e63ca · habitat v4 · REAL Three.js isometric SimCity · per Mo "create what you are missing and employ it" 2026-05-17 -->
+<!-- Architecture advice by internal Maya agent (Game Dev district · dispatched via /api/hermes_dispatch.php this session) -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
+<title>Maya AI · Sovereign Campus v4 · Real 3D · SANDBOX</title>
+<meta name="description" content="Maya AI 3D Sovereign Campus · 100 staffing agencies as interactive isometric buildings · Powered by MirzaTech.ai · Property of EMAAA.io">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg-0:#03060c; --line:rgba(110,170,255,.18); --line-strong:rgba(0,200,255,.45);
+  --gold:#f5c542; --gold-soft:rgba(245,197,66,.18);
+  --cyan:#00e4ff; --cyan-soft:rgba(0,228,255,.18);
+  --green:#43e6a1; --red:#ff5b6a; --white:#eaf2ff;
+  --text:#dbe6ff; --muted:#7e8bb0;
+  --glass:rgba(10,18,38,.78);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg-0);color:var(--text);font-family:'Inter',system-ui,sans-serif;height:100vh;overflow:hidden}
+body{background:radial-gradient(1400px 900px at 50% -10%,rgba(245,197,66,.05),transparent 55%),linear-gradient(180deg,#03060c 0%,#060912 100%)}
+
+/* TOP STRIP */
+.topstrip{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;gap:12px;align-items:center;padding:9px 16px;background:rgba(3,6,12,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--white)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:dotPulse 2s infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.55}}
+.brand .v{margin-left:6px;padding:3px 8px;border-radius:99px;background:var(--gold-soft);color:var(--gold);font-size:9px;letter-spacing:.14em;border:1px solid var(--gold)}
+.ticker{flex:1;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.ticker::-webkit-scrollbar{display:none}
+.ticker .item{flex:0 0 auto;font-size:11px;color:var(--muted);padding:5px 11px;border-radius:99px;background:rgba(10,18,38,.5);border:1px solid var(--line);white-space:nowrap;display:flex;align-items:center;gap:6px}
+.ticker .item b{color:var(--text);font-weight:600}
+.ticker .item.gold{color:var(--gold);border-color:rgba(245,197,66,.35)}.ticker .item.gold b{color:var(--gold)}
+.ticker .item.green{color:var(--green);border-color:rgba(67,230,161,.35)}.ticker .item.green b{color:var(--green)}
+.ticker .item .pulse{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor}
+.phone{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:linear-gradient(135deg,rgba(245,197,66,.2),rgba(245,197,66,.08));border:1px solid rgba(245,197,66,.4);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;white-space:nowrap;text-decoration:none}
+
+/* 3D STAGE · fills viewport between top and bottom strips */
+#stage3d{position:fixed;top:54px;bottom:62px;left:0;right:0;cursor:grab}
+#stage3d:active{cursor:grabbing}
+#stage3d canvas{display:block;width:100%;height:100%}
+
+/* Tooltip floating above raycaster-hit building */
+.tooltip{position:fixed;pointer-events:none;background:rgba(3,6,12,.95);border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--white);box-shadow:0 8px 22px rgba(0,0,0,.7);transform:translate(12px,12px);z-index:60;display:none;max-width:280px}
+.tooltip.on{display:block}
+.tooltip h6{margin:0 0 3px;font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--cyan);font-weight:600}
+.tooltip .meta{color:var(--muted);font-size:10px;letter-spacing:.06em}
+.tooltip .meta b{color:var(--gold)}
+
+/* Legend (top-left HUD) */
+.legend{position:fixed;top:64px;left:14px;z-index:30;background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:12px;padding:11px 13px;min-width:200px}
+.legend h4{margin:0 0 8px;font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.legend .item{display:flex;align-items:center;gap:8px;font-size:11px;padding:3px 0;cursor:pointer}
+.legend .item:hover .label{color:var(--white)}
+.legend .swatch{width:11px;height:11px;border-radius:3px;box-shadow:0 0 6px currentColor}
+.legend .label{color:var(--text)}
+.legend .count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.legend .item.dim{opacity:.4}
+
+/* Right HUD (Continuity Sentinel) */
+.right-hud{position:fixed;top:64px;right:14px;z-index:30;width:220px;display:flex;flex-direction:column;gap:8px}
+.panel{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.panel h4{margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+.panel h4 .b{margin-left:auto;font-size:8.5px;letter-spacing:.12em;padding:2px 6px;border-radius:99px;background:var(--green-soft,rgba(67,230,161,.18));color:var(--green);border:1px solid rgba(67,230,161,.35)}
+.sentinel-frame{height:80px;border-radius:7px;background:radial-gradient(circle at 50% 40%,rgba(67,230,161,.18),transparent 65%),repeating-linear-gradient(0deg,transparent 0,transparent 9px,rgba(67,230,161,.18) 9px,rgba(67,230,161,.18) 10px),repeating-linear-gradient(90deg,transparent 0,transparent 9px,rgba(67,230,161,.18) 9px,rgba(67,230,161,.18) 10px);border:1px solid rgba(67,230,161,.25);position:relative;overflow:hidden}
+.sentinel-frame::before{content:'';position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);box-shadow:0 0 8px var(--green);animation:scan 3.2s linear infinite}
+@keyframes scan{0%{top:0}100%{top:100%}}
+.sentinel-stats{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--green);margin-top:6px;display:flex;flex-direction:column;gap:2px}
+.sentinel-stats span{display:flex;justify-content:space-between}.sentinel-stats span b{color:var(--white);font-weight:600}
+
+/* Controls (top-right corner) */
+.controls{position:fixed;bottom:72px;right:14px;z-index:30;display:flex;flex-direction:column;gap:6px}
+.controls button{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--line);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;padding:7px 12px;border-radius:8px;cursor:pointer;transition:all .15s}
+.controls button:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* Bottom HUD strip */
+.bottom-hud{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;gap:12px;align-items:center;padding:9px 16px;background:rgba(3,6,12,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.kpi{display:flex;gap:14px;padding:5px 12px;background:rgba(10,18,38,.5);border-radius:99px;border:1px solid var(--line)}
+.kpi.gold{border-color:rgba(245,197,66,.35)}.kpi.green{border-color:rgba(67,230,161,.35)}
+.kpi .val{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--white);font-size:13px}
+.kpi.green .val{color:var(--green)}.kpi.gold .val{color:var(--gold)}
+.kpi .lbl{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.sovereign{margin-left:auto;padding:10px 18px;border-radius:11px;background:linear-gradient(135deg,#f5c542,#cd9938);border:1px solid #f5c542;color:#1a1a08;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 9px 22px rgba(245,197,66,.32);display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;gap:1px}
+.sovereign small{font-weight:500;font-size:9px;opacity:.75;letter-spacing:.18em}
+
+/* Overlay modal for clicked agency */
+.overlay{position:fixed;inset:0;background:rgba(3,6,12,.88);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+.overlay.open{display:flex}
+.modal{max-width:760px;width:100%;max-height:84vh;overflow-y:auto;background:var(--glass);border:1px solid var(--line-strong);border-radius:18px;padding:22px;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.75)}
+.modal h2{margin:0 0 4px;font-family:'Space Grotesk',sans-serif;color:var(--white);font-size:18px}
+.modal .cat{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+.modal .close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:rgba(10,18,38,.5);color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.modal .close:hover{color:var(--white)}
+
+@media (max-width:768px){
+  .legend{display:none}
+  .right-hud{display:none}
+  .ticker .item:nth-of-type(n+3){display:none}
+  .controls{bottom:80px}
+  .kpi:nth-of-type(2){display:none}
+  .sovereign{padding:9px 12px;font-size:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP STRIP -->
+<div class="topstrip">
+  <div class="brand"><div class="dot"></div>MAYA AI · SOVEREIGN CAMPUS<span class="v">v4 · 3D</span></div>
+  <div class="ticker">
+    <div class="item"><div class="pulse"></div><b id="t_count">100</b>&nbsp;Agencies</div>
+    <div class="item"><div class="pulse"></div><b id="t_roles">724</b>&nbsp;Roles</div>
+    <div class="item gold"><div class="pulse"></div>Council <b id="t_consensus">88%</b></div>
+    <div class="item green"><div class="pulse"></div><b id="t_working">0</b>&nbsp;Working</div>
+    <div class="item"><div class="pulse"></div>Maya Lines <b>OPEN</b></div>
+  </div>
+  <a class="phone" href="tel:+17432151423">📞 +1 (743) 215-1423</a>
+</div>
+
+<!-- 3D STAGE · canvas auto-mounted by Three.js -->
+<div id="stage3d"></div>
+
+<!-- Tooltip · floats with cursor on hover -->
+<div class="tooltip" id="tooltip">
+  <h6 id="tt_name">…</h6>
+  <div class="meta" id="tt_meta">…</div>
+</div>
+
+<!-- LEFT HUD · Category Legend -->
+<div class="legend" id="legend">
+  <h4>CATEGORIES · 5</h4>
+  <div class="item" data-cat="tech" onclick="toggleCat('tech')"><span class="swatch" style="background:#00d4ff;color:#00d4ff"></span><span class="label">Technology</span><span class="count" id="c_tech">…</span></div>
+  <div class="item" data-cat="biz" onclick="toggleCat('biz')"><span class="swatch" style="background:#a384ff;color:#a384ff"></span><span class="label">Business</span><span class="count" id="c_biz">…</span></div>
+  <div class="item" data-cat="health" onclick="toggleCat('health')"><span class="swatch" style="background:#43e6a1;color:#43e6a1"></span><span class="label">Healthcare</span><span class="count" id="c_health">…</span></div>
+  <div class="item" data-cat="industry" onclick="toggleCat('industry')"><span class="swatch" style="background:#ffb454;color:#ffb454"></span><span class="label">Industry</span><span class="count" id="c_industry">…</span></div>
+  <div class="item" data-cat="creative" onclick="toggleCat('creative')"><span class="swatch" style="background:#ff5cc4;color:#ff5cc4"></span><span class="label">Creative</span><span class="count" id="c_creative">…</span></div>
+  <div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)">
+    <div class="item" style="cursor:default"><span class="swatch" style="background:#f5c542;color:#f5c542"></span><span class="label">Council Chamber</span><span class="count">12 SEAT</span></div>
+  </div>
+</div>
+
+<!-- RIGHT HUD · Continuity Sentinel + Anatomical Auditor -->
+<div class="right-hud">
+  <div class="panel">
+    <h4>📹 Continuity Sentinel<span class="b">LIVE</span></h4>
+    <div class="sentinel-frame"></div>
+    <div class="sentinel-stats">
+      <span>FACELOCK <b>SECURED</b></span>
+      <span>ANATOMY <b>100%</b></span>
+      <span>FINGERS <b>10/10</b></span>
+    </div>
+  </div>
+  <div class="panel">
+    <h4>🛡 Anatomical Auditor<span class="b">PASSED</span></h4>
+    <div class="sentinel-frame"></div>
+    <div class="sentinel-stats">
+      <span>FRAME <b>PASSED</b></span>
+      <span>LOCK <b>PERFECT</b></span>
+      <span>QA <b>10/10</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- 3D Camera Controls -->
+<div class="controls">
+  <button onclick="resetCamera()">⌂ RESET CAM</button>
+  <button onclick="toggleAutoRotate()" id="rotBtn">↻ AUTO-ROTATE</button>
+  <button onclick="pulseAll()">⚡ PULSE ALL</button>
+</div>
+
+<!-- BOTTOM HUD -->
+<div class="bottom-hud">
+  <div class="kpi green"><div><div class="val">$22,095</div><div class="lbl">Live Sales</div></div></div>
+  <div class="kpi gold"><div><div class="val">88%</div><div class="lbl">Consensus</div></div></div>
+  <button class="sovereign" onclick="sovereignOverride()">Sovereign Override<small>DIRECT-LINE TO MAYA</small></button>
+</div>
+
+<!-- Click-overlay modal -->
+<div class="overlay" id="overlay"><div class="modal" id="modalContent"><button class="close" onclick="closeOverlay()">×</button></div></div>
+
+<!-- Three.js · MIT · verified via cdnjs https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
+
+<script>
+/* signed: KIN·2026-05-17T16:18Z·a75e63ca · habitat v4 · REAL Three.js isometric campus
+   Architecture by internal Maya agent (Game Dev district · dispatched 2026-05-17T16:17Z):
+     10x10 grid · 2-unit spacing · single shared material updated per building · subtle grid overlay
+*/
+
+// ============ SCENE SETUP ============
+const stageEl = document.getElementById('stage3d');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x03060c);
+scene.fog = new THREE.Fog(0x03060c, 40, 90);
+
+const aspect = stageEl.clientWidth / stageEl.clientHeight;
+const viewSize = 18;
+const camera = new THREE.OrthographicCamera(-viewSize*aspect, viewSize*aspect, viewSize, -viewSize, 0.1, 200);
+const CAM_START = new THREE.Vector3(28, 28, 28);
+camera.position.copy(CAM_START);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
+renderer.setSize(stageEl.clientWidth, stageEl.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+stageEl.appendChild(renderer.domElement);
+
+// Lighting
+scene.add(new THREE.AmbientLight(0x4060a0, 0.55));
+const sun = new THREE.DirectionalLight(0xfff5e0, 1.2);
+sun.position.set(20, 32, 14); sun.castShadow = true;
+sun.shadow.camera.left = -25; sun.shadow.camera.right = 25;
+sun.shadow.camera.top = 25; sun.shadow.camera.bottom = -25;
+sun.shadow.mapSize.set(2048, 2048);
+scene.add(sun);
+const rim = new THREE.DirectionalLight(0x00e4ff, 0.4);
+rim.position.set(-20, 10, -10);
+scene.add(rim);
+
+// Ground plane + grid (subtle SimCity grid overlay per agent's recipe (d))
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(60, 60),
+  new THREE.MeshStandardMaterial({color:0x0a1226, metalness:0.2, roughness:0.85})
+);
+ground.rotation.x = -Math.PI/2; ground.receiveShadow = true; ground.position.y = -0.01;
+scene.add(ground);
+const grid = new THREE.GridHelper(60, 30, 0x00e4ff, 0x00e4ff);
+grid.material.transparent = true; grid.material.opacity = 0.12;
+scene.add(grid);
+
+// ============ CATEGORY → COLOR MAP (agent recipe (b): hue per category) ============
+const CAT_COLOR = {
+  tech:      0x00d4ff,   // cyan
+  biz:       0xa384ff,   // violet
+  health:    0x43e6a1,   // green
+  industry:  0xffb454,   // amber
+  creative:  0xff5cc4    // magenta
+};
+const CAT_REGEX = {
+  tech:      /engineering|ai-research|cybersecurity|data-intelligence|robotics|quantum|blockchain|ai-agents|computer-vision|edge-ai|mlops|nlp-specialists|embedded-systems|geospatial-ai|network-security|digital-twins|3d-printing|autonomous-drones|satellite-comms|ar-vr-xr|smart-cities|nuclear-energy-ai|water-ocean-tech/i,
+  biz:       /marketing-growth|sales-revenue|design-creative|content-media|finance-accounting|legal-compliance|human-resources|customer-success|product-management|operations-logistics|recruitment-hrtech|hr-analytics|tax-accounting-ai|insurance-risk|saas-growth|ecommerce-growth|b2b-lead-gen|influencer-marketing|seo-content-ai|video-marketing|social-media-ai|web-scraping-data|legal-tech|legaltech-immigration|crypto-regulatory-compliance|creator-economy/i,
+  health:    /healthcare|pharma|fintech|wellness|mental-health|childcare-edtech|eldercare-tech|clinical-decision|bioinformatics|pet-veterinary/i,
+  industry:  /manufacturing|supply-chain|construction|transportation|automotive|aviation|space|energy|agriculture|telecommunications|government|retail-ecommerce|hospitality|real-estate|prop-tech|defi-tokenomics|climate-esg|climate-risk-modeling|education-training/i,
+  creative:  /video|media-entertainment|voice-audio|prompt-engineering|sports-gaming|game-development|culinary|fashion|arts|event-production|nonprofit|music-production|language-translation|translation-localization|defense-security|ai-safety|ai-ethics|devrel|research-development|ai-disaster|pharma-rd-ai|quantum-ai-optimization/i
+};
+function categorize(slug){
+  slug = (slug||'').toLowerCase();
+  for(const k in CAT_REGEX){ if(CAT_REGEX[k].test(slug)) return k; }
+  return 'tech';
+}
+
+// ============ BUILD BUILDINGS (10x10 grid · 2-unit spacing · agent recipe (a)) ============
+const GRID_N = 10;
+const SPACING = 2.2;
+const buildings = [];        // {mesh, slug, agency, cat, state, baseColor}
+let hoveredBuilding = null;
+let workingCount = 0;
+
+async function loadAndBuild(){
+  let agencies = [];
+  try{
+    const r = await fetch('/api/staff.php', {cache:'no-store'});
+    const j = await r.json();
+    agencies = j.agencies || [];
+  }catch(e){ console.warn('staff.php failed', e); }
+
+  // Pad to 100 if needed
+  while(agencies.length < GRID_N*GRID_N){
+    agencies.push({id:'pad_'+agencies.length, name:'(reserved)', role_count:0, description:'Reserved · district pending'});
+  }
+  agencies = agencies.slice(0, GRID_N*GRID_N);
+
+  document.getElementById('t_count').textContent = agencies.length;
+  document.getElementById('t_roles').textContent = agencies.reduce((s,a)=>s+(a.role_count||0),0);
+
+  // Category counts
+  const counts = {tech:0,biz:0,health:0,industry:0,creative:0};
+  agencies.forEach(a => { counts[categorize(a.id||a.slug)] += 1; });
+  Object.keys(counts).forEach(k => document.getElementById('c_'+k).textContent = counts[k]);
+
+  // Single shared material POOL (recipe (c): avoid per-building material allocation)
+  // We use 5 base materials (one per category) and tint via vertex/instance · here we use
+  // MeshStandardMaterial per building because we need individual emissive but we share geometry
+  const sharedGeometry = new THREE.BoxGeometry(1.2, 1, 1.2);   // base · scaled per building
+
+  agencies.forEach((a, i) => {
+    const row = Math.floor(i / GRID_N);
+    const col = i % GRID_N;
+    const x = (col - (GRID_N-1)/2) * SPACING;
+    const z = (row - (GRID_N-1)/2) * SPACING;
+    const roles = a.role_count || 4;
+    const height = 0.6 + (roles / 12) * 2.6;  // 0.6–3.2 units · taller = more roles
+    const cat = categorize(a.id||a.slug);
+    const baseColor = CAT_COLOR[cat];
+    const padding = String(a.id||'').startsWith('pad_');
+
+    const mat = new THREE.MeshStandardMaterial({
+      color: padding ? 0x1a2238 : baseColor,
+      emissive: baseColor,
+      emissiveIntensity: padding ? 0 : 0.18,
+      metalness: 0.4,
+      roughness: 0.55,
+      transparent: padding,
+      opacity: padding ? 0.25 : 1
+    });
+
+    const mesh = new THREE.Mesh(sharedGeometry, mat);
+    mesh.scale.y = height;
+    mesh.position.set(x, height/2, z);
+    mesh.castShadow = !padding; mesh.receiveShadow = !padding;
+    mesh.userData = {slug:a.id||a.slug, agency:a, cat, baseColor, baseY:height/2, height, state:'idle'};
+    scene.add(mesh);
+    buildings.push(mesh);
+  });
+
+  // Council Chamber · center · gold cylinder (slightly bigger · separate from grid)
+  const chamberGeo = new THREE.CylinderGeometry(1.6, 1.8, 2.2, 24);
+  const chamberMat = new THREE.MeshStandardMaterial({
+    color: 0xf5c542, emissive: 0xf5c542, emissiveIntensity: 0.4,
+    metalness: 0.7, roughness: 0.3
+  });
+  const chamber = new THREE.Mesh(chamberGeo, chamberMat);
+  chamber.position.set(0, 1.1, -SPACING * (GRID_N/2 + 1.4));
+  chamber.castShadow = true; chamber.receiveShadow = true;
+  chamber.userData = {slug:'_council', name:'MirzaTech Council Chamber', cat:'council', state:'idle'};
+  scene.add(chamber);
+  buildings.push(chamber);
+
+  // Glowing ring around the chamber
+  const ringGeo = new THREE.TorusGeometry(2.2, 0.08, 8, 48);
+  const ringMat = new THREE.MeshStandardMaterial({color:0xf5c542, emissive:0xf5c542, emissiveIntensity:0.8});
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.position.copy(chamber.position); ring.position.y = 0.05;
+  ring.rotation.x = -Math.PI/2;
+  scene.add(ring);
+}
+
+// ============ INTERACTION · raycaster click + hover (agent recipe (c) optimization: single Raycaster reused) ============
+const raycaster = new THREE.Raycaster();
+const mouseVec = new THREE.Vector2();
+let lastIntersect = null;
+
+stageEl.addEventListener('mousemove', (e) => {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouseVec.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouseVec.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  showTooltip(e.clientX, e.clientY);
+});
+
+function showTooltip(cx, cy){
+  raycaster.setFromCamera(mouseVec, camera);
+  const hits = raycaster.intersectObjects(buildings, false);
+  const tt = document.getElementById('tooltip');
+  if(hits.length){
+    const m = hits[0].object;
+    if(m.userData.slug && m.userData.slug !== '_pad' && !m.userData.slug.startsWith('pad_')){
+      tt.classList.add('on');
+      tt.style.left = cx + 'px';
+      tt.style.top = cy + 'px';
+      if(m.userData.slug === '_council'){
+        document.getElementById('tt_name').textContent = '🏛 MirzaTech Council Chamber';
+        document.getElementById('tt_meta').innerHTML = `<b>12 SEATS · LIVE</b> · ${m.userData.state.toUpperCase()}`;
+      } else {
+        const a = m.userData.agency;
+        document.getElementById('tt_name').textContent = (a.icon||'🏢') + ' ' + (a.name||m.userData.slug);
+        document.getElementById('tt_meta').innerHTML = `<b>${a.role_count||0} roles</b> · ${m.userData.cat} · ${m.userData.state.toUpperCase()}`;
+      }
+      if(lastIntersect && lastIntersect !== m) lowerBuilding(lastIntersect);
+      raiseBuilding(m);
+      lastIntersect = m;
+      stageEl.style.cursor = 'pointer';
+      return;
+    }
+  }
+  tt.classList.remove('on');
+  if(lastIntersect){ lowerBuilding(lastIntersect); lastIntersect = null; }
+  stageEl.style.cursor = 'grab';
+}
+
+function raiseBuilding(m){ m.position.y = (m.userData.baseY || m.position.y) + 0.4; m.material.emissiveIntensity = 0.55; }
+function lowerBuilding(m){ if(m.userData.baseY) m.position.y = m.userData.baseY; m.material.emissiveIntensity = stateEmissive(m.userData.state); }
+function stateEmissive(s){ return s==='working'?0.85:s==='council'?0.7:s==='error'?0.6:0.18; }
+
+stageEl.addEventListener('click', (e) => {
+  raycaster.setFromCamera(mouseVec, camera);
+  const hits = raycaster.intersectObjects(buildings, false);
+  if(!hits.length) return;
+  const m = hits[0].object;
+  if(m.userData.slug === '_council'){ openCouncil(); return; }
+  if(!m.userData.slug || m.userData.slug.startsWith('pad_')) return;
+  openAgency(m.userData);
+});
+
+// ============ STATE PULSE (working/council/error) ============
+function setBuildingState(slug, state){
+  const m = buildings.find(b => b.userData.slug === slug);
+  if(!m) return;
+  m.userData.state = state;
+  m.material.emissiveIntensity = stateEmissive(state);
+  if(state === 'working'){ m.material.emissive.setHex(0xffffff); }
+  else if(state === 'council'){ m.material.emissive.setHex(0xf5c542); }
+  else if(state === 'error'){ m.material.emissive.setHex(0xff5b6a); }
+  else { m.material.emissive.setHex(m.userData.baseColor || 0x00d4ff); }
+  workingCount = buildings.filter(b => b.userData.state === 'working').length;
+  document.getElementById('t_working').textContent = workingCount;
+}
+
+// ============ CAMERA · simple manual orbit (no OrbitControls dep) ============
+let camDrag = false, dragStart = {x:0,y:0}, camAngle = {y: Math.PI/4, x: Math.PI/4};
+const camRadius = 48;
+function updateCamera(){
+  camAngle.x = Math.max(0.2, Math.min(Math.PI/2 - 0.05, camAngle.x));
+  camera.position.x = camRadius * Math.sin(camAngle.y) * Math.cos(camAngle.x);
+  camera.position.y = camRadius * Math.sin(camAngle.x);
+  camera.position.z = camRadius * Math.cos(camAngle.y) * Math.cos(camAngle.x);
+  camera.lookAt(0, 0, 0);
+}
+updateCamera();
+stageEl.addEventListener('mousedown', e => { camDrag = true; dragStart = {x:e.clientX, y:e.clientY}; });
+window.addEventListener('mouseup', () => { camDrag = false; });
+window.addEventListener('mousemove', e => {
+  if(!camDrag) return;
+  camAngle.y -= (e.clientX - dragStart.x) * 0.008;
+  camAngle.x -= (e.clientY - dragStart.y) * 0.005;
+  dragStart = {x:e.clientX, y:e.clientY};
+  updateCamera();
+});
+stageEl.addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 1.08 : 0.92;
+  camera.zoom = Math.max(0.5, Math.min(3, (camera.zoom||1) * delta));
+  camera.updateProjectionMatrix();
+}, {passive:false});
+
+// Touch support (single-finger drag)
+stageEl.addEventListener('touchstart', e => { if(e.touches.length===1){ camDrag = true; dragStart = {x:e.touches[0].clientX, y:e.touches[0].clientY}; } }, {passive:true});
+stageEl.addEventListener('touchend', () => { camDrag = false; });
+stageEl.addEventListener('touchmove', e => {
+  if(!camDrag || e.touches.length !== 1) return;
+  camAngle.y -= (e.touches[0].clientX - dragStart.x) * 0.008;
+  camAngle.x -= (e.touches[0].clientY - dragStart.y) * 0.005;
+  dragStart = {x:e.touches[0].clientX, y:e.touches[0].clientY};
+  updateCamera();
+}, {passive:true});
+
+let autoRotate = false;
+function toggleAutoRotate(){ autoRotate = !autoRotate; document.getElementById('rotBtn').textContent = autoRotate ? '↻ ROTATING' : '↻ AUTO-ROTATE'; }
+function resetCamera(){ camAngle = {y: Math.PI/4, x: Math.PI/4}; camera.zoom = 1; camera.updateProjectionMatrix(); updateCamera(); }
+function pulseAll(){
+  buildings.forEach(b => {
+    if(b.userData.slug && b.userData.slug !== '_council' && !b.userData.slug.startsWith('pad_')){
+      setBuildingState(b.userData.slug, 'working');
+      setTimeout(() => setBuildingState(b.userData.slug, 'idle'), 1500 + Math.random()*2000);
+    }
+  });
+}
+
+// ============ ANIMATE ============
+let t = 0;
+function animate(){
+  requestAnimationFrame(animate);
+  t += 0.016;
+  if(autoRotate){ camAngle.y += 0.003; updateCamera(); }
+  // Subtle pulse on 'working' state buildings
+  buildings.forEach(b => {
+    if(b.userData.state === 'working'){
+      b.material.emissiveIntensity = 0.65 + 0.35 * Math.sin(t * 4);
+    }
+  });
+  renderer.render(scene, camera);
+}
+animate();
+
+// ============ RESIZE ============
+window.addEventListener('resize', () => {
+  const w = stageEl.clientWidth, h = stageEl.clientHeight;
+  const ar = w/h;
+  camera.left = -viewSize*ar; camera.right = viewSize*ar;
+  camera.top = viewSize; camera.bottom = -viewSize;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+});
+
+// ============ AGENCY MODAL + DISPATCH ============
+function openOverlay(html){ document.getElementById('modalContent').innerHTML = `<button class="close" onclick="closeOverlay()">×</button>${html}`; document.getElementById('overlay').classList.add('open'); }
+function closeOverlay(){ document.getElementById('overlay').classList.remove('open'); }
+document.getElementById('overlay').addEventListener('click', e => { if(e.target.id === 'overlay') closeOverlay(); });
+
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s){ return String(s).replace(/[&<>"'\\]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','\\':'\\\\'}[c])); }
+
+function openAgency(ud){
+  const a = ud.agency || {};
+  const slug = ud.slug;
+  const icon = a.icon || '🏢';
+  const name = a.name || slug;
+  const desc = a.description || a.tagline || '';
+  const roles = a.role_count || 0;
+  const cat = ud.cat;
+  openOverlay(`
+    <div class="cat">AGENCY · ${cat.toUpperCase()} · ${roles} ROLES · STATE: ${ud.state.toUpperCase()}</div>
+    <h2>${icon} ${escapeHTML(name)}</h2>
+    <div style="font-size:12.5px;line-height:1.55;color:var(--text);padding:10px 12px;border-radius:10px;background:rgba(8,12,24,.55);border:1px solid var(--line);margin:8px 0 14px">${escapeHTML(desc)}</div>
+    <div style="margin-top:6px;padding:12px;border-radius:11px;background:linear-gradient(135deg,rgba(245,197,66,.08),rgba(8,12,24,.55));border:1px solid rgba(245,197,66,.35)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold);font-size:12px;letter-spacing:.08em">⚡ SPAWN AGENT</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)">live · Maya routes</span>
+      </div>
+      <textarea id="task_${escapeAttr(slug)}" placeholder="Ask the ${escapeHTML(name)} agent something..." style="width:100%;min-height:60px;border-radius:8px;padding:8px 10px;background:rgba(3,6,12,.7);border:1px solid var(--line);color:var(--text);font-family:'Inter',sans-serif;font-size:12px;resize:vertical"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <button onclick="dispatch('${escapeAttr(slug)}','${escapeAttr(cat)}')" id="btn_${escapeAttr(slug)}" style="padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#f5c542,#cd9938);border:1px solid var(--gold);color:#1a1a08;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer">Dispatch</button>
+        <span id="meta_${escapeAttr(slug)}" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)"></span>
+      </div>
+      <div id="reply_${escapeAttr(slug)}" style="margin-top:10px;display:none"></div>
+    </div>
+  `);
+}
+
+function openCouncil(){
+  openOverlay(`
+    <div class="cat">🏛 CANONICAL · 12 SEATS · MIRZATECH</div>
+    <h2>MirzaTech Council Chamber</h2>
+    <div style="font-size:12.5px;line-height:1.55;color:var(--text);padding:10px 12px;border-radius:10px;background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.35);margin:8px 0 14px">
+      The 12 canonical lanes that govern every empire-binding decision: <b>Reasoning Lead · Strategic Systems · Architecture · Agentic · Practical · Conversion · Web-aware · Agentic Orchestration · Multilingual Reasoning · Independent Voice · Multimodal Vision · Math + Code Specialist</b>.<br><br>
+      Same 12 lanes power Board of Directors (ai-staffing.agency) + Council (mirzatech.ai) + form the Synthesis seat of Parliament (24-seat · 5-round).
+    </div>
+    <a href="https://mirzatech.ai/council/" target="_blank" rel="noopener" style="padding:7px 14px;border:1px solid var(--cyan);border-radius:8px;color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase">VIEW CANONICAL COUNCIL →</a>
+  `);
+}
+
+async function dispatch(slug, cat){
+  const m = buildings.find(b => b.userData.slug === slug);
+  const taskEl = document.getElementById('task_'+slug);
+  const replyEl = document.getElementById('reply_'+slug);
+  const metaEl = document.getElementById('meta_'+slug);
+  const btn = document.getElementById('btn_'+slug);
+  const task = (taskEl.value||'').trim();
+  if(!task){ taskEl.focus(); return; }
+  btn.disabled = true; btn.textContent = 'Dispatching…'; metaEl.textContent = '· thinking'; replyEl.style.display='none';
+  setBuildingState(slug, 'working');
+  const distMap = {tech:'k-tools', biz:'k-staffing', health:'k-staffing', industry:'k-staffing', creative:'k-video'};
+  const district = distMap[cat] || 'k-staffing';
+  const a = m ? m.userData.agency : {};
+  const t0 = Date.now();
+  try{
+    const r = await fetch('/api/hermes_dispatch.php', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({district, task:`[Speaking AS the "${a.name||slug}" staffing agency · ${a.role_count||0} roles · ${a.description||''}] ${task}`})
+    });
+    const j = await r.json();
+    const elapsed = Date.now() - t0;
+    if(j.ok){
+      replyEl.innerHTML = `<div style="padding:11px 13px;border-radius:9px;background:rgba(8,12,24,.55);border:1px solid var(--line)"><div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--green);letter-spacing:.12em;margin-bottom:5px">▸ MAYA AGENT · ${j.ms||elapsed}ms</div><div style="font-size:12.5px;line-height:1.55;color:var(--text);white-space:pre-wrap">${escapeHTML(j.reply||'(empty)')}</div></div>`;
+      metaEl.textContent = `· ${j.ms||elapsed}ms`;
+      setBuildingState(slug, 'idle');
+    } else {
+      replyEl.innerHTML = `<div style="padding:11px 13px;border-radius:9px;background:rgba(40,8,12,.55);border:1px solid var(--red);color:var(--red);font-family:'JetBrains Mono',monospace;font-size:11px">⚠ ${escapeHTML(j.error||'dispatch failed')}</div>`;
+      metaEl.textContent = '· error';
+      setBuildingState(slug, 'error');
+    }
+  }catch(e){
+    replyEl.innerHTML = `<div style="padding:11px 13px;border-radius:9px;background:rgba(40,8,12,.55);border:1px solid var(--red);color:var(--red);font-family:'JetBrains Mono',monospace;font-size:11px">⚠ ${escapeHTML(e.message||String(e))}</div>`;
+    metaEl.textContent = '· error';
+    setBuildingState(slug, 'error');
+  } finally {
+    replyEl.style.display='block';
+    btn.disabled=false; btn.textContent='Dispatch';
+  }
+}
+
+// ============ LEGEND TOGGLE ============
+const hiddenCats = new Set();
+function toggleCat(cat){
+  if(hiddenCats.has(cat)) hiddenCats.delete(cat); else hiddenCats.add(cat);
+  document.querySelector(`.legend .item[data-cat="${cat}"]`).classList.toggle('dim', hiddenCats.has(cat));
+  buildings.forEach(b => {
+    if(b.userData.cat === cat && !b.userData.slug.startsWith('pad_') && b.userData.slug !== '_council'){
+      b.visible = !hiddenCats.has(cat);
+    }
+  });
+}
+
+function sovereignOverride(){ window.location.href = 'tel:+17432151423'; }
+
+// ============ BOOT ============
+loadAndBuild();
+</script>
+</body>
+</html>
