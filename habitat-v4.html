@@ -1188,11 +1188,13 @@ function buildOfficeScene(agency){
 }
 
 function enterOffice(slug){
-  const a = AGENCIES.find(x => (x.id||x.slug) === slug);
-  if(!a) return;
+  // FIX 2026-05-17T18:05Z · was using undeclared global AGENCIES · ReferenceError silently swallowed by inline onclick
+  // Source of truth is the buildings[] array which has userData.agency on each mesh
+  const b = buildings.find(x => x.userData && x.userData.slug === slug);
+  const a = b && b.userData && b.userData.agency;
+  if(!a){ console.warn('enterOffice: no agency for slug', slug); return; }
   closeOverlay();
   document.getElementById('officeView').style.display = 'block';
-  // Resize stage now that it's visible
   setTimeout(() => buildOfficeScene(a), 30);
 }
 
