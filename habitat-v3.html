@@ -75,6 +75,35 @@ a{color:var(--cyan);text-decoration:none}
 
 /* THE BACKDROP — the actual Gemini mockup as the SimCity image */
 .stage{position:relative;flex:1;min-height:540px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#03060c}
+
+/* AGENCY FLOOR · all 100 staffing agencies as live building tiles */
+.agency-floor{position:absolute;inset:0;padding:14px;overflow-y:auto;z-index:10;display:none}
+.agency-floor.on{display:block}
+.agency-floor .floor-head{display:flex;justify-content:space-between;align-items:center;padding:0 4px 10px;border-bottom:1px solid var(--line);margin-bottom:12px;gap:10px;flex-wrap:wrap}
+.agency-floor .floor-head h2{margin:0;font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.08em;color:var(--white);font-weight:700}
+.agency-floor .floor-head h2 span{color:var(--cyan)}
+.agency-floor .floor-stats{display:flex;gap:10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.08em}
+.agency-floor .floor-stats b{color:var(--cyan)}
+.agency-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.ag-tile{position:relative;padding:9px 11px 10px;border-radius:10px;background:linear-gradient(180deg,rgba(18,28,52,.85),rgba(8,12,24,.75));border:1px solid var(--line);cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .25s;overflow:hidden;min-height:78px;display:flex;flex-direction:column;gap:3px}
+.ag-tile:hover{transform:translateY(-2px);border-color:var(--line-strong);box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 0 1px rgba(0,228,255,.25) inset}
+.ag-tile .ag-state{position:absolute;top:6px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 6px var(--blue)}
+.ag-tile.s-working .ag-state{background:var(--white);box-shadow:0 0 8px var(--white);animation:agWorking .8s ease-in-out infinite}
+.ag-tile.s-council .ag-state{background:var(--gold);box-shadow:0 0 9px var(--gold)}
+.ag-tile.s-error .ag-state{background:var(--red);box-shadow:0 0 9px var(--red)}
+@keyframes agWorking{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+.ag-tile .ag-icon{font-size:16px;line-height:1}
+.ag-tile h5{margin:2px 0 0;font-size:11px;font-weight:600;color:var(--white);line-height:1.25;letter-spacing:.01em}
+.ag-tile .ag-tagline{font-size:9.5px;color:var(--muted);line-height:1.3;margin-top:auto;opacity:.85}
+.ag-tile .ag-roles{margin-top:5px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--cyan);text-transform:uppercase}
+.ag-tile .ag-roles b{color:var(--white);font-weight:600;font-size:10px}
+.ag-tile.s-working{border-color:var(--cyan);background:linear-gradient(180deg,rgba(0,228,255,.10),rgba(8,12,24,.75))}
+
+.floor-filter{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;padding:0 4px}
+.floor-filter .chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:99px;border:1px solid var(--line);background:rgba(10,18,38,.4);color:var(--muted);cursor:pointer;transition:all .15s}
+.floor-filter .chip:hover{color:var(--text);border-color:var(--line-strong)}
+.floor-filter .chip.active{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-soft)}
+.ag-tile[data-hidden="1"]{display:none}
 .stage .backdrop{position:absolute;inset:0;background-image:url('/assets/sim-city/5.png');background-size:cover;background-position:center;background-repeat:no-repeat;transition:opacity .8s ease,background-image .4s ease;z-index:1}
 .stage .backdrop::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,6,12,0) 60%,rgba(3,6,12,.45) 100%);pointer-events:none}
 body.state-deliberating .stage .backdrop{filter:saturate(1.2) hue-rotate(-12deg) brightness(1.06)}
@@ -221,16 +250,34 @@ body.state-executing .stage .backdrop{filter:brightness(1.18) saturate(.9)}
     <!-- CENTER · the actual Gemini mockup IS the stage -->
     <div class="stage-wrap">
       <div class="stage-head">
-        <h1>MAYA AI <span class="who">· 28-DOMAIN SOVEREIGN CAMPUS</span></h1>
+        <h1>MAYA AI <span class="who">· <span id="stageTitle">AGENCY FLOOR</span></span></h1>
         <div class="toolbar">
-          <button class="active" onclick="setState('idle',this)">Idle</button>
+          <button id="viewAgencies" class="active" onclick="setStageView('agencies')">🏢 Agencies</button>
+          <button id="viewEmpire" onclick="setStageView('empire')">🗺 Empire Map</button>
+          <button onclick="setState('idle',this)">Idle</button>
           <button onclick="setState('deliberating',this)">Council</button>
           <button onclick="setState('executing',this)">Execute</button>
-          <button onclick="setState('firewall',this)">Firewall</button>
         </div>
       </div>
       <div class="stage" id="stage">
         <div class="backdrop" id="backdrop"></div>
+
+        <!-- AGENCY FLOOR · live · all 100 agencies as building tiles -->
+        <div class="agency-floor on" id="agencyFloor">
+          <div class="floor-head">
+            <h2>🏢 ALL AGENCIES ON FLOOR · <span id="floorCount">…</span></h2>
+            <div class="floor-stats">
+              <span>ROLES <b id="floorRoles">…</b></span>
+              <span>WORKING <b id="floorWorking">0</b></span>
+              <span>IDLE <b id="floorIdle">…</b></span>
+            </div>
+          </div>
+          <div class="floor-filter" id="floorFilter"></div>
+          <div class="agency-grid" id="agencyGrid">
+            <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px;font-family:'JetBrains Mono',monospace;font-size:11px">Loading 100 agencies from /api/staff.php …</div>
+          </div>
+        </div>
+
 
         <!-- Stage overlay: live mini-ticker -->
         <div class="stage-overlay">
@@ -534,9 +581,201 @@ window.sovereignOverride = function(){
   window.location.href = 'tel:+17432151423';
 };
 
+// ============ AGENCY FLOOR · live 100-agency grid ============
+let AGENCIES = [];
+let AGENCY_STATE = {}; // slug → 'idle'|'working'|'council'|'error'
+const CAT_BUCKETS = [
+  {key:'tech',     label:'Technology',  match:/engineering|ai-research|cybersecurity|data-intelligence|robotics|quantum|blockchain|ai-agents|computer-vision|edge-ai|mlops|nlp-specialists|embedded-systems|geospatial-ai|network-security|digital-twins|3d-printing|autonomous-drones|satellite-comms|ar-vr-xr|smart-cities|nuclear-energy-ai|water-ocean-tech/i},
+  {key:'biz',      label:'Business',    match:/marketing-growth|sales-revenue|design-creative|content-media|finance-accounting|legal-compliance|human-resources|customer-success|product-management|operations-logistics|recruitment-hrtech|hr-analytics|tax-accounting-ai|insurance-risk|saas-growth|ecommerce-growth|b2b-lead-gen|influencer-marketing|seo-content-ai|video-marketing|social-media-ai|web-scraping-data|legal-tech|legaltech-immigration|crypto-regulatory-compliance|creator-economy/i},
+  {key:'health',   label:'Healthcare',  match:/healthcare|pharma|fintech|wellness|mental-health|childcare-edtech|eldercare-tech|clinical-decision|bioinformatics|pet-veterinary/i},
+  {key:'industry', label:'Industry',    match:/manufacturing|supply-chain|construction|transportation|automotive|aviation|space|energy|agriculture|telecommunications|government|retail-ecommerce|hospitality|real-estate|prop-tech|defi-tokenomics|climate-esg|climate-risk-modeling|education-training/i},
+  {key:'creative', label:'Creative',    match:/video|media-entertainment|voice-audio|prompt-engineering|sports-gaming|game-development|culinary|fashion|arts|event-production|nonprofit|music-production|language-translation|translation-localization|defense-security|ai-safety|ai-ethics|devrel|research-development|ai-disaster|pharma-rd-ai|quantum-ai-optimization/i}
+];
+
+async function loadAgencies(){
+  const grid = document.getElementById('agencyGrid');
+  try{
+    const r = await fetch('/api/staff.php', {cache:'no-store'});
+    const j = await r.json();
+    AGENCIES = j.agencies || [];
+    AGENCIES.forEach(a => { AGENCY_STATE[a.id || a.slug] = 'idle'; });
+    renderAgencyGrid('all');
+    renderFloorFilter();
+    updateFloorStats();
+  }catch(e){
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:30px;font-family:'JetBrains Mono',monospace;font-size:11px">⚠ Failed to load /api/staff.php · ${escapeHTML(e.message||String(e))}</div>`;
+  }
+}
+
+function categorize(a){
+  const slug = (a.id || a.slug || '').toLowerCase();
+  for(const b of CAT_BUCKETS){ if(b.match.test(slug)) return b.key; }
+  return 'other';
+}
+
+function renderAgencyGrid(filter){
+  const grid = document.getElementById('agencyGrid');
+  let html = '';
+  AGENCIES.forEach((a, i) => {
+    const slug = a.id || a.slug || ('agency_'+i);
+    const cat  = categorize(a);
+    const hidden = (filter && filter !== 'all' && cat !== filter) ? 1 : 0;
+    const state = AGENCY_STATE[slug] || 'idle';
+    const icon  = a.icon || '🏢';
+    const name  = a.name || slug;
+    const tagline = a.tagline || (a.description||'').substring(0,72);
+    const roles = a.role_count || 0;
+    html += `
+      <div class="ag-tile s-${state}" data-slug="${escapeAttr(slug)}" data-cat="${cat}" data-hidden="${hidden}" onclick="openAgency('${escapeAttr(slug)}')">
+        <div class="ag-state"></div>
+        <div style="display:flex;align-items:center;gap:6px"><span class="ag-icon">${icon}</span></div>
+        <h5>${escapeHTML(name)}</h5>
+        <div class="ag-tagline">${escapeHTML(tagline)}</div>
+        <div class="ag-roles"><span>${cat}</span><b>${roles} roles</b></div>
+      </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function renderFloorFilter(){
+  const el = document.getElementById('floorFilter');
+  let html = `<div class="chip active" onclick="filterAgencies('all',this)">ALL · ${AGENCIES.length}</div>`;
+  CAT_BUCKETS.forEach(b => {
+    const n = AGENCIES.filter(a => categorize(a) === b.key).length;
+    if(n > 0) html += `<div class="chip" onclick="filterAgencies('${b.key}',this)">${b.label} · ${n}</div>`;
+  });
+  el.innerHTML = html;
+}
+
+function filterAgencies(key, btn){
+  document.querySelectorAll('#floorFilter .chip').forEach(c => c.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('#agencyGrid .ag-tile').forEach(t => {
+    t.dataset.hidden = (key === 'all' || t.dataset.cat === key) ? '0' : '1';
+  });
+}
+
+function updateFloorStats(){
+  const total_roles = AGENCIES.reduce((s,a) => s + (a.role_count||0), 0);
+  const working = Object.values(AGENCY_STATE).filter(s => s === 'working').length;
+  const idle    = AGENCIES.length - working;
+  document.getElementById('floorCount').textContent = AGENCIES.length;
+  document.getElementById('floorRoles').textContent = total_roles;
+  document.getElementById('floorWorking').textContent = working;
+  document.getElementById('floorIdle').textContent = idle;
+  document.getElementById('t_domains').textContent = AGENCIES.length;
+}
+
+function setAgencyState(slug, state){
+  AGENCY_STATE[slug] = state;
+  document.querySelectorAll(`.ag-tile[data-slug="${slug}"]`).forEach(t => {
+    t.classList.remove('s-idle','s-working','s-council','s-error');
+    t.classList.add('s-' + state);
+  });
+  updateFloorStats();
+}
+
+function setStageView(v){
+  document.getElementById('viewAgencies').classList.toggle('active', v === 'agencies');
+  document.getElementById('viewEmpire').classList.toggle('active', v === 'empire');
+  document.getElementById('agencyFloor').classList.toggle('on', v === 'agencies');
+  document.getElementById('stageTitle').textContent = v === 'agencies' ? 'AGENCY FLOOR · 100 LIVE' : '28-DOMAIN SOVEREIGN CAMPUS';
+}
+
+function openAgency(slug){
+  const a = AGENCIES.find(x => (x.id||x.slug) === slug);
+  if(!a) return;
+  const icon = a.icon || '🏢';
+  const name = a.name || slug;
+  const tagline = a.tagline || '';
+  const desc = a.description || '';
+  const roles = a.role_count || 0;
+  const cat = categorize(a);
+  const catLabel = (CAT_BUCKETS.find(b => b.key === cat) || {label:'Specialist'}).label;
+  const visit = `https://ai-staffing.agency/agencies/${slug}/`;
+  openOverlay(`
+    <div class="cat">AGENCY · ${escapeHTML(catLabel.toUpperCase())} · ${roles} ROLES · STATE: ${(AGENCY_STATE[slug]||'idle').toUpperCase()}</div>
+    <h2>${icon} ${escapeHTML(name)}</h2>
+    <div style="color:var(--muted);font-size:11.5px;margin:4px 0 14px;font-style:italic">${escapeHTML(tagline)}</div>
+    <div style="font-size:12.5px;line-height:1.55;color:var(--text);padding:10px 12px;border-radius:10px;background:rgba(8,12,24,.55);border:1px solid var(--line);margin-bottom:12px">${escapeHTML(desc)}</div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px">
+      <a href="${visit}" target="_blank" rel="noopener" style="padding:7px 14px;border:1px solid var(--cyan);border-radius:8px;color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase">VIEW HABITAT →</a>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${roles} roles · ${cat}</span>
+    </div>
+    <div style="margin-top:6px;padding:12px;border-radius:11px;background:linear-gradient(135deg,rgba(245,197,66,.08),rgba(8,12,24,.55));border:1px solid rgba(245,197,66,.35)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold);font-size:12px;letter-spacing:.08em">⚡ SPAWN AGENT</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)">live · Maya routes</span>
+      </div>
+      <textarea id="agTask_${escapeAttr(slug)}" placeholder="Ask the ${escapeHTML(name)} agent something..." style="width:100%;min-height:60px;border-radius:8px;padding:8px 10px;background:rgba(3,6,12,.7);border:1px solid var(--line);color:var(--text);font-family:'Inter',sans-serif;font-size:12px;resize:vertical"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <button onclick="dispatchAgency('${escapeAttr(slug)}')" id="agBtn_${escapeAttr(slug)}" style="padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#f5c542,#cd9938);border:1px solid var(--gold);color:#1a1a08;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer">Dispatch</button>
+        <span id="agMeta_${escapeAttr(slug)}" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)"></span>
+      </div>
+      <div id="agReply_${escapeAttr(slug)}" style="margin-top:10px;display:none"></div>
+    </div>
+  `);
+}
+
+async function dispatchAgency(slug){
+  const a = AGENCIES.find(x => (x.id||x.slug) === slug);
+  if(!a) return;
+  const taskEl = document.getElementById('agTask_'+slug);
+  const replyEl = document.getElementById('agReply_'+slug);
+  const metaEl = document.getElementById('agMeta_'+slug);
+  const btn = document.getElementById('agBtn_'+slug);
+  if(!taskEl) return;
+  const task = (taskEl.value||'').trim();
+  if(!task){ taskEl.focus(); return; }
+  btn.disabled = true; btn.textContent = 'Dispatching…';
+  metaEl.textContent = '· thinking';
+  replyEl.style.display = 'none';
+  setAgencyState(slug, 'working');
+  const cat = categorize(a);
+  // Map agency category → existing district persona key
+  const distMap = { tech:'k-tools', biz:'k-staffing', health:'k-staffing', industry:'k-staffing', creative:'k-video', other:'k-staffing' };
+  const district = distMap[cat] || 'k-staffing';
+  const t0 = Date.now();
+  try{
+    const r = await fetch('/api/hermes_dispatch.php', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        district: district,
+        task: `[You are speaking AS the "${a.name}" agency from Mo's AI Staffing roster. ${a.role_count} roles available: ${(a.description||a.tagline||'').substring(0,200)}]\n\nQUESTION: ${task}`
+      })
+    });
+    const j = await r.json();
+    const elapsed = Date.now() - t0;
+    if(j.ok){
+      replyEl.innerHTML = `
+        <div style="padding:11px 13px;border-radius:9px;background:rgba(8,12,24,.55);border:1px solid var(--line)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--green);letter-spacing:.12em;margin-bottom:5px">▸ MAYA AGENT REPLY · ${j.ms||elapsed}ms</div>
+          <div style="font-size:12.5px;line-height:1.55;color:var(--text);white-space:pre-wrap">${escapeHTML(j.reply||'(empty)')}</div>
+        </div>`;
+      metaEl.textContent = `· ${j.ms||elapsed}ms`;
+      setAgencyState(slug, 'idle');
+    } else {
+      replyEl.innerHTML = `<div style="padding:11px 13px;border-radius:9px;background:rgba(40,8,12,.55);border:1px solid var(--red);color:var(--red);font-family:'JetBrains Mono',monospace;font-size:11px">⚠ ${escapeHTML(j.error||'dispatch failed')}</div>`;
+      metaEl.textContent = '· error';
+      setAgencyState(slug, 'error');
+    }
+  }catch(e){
+    replyEl.innerHTML = `<div style="padding:11px 13px;border-radius:9px;background:rgba(40,8,12,.55);border:1px solid var(--red);color:var(--red);font-family:'JetBrains Mono',monospace;font-size:11px">⚠ network: ${escapeHTML(e.message||String(e))}</div>`;
+    metaEl.textContent = '· network error';
+    setAgencyState(slug, 'error');
+  } finally {
+    replyEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Dispatch';
+  }
+}
+
+function escapeAttr(s){ return String(s).replace(/[&<>"'\\]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','\\':'\\\\'}[c])); }
+
 document.addEventListener('DOMContentLoaded', () => {
   renderLegend();
   drawHeart();
+  loadAgencies();
 });
 </script>
 </body>
