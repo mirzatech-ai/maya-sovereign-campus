@@ -164,6 +164,24 @@
       "mo_correction": "2026-05-17 Mo verbatim: 'I thought that Hermes was a free fucking tool. Right? Open source that we can download and then use our APIs from our library that we have to assign agents for Hermes.' · Kin had wrongly downgraded Hermes to reference-only after misreading earlier · README confirms MIT · free · installable · bring-your-own-model · this is the cross-session memory backbone Mo's been needing"
     },
     {
+      "slot": 14,
+      "category": "web_3d_stack",
+      "name": "Real 3D in Browser · Three.js + Babylon + Zdog (NEW · Mo 2026-05-17 directive)",
+      "repos": [
+        {"name":"Three.js","github":"https://github.com/mrdoob/three.js","cdn":"https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js","license":"MIT","verified":"200"},
+        {"name":"Babylon.js","github":"https://github.com/BabylonJS/Babylon.js","cdn":"https://cdn.babylonjs.com/babylon.js","license":"Apache-2.0","verified":"200"},
+        {"name":"Zdog","github":"https://github.com/metafizzy/zdog","cdn":"https://cdn.jsdelivr.net/npm/zdog@1/dist/zdog.dist.min.js","license":"MIT","verified":"200"},
+        {"name":"react-three-fiber","github":"https://github.com/pmndrs/react-three-fiber","license":"MIT","verified":"200"},
+        {"name":"threex.proceduralcity","github":"https://github.com/jeromeetienne/threex.proceduralcity","license":"MIT","verified":"200"},
+        {"name":"glTF Sample Models","github":"https://github.com/KhronosGroup/glTF-Sample-Models","license":"CC0","verified":"200"}
+      ],
+      "purpose": "Real interactive 3D in the browser. NOT Midjourney-fidelity (needs an illustrator/animator for that) · BUT actual rotatable / clickable / state-pulsing 3D scenes for things like the staffing-agency SimCity campus. Procedural buildings · isometric camera · OrbitControls · raycaster click handlers · ambient + emissive lighting. Closer to SimCity 2000 / SimTower aesthetic than Midjourney art.",
+      "trigger": "When Mo asks for SimCity / 3D / isometric campus / interactive 3D visualization · use Three.js procedural geometry on the staff.php data. Pre-built models from KhronosGroup glTF samples when needed. No PNG-mockup-as-background shortcut · build the real scene.",
+      "verified_at": "2026-05-17T16:15:00Z",
+      "http_status": 200,
+      "mo_directive": "Mo 2026-05-17 verbatim: 'go find some skills that will give you a three d illustration animation possibilities... you have access to my staffing agency. Create a fucking thing that you are missing, and then employ it.' · Kin added this slot after admitting CSS-only could not match Mo's vision · this is the honest path to real 3D in browser without illustrator/game-engine spend"
+    },
+    {
       "slot": 13,
       "category": "harness",
       "name": "Everything Claude Code (affaan-m · 184k★ Performance Harness)",
