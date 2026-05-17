@@ -281,10 +281,46 @@ async function loadAndBuild(){
   agencies.forEach(a => { counts[categorize(a.id||a.slug)] += 1; });
   Object.keys(counts).forEach(k => document.getElementById('c_'+k).textContent = counts[k]);
 
-  // Single shared material POOL (recipe (c): avoid per-building material allocation)
-  // We use 5 base materials (one per category) and tint via vertex/instance · here we use
-  // MeshStandardMaterial per building because we need individual emissive but we share geometry
-  const sharedGeometry = new THREE.BoxGeometry(1.2, 1, 1.2);   // base · scaled per building
+  // Single shared geometry · per-building material for individual emissive (Gemini directive 2)
+  const sharedGeometry = new THREE.BoxGeometry(1.2, 1, 1.2);
+
+  // CANVAS-GENERATED WINDOW-GRID TEXTURE · gives boxes the "skyscraper at night" look
+  // (Gemini directive 2 · glowing window grids via programmatic emissiveMap)
+  function makeWindowTexture(hex){
+    const c = document.createElement('canvas');
+    c.width = 128; c.height = 128;
+    const ctx = c.getContext('2d');
+    // Dark obsidian backdrop
+    ctx.fillStyle = '#050a18';
+    ctx.fillRect(0, 0, 128, 128);
+    // Glowing window grid (8 cols × 10 rows · random pattern · per-window flicker via opacity)
+    const color = '#' + ('000000' + hex.toString(16)).slice(-6);
+    const cols = 8, rows = 10;
+    const cellW = 128/cols, cellH = 128/rows;
+    for(let r = 0; r < rows; r++){
+      for(let cc = 0; cc < cols; cc++){
+        const lit = Math.random();
+        if(lit > 0.18){  // ~82% windows lit
+          ctx.fillStyle = color;
+          ctx.globalAlpha = 0.45 + Math.random()*0.55;
+          ctx.fillRect(cc*cellW + 2.2, r*cellH + 2.5, cellW - 4.4, cellH - 5);
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+    // Thin neon stripes across the top + bottom (rim accents)
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.8;
+    ctx.fillRect(0, 0, 128, 2);
+    ctx.fillRect(0, 126, 128, 2);
+    const tex = new THREE.CanvasTexture(c);
+    tex.anisotropy = 4;
+    return tex;
+  }
+
+  // Pre-bake one window-texture per category color (reuse across all buildings of that category)
+  const windowTex = {};
+  Object.keys(CAT_COLOR).forEach(k => { windowTex[k] = makeWindowTexture(CAT_COLOR[k]); });
 
   agencies.forEach((a, i) => {
     const row = Math.floor(i / GRID_N);
@@ -292,19 +328,23 @@ async function loadAndBuild(){
     const x = (col - (GRID_N-1)/2) * SPACING;
     const z = (row - (GRID_N-1)/2) * SPACING;
     const roles = a.role_count || 4;
-    const height = 0.6 + (roles / 12) * 2.6;  // 0.6–3.2 units · taller = more roles
+    const height = 0.7 + (roles / 12) * 3.0;  // 0.7–3.7 units · taller = more roles
     const cat = categorize(a.id||a.slug);
     const baseColor = CAT_COLOR[cat];
     const padding = String(a.id||'').startsWith('pad_');
 
-    const mat = new THREE.MeshStandardMaterial({
-      color: padding ? 0x1a2238 : baseColor,
+    // GLASS + STEEL (Gemini blueprint · MeshPhysicalMaterial)
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: padding ? 0x1a2238 : 0x0f172a,                    // dark base · neon comes from emissiveMap
       emissive: baseColor,
-      emissiveIntensity: padding ? 0 : 0.18,
-      metalness: 0.4,
-      roughness: 0.55,
+      emissiveMap: padding ? null : windowTex[cat],            // glowing window grid texture
+      emissiveIntensity: padding ? 0 : 0.32,
+      metalness: 0.9,
+      roughness: 0.18,
+      clearcoat: 0.6,
+      clearcoatRoughness: 0.2,
       transparent: padding,
-      opacity: padding ? 0.25 : 1
+      opacity: padding ? 0.22 : 1
     });
 
     const mesh = new THREE.Mesh(sharedGeometry, mat);
@@ -314,28 +354,156 @@ async function loadAndBuild(){
     mesh.userData = {slug:a.id||a.slug, agency:a, cat, baseColor, baseY:height/2, height, state:'idle'};
     scene.add(mesh);
     buildings.push(mesh);
+
+    // METALLIC ROOFTOP CAP with neon-trim border (Gemini directive 2)
+    if(!padding){
+      const roofGeo = new THREE.BoxGeometry(1.24, 0.07, 1.24);
+      const roofMat = new THREE.MeshStandardMaterial({color:0x080d1a, metalness:0.95, roughness:0.25});
+      const roof = new THREE.Mesh(roofGeo, roofMat);
+      roof.position.set(x, height + 0.04, z);
+      roof.castShadow = true;
+      scene.add(roof);
+      // Neon-trim border on the roof · thin glowing line
+      const trimGeo = new THREE.BoxGeometry(1.28, 0.025, 1.28);
+      const trimMat = new THREE.MeshBasicMaterial({color: baseColor, transparent:true, opacity:0.85});
+      const trim = new THREE.Mesh(trimGeo, trimMat);
+      trim.position.set(x, height + 0.085, z);
+      scene.add(trim);
+    }
   });
 
-  // Council Chamber · center · gold cylinder (slightly bigger · separate from grid)
+  // Council Chamber · LOCKED at anchor (Gemini directive 1 · Z-axis constraint)
+  // baseY set explicitly · slug='_council' is whitelisted to ignore raise/lower
+  const COUNCIL_ANCHOR = {x:0, y:1.1, z:-SPACING * (GRID_N/2 + 1.4)};
   const chamberGeo = new THREE.CylinderGeometry(1.6, 1.8, 2.2, 24);
-  const chamberMat = new THREE.MeshStandardMaterial({
-    color: 0xf5c542, emissive: 0xf5c542, emissiveIntensity: 0.4,
-    metalness: 0.7, roughness: 0.3
+  const chamberMat = new THREE.MeshPhysicalMaterial({
+    color: 0x2a1f08, emissive: 0xf5c542, emissiveIntensity: 0.55,
+    metalness: 0.85, roughness: 0.22, clearcoat: 0.8, clearcoatRoughness: 0.15
   });
   const chamber = new THREE.Mesh(chamberGeo, chamberMat);
-  chamber.position.set(0, 1.1, -SPACING * (GRID_N/2 + 1.4));
+  chamber.position.set(COUNCIL_ANCHOR.x, COUNCIL_ANCHOR.y, COUNCIL_ANCHOR.z);
   chamber.castShadow = true; chamber.receiveShadow = true;
-  chamber.userData = {slug:'_council', name:'MirzaTech Council Chamber', cat:'council', state:'idle'};
+  chamber.userData = {slug:'_council', name:'MirzaTech Council Chamber', cat:'council', state:'idle', baseY: COUNCIL_ANCHOR.y, locked:true};
   scene.add(chamber);
   buildings.push(chamber);
 
-  // Glowing ring around the chamber
+  // Council Chamber dome (decorative cap · steel + neon trim)
+  const domeGeo = new THREE.SphereGeometry(1.45, 24, 16, 0, Math.PI*2, 0, Math.PI/2);
+  const domeMat = new THREE.MeshPhysicalMaterial({color:0x0a0e1a, metalness:0.95, roughness:0.2, clearcoat:1, clearcoatRoughness:0.15});
+  const dome = new THREE.Mesh(domeGeo, domeMat);
+  dome.position.set(COUNCIL_ANCHOR.x, COUNCIL_ANCHOR.y + 1.1, COUNCIL_ANCHOR.z);
+  dome.castShadow = true;
+  scene.add(dome);
+
+  // Gold ring around the chamber base · LOCKED at fixed position
   const ringGeo = new THREE.TorusGeometry(2.2, 0.08, 8, 48);
-  const ringMat = new THREE.MeshStandardMaterial({color:0xf5c542, emissive:0xf5c542, emissiveIntensity:0.8});
+  const ringMat = new THREE.MeshBasicMaterial({color:0xf5c542, transparent:true, opacity:0.9});
   const ring = new THREE.Mesh(ringGeo, ringMat);
-  ring.position.copy(chamber.position); ring.position.y = 0.05;
+  ring.position.set(COUNCIL_ANCHOR.x, 0.05, COUNCIL_ANCHOR.z);
   ring.rotation.x = -Math.PI/2;
   scene.add(ring);
+
+  // === KINETIC DATA-PACKET TRAFFIC (Gemini directive 3) ===
+  // Pool of glowing spheres flowing between random buildings and the Council Chamber
+  initDataPackets();
+}
+
+// Particle pool · pre-allocated · reused (single material per category · zero allocations per frame)
+const PACKET_POOL_SIZE = 28;
+const dataPackets = [];
+
+function initDataPackets(){
+  const sphereGeo = new THREE.SphereGeometry(0.08, 10, 10);
+  for(let i = 0; i < PACKET_POOL_SIZE; i++){
+    // Pick a random non-pad building to start from
+    const sources = buildings.filter(b => b.userData.slug && !b.userData.slug.startsWith('pad_') && b.userData.slug !== '_council');
+    if(sources.length === 0) break;
+    const src = sources[Math.floor(Math.random() * sources.length)];
+    const startPos = src.position.clone();
+    startPos.y = src.userData.baseY + src.userData.height/2;
+    const endPos = new THREE.Vector3(0, 1.4, -SPACING * (GRID_N/2 + 1.4));  // Council Chamber
+    const color = src.userData.baseColor;
+    const mat = new THREE.MeshBasicMaterial({color, transparent:true, opacity:0.95});
+    const mesh = new THREE.Mesh(sphereGeo, mat);
+    mesh.position.copy(startPos);
+    scene.add(mesh);
+    dataPackets.push({
+      mesh, startPos, endPos, color,
+      progress: Math.random(),
+      speed: 0.004 + Math.random()*0.006,
+      reverse: false,
+      sourceSlug: src.userData.slug
+    });
+  }
+}
+
+function reroutePacket(p){
+  // Pick a fresh random source · reverse direction (Council → building, then building → Council, etc.)
+  const sources = buildings.filter(b => b.userData.slug && !b.userData.slug.startsWith('pad_') && b.userData.slug !== '_council');
+  if(sources.length === 0) return;
+  const src = sources[Math.floor(Math.random() * sources.length)];
+  p.startPos = src.position.clone();
+  p.startPos.y = src.userData.baseY + src.userData.height/2;
+  p.endPos = new THREE.Vector3(0, 1.4, -SPACING * (GRID_N/2 + 1.4));
+  p.color = src.userData.baseColor;
+  p.mesh.material.color.setHex(p.color);
+  p.progress = 0;
+  p.speed = 0.004 + Math.random()*0.006;
+  p.sourceSlug = src.userData.slug;
+}
+
+function animatePackets(){
+  dataPackets.forEach(p => {
+    p.progress += p.speed;
+    if(p.progress >= 1){ reroutePacket(p); return; }
+    // Lerp position with a small arc (data-stream curve · not a straight line)
+    const t = p.progress;
+    p.mesh.position.x = p.startPos.x + (p.endPos.x - p.startPos.x) * t;
+    p.mesh.position.z = p.startPos.z + (p.endPos.z - p.startPos.z) * t;
+    // Arc up and back down (gentle parabola)
+    const arcY = 4 * t * (1 - t);  // peak at t=0.5
+    p.mesh.position.y = (p.startPos.y + (p.endPos.y - p.startPos.y) * t) + arcY * 1.4;
+    // Fade in/out at ends
+    p.mesh.material.opacity = 0.4 + 0.55 * Math.sin(Math.PI * t);
+  });
+}
+
+// === CLICK BURST (Gemini directive 3 · burst from clicked tower toward Council) ===
+const burstPool = [];
+function fireClickBurst(srcMesh){
+  if(srcMesh.userData.slug === '_council') return;
+  const startPos = srcMesh.position.clone();
+  startPos.y = srcMesh.userData.baseY + srcMesh.userData.height/2;
+  const endPos = new THREE.Vector3(0, 1.4, -SPACING * (GRID_N/2 + 1.4));
+  const sphereGeo = new THREE.SphereGeometry(0.11, 10, 10);
+  for(let i = 0; i < 7; i++){
+    const mat = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:1});
+    const mesh = new THREE.Mesh(sphereGeo, mat);
+    mesh.position.copy(startPos);
+    scene.add(mesh);
+    burstPool.push({
+      mesh, startPos: startPos.clone(), endPos: endPos.clone(),
+      progress: -i * 0.06,   // staggered launch
+      speed: 0.020 + Math.random()*0.008,
+      dead: false
+    });
+  }
+}
+
+function animateBursts(){
+  for(let i = burstPool.length - 1; i >= 0; i--){
+    const p = burstPool[i];
+    if(p.dead){ scene.remove(p.mesh); p.mesh.material.dispose(); burstPool.splice(i, 1); continue; }
+    p.progress += p.speed;
+    if(p.progress < 0){ p.mesh.material.opacity = 0; continue; }
+    if(p.progress >= 1){ p.dead = true; continue; }
+    const t = p.progress;
+    p.mesh.position.x = p.startPos.x + (p.endPos.x - p.startPos.x) * t;
+    p.mesh.position.z = p.startPos.z + (p.endPos.z - p.startPos.z) * t;
+    const arcY = 4 * t * (1 - t);
+    p.mesh.position.y = (p.startPos.y + (p.endPos.y - p.startPos.y) * t) + arcY * 2.2;
+    p.mesh.material.opacity = (1 - t) * 0.95;
+  }
 }
 
 // ============ INTERACTION · raycaster click + hover (agent recipe (c) optimization: single Raycaster reused) ============
@@ -380,9 +548,19 @@ function showTooltip(cx, cy){
   stageEl.style.cursor = 'grab';
 }
 
-function raiseBuilding(m){ m.position.y = (m.userData.baseY || m.position.y) + 0.4; m.material.emissiveIntensity = 0.55; }
-function lowerBuilding(m){ if(m.userData.baseY) m.position.y = m.userData.baseY; m.material.emissiveIntensity = stateEmissive(m.userData.state); }
-function stateEmissive(s){ return s==='working'?0.85:s==='council'?0.7:s==='error'?0.6:0.18; }
+function raiseBuilding(m){
+  // FIX (Gemini directive 1 · Z-axis constraint): Council Chamber is LOCKED · never raise it
+  if(m.userData.slug === '_council') return;
+  if(typeof m.userData.baseY !== 'number') m.userData.baseY = m.position.y;  // safety
+  m.position.y = m.userData.baseY + 0.4;
+  m.material.emissiveIntensity = 0.55;
+}
+function lowerBuilding(m){
+  if(m.userData.slug === '_council') return;  // locked
+  if(typeof m.userData.baseY === 'number') m.position.y = m.userData.baseY;
+  m.material.emissiveIntensity = stateEmissive(m.userData.state);
+}
+function stateEmissive(s){ return s==='working'?0.85:s==='council'?0.7:s==='error'?0.6:0.32; }
 
 stageEl.addEventListener('click', (e) => {
   raycaster.setFromCamera(mouseVec, camera);
@@ -391,8 +569,33 @@ stageEl.addEventListener('click', (e) => {
   const m = hits[0].object;
   if(m.userData.slug === '_council'){ openCouncil(); return; }
   if(!m.userData.slug || m.userData.slug.startsWith('pad_')) return;
+  // Gemini directive 3: fire click burst toward Council
+  fireClickBurst(m);
+  // Gemini directive 4: mobile camera focus on tapped building
+  if(window.innerWidth < 768){ focusCameraOn(m); }
   openAgency(m.userData);
 });
+
+// Smooth camera focus on a target building (mobile · Gemini directive 4)
+function focusCameraOn(target){
+  // Pan the camera target slightly toward the building · keep iso angle locked
+  const px = target.position.x, pz = target.position.z;
+  const steps = 24;
+  let i = 0;
+  const startCx = camAngle.y, startCx2 = camAngle.x;
+  // We don't move the camera position drastically · we just tilt the lookAt
+  // For ortho cam, easier: shift the camera + lookAt by a fraction of the offset
+  const cameraOffsetX = px * 0.4, cameraOffsetZ = pz * 0.4;
+  function step(){
+    if(i++ > steps) return;
+    const t = i / steps;
+    camera.position.x = camRadius * Math.sin(camAngle.y) * Math.cos(camAngle.x) + cameraOffsetX * t;
+    camera.position.z = camRadius * Math.cos(camAngle.y) * Math.cos(camAngle.x) + cameraOffsetZ * t;
+    camera.lookAt(cameraOffsetX * t, 0, cameraOffsetZ * t);
+    requestAnimationFrame(step);
+  }
+  step();
+}
 
 // ============ STATE PULSE (working/council/error) ============
 function setBuildingState(slug, state){
@@ -466,10 +669,13 @@ function animate(){
   if(autoRotate){ camAngle.y += 0.003; updateCamera(); }
   // Subtle pulse on 'working' state buildings
   buildings.forEach(b => {
-    if(b.userData.state === 'working'){
+    if(b.userData.state === 'working' && b.userData.slug !== '_council'){
       b.material.emissiveIntensity = 0.65 + 0.35 * Math.sin(t * 4);
     }
   });
+  // Kinetic data-packet traffic (Gemini directive 3)
+  if(dataPackets.length) animatePackets();
+  if(burstPool.length)   animateBursts();
   renderer.render(scene, camera);
 }
 animate();
