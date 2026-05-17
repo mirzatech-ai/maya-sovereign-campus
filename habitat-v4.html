@@ -52,11 +52,20 @@
     "no_framework": "vanilla Three.js · no React/Vue/Angular · no bundler · single 44KB HTML file"
   },
   "gemini_directives_executed": [
-    {"directive": "1. Fix floating Council Chamber Z-axis", "status": "DONE", "implementation": "slug==='_council' whitelisted out of raiseBuilding/lowerBuilding · COUNCIL_ANCHOR const pins x/y/z · steel dome cap added"},
+    {"directive": "1. Fix floating Council Chamber Z-axis", "status": "DONE + REINFORCED", "implementation": "slug==='_council' whitelisted out of raiseBuilding/lowerBuilding · COUNCIL_ANCHOR const · BELT-AND-SUSPENDERS: per-frame hard clamp in animate() loop re-anchors position every tick · second clamp inside click handler · physically cannot drift now"},
     {"directive": "2. Architectural restyle · glass+steel + window grids + metallic rooftops", "status": "DONE", "implementation": "MeshPhysicalMaterial w/ metalness 0.9 · roughness 0.18 · clearcoat 0.6 · canvas-generated 8x10 window-grid emissive textures per category · separate roof mesh + neon-trim border"},
-    {"directive": "3. Kinetic data-packet traffic", "status": "DONE", "implementation": "28-packet pool flying building↔Council on parabolic arcs · category-colored · sin-wave fade · click-burst fires 7 white particles from clicked tower"},
+    {"directive": "3. Kinetic data-packet traffic", "status": "DONE + UPGRADED TO THREE.Points", "implementation": "Refactored from 28 individual Meshes to a single THREE.Points BufferGeometry (1 draw call vs 28) · vertexColors · AdditiveBlending · sizeAttenuation · per Gemini's exact perf recommendation · 7-particle click-burst kept as separate burstPool"},
     {"directive": "4. Mobile viewport shielding", "status": "DONE", "implementation": "<768px · click building triggers smooth 24-step camera focus pan · isometric angle locked · sidebar HUDs hide"}
   ],
+  "gemini_round2_additions": {
+    "ts": "2026-05-17T17:10:00Z",
+    "trigger": "Gemini round-2 review (Entry 020 ledger pointer) restated the 3 directives - Kin verified all 3 were already in v4.1 (20 occurrences of fix markers in deployed file) but applied Gemini's exact verbatim patches as belt-and-suspenders defense",
+    "patches": [
+      "Per-frame Council Chamber clamp in animate() loop (Gemini verbatim: 'force the ring to stay strictly flush')",
+      "Re-clamp in click handler (Gemini verbatim: 'councilChamber.position.y = 0' inside intersection handler)",
+      "THREE.Points refactor for data-packet pool (Gemini verbatim: 'lightweight THREE.Points particle system')"
+    ]
+  },
   "honest_scope": {
     "is": "SimCity 4 / Cities: Skylines aesthetic · procedural towers · neon-trim · kinetic data traffic · functional dispatch",
     "is_not": "Midjourney AAA fidelity (interior offices visible through windows · rigged animated agent figures · photorealistic PBR textures) — those require custom glTF assets + character rigs from a 3D illustrator"
@@ -473,64 +482,82 @@ async function loadAndBuild(){
   initDataPackets();
 }
 
-// Particle pool · pre-allocated · reused (single material per category · zero allocations per frame)
+// PARTICLE TRAFFIC · GEMINI PERF UPGRADE · THREE.Points (single draw call · 28 vertices)
+// (his exact recommendation: "instantiate a lightweight THREE.Points particle system")
 const PACKET_POOL_SIZE = 28;
 const dataPackets = [];
+let dataPacketPoints = null;   // THREE.Points · one draw call
+let dataPacketGeo = null;      // shared BufferGeometry
 
 function initDataPackets(){
-  const sphereGeo = new THREE.SphereGeometry(0.08, 10, 10);
+  // Per-particle state (CPU-side · just numbers)
   for(let i = 0; i < PACKET_POOL_SIZE; i++){
-    // Pick a random non-pad building to start from
     const sources = buildings.filter(b => b.userData.slug && !b.userData.slug.startsWith('pad_') && b.userData.slug !== '_council');
     if(sources.length === 0) break;
     const src = sources[Math.floor(Math.random() * sources.length)];
     const startPos = src.position.clone();
     startPos.y = src.userData.baseY + src.userData.height/2;
-    const endPos = new THREE.Vector3(0, 1.4, -SPACING * (GRID_N/2 + 1.4));  // Council Chamber
-    const color = src.userData.baseColor;
-    const mat = new THREE.MeshBasicMaterial({color, transparent:true, opacity:0.95});
-    const mesh = new THREE.Mesh(sphereGeo, mat);
-    mesh.position.copy(startPos);
-    scene.add(mesh);
+    const endPos = new THREE.Vector3(0, 1.4, -SPACING * (GRID_N/2 + 1.4));
     dataPackets.push({
-      mesh, startPos, endPos, color,
+      startPos, endPos,
+      color: new THREE.Color(src.userData.baseColor),
       progress: Math.random(),
       speed: 0.004 + Math.random()*0.006,
-      reverse: false,
       sourceSlug: src.userData.slug
     });
   }
+  // BufferGeometry · single draw call (Gemini perf rec)
+  const positions = new Float32Array(PACKET_POOL_SIZE * 3);
+  const colors = new Float32Array(PACKET_POOL_SIZE * 3);
+  for(let i = 0; i < PACKET_POOL_SIZE; i++){
+    positions[i*3] = dataPackets[i].startPos.x;
+    positions[i*3+1] = dataPackets[i].startPos.y;
+    positions[i*3+2] = dataPackets[i].startPos.z;
+    colors[i*3] = dataPackets[i].color.r;
+    colors[i*3+1] = dataPackets[i].color.g;
+    colors[i*3+2] = dataPackets[i].color.b;
+  }
+  dataPacketGeo = new THREE.BufferGeometry();
+  dataPacketGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  dataPacketGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  const mat = new THREE.PointsMaterial({
+    size: 0.22, vertexColors: true, transparent: true, opacity: 0.95,
+    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+  });
+  dataPacketPoints = new THREE.Points(dataPacketGeo, mat);
+  scene.add(dataPacketPoints);
 }
 
 function reroutePacket(p){
-  // Pick a fresh random source · reverse direction (Council → building, then building → Council, etc.)
   const sources = buildings.filter(b => b.userData.slug && !b.userData.slug.startsWith('pad_') && b.userData.slug !== '_council');
   if(sources.length === 0) return;
   const src = sources[Math.floor(Math.random() * sources.length)];
   p.startPos = src.position.clone();
   p.startPos.y = src.userData.baseY + src.userData.height/2;
   p.endPos = new THREE.Vector3(0, 1.4, -SPACING * (GRID_N/2 + 1.4));
-  p.color = src.userData.baseColor;
-  p.mesh.material.color.setHex(p.color);
+  p.color = new THREE.Color(src.userData.baseColor);
   p.progress = 0;
   p.speed = 0.004 + Math.random()*0.006;
   p.sourceSlug = src.userData.slug;
 }
 
 function animatePackets(){
-  dataPackets.forEach(p => {
+  if(!dataPacketPoints) return;
+  const posAttr = dataPacketGeo.getAttribute('position');
+  const colAttr = dataPacketGeo.getAttribute('color');
+  dataPackets.forEach((p, i) => {
     p.progress += p.speed;
-    if(p.progress >= 1){ reroutePacket(p); return; }
-    // Lerp position with a small arc (data-stream curve · not a straight line)
-    const t = p.progress;
-    p.mesh.position.x = p.startPos.x + (p.endPos.x - p.startPos.x) * t;
-    p.mesh.position.z = p.startPos.z + (p.endPos.z - p.startPos.z) * t;
-    // Arc up and back down (gentle parabola)
-    const arcY = 4 * t * (1 - t);  // peak at t=0.5
-    p.mesh.position.y = (p.startPos.y + (p.endPos.y - p.startPos.y) * t) + arcY * 1.4;
-    // Fade in/out at ends
-    p.mesh.material.opacity = 0.4 + 0.55 * Math.sin(Math.PI * t);
+    if(p.progress >= 1){ reroutePacket(p); }
+    const t = Math.max(0, Math.min(1, p.progress));
+    const x = p.startPos.x + (p.endPos.x - p.startPos.x) * t;
+    const z = p.startPos.z + (p.endPos.z - p.startPos.z) * t;
+    const arcY = 4 * t * (1 - t);
+    const y = (p.startPos.y + (p.endPos.y - p.startPos.y) * t) + arcY * 1.4;
+    posAttr.setXYZ(i, x, y, z);
+    colAttr.setXYZ(i, p.color.r, p.color.g, p.color.b);
   });
+  posAttr.needsUpdate = true;
+  colAttr.needsUpdate = true;
 }
 
 // === CLICK BURST (Gemini directive 3 · burst from clicked tower toward Council) ===
@@ -632,7 +659,12 @@ stageEl.addEventListener('click', (e) => {
   const hits = raycaster.intersectObjects(buildings, false);
   if(!hits.length) return;
   const m = hits[0].object;
-  if(m.userData.slug === '_council'){ openCouncil(); return; }
+  if(m.userData.slug === '_council'){
+    // GEMINI exact verbatim · re-clamp inside interaction handler · cannot drift on click
+    m.position.x = 0; m.position.y = 1.1; m.position.z = -SPACING * (GRID_N/2 + 1.4);
+    openCouncil();
+    return;
+  }
   if(!m.userData.slug || m.userData.slug.startsWith('pad_')) return;
   // Gemini directive 3: fire click burst toward Council
   fireClickBurst(m);
@@ -732,6 +764,17 @@ function animate(){
   requestAnimationFrame(animate);
   t += 0.016;
   if(autoRotate){ camAngle.y += 0.003; updateCamera(); }
+
+  // GEMINI BELT-AND-SUSPENDERS · per-frame hard clamp on Council Chamber position
+  // (his exact verbatim recommendation: "Force the ring to stay strictly flush with the terrain")
+  // Even if something else in code mutates it, this re-anchors every frame · cost: ~negligible
+  const _council = buildings.find(b => b.userData && b.userData.slug === '_council');
+  if(_council){
+    _council.position.x = 0;
+    _council.position.y = 1.1;                           // baseY anchor
+    _council.position.z = -SPACING * (GRID_N/2 + 1.4);
+  }
+
   // Subtle pulse on 'working' state buildings
   buildings.forEach(b => {
     if(b.userData.state === 'working' && b.userData.slug !== '_council'){
