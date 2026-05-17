@@ -397,8 +397,70 @@ function openDistrict(i){
       </div>
       <a href="https://${s.d}" target="_blank" rel="noopener" style="padding:6px 12px;border:1px solid var(--cyan);border-radius:8px;color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase">VISIT</a>
     </div>`).join('');
-  openOverlay(`<div class="cat">DISTRICT ${String(i+1).padStart(2,'0')} · ${D.cat}</div><h2>${D.icon} ${D.label}</h2><div style="color:var(--muted);font-size:11.5px;margin:6px 0 14px">${D.sites.length} domain${D.sites.length>1?'s':''} in this district · Maya routes between them</div>${sites}`);
+
+  // Spawn Agent live dispatch surface (per Mo 2026-05-17 · uses Hermes-backed runtime)
+  const dispatchUI = `
+    <div style="margin-top:18px;padding:12px;border-radius:11px;background:linear-gradient(135deg,rgba(245,197,66,.08),rgba(8,12,24,.55));border:1px solid rgba(245,197,66,.35)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold);font-size:12px;letter-spacing:.08em">⚡ SPAWN AGENT</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)">${D.icon} ${D.label} · live dispatch</span>
+      </div>
+      <textarea id="dispatchTask_${i}" placeholder="Ask the ${D.label} agent something..." style="width:100%;min-height:50px;border-radius:8px;padding:8px 10px;background:rgba(3,6,12,.7);border:1px solid var(--line);color:var(--text);font-family:'Inter',sans-serif;font-size:12px;resize:vertical"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <button onclick="dispatchAgent(${i})" id="dispatchBtn_${i}" style="padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#f5c542,#cd9938);border:1px solid var(--gold);color:#1a1a08;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer">Dispatch</button>
+        <span id="dispatchMeta_${i}" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)"></span>
+      </div>
+      <div id="dispatchReply_${i}" style="margin-top:10px;display:none"></div>
+    </div>`;
+
+  openOverlay(`<div class="cat">DISTRICT ${String(i+1).padStart(2,'0')} · ${D.cat}</div><h2>${D.icon} ${D.label}</h2><div style="color:var(--muted);font-size:11.5px;margin:6px 0 14px">${D.sites.length} domain${D.sites.length>1?'s':''} in this district · Maya routes between them</div>${sites}${dispatchUI}`);
 }
+
+async function dispatchAgent(i){
+  const D = DISTRICTS[i];
+  const taskEl = document.getElementById('dispatchTask_'+i);
+  const replyEl = document.getElementById('dispatchReply_'+i);
+  const metaEl = document.getElementById('dispatchMeta_'+i);
+  const btn = document.getElementById('dispatchBtn_'+i);
+  if(!taskEl || !replyEl || !btn) return;
+  const task = (taskEl.value || '').trim();
+  if(!task){ taskEl.focus(); return; }
+  btn.disabled = true; btn.textContent = 'Dispatching…';
+  metaEl.textContent = '· thinking';
+  replyEl.style.display = 'none';
+  const t0 = Date.now();
+  try{
+    const r = await fetch('/api/hermes_dispatch.php', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({district: D.key, task: task})
+    });
+    const j = await r.json();
+    const elapsed = Date.now() - t0;
+    if(j.ok){
+      replyEl.innerHTML = `
+        <div style="padding:11px 13px;border-radius:9px;background:rgba(8,12,24,.55);border:1px solid var(--line)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--green);letter-spacing:.12em;margin-bottom:5px">▸ AGENT REPLY · ${j.provider}/${(j.model||'').split('/').pop()} · ${j.ms||elapsed}ms</div>
+          <div style="font-size:12.5px;line-height:1.55;color:var(--text);white-space:pre-wrap">${escapeHTML(j.reply||'(empty reply)')}</div>
+        </div>`;
+      metaEl.textContent = `· ${j.ms||elapsed}ms · ${j.provider}`;
+    } else {
+      replyEl.innerHTML = `
+        <div style="padding:11px 13px;border-radius:9px;background:rgba(40,8,12,.55);border:1px solid var(--red);color:var(--red);font-family:'JetBrains Mono',monospace;font-size:11px">
+          ⚠ ${escapeHTML(j.error || 'dispatch failed')}
+        </div>`;
+      metaEl.textContent = `· error`;
+    }
+  }catch(e){
+    replyEl.innerHTML = `<div style="padding:11px 13px;border-radius:9px;background:rgba(40,8,12,.55);border:1px solid var(--red);color:var(--red);font-family:'JetBrains Mono',monospace;font-size:11px">⚠ network: ${escapeHTML(e.message||String(e))}</div>`;
+    metaEl.textContent = `· network error`;
+  } finally {
+    replyEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Dispatch';
+  }
+}
+
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function openBody(which){
   if(which==='council' || which==='board'){
