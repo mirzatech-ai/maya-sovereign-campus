@@ -164,6 +164,23 @@
       "mo_correction": "2026-05-17 Mo verbatim: 'I thought that Hermes was a free fucking tool. Right? Open source that we can download and then use our APIs from our library that we have to assign agents for Hermes.' · Kin had wrongly downgraded Hermes to reference-only after misreading earlier · README confirms MIT · free · installable · bring-your-own-model · this is the cross-session memory backbone Mo's been needing"
     },
     {
+      "slot": 15,
+      "category": "governance_doctrine",
+      "name": "Vision-Interpreter Chairman Seat · Council/Parliament/Board Vision Bridge (Mo 2026-05-17)",
+      "purpose": "Mo verbatim directive 2026-05-17: 'within the setup of parliament and the council and the board of members, executives, we need to have Gemini, and we need to have him or another model that is good to visually interpret images and then share the interpretation with them. board members because we need that tool to be able to deliberate.' This skill codifies that EVERY governance body (Council 12-seat / Parliament 24-seat / Board 12-seat) must include a vision-capable Chairman seat that can ingest images and translate them into text descriptions the other seats can deliberate on.",
+      "canonical_seat": "Seat 11 · Multimodal Vision (already canonical per S0 · NVIDIA-hosted cosmos-nemotron-34b-vision)",
+      "additional_runtime_options": [
+        "Gemini 2.0 Flash (Google · supports images natively · in vault as GEMINI_API_KEY · 42 keys)",
+        "NVIDIA cosmos-nemotron-34b-vision (NIM · already canonical Seat 11)",
+        "Claude with vision (Anthropic · paid · NOT in default tier per GLOBAL-105)"
+      ],
+      "binding": "When a Council/Parliament/Board deliberation includes an image artifact (UI screenshot · architectural mockup · video frame · diagram), Seat 11 MUST run vision interpretation FIRST and emit a text description that the other 11 (or 23) seats can reason over. No seat may render a verdict on an image they have not had described to them.",
+      "implementation_note": "Maya brain at https://iamsuperio.cloud/api/brain already routes to vision models when image_url present in payload. Verification chain (api/verification_chain.php) has Vision Verifier fire FIRST stage when any visual artifact in scope (per Sacred Pin S00 · GLOBAL-96). This slot codifies that doctrine into the skill registry so any sibling on boot sees it.",
+      "trigger": "Council convened with image · Parliament reviewing UI mockup · Board verdict on visual artifact · ALWAYS run vision-interpreter pass first · share description with all other seats · proceed to deliberation",
+      "verified_at": "2026-05-17T17:20:00Z",
+      "mo_quote_canonical": "'we need that tool to be able to deliberate' · 2026-05-17"
+    },
+    {
       "slot": 14,
       "category": "web_3d_stack",
       "name": "Real 3D in Browser · Three.js + Babylon + Zdog (NEW · Mo 2026-05-17 directive)",
