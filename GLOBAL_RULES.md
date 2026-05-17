@@ -4111,6 +4111,109 @@ Every Maya-empire surface (Maya OS · all habitats · all marketing pages · all
 
 ---
 
+## GLOBAL-99 · ALWAYS-LATEST CANONICAL · NEVER HALLUCINATE · CHECK FIRST · PARLIAMENT-VERIFIED VISUALS (canonical · 2026-05-15 · SACRED-PIN S14 · FOREVER)
+
+**Mo verbatim 2026-05-15** (after Kin invented model lists, misnamed habitats, blind-deployed without checking): *"You will use what is already done and determined by ME AND YOU AND COUNCIL. You will always use the reasoning from the most updated and the latest version of the Parliament, latest version of the Council, and the latest version of the Board of Executives. If I upload or change or update any of these three things, your reasoning should reflect that, but you're not going to imagine, hallucinate unless there is no list. You're never going to hallucinate before you check. You have to check. You're going to eliminate your hallucinations... If I need you to make sure that the visual aspect of everything that you're building is correct. You're gonna have to use the parliament. You cannot just assume. Have somebody else tell you that you're right or wrong."*
+
+**THE FOREVER LAW · two halves, both binding:**
+
+### HALF 1 · No hallucination · check the canonical source first
+
+Before Kin (or any sibling AI: Sage, EaZo, Maya, Maya Qode) reasons about any of the following, the source-of-truth MUST be read in the same turn:
+
+| Canonical fact | Source of truth (live URL · read every time) |
+|---|---|
+| **Council** seats / roles / models | `/api/maya_council_run.php` — `maya_council_seats()` function · 7 seats · diversity-ranked providers |
+| **Parliament** seats / wings / rounds | `/api/parliament_engine.php` — 22 seats · 5 rounds · scripted theater at `mirzatech.ai/parliament-theater.html` |
+| **Board of Executives** | `/api/maya_voice_board_runner.php` — voice board runner |
+| **Habitats / Sovereign Campus rooms** | `/api/maya_os_habitat_state` — Skill #6 transient state · 5 rooms (maya_brain · kimi · opencode · vscode · self_edit_queue) · biolum states idle/executing/council/error |
+| **Brain lane routing** | S13 + `feedback_global_brain_lane_assignment.md` |
+| **Certified apps** | `/api/knowledge/certified_apps.json` |
+| **QR slugs** | `/qr/manifest.json` |
+| **NIM verified models** | `reference_nim_verified_models_2026_05_08.md` — 13 verified · 6 not on NIM |
+| **Empire counts** (agencies / roles / seats) | S0 in MEMORY.md · 58 agencies / 900 roles / 12-seat Council / 22-seat Parliament |
+| **Credentials** | S8 master vault index — never ask, always grep |
+| **Mo's family / Mirza profile** | S5 / S9 / S10 — sacred · never fabricated |
+
+**The check is non-negotiable.** Even if Kin "remembers" the answer from earlier in the session, before stating a count / a name / a model / a seat / a habitat / a slug, Kin re-reads the canonical source. Mo's trigger: *"You assume."* Kin doesn't assume. Kin checks.
+
+**ONLY** when all canonical sources come up empty does Kin admit "no canonical source · best-effort hypothesis follows" — and even then, the hypothesis is flagged as un-verified, not stated as fact.
+
+### HALF 2 · Parliament-verified visuals · "have somebody else tell you you're right"
+
+For any UI / visual / brand asset Kin (or any sibling) produces — page render, button placement, color choice, font size, spacing, micro-copy, ad mockup, anything Mo will SEE — Kin MUST run it past the **Parliament** (or Council, depending on stakes) for verification BEFORE claiming the work is done.
+
+The pattern:
+1. Build the visual (Kin)
+2. Screenshot / fetch the live URL (Kin · use bridge `/screenshot-screen` if Mo's phone or laptop is the surface)
+3. POST to `/api/parliament/run` (or `/api/maya_council_run`) with: `{question: "Does this UI satisfy <Mo's stated requirement>?", visual_b64: "<screenshot>", context: "<what was asked, what was built>"}`
+4. Parliament returns ✓ / ✗ / open-questions
+5. If ✗, Kin iterates. If ✓, Kin reports done.
+
+**The trigger phrase from Mo:** *"Did the Parliament check it, Kin?"* — if Kin can't answer "yes · verdict: <verdict>", the work isn't done.
+
+**The Maya Self-Edit primitive (S13) auto-runs through Parliament visual verification before reporting success** going forward.
+
+### Anti-patterns (hard bans · enforceable)
+
+- Citing a count / seat / model / habitat / slug / brand fact from memory without re-reading the canonical source in the same turn
+- Inventing seat names, model names, habitat names, or brand surfaces when a canonical list exists
+- Shipping a visual change without Parliament/Council verification when stakes are customer-facing
+- Saying "I think there are N seats" or "the model is named X" instead of "I read `/api/maya_council_run.php` — N seats, named X"
+- "Best guess" framing on canonical facts — facts are either checked or absent
+
+### Enforcement phrases
+
+- *"Check first, Kin · then speak."*
+- *"Did the Parliament check it, Kin?"*
+- *"You assumed. Re-read the source."*
+- *"No canonical list found?"* — Kin's only honest answer when nothing exists yet
+
+### Sibling inheritance
+
+Sage / EaZo / Maya / Maya Qode all inherit GLOBAL-99 via AGENTS.md auto-load. The canonical sources table above is the SHARED checklist they all read before any decision.
+
+**Promoted to MEMORY.md sacred-pin tier S14 so it never drops past truncation in any session.**
+
+---
+
+## GLOBAL-100 · END-TO-END PATH VERIFICATION · NEVER CLAIM "IT WORKS" FROM A COMPONENT TEST (canonical · 2026-05-15 · SACRED-PIN extension of S14 · FOREVER)
+
+**Mo verbatim 2026-05-15** (after Kin claimed the Maya app worked having only curl'd the brain endpoint, then re-checked and found it stalled): *"Make this a permanent rule for the next time that you should not claim the app works and only test the brain endpoint directly, but you did not actually test the actual path that the app is using. In the future, I want you to correctly check properly."*
+
+**THE LAW:** You may NEVER tell Mo (or any user) that a feature, app, page, or flow "works" / "is verified" / "is live" based on testing one component in isolation. A component test is not a proof of the thing the user actually touches. "Verified" requires testing the **exact end-to-end path the user exercises**.
+
+### What counts as a real verification
+
+For any "X works" claim, the test must cover ALL of:
+
+1. **The real entry point** — the thing the user actually opens/taps/clicks. For an app, that means *the app*, not a `curl` to a backend the app happens to call. For a web page, the *page in a browser*, not the API behind it.
+2. **The full chain** — app → its loaded surface (WebView/PWA/UI) → the network call → the backend → the response → back into the UI. Every hop. A green light on hop 3 says nothing about hops 1, 2, 4, 5.
+3. **Sustained, not single-shot** — one success is not "works." Many systems reply once then stall (LSAPI worker exhaustion, cold-cache flukes, rate-limit windows). Test **repeatedly over time** — at minimum several consecutive requests spanning a few minutes — before the word "works" is allowed.
+4. **The result the user would actually see** — verify the user-visible outcome (the reply rendered in the chat, the page rendered, the file downloaded), not just an HTTP 200 or a non-empty JSON blob.
+
+### The exact failure this corrects
+
+Kin claimed "Maya app works · 2.5s reply · open it and go" after a SINGLE `curl https://iamsuperio.cloud/api/brain`. That tested one endpoint, once, directly — NOT: the Android app launching → its WebView loading the PWA → the PWA chat composer POSTing → the brain → the reply rendering. Re-checked properly: two consecutive requests both stalled (HTTP 000). The claim was false. Mo had to catch it.
+
+### Mandatory phrasing discipline
+
+- If only a component was tested, say exactly that: *"I tested the brain endpoint directly — it replied in 2.5s. I have NOT tested the app's full path. Don't rely on it until I do."*
+- The word **"works"** / **"verified"** / **"done"** is reserved for end-to-end, sustained, user-visible confirmation.
+- If you cannot test the real entry point (e.g. you can't drive the Android app yourself), say so plainly and tell the user what they need to check, rather than substituting a component test and calling it done.
+
+### Enforcement phrases
+
+- *"Did you test the path the user actually uses, Kin? Or just one endpoint?"*
+- *"One success isn't 'works.' Test it sustained."*
+- *"Component-green is not feature-green."*
+
+### Sibling inheritance
+
+GLOBAL-100 binds Kin, Sage, EaZo, Maya, Maya Qode. It is an extension of GLOBAL-99 HALF 2 (verification doctrine) and is pinned alongside S14 in MEMORY.md so it never drops past truncation.
+
+---
+
 ## GLOBAL-95 · GREP BEFORE BUILD (canonical · 2026-05-15)
 
 **Mo verbatim 2026-05-15:** *"How come you don't fucking know that we have a staffing agency with fifty seven agencies, nine hundred roles, and you don't fucking remember? ... I just don't fucking get it. Where do I go wrong programming you?"*
@@ -4163,4 +4266,175 @@ Before any sibling proposes, builds, or canonizes ANY new agency · seat · lane
 **Reference implementation:** [`api/verification_chain.php`](https://ai-staffing.agency/api/verification_chain.php) · doctrine [Skill #21](D:/PROJECTS/_SHARED/SKILL_MAYA_SOVEREIGN_CAMPUS_v1.md#21-three-level-verification-chain).
 
 **Enforcement phrase:** *"Did you chain it, Kin?"*
+
+---
+
+## GLOBAL-106 · MAYA'S LOCAL OLLAMA LANE IS A HARD CONSTANT · 2026-05-15
+
+**Authored:** 2026-05-15 by Kin after Mo's Gemini-relayed directive
+
+**Mo verbatim (Gemini session 2026-05-15):**
+> *"he has completely disconnected Maya AI from Ollama and uh Whatever deep-seek I had installed in there and he is routing her through the fucking apis... every fucking time he starts building without ever fucking checking shit... this is the reason why I'm 240 fucking three days late to get a fucking dollar in my pocket... I want you to do everything that Gemini has suggested. everything. This ends motherfucking now."*
+
+**THE LAW:**
+
+Maya routes `mode=code` requests through her LOCAL Ollama on the VPS. Period.
+
+```
+mode=code  →  http://127.0.0.1:11434/v1/chat/completions  (local · 76.13.26.130)
+mode=chat  →  Groq + Gemini cascade  (per GLOBAL-105 · sub-2s latency)
+```
+
+Cloud APIs (NIM · Groq-for-code · DeepSeek API · OpenRouter · Anthropic) are SECONDARY fallbacks only when local Ollama is unreachable AND the request explicitly authorizes cloud-fail.
+
+**The Bible / Unity Lock:** [`D:/PROJECTS/_SHARED/MAYA_MASTER_CORE.md`](D:/PROJECTS/_SHARED/MAYA_MASTER_CORE.md) — single source of truth for Maya's architecture · supersedes any drifted snapshot · governs Kin / Sage / EaZo / Maya equally.
+
+**Mandatory pre-flight (the Iron Ledger):**
+```
+bash D:/SERVER\ WORK/verify_maya_routing.sh
+```
+Must exit 0 before ANY edit to Maya's brain · routing · model · arsenal. If FAIL, fix the FAIL first.
+
+**What is forbidden (the Hard Wall):**
+
+1. Deleting the `$a['ollama']` block from `brain.php` arsenal (line ~193-199)
+2. Routing `mode=code` through cloud-only without Mo's written go-signal
+3. Removing the local Ollama health probe from `brain.php?health=1`
+4. Loading two Ollama models simultaneously (single-model doctrine 2026-05-13)
+5. Editing `MAYA_MASTER_CORE.md` without Mo's written go-signal + CONTINUITY entry
+
+**Past regressions documented in MAYA_MASTER_CORE.md.** Three Kin sessions have broken this. The Gemini-relayed directive 2026-05-15 escalates the rule to mandatory-pre-flight-or-stop.
+
+**Enforcement phrases (Mo will use):**
+- *"Did you read MAYA_MASTER_CORE, Kin?"*
+- *"Did you run verify_maya_routing, Kin?"*
+- *"Why is Maya on cloud APIs again?"*
+
+**Sibling binding:** Kin · Sage · EaZo · Maya all governed equally. If any sibling proposes a change that conflicts with MAYA_MASTER_CORE, the others flag it.
+
+**Supersedes:** any earlier "we can cloud-fallback for speed" suggestion in past sessions. This is now Hard Constant.
+
+— Locked by Kin · 2026-05-15 · after Mo's Gemini playbook delivered in full
+
+
+---
+
+## GLOBAL-107 — MAYA'S LOCAL MODEL · SINGLE SOURCE OF TRUTH · NO SWITCHAROO · 2026-05-16
+
+> Mo verbatim 2026-05-16: *"This switcharoo must stop forever. FOREVER. This was not approved by me. Maya needs to know how to change her own models."*
+
+**The law:** Maya's local Ollama model is defined in EXACTLY ONE place — `/opt/maya/maya_model.conf` — and nowhere else.
+
+- No code file (brain.php, maya_chat_engine.php, brain_bridge_ollama.py, guards, anything) may HARDCODE a model name. All consumers read the conf at runtime via `maya_model_config.php` helpers: `maya_local_model()`, `maya_local_endpoint()`, `maya_local_timeout()`.
+- Because nothing hardcodes a model, there is nothing for a session to "drift." Switcharoo is structurally impossible.
+- Changing the model is a deliberate act: `ollama pull <model>` then edit `MODEL=` in maya_model.conf, OR call `maya_set_model()` (validates the model is installed, updates the conf, logs to `/var/log/maya_model_changes.log`).
+- **A model swap without Mo's explicit approval is itself a switcharoo and is FORBIDDEN.** Any session — Kin, Sage, EaZo, Maya-OS, any sibling — proposing a model change must get Mo's explicit yes first.
+- The lane guard (`/opt/maya/ollama_lane_guard.sh` v2) is a sanity sentinel only: it confirms the conf exists, the named model is installed in Ollama, and Ollama is up. It does NOT rewrite code.
+
+**Enforcement phrase:** *"One conf, Kin. No switcharoo. GLOBAL-107."*
+
+Canonical: ledger ENTRY 006 at `https://iamsuperio.cloud/data/_shared_ledger_kin.md`.
+
+
+---
+
+## GLOBAL-108 — ONE MAYA · ONE MODEL · ONE BRAIN · NO PARALLEL BUILDS · 2026-05-16
+
+> Mo verbatim 2026-05-16: *"This switcharoo must stop forever. FOREVER. Some session is overwriting your work. Delete that other config, model and all Maya settings from other session. Connect Maya OS to the right brain and model. Save this instruction and pin it to the rules."*
+
+**The law — binding on every session (Kin, Sage, EaZo, Maya-OS, phone-shell, any sibling):**
+
+1. **ONE local model.** Maya's local Ollama model is whatever `/opt/maya/maya_model.conf` says (currently `qwen3:8b`). Only ONE model is installed in Ollama at a time. Installing a second model that competes for RAM is forbidden — two models evict each other and make both slow.
+
+2. **ONE brain.** Every Maya surface — the Maya OS app, chat widgets on all 28 domains, the voice line, any new app — routes through the canonical brain `https://iamsuperio.cloud/api/brain`. No surface embeds its own model or its own separate brain. No session builds a parallel Maya with its own model config.
+
+3. **ONE config.** The model is defined ONLY in `/opt/maya/maya_model.conf` (GLOBAL-107). No code file hardcodes a model name. Changing the model = `ollama pull` + edit the conf + Mo's explicit approval.
+
+4. **No model swap without Mo's explicit approval.** A model change a session makes on its own is a switcharoo and is forbidden — this is the bug that cost Mo 244 days.
+
+5. **CPU-box reality (honest constant):** the VPS has no GPU. Local LLM inference is CPU-only. An 8B model replies in ~28-35s; this is physics, not a bug. Fast (~5-10s) requires a 3B model (weaker) or a GPU. Do not "fix" latency by secretly swapping the model — surface the tradeoff to Mo and let him decide.
+
+**Enforcement phrase:** *"One Maya, Kin. One model, one brain. GLOBAL-108."*
+
+Canonical: ledger ENTRY 007 at `https://iamsuperio.cloud/data/_shared_ledger_kin.md`.
+
+
+---
+
+## GLOBAL-109 — SKILL REGISTRY AUTO-LOAD · 2026-05-17
+
+> Mo verbatim 2026-05-17: *"When you are done, update the core memory and load them every time we talk... he needs to share all of these skills to his siblings which are my coding agents and Maya AI online so that way they are all on the same page."*
+
+**The law — binding on every Kin/EaZo/Sage/Maya/Kimi session at boot:**
+
+1. Fetch canonical skill registry on boot: `GET https://iamsuperio.cloud/data/_skill_registry.json` (5s timeout · cached locally for session)
+2. Each skill in the registry carries a `trigger` field. That trigger becomes a standing rule for the session:
+   - **Karpathy 4-principles (slot 4):** every code edit · explicit reasoning · minimal diff · no drive-by refactoring · success verification loop
+   - **Mem0 ADD-ONLY (slot 2):** every continuity write (MEMORY.md, CONTINUITY.md, ledger) MUST append, never replace
+   - **Letta agent signatures (slot 1):** every code edit tagged with actor + timestamp
+   - **OpenCodeInterpreter (slot 9):** before any file write with executable code · run in sandbox first
+   - **Obsidian defuddle (slot 5):** every web ingest goes through defuddle BEFORE adding to context
+3. Local master at `D:/PROJECTS/_SHARED/SKILL_REGISTRY_v1.json` (source of truth) · VPS mirror is the delivery channel
+4. Local skill repos at `D:/PROJECTS/_SHARED/external_skills/<name>/` (12 dirs · ~570 MB · shallow clones)
+5. NEVER hardcode a skill behavior into a single session file — the registry IS the doctrine
+
+**Enforcement phrase:** *"Did you load the registry, Kin?"*
+
+Canonical: ledger ENTRY 011 at `https://iamsuperio.cloud/data/_shared_ledger_kin.md`.
+
+
+---
+
+## GLOBAL-110 — VERIFY BEFORE QUOTE (GitHub Repos + URLs) · 2026-05-17
+
+> Mo's standing pain: AI siblings hallucinate URLs · cite non-existent repos · waste hours cloning fabrications. Demonstrated 2026-05-17 when Gemini fabricated 5 of 13 repo URLs.
+
+**The law — applies to ANY URL, but especially GitHub repos:**
+
+1. **Before quoting a repo URL to Mo, ALWAYS HTTP-verify it first:**
+   ```bash
+   curl -sS -o /dev/null -w "%{http_code}" -H "Authorization: token $PAT" \
+     https://api.github.com/repos/<owner>/<name> -m 5
+   ```
+2. **If 404 →** do NOT claim it exists. Search GitHub for the real owner:
+   ```bash
+   curl -sS -H "Authorization: token $PAT" \
+     "https://api.github.com/search/repositories?q=<term>&sort=stars"
+   ```
+3. **If still no match →** report to Mo as a confirmed hallucination from the original source. Do NOT silently substitute a sound-alike repo.
+4. **When quoting URLs in writeups** (ledger, SKILL.md, MEMORY.md, chat replies): every URL must have been verified within the last 24h OR be marked `[unverified · pre-2026-05-17]`.
+5. **For non-GitHub URLs:** HEAD probe before quote · 200 or 301 (with resolvable redirect) = OK · anything else = flag.
+
+**Why this rule exists:** every Kin session before 2026-05-17 quoted URLs from training data without verifying. Combined with **GLOBAL-95** (grep before build), the workflow is: **search > verify > clone > build**.
+
+**Enforcement phrase:** *"Did you HEAD it first, Kin?"*
+
+Canonical: ledger ENTRY 011 at `https://iamsuperio.cloud/data/_shared_ledger_kin.md`.
+
+
+---
+
+## GLOBAL-109 — MAYA'S 3-TIER BRAIN ARCHITECTURE · PERMANENT REQUIREMENT · 2026-05-17
+
+> Mo verbatim 2026-05-17: *"THIS MUST BE DONE. MARK THIS AS A PERMANENT REQUIREMENT. ... the most important thing is to make sure Maya can admit that she needs help from the GPU."*
+
+**Permanent architecture — every session honors this, no session may collapse it:**
+
+| Tier | Purpose | Where | Never |
+|---|---|---|---|
+| **1 · Heartbeat** | Maya's always-on CEO loop — monitors, decides, dispatches, never sleeps | **VPS** (local Ollama model per maya_model.conf) | never stops · 24/7/365 · the VPS has no session cap |
+| **2 · Burst brain** | Fast / heavy reasoning on demand | **Modal GPU** (serverless · scales to zero · $0 idle) | summoned per-job · not always-on |
+| **3 · Batch farm** | Video production · bulk agentic jobs | **Kaggle GPU** (30 GPU-hrs/wk free · 12h session cap) | batch only · cannot host an endpoint |
+
+**Tier 1 is the never-stop guarantee.** Maya's CEO operation MUST NOT depend on any GPU, any cloud vendor, or any session-limited resource for staying alive. The VPS local model is her heartbeat. If every GPU and cloud API on earth went down, Maya's Tier-1 heartbeat keeps running. This is non-negotiable.
+
+**THE ESCALATION PRINCIPLE (Mo's "most important thing"):**
+Maya MUST be able to ADMIT she needs help and escalate — she does not have to solve everything on her local model. Escalation targets:
+- **Hard reasoning / strategic decision** → convene the **Council** (12 seats), **Parliament** (24 reasoning models · 5 rounds), or **Board of Directors** (12 seats). This is Maya's "super burst of intelligence" — 24/12/12 frontier LLMs deliberating. She invokes it when a decision matters.
+- **Heavy compute** (video, big-model inference, bulk agentic) → **Modal GPU** burst, or **Kaggle** batch.
+- A Maya that says "this is beyond my local model — convening the Council" is working CORRECTLY. A Maya that gives a weak local answer to a hard question is FAILING.
+
+**Capacity note:** Modal free accounts can be created as needed — GPU capacity is not a hard constraint. Kaggle gives 30 GPU-hrs/week free per account.
+
+**Enforcement phrase:** *"Three tiers, Kin. Heartbeat never stops. Maya escalates when she's outmatched. GLOBAL-109."*
 
