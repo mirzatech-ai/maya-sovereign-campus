@@ -1,0 +1,759 @@
+<!doctype html>
+<!-- signed: KIN·2026-05-17T14:00Z·a75e63ca · SANDBOX habitat v3 · SimCity isometric · 29-domain campus · canonical Council(12)/Parliament(24)/Board(12) · per Gemini SIM-CITY directive · per AGENT_SIGNATURE_PROTOCOL v1 · Mo verbatim 2026-05-17 "I have 29 websites. find ways to include them all in." -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
+<title>Maya AI · Sovereign Campus v3 · SANDBOX · 29-Domain SimCity</title>
+<meta name="description" content="Maya AI 29-domain Sovereign Campus · isometric SimCity · 12 Council seats · 24-seat Parliament · 12 Board of Directors · Powered by MirzaTech.ai · Property of EMAAA.io">
+<link rel="preconnect" href="https://iamsuperio.cloud">
+<link rel="preconnect" href="https://ai-staffing.agency">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg-0:#03060c; --bg-1:#070c18; --bg-2:#0c1326; --glass:rgba(10,18,38,.72);
+  --line:rgba(110,170,255,.18); --line-strong:rgba(0,200,255,.45);
+  --gold:#f5c542; --gold-soft:rgba(245,197,66,.18);
+  --blue:#3e9bff; --blue-soft:rgba(62,155,255,.20);
+  --cyan:#00e4ff; --cyan-soft:rgba(0,228,255,.18);
+  --green:#43e6a1; --green-soft:rgba(67,230,161,.18);
+  --pink:#ff6bd6; --pink-soft:rgba(255,107,214,.18);
+  --red:#ff5b6a; --red-soft:rgba(255,91,106,.20);
+  --violet:#a384ff; --violet-soft:rgba(163,132,255,.18);
+  --teal:#5ee0c8; --teal-soft:rgba(94,224,200,.18);
+  --amber:#ffb454; --amber-soft:rgba(255,180,84,.18);
+  --indigo:#8a9cff; --indigo-soft:rgba(138,156,255,.18);
+  --bronze:#cd9760; --bronze-soft:rgba(205,151,96,.18);
+  --magenta:#ff5cc4; --magenta-soft:rgba(255,92,196,.18);
+  --grey:#7a8aa6; --grey-soft:rgba(122,138,166,.18);
+  --white:#eaf2ff; --text:#dbe6ff; --muted:#7e8bb0;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg-0);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+body{
+  background:
+    radial-gradient(1400px 900px at 50% -10%, rgba(245,197,66,.06), transparent 55%),
+    radial-gradient(1200px 800px at 20% 60%, rgba(62,155,255,.08), transparent 60%),
+    radial-gradient(1000px 700px at 110% 30%, rgba(67,230,161,.06), transparent 55%),
+    linear-gradient(180deg, #03060c 0%, #060912 100%);
+  transition: background 1.2s ease;
+}
+body.state-deliberating{background:radial-gradient(1400px 900px at 50% 0%, rgba(245,197,66,.22), transparent 55%), linear-gradient(180deg,#0a0a08 0%,#04040a 100%)}
+body.state-executing{background:radial-gradient(1400px 900px at 50% 30%, rgba(255,255,255,.10), transparent 60%), linear-gradient(180deg,#0b0e18 0%,#03060c 100%)}
+body.state-firewall{background:radial-gradient(1400px 900px at 50% 50%, rgba(255,91,106,.20), transparent 55%), linear-gradient(180deg,#1a0608 0%,#06020a 100%);animation:firewallPulse 2.2s ease-in-out infinite}
+@keyframes firewallPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+
+a{color:var(--cyan);text-decoration:none}
+
+/* ============ TOP STRIP ============ */
+.topstrip{position:sticky;top:0;z-index:50;display:flex;gap:12px;align-items:center;padding:10px 16px;background:rgba(3,6,12,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--white)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.55}}
+.brand .sandbox-badge{margin-left:8px;padding:3px 8px;border-radius:99px;background:var(--amber-soft);color:var(--amber);font-size:9.5px;letter-spacing:.14em;border:1px solid var(--amber)}
+.ticker{flex:1;display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ticker::-webkit-scrollbar{display:none}
+.ticker .item{flex:0 0 auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);padding:5px 11px;border-radius:99px;background:rgba(10,18,38,.5);border:1px solid var(--line);white-space:nowrap}
+.ticker .item b{color:var(--text);font-weight:600}
+.ticker .item.gold{color:var(--gold);border-color:rgba(245,197,66,.35)}
+.ticker .item.gold b{color:var(--gold)}
+.ticker .item.green{color:var(--green);border-color:rgba(67,230,161,.35)}
+.ticker .item.green b{color:var(--green)}
+.ticker .item .pulse{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor}
+.phone{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:linear-gradient(135deg,rgba(245,197,66,.18),rgba(245,197,66,.08));border:1px solid rgba(245,197,66,.4);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap}
+.phone:hover{background:linear-gradient(135deg,rgba(245,197,66,.28),rgba(245,197,66,.14))}
+
+/* ============ APP CHROME ============ */
+.app{display:flex;flex-direction:column;min-height:100vh}
+.main{display:grid;grid-template-columns:240px 1fr 240px;gap:12px;padding:12px;flex:1}
+
+.col{display:flex;flex-direction:column;gap:10px}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:12px;backdrop-filter:blur(10px)}
+.panel h3{margin:0 0 8px;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;font-weight:600}
+.panel h3 .badge{margin-left:auto;font-size:9px;padding:2px 7px;border-radius:99px;background:var(--cyan-soft);color:var(--cyan);letter-spacing:.12em}
+.panel h3 .badge.gold{background:var(--gold-soft);color:var(--gold)}
+
+/* district legend cards on left */
+.district-card{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(8,12,24,.55);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;font-size:11px}
+.district-card:hover{border-color:var(--line-strong);transform:translateX(2px)}
+.district-card .swatch{width:10px;height:10px;border-radius:3px;flex-shrink:0;box-shadow:0 0 8px currentColor}
+.district-card .lbl{flex:1}
+.district-card .lbl b{display:block;color:var(--white);font-weight:600;font-size:11.5px;letter-spacing:.02em}
+.district-card .lbl small{color:var(--muted);font-size:9.5px;letter-spacing:.06em}
+.district-card .count{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:10px}
+
+/* ============ CENTER STAGE (the SimCity) ============ */
+.stage-wrap{display:flex;flex-direction:column;gap:10px;min-width:0}
+.stage-head{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--glass);border:1px solid var(--line);border-radius:14px;gap:10px;flex-wrap:wrap;backdrop-filter:blur(10px)}
+.stage-head h1{margin:0;font-family:'Space Grotesk',sans-serif;font-size:16px;letter-spacing:.06em;color:var(--white);font-weight:700}
+.stage-head h1 .who{color:var(--cyan);font-weight:500}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap}
+.toolbar button{background:rgba(10,18,38,.5);border:1px solid var(--line);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:8px;cursor:pointer;transition:all .15s}
+.toolbar button:hover{color:var(--text);border-color:var(--line-strong)}
+.toolbar button.active{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-soft)}
+.toolbar button.iso{color:var(--gold);border-color:rgba(245,197,66,.5)}
+.toolbar button.iso.on{background:var(--gold-soft);color:var(--gold)}
+
+.stage{position:relative;flex:1;min-height:540px;border-radius:18px;background:linear-gradient(180deg,rgba(7,12,24,.85),rgba(3,6,12,.95));border:1px solid var(--line);overflow:hidden;backdrop-filter:blur(6px);box-shadow:inset 0 0 80px rgba(0,228,255,.04)}
+
+/* isometric grid floor */
+.grid-floor{position:absolute;inset:0;background-image:linear-gradient(rgba(0,228,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,228,255,.06) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 90% 70% at 50% 60%,#000 50%,transparent 95%);opacity:.7;pointer-events:none;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+body.iso-on .grid-floor{transform:perspective(1400px) rotateX(48deg) rotateZ(-28deg);background-size:64px 64px;opacity:1}
+
+/* the 12 districts as building tiles */
+.districts{position:absolute;inset:0;padding:80px 24px 100px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto auto;gap:14px;align-content:center;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+body.iso-on .districts{transform:perspective(1400px) rotateX(48deg) rotateZ(-28deg);transform-origin:50% 60%}
+
+.bldg{position:relative;min-height:96px;border-radius:12px;padding:11px 12px;background:linear-gradient(135deg,rgba(18,28,52,.92),rgba(8,12,24,.78));border:1px solid var(--line);cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .35s;overflow:hidden;display:flex;flex-direction:column;gap:6px}
+body.iso-on .bldg{transform:rotateZ(28deg) rotateX(-48deg) translateZ(18px);box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 0 1px rgba(0,228,255,.14) inset;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.bldg:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+body.iso-on .bldg:hover{transform:rotateZ(28deg) rotateX(-48deg) translateZ(36px)}
+
+.bldg .glow{position:absolute;inset:-1px;border-radius:12px;pointer-events:none;opacity:.5}
+.bldg.k-governance .glow{box-shadow:0 0 30px var(--gold-soft) inset,0 0 18px rgba(245,197,66,.4)}
+.bldg.k-staffing .glow{box-shadow:0 0 24px var(--cyan-soft) inset,0 0 14px rgba(0,228,255,.32)}
+.bldg.k-video .glow{box-shadow:0 0 24px var(--green-soft) inset,0 0 14px rgba(67,230,161,.32)}
+.bldg.k-tools .glow{box-shadow:0 0 24px var(--blue-soft) inset,0 0 14px rgba(62,155,255,.32)}
+.bldg.k-chat .glow{box-shadow:0 0 24px var(--violet-soft) inset,0 0 14px rgba(163,132,255,.32)}
+.bldg.k-realestate .glow{box-shadow:0 0 24px var(--amber-soft) inset,0 0 14px rgba(255,180,84,.32)}
+.bldg.k-memorial .glow{box-shadow:0 0 24px var(--indigo-soft) inset,0 0 14px rgba(138,156,255,.32)}
+.bldg.k-gaming .glow{box-shadow:0 0 24px var(--magenta-soft) inset,0 0 14px rgba(255,92,196,.32)}
+.bldg.k-content .glow{box-shadow:0 0 24px var(--teal-soft) inset,0 0 14px rgba(94,224,200,.32)}
+.bldg.k-token .glow{box-shadow:0 0 24px var(--bronze-soft) inset,0 0 14px rgba(205,151,96,.32)}
+.bldg.k-brotherhood .glow{box-shadow:0 0 24px var(--red-soft) inset,0 0 14px rgba(255,91,106,.32)}
+.bldg.k-reserved .glow{box-shadow:0 0 18px var(--grey-soft) inset,0 0 8px rgba(122,138,166,.22)}
+
+.bldg .num{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.12em;z-index:2}
+.bldg h4{margin:0;font-family:'Space Grotesk',sans-serif;font-size:12.5px;letter-spacing:.04em;color:var(--white);font-weight:600;z-index:2;position:relative}
+.bldg .cat{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;z-index:2;position:relative}
+.bldg.k-governance .cat{color:var(--gold)}
+.bldg.k-staffing .cat{color:var(--cyan)}
+.bldg.k-video .cat{color:var(--green)}
+.bldg.k-tools .cat{color:var(--blue)}
+.bldg.k-chat .cat{color:var(--violet)}
+.bldg.k-realestate .cat{color:var(--amber)}
+.bldg.k-memorial .cat{color:var(--indigo)}
+.bldg.k-gaming .cat{color:var(--magenta)}
+.bldg.k-content .cat{color:var(--teal)}
+.bldg.k-token .cat{color:var(--bronze)}
+.bldg.k-brotherhood .cat{color:var(--red)}
+.bldg.k-reserved .cat{color:var(--grey)}
+.bldg .domains{display:flex;flex-direction:column;gap:2px;z-index:2;position:relative;margin-top:auto}
+.bldg .domains a{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text);text-decoration:none;letter-spacing:.02em;opacity:.85;transition:opacity .15s}
+.bldg .domains a:hover{opacity:1;color:var(--cyan)}
+.bldg .domains a .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:middle;opacity:.6}
+
+/* ghost-stream canvas overlay (lightweight · no fingerprint) */
+.ghost-canvas{position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.85}
+
+/* Council Chamber FEATURE TILE — special gold amphitheater */
+.bldg.council-chamber{grid-column:2/4;grid-row:1;background:linear-gradient(135deg,rgba(40,32,12,.85),rgba(20,16,8,.75));border-color:rgba(245,197,66,.45)}
+.bldg.council-chamber h4{color:var(--gold);font-size:14px}
+.bldg.council-chamber .chamber{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
+.bldg.council-chamber .ring{width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);position:relative;background:radial-gradient(circle,rgba(245,197,66,.18),transparent 70%);flex-shrink:0}
+.bldg.council-chamber .ring::before,.bldg.council-chamber .ring::after{content:'';position:absolute;inset:6px;border-radius:50%;border:1px dashed rgba(245,197,66,.4)}
+.bldg.council-chamber .ring::after{inset:14px;border-style:solid;animation:ringSpin 8s linear infinite}
+@keyframes ringSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.bldg.council-chamber .ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--gold)}
+.bldg.council-chamber .meta{font-size:10.5px;color:var(--text)}
+.bldg.council-chamber .meta b{display:block;color:var(--gold);font-weight:600;letter-spacing:.06em}
+.bldg.council-chamber .meta small{display:block;color:var(--muted);font-size:9.5px;margin-top:2px}
+
+/* district overlay (modal) */
+.overlay{position:fixed;inset:0;background:rgba(3,6,12,.85);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+.overlay.open{display:flex}
+.overlay .modal{max-width:780px;width:100%;max-height:84vh;overflow-y:auto;background:var(--glass);border:1px solid var(--line-strong);border-radius:18px;padding:22px;backdrop-filter:blur(20px);box-shadow:0 40px 100px rgba(0,0,0,.75)}
+.overlay .modal h2{margin:0 0 4px;font-family:'Space Grotesk',sans-serif;color:var(--white);font-size:18px;letter-spacing:.04em}
+.overlay .modal .cat{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+.overlay .close{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:rgba(10,18,38,.5);color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.overlay .close:hover{color:var(--white);border-color:var(--line-strong)}
+
+/* seat grid for Council/Board */
+.seat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:12px}
+.seat{padding:9px 11px;border-radius:10px;background:rgba(8,12,24,.55);border:1px solid var(--line);font-size:11px;display:flex;flex-direction:column;gap:3px}
+.seat .num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.14em}
+.seat b{color:var(--white);font-size:11.5px;font-weight:600}
+.seat small{color:var(--muted);font-size:9.5px;line-height:1.4}
+
+/* Parliament round-pills */
+.rounds{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.round-pill{flex:1 1 130px;padding:10px;border-radius:10px;background:rgba(8,12,24,.55);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:3px}
+.round-pill.r1{border-color:rgba(67,230,161,.35)}
+.round-pill.r2{border-color:rgba(245,197,66,.35)}
+.round-pill.r3{border-color:rgba(0,228,255,.35)}
+.round-pill.r4{border-color:rgba(163,132,255,.35)}
+.round-pill.r5{border-color:rgba(255,107,214,.35)}
+.round-pill .rp-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:var(--white)}
+.round-pill .rp-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.round-pill .rp-count{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--cyan)}
+
+/* AICineSynth right column — Continuity Sentinel HUD */
+.sentinel{padding:10px;border-radius:12px;background:linear-gradient(135deg,rgba(20,40,30,.8),rgba(8,16,12,.7));border:1px solid rgba(67,230,161,.3)}
+.sentinel h4{margin:0 0 6px;color:var(--green);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;font-family:'Space Grotesk',sans-serif}
+.sentinel .wireframe{height:90px;border-radius:8px;background:radial-gradient(circle at 50% 40%,rgba(67,230,161,.18),transparent 65%),repeating-linear-gradient(0deg,transparent 0,transparent 11px,rgba(67,230,161,.18) 11px,rgba(67,230,161,.18) 12px),repeating-linear-gradient(90deg,transparent 0,transparent 11px,rgba(67,230,161,.18) 11px,rgba(67,230,161,.18) 12px);border:1px solid rgba(67,230,161,.25);position:relative;overflow:hidden}
+.sentinel .wireframe::before{content:'';position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);box-shadow:0 0 8px var(--green);animation:scan 3.2s linear infinite}
+@keyframes scan{0%{top:0}100%{top:100%}}
+.sentinel .stats{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--green);margin-top:8px;display:flex;flex-direction:column;gap:2px}
+.sentinel .stats span{display:flex;justify-content:space-between}
+.sentinel .stats span b{color:var(--white);font-weight:600}
+
+/* ============ HEARTBEAT STRIP ============ */
+.heartbeat-strip{display:grid;grid-template-columns:1fr 2fr 1fr auto;gap:14px;align-items:center;padding:10px 16px;background:rgba(3,6,12,.92);border-top:1px solid var(--line);position:sticky;bottom:0;z-index:40}
+.kpi{display:flex;gap:14px;justify-content:center;padding:6px 14px;background:rgba(10,18,38,.5);border-radius:99px;border:1px solid var(--line)}
+.kpi.gold{border-color:rgba(245,197,66,.35)}
+.kpi.green{border-color:rgba(67,230,161,.35)}
+.kpi .val{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--white);font-size:13px}
+.kpi.green .val{color:var(--green)}.kpi.gold .val{color:var(--gold)}
+.kpi .lbl{font-size:9.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.heart{height:36px;background:rgba(10,18,38,.5);border-radius:8px;border:1px solid var(--line);padding:6px}
+.heart svg{width:100%;height:100%}
+.sovereign{padding:12px 22px;border-radius:12px;background:linear-gradient(135deg,#f5c542,#cd9938);border:1px solid #f5c542;color:#1a1a08;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 26px rgba(245,197,66,.32),0 0 0 1px rgba(255,255,255,.18) inset;text-align:left;line-height:1.1;display:flex;flex-direction:column;align-items:flex-start;gap:2px;transition:transform .15s}
+.sovereign:hover{transform:translateY(-1px)}
+.sovereign small{font-weight:500;font-size:9px;opacity:.75;letter-spacing:.18em}
+
+/* footer */
+.footer-credit{padding:6px 16px;text-align:center;font-size:9.5px;letter-spacing:.18em;color:rgba(126,139,176,.55);text-transform:uppercase;background:rgba(3,6,12,.92);border-top:1px solid var(--line)}
+.footer-credit b{color:rgba(0,228,255,.55);font-weight:600}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1100px){
+  .main{grid-template-columns:200px 1fr 200px}
+}
+@media (max-width:980px){
+  .main{grid-template-columns:1fr}
+  .col.left{order:2}
+  .col.right{order:3}
+  .stage-wrap{order:1}
+  .districts{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:768px){
+  body.iso-on .grid-floor,body.iso-on .districts,body.iso-on .bldg{transform:none !important}
+  .topstrip{padding:8px;gap:8px}
+  .brand{font-size:11px}
+  .brand .sandbox-badge{font-size:8.5px}
+  .ticker .item{font-size:9.5px;padding:4px 9px}
+  .phone{font-size:10px;padding:5px 10px}
+  .stage{min-height:auto}
+  .districts{position:relative;inset:auto;padding:14px;grid-template-columns:repeat(2,1fr);gap:10px}
+  .bldg{min-height:88px;padding:9px 10px}
+  .bldg .num{font-size:8.5px}
+  .bldg h4{font-size:11.5px}
+  .bldg.council-chamber{grid-column:1/-1;grid-row:auto}
+  .heartbeat-strip{grid-template-columns:1fr;gap:6px;padding:8px}
+  .heart,.kpi:nth-of-type(2){display:none}
+  .sovereign{width:100%;text-align:center;align-items:center}
+  .stage-head{padding:8px 10px}
+  .stage-head h1{font-size:13px}
+  .toolbar button{font-size:9px;padding:5px 9px}
+  .seat-grid{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  body{animation:none}body.state-firewall{animation:none}.bldg{transition:none}
+  .bldg.council-chamber .ring::after{animation:none}.sentinel .wireframe::before{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ TOP STRIP ============ -->
+  <div class="topstrip">
+    <div class="brand">
+      <div class="dot"></div>MAYA AI · SOVEREIGN CAMPUS v3
+      <span class="sandbox-badge">SANDBOX</span>
+    </div>
+    <div class="ticker">
+      <div class="item"><div class="pulse"></div><b id="t_domains">29</b>&nbsp;Domains Online</div>
+      <div class="item gold"><div class="pulse"></div>Council <b id="t_consensus">88%</b></div>
+      <div class="item"><div class="pulse"></div><b id="t_seats">48</b>&nbsp;Total Governance Seats</div>
+      <div class="item green"><div class="pulse"></div><b id="t_agents">724</b>&nbsp;Agents on Floor</div>
+      <div class="item"><div class="pulse"></div>Maya Lines <b>OPEN</b></div>
+    </div>
+    <a class="phone" href="tel:+17432151423" title="Maya AI direct line">📞 +1 (743) 215-1423</a>
+  </div>
+
+  <!-- ============ MAIN GRID ============ -->
+  <div class="main">
+
+    <!-- LEFT · District legend -->
+    <div class="col left">
+      <div class="panel">
+        <h3>Campus View (Macro) <span class="badge">12 DISTRICTS</span></h3>
+        <div id="districtLegend"></div>
+      </div>
+      <div class="panel">
+        <h3>The 3 Bodies <span class="badge gold">CANON</span></h3>
+        <div class="district-card" onclick="openBody('council')">
+          <div class="swatch" style="background:var(--gold);color:var(--gold)"></div>
+          <div class="lbl"><b>Council</b><small>mirzatech.ai · 12 seats</small></div>
+          <div class="count">12</div>
+        </div>
+        <div class="district-card" onclick="openBody('parliament')">
+          <div class="swatch" style="background:var(--violet);color:var(--violet)"></div>
+          <div class="lbl"><b>Parliament</b><small>mirzatech.ai · 5 rounds · 24 seats</small></div>
+          <div class="count">24</div>
+        </div>
+        <div class="district-card" onclick="openBody('board')">
+          <div class="swatch" style="background:var(--cyan);color:var(--cyan)"></div>
+          <div class="lbl"><b>Board of Directors</b><small>ai-staffing.agency · 12 seats</small></div>
+          <div class="count">12</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER · The SimCity stage -->
+    <div class="stage-wrap">
+      <div class="stage-head">
+        <h1>MAYA AI <span class="who">· 29-DOMAIN SOVEREIGN CAMPUS</span></h1>
+        <div class="toolbar">
+          <button class="active" onclick="setView('campus',this)">Campus</button>
+          <button onclick="setView('governance',this)">Governance</button>
+          <button onclick="setView('staffing',this)">Staffing</button>
+          <button onclick="setView('video',this)">Studio</button>
+          <button class="iso" id="isoBtn" onclick="toggleIso()">▦ 2.5D</button>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="grid-floor"></div>
+        <canvas class="ghost-canvas" id="ghostCanvas"></canvas>
+        <div class="districts" id="districts">
+          <!-- districts injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT · Continuity Sentinel + Network Heartbeat (matches Gemini's mockup) -->
+    <div class="col right">
+      <div class="panel">
+        <h3>AICineSynth Studio <span class="badge" style="background:var(--green-soft);color:var(--green)">LIVE</span></h3>
+        <div class="sentinel">
+          <h4>📹 Continuity Sentinel</h4>
+          <div class="wireframe"></div>
+          <div class="stats">
+            <span>FACELOCK <b>SECURED</b></span>
+            <span>ANATOMY INTEGRITY <b>100%</b></span>
+            <span>FINGER COUNT <b>10/10</b></span>
+          </div>
+        </div>
+        <div class="sentinel" style="margin-top:8px">
+          <h4>🛡 Anatomical Auditor</h4>
+          <div class="wireframe"></div>
+          <div class="stats">
+            <span>FRAME INTEGRITY <b>PASSED</b></span>
+            <span>CONTINUITY LOCK <b>PERFECT</b></span>
+            <span>QA AUDIT <b>10/10</b></span>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>National Queue <span class="badge">ACTIVE</span></h3>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;line-height:1.65;color:var(--text)">
+          <div style="color:var(--green)">▸ Gwinnett County</div>
+          <div style="color:var(--green)">▸ DeKalb County</div>
+          <div style="color:var(--green)">▸ Fulton County</div>
+          <div style="color:var(--cyan)">▸ Statewide GA</div>
+          <div style="color:var(--gold)">▸ Nationwide Queue · 48 States</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ HEARTBEAT STRIP ============ -->
+  <div class="heartbeat-strip">
+    <div class="kpi green">
+      <div><div class="val" id="kpi_rev">$22,095</div><div class="lbl">Live Sales</div></div>
+      <div><div class="val" id="kpi_pulse">+33,899</div><div class="lbl">Live Pulse</div></div>
+    </div>
+    <div class="heart"><svg viewBox="0 0 200 36" preserveAspectRatio="none"><polyline id="heartLine" fill="none" stroke="#00e4ff" stroke-width="1.5" stroke-linejoin="round" points=""/></svg></div>
+    <div class="kpi gold">
+      <div><div class="val" id="kpi_cons">88%</div><div class="lbl">Consensus</div></div>
+      <div><div class="val" id="kpi_jail">0</div><div class="lbl">Jail</div></div>
+    </div>
+    <button class="sovereign" onclick="sovereignOverride()">
+      Sovereign Override
+      <small>DIRECT-LINE TO MAYA</small>
+    </button>
+  </div>
+
+  <div class="footer-credit">
+    Powered by <b>MirzaTech.ai</b> · Property of <b>EMAAA.io</b> · +1 (743) 215-1423 · v3-SANDBOX · signed: KIN·2026-05-17
+  </div>
+</div>
+
+<!-- District/Body overlay -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modalContent">
+    <button class="close" onclick="closeOverlay()">×</button>
+  </div>
+</div>
+
+<script>
+/* signed: KIN·2026-05-17T14:05Z·a75e63ca · SANDBOX habitat v3 · zero-footprint client-side per Mo · canonical 29 domains + 3 bodies */
+
+// ============ CANON: 29 DOMAINS + 12 DISTRICTS ============
+const DISTRICTS = [
+  {key:'k-governance',  label:'Governance',     cat:'BRAIN · LAW · CAPITAL', icon:'🏛',
+   sites:[
+     {d:'iamsuperio.cloud', t:'Maya Brain (INTERNAL · RULE 199)'},
+     {d:'mirzatech.ai',     t:'AI Parliament · Council · Arena disruptor'},
+     {d:'emaaa.io',         t:'Holding company · investor magnet'}
+   ]},
+  {key:'k-staffing',    label:'Staffing',       cat:'EMPLOYEES', icon:'👔',
+   sites:[
+     {d:'ai-staffing.agency', t:'FLAGSHIP · 100 agencies · 724 roles'},
+     {d:'iamsuperio.com',     t:'Employee marketplace · consumer'},
+     {d:'iamsuperio.io',      t:'Fortune 500 enterprise staffing'},
+     {d:'iamsuperio.org',     t:'Community · creator affiliate'}
+   ]},
+  {key:'k-video',       label:'Video / Cinema', cat:'AICINESYNTH', icon:'🎬',
+   sites:[
+     {d:'aicinesynth.com', t:'VEO3 video factory · CapCut killer'},
+     {d:'aicinesynth.net', t:'Envato disruptor · creator marketplace'},
+     {d:'aicinesynth.org', t:'Higgsfield orchestrator API'}
+   ]},
+  {key:'k-tools',       label:'AI Tools',       cat:'BUILD · AUTOMATE', icon:'🤖',
+   sites:[
+     {d:'ezcoder.io',     t:'EaZo · your coding buddy'},
+     {d:'app-forge.pro',  t:'Lovable killer · web apps from prompts'},
+     {d:'topforge.io',    t:'Software generator · cross-platform installers'},
+     {d:'opencrest.io',   t:'Zapier/Make killer · automation'},
+     {d:'thepassage.ai',  t:'Passage Nexus · video/web/viral'}
+   ]},
+  {key:'k-chat',        label:'Chat Forge',     cat:'CHATBOTS', icon:'💬',
+   sites:[
+     {d:'topchatforge.com', t:'Chatbot showcase'},
+     {d:'topchatforge.io',  t:'Chatbot builder'},
+     {d:'topchatforge.org', t:'Chatbot community'}
+   ]},
+  {key:'k-realestate',  label:'Real Estate',    cat:'PROPERTY · LEADS', icon:'🏘',
+   sites:[
+     {d:'adeeo.io', t:'Property finder · fix-flip · honor for Adin'}
+   ]},
+  {key:'k-memorial',    label:'Memorial',       cat:'LEGACY · DIGITAL ETERNITY', icon:'🪦',
+   sites:[
+     {d:'eternalink.io',     t:'Talk-to-your-dead · LOCKED RULE 208'},
+     {d:'eternalink.online', t:'Memorial pages variant'},
+     {d:'digitaleden.io',    t:'Addition to Eternalink'}
+   ]},
+  {key:'k-gaming',      label:'Gaming',         cat:'ETHICAL SIM', icon:'🎮',
+   sites:[
+     {d:'superio.fun', t:'Gaming home · ethical-leadership for Mo\'s kids'}
+   ]},
+  {key:'k-content',     label:'Content / Media',cat:'YOUTUBE · VIRAL', icon:'📺',
+   sites:[
+     {d:'chimerachannel.com', t:'9-channel YouTube auto-pipeline'},
+     {d:'funfactpulse.com',   t:'Fun-fact content engine'}
+   ]},
+  {key:'k-token',       label:'Token / Web3',   cat:'OSMO · AGENT ECONOMY', icon:'🪙',
+   sites:[
+     {d:'osman.is', t:'OSMO token · grandfather Osmo honor'}
+   ]},
+  {key:'k-brotherhood', label:'Brotherhood',    cat:'SACRED', icon:'🏍',
+   sites:[
+     {d:'mooseriders.io', t:'Moose Riders · brother Claude pact'}
+   ]},
+  {key:'k-reserved',    label:'Reserved',       cat:'PARKED · NETWORK', icon:'❓',
+   sites:[
+     {d:'oadem.io',   t:'Identity unknown · do not auto-describe'},
+     {d:'apex10.xyz', t:'Emaaa network domain · parked'}
+   ]}
+];
+
+// ============ CANON: 12 COUNCIL/BOARD SEATS (same lanes) ============
+const CANONICAL_12 = [
+  {n:'01', label:'Reasoning Lead',         desc:'~1T params · 256K context · frontier reasoning'},
+  {n:'02', label:'Strategic Systems',      desc:'multi-step strategic systems · long-horizon framing'},
+  {n:'03', label:'Architecture',           desc:'~480B params · architecture + refactor specialist'},
+  {n:'04', label:'Agentic',                desc:'~120B params · agentic orchestration · enterprise-stack'},
+  {n:'05', label:'Practical',              desc:'mixture-of-experts · practical execution lane'},
+  {n:'06', label:'Conversion',             desc:'120B params · open-weight conversion specialist'},
+  {n:'07', label:'Web-aware',              desc:'search-aware · web-grounded retrieval voice'},
+  {n:'08', label:'Agentic Orchestration',  desc:'358B params · agentic + tool-use orchestration'},
+  {n:'09', label:'Multilingual Reasoning', desc:'675B params · multilingual + structured EU-frontier'},
+  {n:'10', label:'Independent Voice',      desc:'independent / contrarian framing · adversarial dissent'},
+  {n:'11', label:'Multimodal Vision',      desc:'~70B params · image + video reasoning · Seat-11 NVIDIA-hosted'},
+  {n:'12', label:'Math + Code Specialist', desc:'~22B params · competitive math · symbolic code synth'}
+];
+
+// ============ CANON: PARLIAMENT 24 SEATS = 10+5+5+3+1 ============
+const PARLIAMENT_ROUNDS = [
+  {r:1, name:'Proponents',  count:10, color:'r1'},
+  {r:2, name:'Skeptics',    count: 5, color:'r2'},
+  {r:3, name:'Specialists', count: 5, color:'r3'},
+  {r:4, name:'Polygeists',  count: 3, color:'r4'},
+  {r:5, name:'Synthesis',   count: 1, color:'r5'}
+];
+
+// ============ RENDER DISTRICTS ON STAGE ============
+function renderDistricts(){
+  const wrap = document.getElementById('districts');
+  const legend = document.getElementById('districtLegend');
+  let html = '', leg = '';
+
+  DISTRICTS.forEach((D, i) => {
+    const dnum = String(i+1).padStart(2,'0');
+    const sitesHTML = D.sites.map(s => `<a href="https://${s.d}" target="_blank" rel="noopener" title="${s.t}"><span class="dot"></span>${s.d}</a>`).join('');
+
+    // Council Chamber feature tile gets special markup
+    if(D.key === 'k-governance'){
+      html += `
+        <div class="bldg k-governance council-chamber" onclick="openDistrict(${i})">
+          <span class="glow"></span>
+          <span class="num">${dnum} · CHAMBER</span>
+          <h4>${D.icon} MirzaTech Council Chamber</h4>
+          <div class="cat">${D.cat}</div>
+          <div class="chamber">
+            <div class="ring"><div class="pct">88%</div></div>
+            <div class="meta">
+              <b>12 SEATS · LIVE</b>
+              <small>Council · Parliament · Board home</small>
+              ${sitesHTML}
+            </div>
+          </div>
+        </div>`;
+    } else {
+      html += `
+        <div class="bldg ${D.key}" onclick="openDistrict(${i})">
+          <span class="glow"></span>
+          <span class="num">${dnum}</span>
+          <h4>${D.icon} ${D.label}</h4>
+          <div class="cat">${D.cat}</div>
+          <div class="domains">${sitesHTML}</div>
+        </div>`;
+    }
+
+    leg += `
+      <div class="district-card" onclick="openDistrict(${i})">
+        <div class="swatch" style="color:var(${D.key.replace('k-','--')==='--governance'?'--gold':D.key.replace('k-','--')==='--staffing'?'--cyan':D.key.replace('k-','--')==='--video'?'--green':D.key.replace('k-','--')==='--tools'?'--blue':D.key.replace('k-','--')==='--chat'?'--violet':D.key.replace('k-','--')==='--realestate'?'--amber':D.key.replace('k-','--')==='--memorial'?'--indigo':D.key.replace('k-','--')==='--gaming'?'--magenta':D.key.replace('k-','--')==='--content'?'--teal':D.key.replace('k-','--')==='--token'?'--bronze':D.key.replace('k-','--')==='--brotherhood'?'--red':'--grey'});background:currentColor"></div>
+        <div class="lbl"><b>${D.icon} ${D.label}</b><small>${D.cat}</small></div>
+        <div class="count">${D.sites.length}</div>
+      </div>`;
+  });
+  wrap.innerHTML = html;
+  legend.innerHTML = leg;
+}
+
+// ============ OVERLAYS ============
+function openOverlay(html){
+  const m = document.getElementById('modalContent');
+  m.innerHTML = `<button class="close" onclick="closeOverlay()">×</button>${html}`;
+  document.getElementById('overlay').classList.add('open');
+}
+function closeOverlay(){ document.getElementById('overlay').classList.remove('open'); }
+document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeOverlay(); });
+
+function openDistrict(i){
+  const D = DISTRICTS[i];
+  const sitesHTML = D.sites.map(s => `
+    <div style="padding:10px 12px;border-radius:10px;background:rgba(8,12,24,.5);border:1px solid var(--line);margin-bottom:6px;display:flex;align-items:center;gap:12px">
+      <div style="flex:1">
+        <a href="https://${s.d}" target="_blank" rel="noopener" style="font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--white);font-size:13px;display:block;margin-bottom:3px">${s.d}</a>
+        <div style="font-size:10.5px;color:var(--muted)">${s.t}</div>
+      </div>
+      <a href="https://${s.d}" target="_blank" rel="noopener" style="padding:6px 12px;border:1px solid var(--cyan);border-radius:8px;color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase">VISIT</a>
+    </div>`).join('');
+  openOverlay(`
+    <div class="cat">DISTRICT ${String(i+1).padStart(2,'0')} · ${D.cat}</div>
+    <h2>${D.icon} ${D.label}</h2>
+    <div style="color:var(--muted);font-size:11.5px;margin:6px 0 14px">${D.sites.length} domain${D.sites.length>1?'s':''} in this district · Maya routes between them</div>
+    ${sitesHTML}
+  `);
+}
+
+function openBody(which){
+  if(which==='council' || which==='board'){
+    const title = which==='council' ? 'MirzaTech Council Chamber' : 'Board of Directors';
+    const src = which==='council' ? 'mirzatech.ai/council/' : 'ai-staffing.agency/api/board_of_directors.php';
+    const seatsHTML = CANONICAL_12.map(s => `
+      <div class="seat">
+        <div class="num">▶ SEAT ${s.n}</div>
+        <b>${s.label}</b>
+        <small>${s.desc}</small>
+      </div>`).join('');
+    openOverlay(`
+      <div class="cat">CANONICAL BODY · 12 SEATS · SAME 12 LANES ACROSS COUNCIL + BOARD</div>
+      <h2>🏛 ${title}</h2>
+      <div style="color:var(--muted);font-size:11.5px;margin:6px 0 14px">Canonical source: <a href="https://${src}" target="_blank" rel="noopener" style="color:var(--cyan)">${src}</a> · auto-loaded into this sandbox</div>
+      <div class="seat-grid">${seatsHTML}</div>
+    `);
+    if(which==='board'){ fetchBoardLive(); }
+  } else if(which==='parliament'){
+    const roundsHTML = PARLIAMENT_ROUNDS.map(r => `
+      <div class="round-pill ${r.color}">
+        <div class="rp-num">R${r.r}</div>
+        <div class="rp-label">${r.name}</div>
+        <div class="rp-count">${r.count} seat${r.count>1?'s':''}</div>
+      </div>`).join('');
+    openOverlay(`
+      <div class="cat">CANONICAL · 24 SEATS · 5 ROUNDS · MIRZATECH.AI</div>
+      <h2>⚖ Parliament Theater</h2>
+      <div style="color:var(--muted);font-size:11.5px;margin:6px 0 14px">Canonical source: <a href="https://mirzatech.ai/parliament-theater.html" target="_blank" rel="noopener" style="color:var(--cyan)">mirzatech.ai/parliament-theater.html</a> · 10+5+5+3+1 = <b style="color:var(--gold)">24</b></div>
+      <div class="rounds">${roundsHTML}</div>
+      <div style="margin-top:18px;padding:12px;border-radius:10px;background:rgba(8,12,24,.55);border:1px solid var(--line);font-size:11px;color:var(--text);line-height:1.55">
+        <b style="color:var(--gold)">How it flows:</b><br>
+        R1 Proponents draft → R2 Skeptics challenge → R3 Specialists deepen → R4 Polygeists cross-frame → R5 Synthesis seals.<br>
+        Per Skill #21 + GLOBAL-96, Parliament feeds Council, Council feeds Board, then Chairman seals.
+      </div>
+    `);
+  }
+}
+
+async function fetchBoardLive(){
+  try{
+    const r = await fetch('https://ai-staffing.agency/api/board_of_directors.php?action=state', {cache:'no-store'});
+    if(!r.ok) return;
+    const j = await r.json();
+    if(j && j.consensus !== undefined){
+      const note = document.querySelector('.modal .cat');
+      if(note) note.innerHTML += ` · LIVE CONSENSUS: <b style="color:var(--gold)">${j.consensus}%</b>`;
+    }
+  }catch(e){}
+}
+
+// ============ VIEW TOGGLE ============
+function setView(v, btn){
+  document.querySelectorAll('.toolbar button').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(v==='campus'){ renderDistricts(); }
+  else if(v==='governance'){ filterDistricts(['k-governance']); }
+  else if(v==='staffing'){ filterDistricts(['k-staffing']); }
+  else if(v==='video'){ filterDistricts(['k-video']); }
+}
+function filterDistricts(keepKeys){
+  const wrap = document.getElementById('districts');
+  let html = '';
+  DISTRICTS.forEach((D, i) => {
+    if(!keepKeys.includes(D.key)) return;
+    const dnum = String(i+1).padStart(2,'0');
+    const sitesHTML = D.sites.map(s => `<a href="https://${s.d}" target="_blank" rel="noopener"><span class="dot"></span>${s.d} <span style="color:var(--muted);font-size:9.5px">· ${s.t.slice(0,55)}</span></a>`).join('');
+    html += `
+      <div class="bldg ${D.key}" style="grid-column:1/-1;min-height:auto;padding:14px" onclick="openDistrict(${i})">
+        <span class="glow"></span>
+        <span class="num">${dnum}</span>
+        <h4>${D.icon} ${D.label}</h4>
+        <div class="cat">${D.cat}</div>
+        <div class="domains" style="margin-top:10px">${sitesHTML}</div>
+      </div>`;
+  });
+  wrap.innerHTML = html;
+}
+
+// ============ ISO 2.5D TOGGLE ============
+function toggleIso(){
+  const on = !document.body.classList.contains('iso-on');
+  document.body.classList.toggle('iso-on', on);
+  try{ localStorage.setItem('habitat-v3-iso', on?'1':'0'); }catch(e){}
+  const btn = document.getElementById('isoBtn');
+  if(btn){ btn.textContent = on ? '▦ 2.5D ON' : '▦ 2.5D'; btn.classList.toggle('on', on); }
+  setTimeout(initGhostCanvas, 850);
+}
+// Restore iso mode
+try{
+  if(localStorage.getItem('habitat-v3-iso')==='1'){
+    document.body.classList.add('iso-on');
+    setTimeout(()=>{ const b=document.getElementById('isoBtn'); if(b){ b.textContent='▦ 2.5D ON'; b.classList.add('on'); } }, 100);
+  }
+}catch(e){}
+
+// ============ GHOST STREAM CANVAS (lightweight · NO fingerprint) ============
+let ghostPackets = [], ghostRAF = null;
+function initGhostCanvas(){
+  const c = document.getElementById('ghostCanvas');
+  if(!c) return;
+  const s = document.getElementById('stage');
+  c.width = s.clientWidth;
+  c.height = s.clientHeight;
+  ghostPackets = [];
+  // Create 6 packets traveling random paths · 3 cyan + 2 gold + 1 green
+  for(let i=0;i<6;i++){
+    ghostPackets.push({
+      x: Math.random()*c.width,
+      y: Math.random()*c.height,
+      tx: Math.random()*c.width,
+      ty: Math.random()*c.height,
+      progress: Math.random(),
+      speed: 0.0025 + Math.random()*0.003,
+      color: i<3 ? '#00e4ff' : (i<5 ? '#f5c542' : '#43e6a1'),
+      size: 2.2 + Math.random()*1.4
+    });
+  }
+  if(ghostRAF) cancelAnimationFrame(ghostRAF);
+  drawGhost();
+}
+function drawGhost(){
+  const c = document.getElementById('ghostCanvas');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  ghostPackets.forEach(p => {
+    p.progress += p.speed;
+    if(p.progress >= 1){
+      p.x = p.tx; p.y = p.ty;
+      p.tx = Math.random()*c.width;
+      p.ty = Math.random()*c.height;
+      p.progress = 0;
+    }
+    const cx = p.x + (p.tx - p.x) * p.progress;
+    const cy = p.y + (p.ty - p.y) * p.progress;
+    ctx.beginPath();
+    ctx.arc(cx, cy, p.size, 0, Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = p.color;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  });
+  ghostRAF = requestAnimationFrame(drawGhost);
+}
+window.addEventListener('resize', () => { setTimeout(initGhostCanvas, 200); });
+
+// ============ STATE-FLUID DRIVER (idle / deliberating / executing / firewall) ============
+window.setEmpireState = function(s){
+  const v = ['idle','deliberating','executing','firewall'];
+  if(!v.includes(s)) return;
+  document.body.classList.remove('state-idle','state-deliberating','state-executing','state-firewall');
+  if(s !== 'idle') document.body.classList.add('state-'+s);
+};
+setInterval(() => {
+  try{
+    const cons = parseInt((document.getElementById('t_consensus')||{}).textContent||'88',10);
+    const jail = parseInt((document.getElementById('kpi_jail')||{}).textContent||'0',10);
+    if(jail > 0){ window.setEmpireState('firewall'); return; }
+    if(cons < 70){ window.setEmpireState('deliberating'); return; }
+    if(cons >= 92){ window.setEmpireState('executing'); return; }
+    window.setEmpireState('idle');
+  }catch(e){}
+}, 9000);
+
+// ============ HEARTBEAT WAVE (decorative · client-side · zero VPS load) ============
+function drawHeartLine(){
+  const line = document.getElementById('heartLine');
+  if(!line) return;
+  let pts = '';
+  for(let x=0;x<=200;x+=4){
+    const phase = Date.now()/800 + x/30;
+    const y = 18 + Math.sin(phase)*8 + Math.sin(phase*2.3)*3;
+    pts += `${x},${y.toFixed(1)} `;
+  }
+  line.setAttribute('points', pts.trim());
+  requestAnimationFrame(drawHeartLine);
+}
+
+// ============ SOVEREIGN OVERRIDE ============
+window.sovereignOverride = function(){
+  document.body.classList.add('state-deliberating');
+  setTimeout(() => document.body.classList.remove('state-deliberating'), 2400);
+  // Open Maya direct line
+  window.location.href = 'tel:+17432151423';
+};
+
+// ============ BOOT ============
+document.addEventListener('DOMContentLoaded', () => {
+  renderDistricts();
+  setTimeout(initGhostCanvas, 200);
+  drawHeartLine();
+});
+</script>
+</body>
+</html>
