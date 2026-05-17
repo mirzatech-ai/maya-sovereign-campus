@@ -322,6 +322,18 @@ body{background:radial-gradient(1400px 900px at 50% -10%,rgba(245,197,66,.05),tr
     <div id="officeTitle" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--white);font-size:14px;letter-spacing:.06em"></div>
   </div>
   <div id="officeStage" style="position:absolute;inset:0"></div>
+
+  <!-- Track B · Sidebar Dossier (live · click any agent in the office to inspect) -->
+  <div id="dossierPanel" style="position:absolute;right:14px;bottom:14px;width:280px;z-index:5;background:rgba(10,18,38,.88);backdrop-filter:blur(14px);border:1px solid var(--cyan);border-radius:14px;padding:14px;box-shadow:0 18px 40px rgba(0,0,0,.6);max-height:46vh;overflow-y:auto">
+    <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--cyan);font-size:11px;letter-spacing:.14em;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <span>📹 AGENT DOSSIER</span>
+      <span id="dossierState" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted)">IDLE</span>
+    </div>
+    <div id="dossierContent" style="font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.5;color:var(--text)">
+      <div style="color:var(--muted)">▸ click any glowing cylinder agent in the room to load their dossier here</div>
+    </div>
+  </div>
+
   <!-- Data Dropzone (HTML5 drag-drop · POST to /api/agency_file_intake.php) -->
   <div id="dropzonePanel" style="position:absolute;right:14px;top:62px;width:280px;z-index:5;background:rgba(10,18,38,.85);backdrop-filter:blur(14px);border:1px solid var(--gold);border-radius:14px;padding:14px;box-shadow:0 18px 40px rgba(0,0,0,.6)">
     <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold);font-size:11px;letter-spacing:.14em;margin-bottom:8px">📦 AGENCY DATA CARRIER</div>
@@ -998,6 +1010,7 @@ function sovereignOverride(){ window.location.href = 'tel:+17432151423'; }
 // ============ OFFICE INTERIOR · MACRO-TO-MICRO ZOOM (Gemini Skill #16) ============
 // Procedural isometric office · desks · monitors · agent data-cores · NO external assets
 let officeScene = null, officeCamera = null, officeRenderer = null, officeAgents = [], officeRAF = null, currentOfficeAgency = null;
+let officeServerLEDs = [];
 
 function buildOfficeScene(agency){
   const stage = document.getElementById('officeStage');
@@ -1095,17 +1108,39 @@ function buildOfficeScene(agency){
     }
   }
 
-  // DESKS + MONITORS + AGENT DATA-CORES (Gemini recipe)
+  // Per Gemini round-5: shadow maps on (already enabled at renderer); PCFSoft type set above
+  officeRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  // SHADOW: configure sun for sharper shadows
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.camera.left = -15; sun.shadow.camera.right = 15;
+  sun.shadow.camera.top = 15; sun.shadow.camera.bottom = -15;
+
+  // DESKS + MONITORS + AGENT DATA-CORES (Gemini recipe + round-5 details)
   officeAgents = [];
   const roleCount = Math.min(agency.role_count || 4, 8);
   const cols = Math.min(roleCount, 4);
   const rows = Math.ceil(roleCount / cols);
   const deskSpacing = 3.2;
+
+  // Role title generator (no extra fetch · uses category)
+  const ROLE_TITLES = {
+    tech: ['Lead Engineer','Senior Dev','ML Researcher','Systems Architect','Data Scientist','Backend Specialist','DevOps Lead','QA Engineer'],
+    biz: ['Account Manager','Sales Lead','Marketing Strategist','Operations Director','Finance Analyst','Legal Counsel','HR Partner','Growth Lead'],
+    health: ['Clinical AI Specialist','Bioinformatics Lead','Patient Outcomes Analyst','Pharma Researcher','Wellness Coach','Care Coordinator','Medical Advisor','Genomics Engineer'],
+    industry: ['Supply Chain Lead','Manufacturing Engineer','Logistics Specialist','Field Ops Director','Procurement Analyst','Energy Strategist','Compliance Lead','Industrial Designer'],
+    creative: ['Creative Director','Video Producer','Audio Engineer','Game Designer','Content Strategist','Brand Lead','Animation Director','Story Architect']
+  };
+  const titles = ROLE_TITLES[cat] || ROLE_TITLES.tech;
+
   for(let i = 0; i < roleCount; i++){
     const col = i % cols, row = Math.floor(i / cols);
     const dx = (col - (cols-1)/2) * deskSpacing;
     const dz = (row - (rows-1)/2) * 2.2 + 2;
-    // Desktop (flat wide box)
+    const agentId = 'A-' + String(i+1).padStart(2,'0');
+    const roleTitle = titles[i % titles.length];
+
+    // Desk
     const desk = new THREE.Mesh(
       new THREE.BoxGeometry(2.0, 0.08, 1.1),
       new THREE.MeshPhysicalMaterial({color:0x141c30, metalness:0.6, roughness:0.35, clearcoat:0.4})
@@ -1113,7 +1148,7 @@ function buildOfficeScene(agency){
     desk.position.set(dx, 0.78, dz);
     desk.castShadow = desk.receiveShadow = true;
     officeScene.add(desk);
-    // 4 legs (thin cylinders)
+    // 4 legs
     [[-0.85,0.4,-0.45],[0.85,0.4,-0.45],[-0.85,0.4,0.45],[0.85,0.4,0.45]].forEach(([lx,ly,lz]) => {
       const leg = new THREE.Mesh(
         new THREE.CylinderGeometry(0.05, 0.05, 0.78, 8),
@@ -1123,7 +1158,7 @@ function buildOfficeScene(agency){
       leg.castShadow = true;
       officeScene.add(leg);
     });
-    // Monitor · emissive · category-colored
+    // Monitor
     const monitor = new THREE.Mesh(
       new THREE.BoxGeometry(0.85, 0.55, 0.05),
       new THREE.MeshStandardMaterial({color:0x040810, emissive:accent, emissiveIntensity:0.85, metalness:0.7, roughness:0.2})
@@ -1138,26 +1173,86 @@ function buildOfficeScene(agency){
     );
     stand.position.set(dx, 0.91, dz - 0.4);
     officeScene.add(stand);
-    // AGENT DATA-CORE · sleek semi-transparent cylinder (Gemini "obsidian glass humanoid" → cleaner: glowing data core)
+    // AGENT DATA-CORE · transparent glass cylinder
     const agentCore = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.22, 0.28, 0.85, 16),
+      new THREE.CylinderGeometry(0.24, 0.30, 0.95, 16),
       new THREE.MeshPhysicalMaterial({
         color: accent, emissive: accent, emissiveIntensity: 0.6,
-        transparent: true, opacity: 0.65, metalness: 0.3, roughness: 0.15,
-        transmission: 0.55, thickness: 0.6, clearcoat: 0.9
+        transparent: true, opacity: 0.45, metalness: 0.3, roughness: 0.15,
+        transmission: 0.65, thickness: 0.6, clearcoat: 0.9
       })
     );
-    agentCore.position.set(dx, 0.43, dz + 0.45);
+    agentCore.position.set(dx, 0.48, dz + 0.45);
     agentCore.castShadow = true;
+    agentCore.userData = {agentId, isAgent: true, agentIdx: i};
     officeScene.add(agentCore);
-    // Floating ID ring above the agent core
-    const ringG = new THREE.TorusGeometry(0.3, 0.025, 6, 24);
-    const ring = new THREE.Mesh(ringG, new THREE.MeshBasicMaterial({color:accent, transparent:true, opacity:0.7}));
-    ring.position.set(dx, 1.0, dz + 0.45);
+
+    // Round-5 directive 2: INNER OCTAHEDRON (the "living" core)
+    const innerCoreGeo = new THREE.OctahedronGeometry(0.16, 0);
+    const innerCoreMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true, transparent:true, opacity:0.9});
+    const innerCore = new THREE.Mesh(innerCoreGeo, innerCoreMat);
+    innerCore.position.set(dx, 0.48, dz + 0.45);
+    officeScene.add(innerCore);
+
+    // Floating ID ring
+    const ringG = new THREE.TorusGeometry(0.32, 0.025, 6, 24);
+    const ring = new THREE.Mesh(ringG, new THREE.MeshBasicMaterial({color:accent, transparent:true, opacity:0.8}));
+    ring.position.set(dx, 1.05, dz + 0.45);
     ring.rotation.x = -Math.PI/2;
     officeScene.add(ring);
-    officeAgents.push({core:agentCore, monitor:monitor, ring:ring, dx, dz, phase: Math.random()*Math.PI*2});
+
+    // TRACK A: floating HUD sprite (label above agent)
+    const labelCanvas = document.createElement('canvas');
+    labelCanvas.width = 256; labelCanvas.height = 64;
+    const lblTex = new THREE.CanvasTexture(labelCanvas);
+    const spriteMat = new THREE.SpriteMaterial({map: lblTex, transparent: true, depthTest: false});
+    const sprite = new THREE.Sprite(spriteMat);
+    sprite.scale.set(1.6, 0.4, 1);
+    sprite.position.set(dx, 1.6, dz + 0.45);
+    sprite.renderOrder = 500;
+    officeScene.add(sprite);
+
+    const agentObj = {
+      id: agentId, agentIdx: i, agency_slug: agency.id || agency.slug,
+      name: roleTitle, specialty: cat.toUpperCase(), capability: titles.slice(0,3).join(', '),
+      state: 'IDLE', currentTask: 'standing by',
+      core: agentCore, innerCore, monitor, ring, sprite, labelCanvas, lblTex,
+      dx, dz, phase: Math.random()*Math.PI*2, baseY: 0.48
+    };
+    officeAgents.push(agentObj);
+    renderAgentLabel(agentObj);   // initial paint
   }
+
+  // ROUND-5 directive 3: LIVE SERVER LED arrays · already have basic LEDs · now add the random flicker logic
+  // Build a registry of LED meshes for the animation loop
+  officeServerLEDs = [];
+  for(let i = 0; i < 5; i++){
+    for(let j = 0; j < 8; j++){
+      const led = new THREE.Mesh(
+        new THREE.BoxGeometry(0.13, 0.045, 0.035),
+        new THREE.MeshBasicMaterial({color: 0x22c55e, transparent:true, opacity:0.9})
+      );
+      led.position.set(-7.5 + i*3.75 - 0.45 + (j%2)*0.5, 0.45 + Math.floor(j/2)*0.4, -8.68);
+      officeScene.add(led);
+      officeServerLEDs.push({mesh:led, nextFlip: Math.random()*60, phase: Math.random()*60});
+    }
+  }
+  // Replace the old static LED loop · the previous loop already added some LEDs · leaving them as static decoration
+  // The new array officeServerLEDs is what the animation will flicker
+
+  // ROUND-5 directive 4: FLOOR WIRE CONDUITS · thin glowing cyan lines from each desk back to the server racks
+  officeAgents.forEach((ag, i) => {
+    const targetX = -7.5 + (i % 5) * 3.75;   // approximate server rack position
+    const points = [
+      new THREE.Vector3(ag.dx, 0.02, ag.dz + 0.55),     // behind the chair
+      new THREE.Vector3(ag.dx, 0.02, -3.5),              // straight back
+      new THREE.Vector3(targetX, 0.02, -3.5),            // sideways to the rack column
+      new THREE.Vector3(targetX, 0.02, -8.5)             // into the server
+    ];
+    const wireGeo = new THREE.BufferGeometry().setFromPoints(points);
+    const wire = new THREE.Line(wireGeo, new THREE.LineBasicMaterial({color: 0x00f2fe, transparent:true, opacity:0.55}));
+    officeScene.add(wire);
+  });
 
   // DROPZONE PARTICLE POOL (for the file-drop visual effect)
   officeDropParticles = [];
@@ -1166,17 +1261,39 @@ function buildOfficeScene(agency){
   document.getElementById('officeTitle').textContent = '🏢 ' + (agency.name || agency.id || agency.slug) + ' · INTERIOR · ' + (agency.role_count||0) + ' STATIONS';
   currentOfficeAgency = agency;
 
-  // Animate
+  // Animate (round-5 + dual-track upgrade)
   let oT = 0;
   function officeAnimate(){
     officeRAF = requestAnimationFrame(officeAnimate);
     oT += 0.016;
-    // Subtle agent-core pulse (per-agent random phase so they don't pulse in lockstep)
+    const now = Date.now();
+    // Per-agent: pulse core · spin + bob inner octahedron · rotate ring · update sprite if state changed
     officeAgents.forEach(ag => {
-      ag.core.material.emissiveIntensity = 0.5 + 0.3 * Math.sin(oT * 1.8 + ag.phase);
+      // Outer core pulse
+      const baseE = ag.state === 'PROCESSING' ? 1.0 : 0.55;
+      const pulseE = baseE + 0.3 * Math.sin(oT * (ag.state === 'PROCESSING' ? 7 : 1.8) + ag.phase);
+      ag.core.material.emissiveIntensity = pulseE;
+      // Inner octahedron · rotate continuously + bob via sine
+      ag.innerCore.rotation.y += 0.02;
+      ag.innerCore.rotation.x += 0.012;
+      ag.innerCore.position.y = ag.baseY + Math.sin(now * 0.002 + ag.phase) * 0.12;
+      // Ring spin
       ag.ring.rotation.z = oT * 0.6 + ag.phase;
+      // Sprite always faces camera (built-in for Sprite)
+      // (no per-frame text re-render unless state changed · saves perf)
     });
-    // Drift the camera very slowly (gentle living-scene feel)
+    // ROUND-5 directive 3: server LED flicker · random color shifts on irregular intervals
+    officeServerLEDs.forEach(L => {
+      L.phase -= 1;
+      if(L.phase <= 0){
+        L.phase = 8 + Math.random()*40;
+        const r = Math.random();
+        const c = r < 0.7 ? 0x22c55e : (r < 0.92 ? 0xeab308 : 0xef4444);
+        L.mesh.material.color.setHex(c);
+        L.mesh.material.opacity = 0.6 + Math.random()*0.4;
+      }
+    });
+    // Camera drift (gentle living-scene feel)
     officeCamera.position.x = 14 + Math.sin(oT * 0.12) * 0.6;
     officeCamera.position.z = 14 + Math.cos(oT * 0.12) * 0.6;
     officeCamera.lookAt(0, 0, 0);
@@ -1185,6 +1302,91 @@ function buildOfficeScene(agency){
     officeRenderer.render(officeScene, officeCamera);
   }
   officeAnimate();
+
+  // TRACK B · raycaster on the office scene · click an agent core → load dossier
+  const officeRaycaster = new THREE.Raycaster();
+  const officeMouse = new THREE.Vector2();
+  officeRenderer.domElement.addEventListener('click', (e) => {
+    const rect = officeRenderer.domElement.getBoundingClientRect();
+    officeMouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    officeMouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    officeRaycaster.setFromCamera(officeMouse, officeCamera);
+    const cores = officeAgents.map(a => a.core);
+    const hits = officeRaycaster.intersectObjects(cores, false);
+    if(hits.length){
+      const idx = hits[0].object.userData.agentIdx;
+      const ag = officeAgents[idx];
+      if(ag){ displayAgentDossier(ag); selectedAgent = ag; }
+    }
+  });
+}
+
+// TRACK A · canvas-texture HUD sprite painter (per Gemini round-6)
+function renderAgentLabel(ag){
+  const c = ag.labelCanvas;
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+  ctx.clearRect(0, 0, w, h);
+  // Obsidian glass background
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.86)';
+  ctx.fillRect(0, 0, w, h);
+  // Border · color by state
+  const border = ag.state === 'PROCESSING' ? '#ffffff' : '#00e4ff';
+  ctx.strokeStyle = border;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, w-2, h-2);
+  // ID + role
+  ctx.font = 'bold 16px monospace';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(`[${ag.id}] ${ag.name}`, 8, 24);
+  // Status
+  ctx.font = '12px monospace';
+  ctx.fillStyle = ag.state === 'PROCESSING' ? '#ffffff' : '#43e6a1';
+  ctx.fillText(`STATUS: ${ag.state}`, 8, 44);
+  ctx.fillStyle = '#7e8bb0';
+  ctx.font = '10px monospace';
+  ctx.fillText((ag.currentTask || '').slice(0, 28), 8, 58);
+  ag.lblTex.needsUpdate = true;
+}
+
+// TRACK B · dossier rendering into the right-side panel
+let selectedAgent = null;
+function displayAgentDossier(ag){
+  const el = document.getElementById('dossierContent');
+  const stateEl = document.getElementById('dossierState');
+  if(!el) return;
+  stateEl.textContent = ag.state;
+  stateEl.style.color = ag.state === 'PROCESSING' ? 'var(--white)' : 'var(--green)';
+  el.innerHTML = `
+    <div style="padding:8px 10px;border-radius:8px;background:rgba(8,12,24,.6);border:1px solid var(--line);margin-bottom:6px">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--white);font-size:13px;letter-spacing:.04em">${escapeHTML(ag.name)}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--cyan);letter-spacing:.1em;margin-top:2px">${ag.id} · ${ag.specialty}</div>
+    </div>
+    <div style="margin:6px 0"><span style="color:var(--muted)">SPECIALTY ·</span> ${escapeHTML(ag.specialty)}</div>
+    <div style="margin:6px 0"><span style="color:var(--muted)">CAPABILITIES ·</span> ${escapeHTML(ag.capability)}</div>
+    <div style="margin:8px 0;padding:6px 8px;border-radius:6px;background:${ag.state==='PROCESSING'?'rgba(255,255,255,.08)':'rgba(67,230,161,.08)'};border:1px solid ${ag.state==='PROCESSING'?'var(--white)':'var(--green)'}">
+      <span style="color:var(--muted)">ACTIVE TASK ·</span><br>
+      <span style="color:${ag.state==='PROCESSING'?'var(--white)':'var(--green)'};font-weight:600">${escapeHTML(ag.currentTask)}</span>
+    </div>
+    <div style="font-size:9.5px;color:var(--muted)"><span style="color:var(--gold)">QA</span> 10/10 · <span style="color:var(--gold)">FIDELITY</span> SECURED · <span style="color:var(--gold)">CONTINUITY</span> LOCKED</div>
+  `;
+}
+
+// TRACK C · file drop targets specific agent (round-5 directive 5)
+function setAgentState(ag, state, task){
+  ag.state = state;
+  if(task !== undefined) ag.currentTask = task;
+  renderAgentLabel(ag);
+  if(selectedAgent && selectedAgent.id === ag.id) displayAgentDossier(ag);
+  // Bright white flash on the core when entering PROCESSING
+  if(state === 'PROCESSING'){
+    const original = ag.core.material.emissive.getHex();
+    ag.core.material.emissive.setHex(0xffffff);
+    setTimeout(() => {
+      // Slow fade back to category color
+      ag.core.material.emissive.setHex(original);
+    }, 600);
+  }
 }
 
 function enterOffice(slug){
@@ -1257,9 +1459,11 @@ function refreshDropList(){
 }
 
 function triggerDropParticles(){
-  // Spawn 8 green particles from the dropzone (top-right) toward a random agent monitor
+  // Round-5 directive 5 · target the SELECTED agent (or first IDLE) · not random
   if(!officeAgents.length) return;
-  const target = officeAgents[Math.floor(Math.random() * officeAgents.length)].monitor.position;
+  let tgtAgent = selectedAgent && officeAgents.includes(selectedAgent) ? selectedAgent : null;
+  if(!tgtAgent) tgtAgent = officeAgents.find(a => a.state === 'IDLE') || officeAgents[0];
+  const target = tgtAgent.core.position;
   const startWorld = new THREE.Vector3(7, 5, 4); // approx world coord of the dropzone panel projected
   const sphereGeo = new THREE.SphereGeometry(0.09, 10, 10);
   for(let i = 0; i < 8; i++){
@@ -1319,9 +1523,17 @@ async function sendDropzoneFiles(){
     if(j.ok){
       const ok = j.received.filter(x => x.ok).length;
       status.innerHTML = `<span style="color:var(--green)">✓ ${ok} of ${j.received.length} stored · ${j.storage}</span>`;
+      // TRACK C · State Shifting: move target agent to PROCESSING with the dropped filename(s)
+      const tgt = (selectedAgent && officeAgents.includes(selectedAgent)) ? selectedAgent : (officeAgents.find(a => a.state === 'IDLE') || officeAgents[0]);
+      if(tgt){
+        const fileNames = j.received.filter(x => x.ok).map(x => x.name).join(', ');
+        setAgentState(tgt, 'PROCESSING', 'INGESTING: ' + (fileNames || 'data payload'));
+        // After ~6s release back to IDLE with completion note
+        setTimeout(() => setAgentState(tgt, 'IDLE', 'last task: ingested ' + (fileNames || 'payload')), 6000);
+      }
       pendingDropFiles = [];
       refreshDropList();
-      // Visual flourish: burst green particles
+      // Visual flourish: burst green particles toward the now-PROCESSING agent
       for(let i = 0; i < 3; i++) setTimeout(triggerDropParticles, i*200);
     } else {
       status.innerHTML = `<span style="color:var(--red)">⚠ ${escapeHTML(j.error || 'upload failed')}</span>`;
