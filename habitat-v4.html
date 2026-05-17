@@ -1423,9 +1423,13 @@ function buildOfficeScene(agency){
     officeDragStart = {x:e.clientX, y:e.clientY};
   });
   canvas.addEventListener('wheel', e => {
+    // FIX 2026-05-17T19:20Z · OrthographicCamera ignores distance · use camera.zoom + updateProjectionMatrix
+    // This is what makes you actually zoom IN/OUT on ortho · previous code just orbited at the same scale
     e.preventDefault();
     userTouchedOfficeCam = true;
-    officeCamRadius = Math.max(3, Math.min(40, officeCamRadius + (e.deltaY > 0 ? 1.5 : -1.5)));
+    const delta = e.deltaY > 0 ? 0.90 : 1.10;
+    officeCamera.zoom = Math.max(0.4, Math.min(10, (officeCamera.zoom || 1) * delta));
+    officeCamera.updateProjectionMatrix();
   }, {passive:false});
   // Touch (single-finger orbit · pinch zoom)
   let lastPinch = 0;
@@ -1445,11 +1449,13 @@ function buildOfficeScene(agency){
       officeDragStart = {x:e.touches[0].clientX, y:e.touches[0].clientY};
     }
     if(e.touches.length === 2){
+      // FIX 2026-05-17T19:20Z · ortho zoom via camera.zoom (same fix as wheel)
       const dx = e.touches[0].clientX - e.touches[1].clientX, dy = e.touches[0].clientY - e.touches[1].clientY;
       const cur = Math.sqrt(dx*dx + dy*dy);
       if(lastPinch > 0){
-        const delta = (lastPinch - cur) * 0.05;
-        officeCamRadius = Math.max(3, Math.min(40, officeCamRadius + delta));
+        const factor = cur / lastPinch;   // > 1 = pinch-out (zoom in) · < 1 = pinch-in (zoom out)
+        officeCamera.zoom = Math.max(0.4, Math.min(10, (officeCamera.zoom || 1) * factor));
+        officeCamera.updateProjectionMatrix();
       }
       lastPinch = cur;
     }
@@ -1478,12 +1484,9 @@ function buildOfficeScene(agency){
       if(ag){
         displayAgentDossier(ag);
         selectedAgent = ag;
-        // Camera focus on clicked agent (pan target + slight zoom)
-        officeCamTarget.x = ag.dx;
-        officeCamTarget.y = 1.0;
-        officeCamTarget.z = ag.dz + 0.55;
-        officeCamRadius = Math.max(5, officeCamRadius * 0.78);
         userTouchedOfficeCam = true;
+        // Smooth camera fly-to (lerp target + zoom in) over ~700ms
+        tweenCameraTo(ag.dx, 1.0, ag.dz + 0.55, 2.4, 700);
       }
     }
   });
@@ -1613,16 +1616,56 @@ function setAgentState(ag, state, task){
   }
 }
 
+// === SMOOTH ORTHO ZOOM TWEEN · for click-to-focus and other animations ===
+let cameraTween = null;
+function tweenCameraTo(tx, ty, tz, targetZoom, durationMs){
+  if(cameraTween) cancelAnimationFrame(cameraTween);
+  const startX = officeCamTarget.x, startY = officeCamTarget.y, startZ = officeCamTarget.z;
+  const startZoom = officeCamera.zoom || 1;
+  const t0 = performance.now();
+  function step(){
+    const t = Math.min(1, (performance.now() - t0) / durationMs);
+    const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;   // ease in-out quad
+    officeCamTarget.x = startX + (tx - startX) * e;
+    officeCamTarget.y = startY + (ty - startY) * e;
+    officeCamTarget.z = startZ + (tz - startZ) * e;
+    officeCamera.zoom = startZoom + (targetZoom - startZoom) * e;
+    officeCamera.updateProjectionMatrix();
+    if(t < 1) cameraTween = requestAnimationFrame(step);
+    else cameraTween = null;
+  }
+  step();
+}
+
 function enterOffice(slug){
   const b = buildings.find(x => x.userData && x.userData.slug === slug);
   const a = b && b.userData && b.userData.agency;
   if(!a){ console.warn('enterOffice: no agency for slug', slug); return; }
+
+  // === MACRO-TO-MICRO CINEMATIC DIVE (Mo: "I need that Macro to Micro zoom again") ===
+  // 1. Flash the building white briefly (selection feedback)
+  if(b.userData.baseColor !== undefined){
+    const origEmissive = b.material.emissive.getHex();
+    b.material.emissive.setHex(0xffffff);
+    b.material.emissiveIntensity = 1.0;
+    setTimeout(() => { b.material.emissive.setHex(origEmissive); b.material.emissiveIntensity = stateEmissive(b.userData.state); }, 600);
+  }
+  // 2. Close overlay
   closeOverlay();
-  document.getElementById('officeView').style.display = 'block';
+  // 3. Reveal office view with cross-fade from black + start office camera zoomed-OUT, then zoom IN to default
+  const ov = document.getElementById('officeView');
+  ov.style.display = 'block';
+  ov.style.opacity = '0';
+  ov.style.transition = 'opacity 0.5s ease-out';
+  requestAnimationFrame(() => { ov.style.opacity = '1'; });
   // Use rAF + small timeout to ensure layout has computed (stage.clientWidth was 0 sometimes)
   setTimeout(() => {
     try {
       buildOfficeScene(a);
+      // 4. After scene built · start zoomed-OUT (0.55) and animate IN to 1.0 over 900ms (dive-in feel)
+      officeCamera.zoom = 0.55;
+      officeCamera.updateProjectionMatrix();
+      tweenCameraTo(0, 0.5, 0, 1.0, 900);
     } catch(err) {
       console.error('buildOfficeScene failed:', err);
       // Surface the error visibly on the black screen so Mo can read what failed
