@@ -158,6 +158,19 @@
       "trigger": "Every session boot · mount ~/.hermes/skills/ if exists",
       "verified_at": "2026-05-17T13:00:00Z",
       "http_status": 200
+    },
+    {
+      "slot": 13,
+      "category": "harness",
+      "name": "Everything Claude Code (affaan-m · 184k★ Performance Harness)",
+      "repo": "affaan-m/everything-claude-code",
+      "github": "https://github.com/affaan-m/everything-claude-code",
+      "local": "D:/PROJECTS/_SHARED/external_skills/everything-claude-code/",
+      "purpose": "Agent harness performance optimization · skills, instincts, memory, self-correction layer for Claude Code · path persistence + session-drift prevention",
+      "trigger": "Every Claude Code session · adopt harness conventions for memory + skill linkage · use as reference for session-drift prevention patterns",
+      "verified_at": "2026-05-17T13:25:00Z",
+      "http_status": 200,
+      "redirect_from": "aflaan-m/everything-claudecode (Gemini misspelled both owner and repo · double-F + dashes)"
     }
   ],
   "auto_load_protocol": {
